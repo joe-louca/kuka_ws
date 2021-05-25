@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-About the script:
-An exmple on controlling KUKA iiwa robot from
-Python3 using the iiwaPy3 class
 
-Modified on 3rd-Jan-2021
-
-@author: Mohammad SAFEEA
-
-"""
 from iiwaPy3 import iiwaPy3
 from math import pi
 import time
@@ -48,9 +39,15 @@ class CopControl:
                 self.t_0 = self.getSecs()                           # Refreshable start time
 
                 while True:                                         # Until Ctrl-C
-                    self.get_cmd()                                  # Get joints from copellia
-                    if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
-                        self.move_cmd()                             # Send command to iiwa
+                    try:
+                        pos_cmd = rospy.get_param('delayed_pos_cmd')
+                        self.commandsList.append(pos_cmd)
+                        if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
+                            self.move_cmd()                             # Send command to iiwa
+
+                    except:
+                        print("No pos command yet...")
+                        pass
                     
             except KeyboardInterrupt:                           # Ctrl-C to exit
                 pass
@@ -94,15 +91,20 @@ class CopControl:
             return
 
     def get_cmd(self):
-        pos_cmd = rospy.get_param('pos_cmd')
-        # TO DO - match to BRL ref frames...
-        self.commandsList.append(pos_cmd)
+        try:
+            pos_cmd = rospy.get_param('delayed_pos_cmd')
+            self.commandsList.append(pos_cmd)
+        except:
+            print("No pos command yet...")
+            pass
 
     def move_cmd(self):
         if len(self.commandsList) > 0:                  # If there are commands to act on
             pos_cmd = self.commandsList[0]              # Get most recent joint command
             self.kuka_jpos = self.iiwa.sendEEfPositionGetActualJpos(pos_cmd)         # Send command
-            rospy.set_param('kuka_jpos', self.kuka_jpos)  # Save kuka_pos as param
+            self.kuka_pos = self.iiwa.getEEFPos()       # Get end effector position
+            rospy.set_param('kuka_jpos', self.kuka_jpos)# Save kuka_jpos as param
+            rospy.set_param('kuka_pos', self.kuka_pos)  # save kuka_pos as param
             self.t_0 = self.getSecs()                   # Refresh start time after move
             self.commandsList = []                      # Clear commands list
 

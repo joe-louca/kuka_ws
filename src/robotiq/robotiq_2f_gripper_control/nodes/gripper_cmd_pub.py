@@ -56,21 +56,25 @@ def publisher():
     rate = rospy.Rate(rate_hz)
     
     while not rospy.is_shutdown():
-        gripper_cmd = rospy.getparam('gripper_cmd')
+        try:
+            gripper_cmd = rospy.get_param('delayed_gripper_cmd')
 
-        # build command msg
-        if gripper_cmd == 1:
-            command.rACT = 1  # activate
-            command.rGTO = 1  # go to action
-            command.rPR = 255 # closed
-        else:
-            command.rACT = 1 # activate
-            command.rGTO = 1 # go to action
-            command.rPR = 0  # open            
+            # build command msg
+            if gripper_cmd == 1:
+                command.rACT = 1  # activate
+                command.rGTO = 1  # go to action
+                command.rPR = 255 # closed
+            else:
+                command.rACT = 1 # activate
+                command.rGTO = 1 # go to action
+                command.rPR = 0  # open            
 
-        # publish to gripper        
-        pub.publish(command)
+            # publish to gripper        
+            pub.publish(command)
 
+        except:
+            pass
+        
         rate.sleep()
                         
 

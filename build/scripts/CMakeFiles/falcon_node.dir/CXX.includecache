@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon_pub.cpp
+/home/joe/kuka_ws/src/scripts/src/input/falcon_pub.cpp
 iostream
 -
 string
@@ -18,23 +18,23 @@ math.h
 stdlib.h
 -
 falcon/core/FalconDevice.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/core/FalconDevice.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/core/FalconDevice.h
 falcon/firmware/FalconFirmwareNovintSDK.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/firmware/FalconFirmwareNovintSDK.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/firmware/FalconFirmwareNovintSDK.h
 falcon/util/FalconCLIBase.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/util/FalconCLIBase.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/util/FalconCLIBase.h
 falcon/util/FalconFirmwareBinaryNvent.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/util/FalconFirmwareBinaryNvent.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/util/FalconFirmwareBinaryNvent.h
 falcon/kinematic/stamper/StamperUtils.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/kinematic/stamper/StamperUtils.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/kinematic/stamper/StamperUtils.h
 falcon/core/FalconGeometry.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/core/FalconGeometry.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/core/FalconGeometry.h
 falcon/gmtl/gmtl.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/gmtl/gmtl.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/gmtl/gmtl.h
 falcon/grip/FalconGripFourButton.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/grip/FalconGripFourButton.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/grip/FalconGripFourButton.h
 falcon/kinematic/FalconKinematicStamper.h
-/home/joe/kuka_ws/src/scripts/src/inputs/falcon/kinematic/FalconKinematicStamper.h
+/home/joe/kuka_ws/src/scripts/src/input/falcon/kinematic/FalconKinematicStamper.h
 ros/ros.h
 -
 geometry_msgs/TwistStamped.h

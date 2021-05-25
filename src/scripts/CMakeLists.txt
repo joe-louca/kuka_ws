@@ -52,30 +52,24 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 catkin_install_python(PROGRAMS
-   src/inputs/config_UR10.py
-   src/inputs/config_kuka.py
-   src/inputs/joy_sub.py
-   src/inputs/falcon_sub.py
-   src/inputs/tf_sub.py
-   src/inputs/joy_control.py   
-   src/inputs/joy_control_CartVel.py
-   src/inputs/move_pub.py
-   src/inputs/move_pub_CartVel.py
-   src/inputs/gripper_pub.py
-   src/inputs/time_pub.py
-   src/feedbacks/cam1_sub.py
-   src/feedbacks/cam2_sub.py
-   src/feedbacks/ft_sub.py
-   src/feedbacks/ft_delay_pub.py
-   src/feedbacks/joy_vibrate.py
-   src/kuka/kuka_joint_sub.py
-   src/UR10/vrep_to_UR10.py
-   src/UR10/UR10_joint_sub.py
+   src/config/config_kuka.py
+
+   src/input/joy_sub.py
+   src/input/falcon_sub.py
+   src/input/input_control.py
+
+   src/feedback/ft_delay.py
+   src/feedback/vrep_cam1_sub.py
+   src/feedback/HUD.py
+   src/feedback/joy_vibrate.py
+
+   src/kuka/kuka_pos_delay.py
+
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
 add_executable(
-falcon_node src/inputs/falcon_pub.cpp
+falcon_node src/input/falcon_pub.cpp
 )
 
 add_dependencies(falcon_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
