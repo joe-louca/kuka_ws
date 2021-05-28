@@ -78,22 +78,21 @@ class INPUT_CONTROL:
                 try:
                     # Get delayed joints & end effector pose from KUKA                                      
                     kuka_pos = rospy.get_param('delayed_kuka_pos')
-
-                    # Calculate new end effector goal pose, based on the current pose & command input:
-                    pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0]
-                    pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1]
-                    pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2]                
-                    pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
-                    pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
-                    pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
-
-                    pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
-
-                    # Send delayed delayed commands to param server for kuka  
-                    rospy.set_param('delayed_pos_cmd', pos_cmd)
-
                 except:
-                    pass
+                    kuka_pos = rospy.get_param('initial_kuka_pos')
+                
+                # Calculate new end effector goal pose, based on the current pose & command input:
+                pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0]
+                pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1]
+                pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2]                
+                pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
+                pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
+                pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
+
+                pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
+
+                # Send delayed delayed commands to param server for kuka  
+                rospy.set_param('delayed_pos_cmd', pos_cmd)
 
                 # If gripper button is pressed, toggle gripper pose
                 button_press_previous = button_press_current

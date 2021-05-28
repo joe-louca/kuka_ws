@@ -14,7 +14,7 @@ class KUKA_JOINTS:
         elapsed_time = rospy.get_time()
 
         for i in range(tbl_len):                                        # For each row
-            if elapsed_time > delayed_tbl[i][row_len] + self.latency:   # If row is old enough
+            if elapsed_time > delayed_tbl[i][row_len-1] + self.latency:   # If row is old enough
                 retrieved_row = delayed_tbl[i]                          # Get this row
                 retrieved_row.pop()                                     # Remove timestamp
                 delayed_tbl = delayed_tbl[:(-tbl_len+i-1)]              # Remove old rows
@@ -39,12 +39,12 @@ class KUKA_JOINTS:
             kuka_pos = rospy.get_param('kuka_pos')
 
             # Store timestamp & retrieve delayed joint angles
-            elapsed_time = rospy.get_time()
-            timestamped_jpos = kuka_jpos.append(elapsed_time)
-            timestamped_pos = kuka_pos.append(elapsed_time)
+            t = rospy.get_time()
+            kuka_jpos.append(t)
+            kuka_pos.append(t)
 
-            jpos, j_retrieved = add_delay(timestamped_jpos, self.delayed_jpos)
-            pos, p_retrieved = add_delay(timestamped_pos, self.delayed_pos)
+            jpos, j_retrieved = self.add_delay(kuka_jpos, self.delayed_jpos)
+            pos, p_retrieved = self.add_delay(kuka_pos, self.delayed_pos)
             
             if j_retrieved:
                 # Publish delayed jpos

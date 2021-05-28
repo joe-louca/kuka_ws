@@ -2,7 +2,7 @@
 
 import rospy
 from std_msgs.msg import Float32MultiArray
-from geometry_msgs import WrenchStamped
+from geometry_msgs.msg import WrenchStamped
 
 class AXIA:
     def add_delay(self, added_row, delayed_tbl):
@@ -14,7 +14,7 @@ class AXIA:
         elapsed_time = rospy.get_time()
 
         for i in range(tbl_len):                                        # For each row
-            if elapsed_time > delayed_tbl[i][row_len] + self.latency:   # If row is old enough
+            if elapsed_time > delayed_tbl[i][row_len-1] + self.latency:   # If row is old enough
                 retrieved_row = delayed_tbl[i]                          # Get this row
                 retrieved_row.pop()                                     # Remove timestamp
                 delayed_tbl = delayed_tbl[:(-tbl_len+i-1)]              # Remove old rows
@@ -27,7 +27,7 @@ class AXIA:
     def ft_callback(msg):
         t = rospy.get_time()
         timestamped_ft = [msg.Wrench.force[0], msg.Wrench.force[1], msg.Wrench.force[2], msg.Wrench.torque[3], msg.Wrench.torque[4], msg.Wrench.torque[5], t]
-        ft, retrieved = add_delay(timestamped_ft, self.delayed_ft_table)
+        ft, retrieved = self.add_delay(timestamped_ft, self.delayed_ft_table)
 
         if retrieved:      
             rospy.set_param('ft_delay/fx', ft[0])
@@ -43,7 +43,7 @@ class AXIA:
         self.delayed_ft_table = []
         self.latency = rospy.get_param('latency')
         rospy.init_node('ft_sub_node', anonymous=True)
-        rospy.Subscriber('ft_sensor', WrenchStamped, ft_callback, queue_size=1)
+        rospy.Subscriber('ft_sensor', WrenchStamped, self.ft_callback, queue_size=1)
         rospy.spin()
 
   

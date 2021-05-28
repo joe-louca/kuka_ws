@@ -5,6 +5,7 @@ from math import pi
 import time
 from datetime import datetime
 import rospy
+import numpy as np
 
 class CopControl:
     def __init__(self):   
@@ -21,14 +22,7 @@ class CopControl:
         self.commandsList=[]
         
         # Move to an initial position
-        j1 = -40*pi/180
-        j2 =  75*pi/180
-        j3 =   0*pi/180
-        j4 =  50*pi/180
-        j5 = -20*pi/180
-        j6 =  35*pi/180
-        j7 =  0*pi/180
-        initPos = [j1,j2,j3,j4,j5,j6,j7]
+        initPos = rospy.get_param('initial_jpos')
         self.iiwa.movePTPJointSpace(initPos, self.velocity)
 
         # Start direct servo control
@@ -39,16 +33,11 @@ class CopControl:
                 self.t_0 = self.getSecs()                           # Refreshable start time
 
                 while True:                                         # Until Ctrl-C
-                    try:
-                        pos_cmd = rospy.get_param('delayed_pos_cmd')
-                        self.commandsList.append(pos_cmd)
-                        if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
-                            self.move_cmd()                             # Send command to iiwa
+                    pos_cmd = rospy.get_param('delayed_pos_cmd')
+                    self.commandsList.append(pos_cmd)
+                    if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
+                        self.move_cmd()                             # Send command to iiwa
 
-                    except:
-                        print("No pos command yet...")
-                        pass
-                    
             except KeyboardInterrupt:                           # Ctrl-C to exit
                 pass
             
@@ -90,27 +79,22 @@ class CopControl:
             print("Error could not disconnect")
             return
 
-    def get_cmd(self):
-        try:
-            pos_cmd = rospy.get_param('delayed_pos_cmd')
-            self.commandsList.append(pos_cmd)
-        except:
-            print("No pos command yet...")
-            pass
 
     def move_cmd(self):
         if len(self.commandsList) > 0:                  # If there are commands to act on
             pos_cmd = self.commandsList[0]              # Get most recent joint command
-            self.kuka_jpos = self.iiwa.sendEEfPositionGetActualJpos(pos_cmd)         # Send command
-            self.kuka_pos = self.iiwa.getEEFPos()       # Get end effector position
+            self.kuka_pos = self.iiwa.sendEEfPositionGetActualEEFpos(pos_cmd)         # Send command  & get pos
+            self.kuka_jpos = self.iiwa.getJointsPos()   # Get joint positions
             rospy.set_param('kuka_jpos', self.kuka_jpos)# Save kuka_jpos as param
             rospy.set_param('kuka_pos', self.kuka_pos)  # save kuka_pos as param
+
             self.t_0 = self.getSecs()                   # Refresh start time after move
             self.commandsList = []                      # Clear commands list
 
     def getSecs(self):
         dt = datetime.now() - self.start_time
         secs = (dt.days * 24 * 60 * 60 + dt.seconds)  + dt.microseconds / 1000000.0
-        return secs      
+        return secs
 
+        
 CopControl()

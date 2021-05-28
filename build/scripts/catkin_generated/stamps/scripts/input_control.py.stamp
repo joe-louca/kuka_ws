@@ -14,7 +14,7 @@ class INPUT_CONTROL:
         elapsed_time = rospy.get_time()
 
         for i in range(tbl_len):                                        # For each row
-            if elapsed_time > delayed_tbl[i][row_len] + self.latency:   # If row is old enough
+            if elapsed_time > delayed_tbl[i][row_len-1] + self.latency:   # If row is old enough
                 retrieved_row = delayed_tbl[i]                          # Get this row
                 retrieved_row.pop()                                     # Remove timestamp
                 delayed_tbl = delayed_tbl[:(-tbl_len+i-1)]              # Remove old rows
@@ -65,35 +65,43 @@ class INPUT_CONTROL:
             ax_yaw = rospy.get_param('ax/yaw')
             x_press = rospy.get_param('but/x_press')
 
-            # Get delayed joints & end effector pose from KUKA
-            kuka_jpos = rospy.get_param('delayed_kuka_jpos')
-            kuka_pos = rospy.get_param('delayed_kuka_pos')                                         
 
             # Store current joy input & read delayed command (outward delay)
+            t = rospy.get_time()
             timestamped_input_cmd = [ax_x, ax_y, ax_z, ax_yaw, ax_pitch, ax_roll, x_press, t]
-            input_cmd, retrieved = add_delay(timestamped_input_cmd, self.delayed_input_cmd)
+            input_cmd, retrieved = self.add_delay(timestamped_input_cmd, self.delayed_input_cmd)
                 
             if retrieved:
-                ax = [joy_input[0], joy_input[1], joy_input[2], joy_input[3], joy_input[4], joy_input[5]]
-                but = [joy_input[6]]
-                
-                ## Calculate new end effector goal pose, based on the current pose & command input:
-                pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0]
-                pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1]
-                pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2]                
-                pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
-                pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
-                pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
-    
+                ax = [input_cmd[0], input_cmd[1], input_cmd[2], input_cmd[3], input_cmd[4], input_cmd[5]]
+                but = [input_cmd[6]]
+
+                try:
+                    # Get delayed joints & end effector pose from KUKA                                      
+                    kuka_pos = rospy.get_param('delayed_kuka_pos')
+
+                    # Calculate new end effector goal pose, based on the current pose & command input:
+                    pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0]
+                    pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1]
+                    pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2]                
+                    pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
+                    pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
+                    pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
+
+                    pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
+
+                    # Send delayed delayed commands to param server for kuka  
+                    rospy.set_param('delayed_pos_cmd', pos_cmd)
+
+                except:
+                    pass
+
                 # If gripper button is pressed, toggle gripper pose
                 button_press_previous = button_press_current
                 button_press_current = but[0]
                 if button_press_previous < button_press_current:
-                    gripper_cmd = gripper_toggle(gripper_cmd)
+                    gripper_cmd = self.gripper_toggle(gripper_cmd)
 
-                # Send delayed delayed commands to param server    
-                pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
-                rospy.set_param('delayed_pos_cmd', pos_cmd)
+                # Send delayed delayed commands to param server for gripper   
                 rospy.set_param('delayed_gripper_cmd', gripper_cmd) 
 
             rate.sleep()

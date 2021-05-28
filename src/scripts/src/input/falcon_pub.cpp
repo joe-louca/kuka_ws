@@ -112,8 +112,8 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
   
   if (!falcon_rpy_mode)
   {
-    twist.twist.linear.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[2] : 0; // X (left/right) // if falcon position greater than deadzone, publish position, else publish 0
-    twist.twist.linear.y = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[0] : 0;// Y (in/out)
+    twist.twist.linear.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[0] : 0; // X (left/right) // if falcon position greater than deadzone, publish position, else publish 0
+    twist.twist.linear.y = (abs(falcon_pos[2]) > deadzone) ? -falcon_pos[2] : 0;// Y (in/out)
     twist.twist.linear.z = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[1] : 0; // Z (up/down)
     twist.twist.angular.x = 0.0;
     twist.twist.angular.y = 0.0;
