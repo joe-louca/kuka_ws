@@ -124,8 +124,8 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
     twist.twist.linear.x = 0.0;
     twist.twist.linear.y = 0.0;
     twist.twist.linear.z = 0.0;
-    twist.twist.angular.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[1] : 0; // pitch (down/up)
-    twist.twist.angular.y = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[0] : 0; // yaw (left/right
+    twist.twist.angular.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[0] : 0; // pitch (down/up)
+    twist.twist.angular.y = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[1] : 0; // yaw (left/right
     twist.twist.angular.z = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[2] : 0; // roll (in/out)
   }
   twist_pub.publish(twist);
@@ -208,7 +208,8 @@ int main(int argc, char* argv[])
       n.getParam("ft_delay/tx",tx);
       n.getParam("ft_delay/ty",ty);
       n.getParam("ft_delay/tz",tz);
-      ft_sensor = {fy, fz, fx};
+      ft_sensor = {fx, fz, fy};
+      
       
       // Set stiffness values 
       stiffness = 3.0;

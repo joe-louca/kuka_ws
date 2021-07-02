@@ -4,24 +4,23 @@ import rospy
 import math
 
 class INPUT_CONTROL:
-
     def add_delay(self, added_row, delayed_tbl):
         delayed_tbl.insert(0, added_row)                                # Add new row to table
-        row_len = len(added_row)
+        row_len = len(added_row)-1
         tbl_len = len(delayed_tbl)                              
         retrieved_row = []
         retrieved = False
         elapsed_time = rospy.get_time()
-
+        
         for i in range(tbl_len):                                        # For each row
-            if elapsed_time > delayed_tbl[i][row_len-1] + self.latency:   # If row is old enough
+            if elapsed_time > delayed_tbl[i][row_len] + self.latency:   # If row is old enough
                 retrieved_row = delayed_tbl[i]                          # Get this row
-                retrieved_row.pop()                                     # Remove timestamp
+                retrieved_row = retrieved_row[:(row_len)]               # Remove timestamp
                 delayed_tbl = delayed_tbl[:(-tbl_len+i-1)]              # Remove old rows
                 retrieved = True                                        # Update marker
                 break
         
-        return retrieved_row, retrieved
+        return retrieved_row, retrieved, delayed_tbl
                 
     def gripper_toggle(self, gripper_cmd):
         if gripper_cmd == 0:
@@ -45,8 +44,7 @@ class INPUT_CONTROL:
         button_press_current = 0
         button_press_previous = 0
         gripper_cmd = 0     # 0 = open, 1 = closed
-        self.delayed_kuka_pos = []
-        self.delayed_input_cmd = []
+        delayed_input_cmd_tbl = []
         
         # User instructions
         print('######### starting joystick control')
@@ -69,7 +67,7 @@ class INPUT_CONTROL:
             # Store current joy input & read delayed command (outward delay)
             t = rospy.get_time()
             timestamped_input_cmd = [ax_x, ax_y, ax_z, ax_yaw, ax_pitch, ax_roll, x_press, t]
-            input_cmd, retrieved = self.add_delay(timestamped_input_cmd, self.delayed_input_cmd)
+            input_cmd, retrieved, delayed_input_cmd_tbl = self.add_delay(timestamped_input_cmd, delayed_input_cmd_tbl)
                 
             if retrieved:
                 ax = [input_cmd[0], input_cmd[1], input_cmd[2], input_cmd[3], input_cmd[4], input_cmd[5]]
@@ -78,22 +76,21 @@ class INPUT_CONTROL:
                 try:
                     # Get delayed joints & end effector pose from KUKA                                      
                     kuka_pos = rospy.get_param('delayed_kuka_pos')
-
-                    # Calculate new end effector goal pose, based on the current pose & command input:
-                    pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0]
-                    pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1]
-                    pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2]                
-                    pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
-                    pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
-                    pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
-
-                    pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
-
-                    # Send delayed delayed commands to param server for kuka  
-                    rospy.set_param('delayed_pos_cmd', pos_cmd)
-
                 except:
-                    pass
+                    kuka_pos = rospy.get_param('initial_kuka_pos')
+                
+                # Calculate new end effector goal pose, based on the current pose & command input:
+                pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0]
+                pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1]
+                pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2]                
+                pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
+                pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
+                pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
+
+                pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
+
+                # Send delayed delayed commands to param server for kuka  
+                rospy.set_param('delayed_pos_cmd', pos_cmd)
 
                 # If gripper button is pressed, toggle gripper pose
                 button_press_previous = button_press_current

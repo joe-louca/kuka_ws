@@ -4,9 +4,9 @@
 from math import pi
 from rospy import set_param
 
-latency = 000.0 / 1000.0        # One way latency (ms to s)
+latency = 10.0 / 1000.0        # One way latency (ms to s)
 rate_hz = 500                   # Loop rate (Hz) 10
-pos_step_size = 1.0             # Position step size (mm to m)
+pos_step_size = 1.0             # Position step size (mm)
 rot_step_size = 1.0 * pi/180    # Rotation step size (deg to rads)
 f_threshold = 100.0             # Force sensor threshold for rigid collisions (N)
 t_threshold = 5.0               # Torque sensor threshold (Nm)

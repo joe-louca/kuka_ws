@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<launch>
+	<arg name="kuka" default="true"/>	
+	<arg name="robotiq" default="false"/>	
+	<arg name="axia" default="false"/>
+	<arg name="ps4" default="true"/>
+	<arg name="falcon" default="false"/>
+	<arg name="haption" default="false"/>	
+	<arg name="sim" default="true"/>
+	
+	<arg name="axia_rate" default="1000"/>
+	<arg name="node_start_delay" default="5.0" />
+
+	<!-- Input streams -->
+	<!-- Load config parameters -->
+	<node pkg="scripts" type="config_kuka.py" name="config"/>
+
+	<!-- Kuka -->
+	<group if="$(arg kuka)">
+		<node pkg="launch" type="run_iiwaPy3TEST.sh" name="kuka_connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		<node pkg="scripts" type="kuka_pos_delay.py" name="kuka_pos_delay" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+	</group>
+		
+	<!-- Robotiq -->	
+	<group if="$(arg robotiq)">
+		<node pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" name="robotiq_connection" args="/dev/ttyUSB0"/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_cmd_pub.py" name="robotiq_commander" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_pos_delay.py" name="robotiq_pos_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+	</group>
+	
+	<!-- Axia -->		
+	<group if="$(arg axia)">
+		<node pkg="netft_utils" type="netft_node" name="axia_connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
+		<node pkg="scripts" type="ft_delay.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+	</group>
+
+	<!-- User input -->
+	<!-- PS4 -->
+	<group if="$(arg ps4)">
+		<node pkg="joy" type="joy_node" name="joy" output="screen">
+	    		<param name="dev" value="/dev/input/js0" />
+	    		<param name="deadzone" value="0.2" />
+	    		<param name="autorepeat_rate" value="40" />
+	    		<param name="coalesce_interval" value="0.025" />
+	  	</node>
+		<node pkg="scripts" type="joy_sub.py" name="joy_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	  	
+  	</group>
+  	
+	<!-- Falcon -->
+	<group if="$(arg falcon)">
+		<node pkg="launch" type="run_falcon.sh" name="run_falcon" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		<node pkg="scripts" type="falcon_sub.py" name="falcon_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+	</group>
+		
+	<!-- Haption -->
+	<group if="$(arg haption)">
+		<!-- TO DO -->
+	</group>
+	
+	<!-- Controller -->
+	<node pkg="scripts" type="input_control.py" name="input_controller" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+	
+	<!-- CopelliaSim -->
+	<group if="$(arg sim)">
+		<node pkg="launch" type="run_cop_KUKA.sh" name="run_cop_KUKA" output="screen"/>
+	</group>
+</launch>

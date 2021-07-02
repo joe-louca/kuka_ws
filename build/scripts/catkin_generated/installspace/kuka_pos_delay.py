@@ -7,27 +7,27 @@ from std_msgs.msg import Float32MultiArray
 class KUKA_JOINTS:   
     def add_delay(self, added_row, delayed_tbl):
         delayed_tbl.insert(0, added_row)                                # Add new row to table
-        row_len = len(added_row)
+        row_len = len(added_row)-1
         tbl_len = len(delayed_tbl)                              
         retrieved_row = []
         retrieved = False
         elapsed_time = rospy.get_time()
-
+        
         for i in range(tbl_len):                                        # For each row
-            if elapsed_time > delayed_tbl[i][row_len-1] + self.latency:   # If row is old enough
+            if elapsed_time > delayed_tbl[i][row_len] + self.latency:   # If row is old enough
                 retrieved_row = delayed_tbl[i]                          # Get this row
-                retrieved_row.pop()                                     # Remove timestamp
+                retrieved_row = retrieved_row[:(row_len)]               # Remove timestamp
                 delayed_tbl = delayed_tbl[:(-tbl_len+i-1)]              # Remove old rows
                 retrieved = True                                        # Update marker
                 break
         
-        return retrieved_row, retrieved
+        return retrieved_row, retrieved, delayed_tbl
 
     def __init__(self):
         rate_hz = rospy.get_param('rate_hz')
         self.latency = rospy.get_param('latency')
-        self.delayed_jpos = []
-        self.delayed_pos = []
+        delayed_jpos = []
+        delayed_pos = []
         
         pub = rospy.Publisher('delayed_kuka_jpos', Float32MultiArray, queue_size=1)
         rospy.init_node('kuka_jpos_node', anonymous=True)
@@ -43,8 +43,8 @@ class KUKA_JOINTS:
             kuka_jpos.append(t)
             kuka_pos.append(t)
 
-            jpos, j_retrieved = self.add_delay(kuka_jpos, self.delayed_jpos)
-            pos, p_retrieved = self.add_delay(kuka_pos, self.delayed_pos)
+            jpos, j_retrieved, delayed_jpos = self.add_delay(kuka_jpos, delayed_jpos)
+            pos, p_retrieved, delayed_pos = self.add_delay(kuka_pos, delayed_pos)
             
             if j_retrieved:
                 # Publish delayed jpos
@@ -53,8 +53,8 @@ class KUKA_JOINTS:
                 pub.publish(msg)
                 rospy.set_param('delayed_kuka_jpos', jpos)
 
-                if p_retrieved:
-                    rospy.set_param('delayed_kuka_pos', pos)
+            if p_retrieved:
+                rospy.set_param('delayed_kuka_pos', pos)
                 
             rate.sleep()
         
