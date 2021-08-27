@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -28,18 +29,18 @@ end
 
 function setShapeActive(h,active)
     if active then
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,1+256) -- make it visible
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,1+256) -- make it visible
         sim.setObjectSpecialProperty(h,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable) -- make it collidable, measurable, detectable, etc.
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_static,0) -- make it non-static
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_respondable,1) -- make it respondable
-        local p=sim.boolOr32(sim.getObjectProperty(h),sim.objectproperty_dontshowasinsidemodel)
+        sim.setObjectInt32Param(h,sim.shapeintparam_static,0) -- make it non-static
+        sim.setObjectInt32Param(h,sim.shapeintparam_respondable,1) -- make it respondable
+        local p=(sim.getObjectProperty(h)|sim.objectproperty_dontshowasinsidemodel)
         sim.setObjectProperty(h,p-sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,0) -- make it invisible
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,0) -- make it invisible
         sim.setObjectSpecialProperty(h,0) -- make it not collidable, measurable, detectable, etc.
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_static,1) -- make it static
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_respondable,0) -- make it non-respondable
-        local p=sim.boolOr32(sim.getObjectProperty(h),sim.objectproperty_dontshowasinsidemodel)
+        sim.setObjectInt32Param(h,sim.shapeintparam_static,1) -- make it static
+        sim.setObjectInt32Param(h,sim.shapeintparam_respondable,0) -- make it non-respondable
+        local p=(sim.getObjectProperty(h)|sim.objectproperty_dontshowasinsidemodel)
         sim.setObjectProperty(h,p)
     end
 end
@@ -61,7 +62,7 @@ setMass=function(m)
             end
         end
         if sim.getObjectType(handle)==sim.object_shape_type then
-            local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+            local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
             if p==0 then
                 local m0,i0,com0=sim.getShapeMassAndInertia(handle)
                 currentMass=currentMass+m0
@@ -86,7 +87,7 @@ setMass=function(m)
             end
         end
         if sim.getObjectType(handle)==sim.object_shape_type then
-            local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+            local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
             if p==0 then
                 local transf=sim.getObjectMatrix(handle,-1)
                 local m0,i0,com0=sim.getShapeMassAndInertia(handle,transf)
@@ -220,7 +221,7 @@ function updateModel()
 
     local textureId=sim.getShapeTextureId(bb)
     for i=1,4,1 do
-        if sim.boolAnd32(bitC,4)>0 then
+        if (bitC&4)>0 then
             sim.setShapeTexture(p[i],textureId,sim.texturemap_cube,4+8,{0.3,0.3})
         else
             sim.setShapeTexture(p[i],-1,sim.texturemap_cube,4+8,{0.3,0.3})
@@ -230,7 +231,7 @@ function updateModel()
 
     sides=sim.groupShapes(p)
     setShapeActive(sides,true)
-    sim.setObjectInt32Parameter(sides,sim.shapeintparam_respondable_mask,65535-1)
+    sim.setObjectInt32Param(sides,sim.shapeintparam_respondable_mask,65535-1)
     sim.setObjectParent(sides,sideConnection,true)
     sim.setObjectPosition(joints[1],model,{w/2,0,h+th/2})
     sim.setObjectPosition(joints[2],model,{-w/2,0,h+th/2})
@@ -239,8 +240,8 @@ function updateModel()
     
     for i=1,4,1 do
         sim.setJointForce(joints[i],maxTorque)
-        sim.setObjectFloatParameter(joints[i],sim.jointfloatparam_kc_k,springK)
-        sim.setObjectFloatParameter(joints[i],sim.jointfloatparam_kc_c,springC)
+        sim.setObjectFloatParam(joints[i],sim.jointfloatparam_kc_k,springK)
+        sim.setObjectFloatParam(joints[i],sim.jointfloatparam_kc_c,springC)
     end
 
     local lidL=c['closePartALength']*w
@@ -261,16 +262,16 @@ function updateModel()
     setCuboidMassAndInertia(lids[4],lidW,th,lidL,defMassPerVolume,inertiaFactor)
     sim.setObjectPosition(lids[4],joints[4],{0,lidL*0.5,0})
 
-    setShapeActive(lids[1],sim.boolAnd32(bitC,1)>0)
-    setShapeActive(lids[2],sim.boolAnd32(bitC,1)>0)
-    setShapeActive(lids[3],sim.boolAnd32(bitC,2)>0)
-    setShapeActive(lids[4],sim.boolAnd32(bitC,2)>0)
-    sim.setObjectInt32Parameter(lids[1],sim.shapeintparam_respondable_mask,65535-254)
-    sim.setObjectInt32Parameter(lids[2],sim.shapeintparam_respondable_mask,65535-254)
-    sim.setObjectInt32Parameter(lids[3],sim.shapeintparam_respondable_mask,65535-254)
-    sim.setObjectInt32Parameter(lids[4],sim.shapeintparam_respondable_mask,65535-254)
+    setShapeActive(lids[1],(bitC&1)>0)
+    setShapeActive(lids[2],(bitC&1)>0)
+    setShapeActive(lids[3],(bitC&2)>0)
+    setShapeActive(lids[4],(bitC&2)>0)
+    sim.setObjectInt32Param(lids[1],sim.shapeintparam_respondable_mask,65535-254)
+    sim.setObjectInt32Param(lids[2],sim.shapeintparam_respondable_mask,65535-254)
+    sim.setObjectInt32Param(lids[3],sim.shapeintparam_respondable_mask,65535-254)
+    sim.setObjectInt32Param(lids[4],sim.shapeintparam_respondable_mask,65535-254)
 
-    if sim.boolAnd32(bitC,4)>0 then
+    if (bitC&4)>0 then
         -- textured
         sim.setShapeTexture(model,textureId,sim.texturemap_cube,4+8,{0.3,0.3})
         sim.setShapeTexture(lids[1],textureId,sim.texturemap_cube,4+8,{0.3,0.3})
@@ -298,14 +299,14 @@ function setDlgItemContent()
         simUI.setEditValue(ui,3,simBWF.format("%.0f",config['height']/0.001),true)
         simUI.setEditValue(ui,4,simBWF.format("%.0f",config['thickness']/0.001),true)
 
-        simUI.setCheckboxValue(ui,10,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
+        simUI.setCheckboxValue(ui,10,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
         simUI.setEditValue(ui,11,simBWF.format("%.0f",config['closePartALength']*100),true)
         simUI.setEditValue(ui,12,simBWF.format("%.0f",config['closePartAWidth']*100),true)
-        simUI.setCheckboxValue(ui,13,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
+        simUI.setCheckboxValue(ui,13,simBWF.getCheckboxValFromBool((config['bitCoded']&2)~=0),true)
         simUI.setEditValue(ui,14,simBWF.format("%.0f",config['closePartBLength']*100),true)
         simUI.setEditValue(ui,15,simBWF.format("%.0f",config['closePartBWidth']*100),true)
 
-        simUI.setCheckboxValue(ui,888,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)~=0),true)
+        simUI.setCheckboxValue(ui,888,simBWF.getCheckboxValFromBool((config['bitCoded']&4)~=0),true)
 
         simUI.setEditValue(ui,20,simBWF.format("%.2f",config['mass']),true)
         simUI.setEditValue(ui,21,simBWF.format("%.2f",config['inertiaFactor']),true)
@@ -319,10 +320,10 @@ function setDlgItemContent()
         simUI.setSliderValue(ui,32,blue*100,true)
         simUI.setSliderValue(ui,33,spec*100,true)
 
-        simUI.setEnabled(ui,11,sim.boolAnd32(config['bitCoded'],1)~=0,true)
-        simUI.setEnabled(ui,12,sim.boolAnd32(config['bitCoded'],1)~=0,true)
-        simUI.setEnabled(ui,14,sim.boolAnd32(config['bitCoded'],2)~=0,true)
-        simUI.setEnabled(ui,15,sim.boolAnd32(config['bitCoded'],2)~=0,true)
+        simUI.setEnabled(ui,11,(config['bitCoded']&1)~=0,true)
+        simUI.setEnabled(ui,12,(config['bitCoded']&1)~=0,true)
+        simUI.setEnabled(ui,14,(config['bitCoded']&2)~=0,true)
+        simUI.setEnabled(ui,15,(config['bitCoded']&2)~=0,true)
 
         simBWF.setSelectedEditWidget(ui,sel)
     end
@@ -398,7 +399,7 @@ end
 
 function lidA_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -410,7 +411,7 @@ end
 
 function lidB_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -594,7 +595,7 @@ end
 
 function texture_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -774,13 +775,13 @@ function sysCall_cleanup()
         -- This means the box is part of the part repository or that we want to finalize the model (i.e. won't be customizable anymore)
         local c=readInfo()
         sim.writeCustomDataBlock(model,'XYZ_PACKINGBOX_INFO','')
-        if sim.boolAnd32(c['bitCoded'],1)==0 then
+        if (c['bitCoded']&1)==0 then
             sim.removeObject(lids[1]) 
             sim.removeObject(lids[2]) 
             sim.removeObject(joints[1]) 
             sim.removeObject(joints[2]) 
         end
-        if sim.boolAnd32(c['bitCoded'],2)==0 then
+        if (c['bitCoded']&2)==0 then
             sim.removeObject(lids[3]) 
             sim.removeObject(lids[4]) 
             sim.removeObject(joints[3]) 

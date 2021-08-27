@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -17,14 +18,14 @@ end
 
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -85,15 +86,15 @@ function setSizes()
     local h=c['height']
     local d=c['detectionDiameter']
     setObjectSize(box,w,l,h)
-    local r,mmin=sim.getObjectFloatParameter(sensor1,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(sensor1,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(sensor1,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(sensor1,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
-    r,mmin=sim.getObjectFloatParameter(sensor1,sim.objfloatparam_objbbox_min_x)
-    r,mmax=sim.getObjectFloatParameter(sensor1,sim.objfloatparam_objbbox_max_x)
+    mmin=sim.getObjectFloatParam(sensor1,sim.objfloatparam_objbbox_min_x)
+    mmax=sim.getObjectFloatParam(sensor1,sim.objfloatparam_objbbox_max_x)
     sd=mmax-mmin
     sim.scaleObject(sensor1,d/sd,d/sd,(h+0.01)/sz)
-    r,mmin=sim.getObjectFloatParameter(sensor2,sim.objfloatparam_objbbox_min_z)
-    r,mmax=sim.getObjectFloatParameter(sensor2,sim.objfloatparam_objbbox_max_z)
+    mmin=sim.getObjectFloatParam(sensor2,sim.objfloatparam_objbbox_min_z)
+    mmax=sim.getObjectFloatParam(sensor2,sim.objfloatparam_objbbox_max_z)
     sz=mmax-mmin
     sim.scaleObject(sensor2,(h+0.01)/sz,(h+0.01)/sz,(h+0.01)/sz)
     sim.setObjectPosition(box,model,{0,0,h*0.5})
@@ -110,15 +111,15 @@ function setDlgItemContent()
         simUI.setEditValue(ui,22,simBWF.format("%.0f",config['height']/0.001),true)
         simUI.setEditValue(ui,23,simBWF.format("%.0f",config['detectionDiameter']/0.001),true)
         simUI.setEditValue(ui,24,simBWF.format("%.0f",180*config['maxLabelAngle']/math.pi),true)
-        simUI.setCheckboxValue(ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)~=0),true)
-        simUI.setCheckboxValue(ui,6,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],8)~=0),true)
-        simUI.setCheckboxValue(ui,30,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],16)~=0),true)
-        simUI.setCheckboxValue(ui,31,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],32)~=0),true)
-        simUI.setCheckboxValue(ui,32,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],64)~=0),true)
-        simUI.setCheckboxValue(ui,33,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],128)~=0),true)
-        simUI.setCheckboxValue(ui,34,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],256)~=0),true)
+        simUI.setCheckboxValue(ui,3,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(ui,4,simBWF.getCheckboxValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool((config['bitCoded']&4)~=0),true)
+        simUI.setCheckboxValue(ui,6,simBWF.getCheckboxValFromBool((config['bitCoded']&8)~=0),true)
+        simUI.setCheckboxValue(ui,30,simBWF.getCheckboxValFromBool((config['bitCoded']&16)~=0),true)
+        simUI.setCheckboxValue(ui,31,simBWF.getCheckboxValFromBool((config['bitCoded']&32)~=0),true)
+        simUI.setCheckboxValue(ui,32,simBWF.getCheckboxValFromBool((config['bitCoded']&64)~=0),true)
+        simUI.setCheckboxValue(ui,33,simBWF.getCheckboxValFromBool((config['bitCoded']&128)~=0),true)
+        simUI.setCheckboxValue(ui,34,simBWF.getCheckboxValFromBool((config['bitCoded']&256)~=0),true)
         simBWF.setSelectedEditWidget(ui,sel)
     end
 end
@@ -145,7 +146,7 @@ end
 
 function hidden_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -156,7 +157,7 @@ end
 
 function showPoints_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -167,7 +168,7 @@ end
 
 function console_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -178,7 +179,7 @@ end
 
 function label_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end
@@ -189,7 +190,7 @@ end
 
 function labelSensorTop_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],16)
+    c['bitCoded']=(c['bitCoded']|16)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-16
     end
@@ -200,7 +201,7 @@ end
 
 function labelSensorSide1_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],32)
+    c['bitCoded']=(c['bitCoded']|32)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-32
     end
@@ -211,7 +212,7 @@ end
 
 function labelSensorSide2_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],64)
+    c['bitCoded']=(c['bitCoded']|64)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-64
     end
@@ -222,7 +223,7 @@ end
 
 function colorLabel_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],128)
+    c['bitCoded']=(c['bitCoded']|128)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-128
     end
@@ -233,7 +234,7 @@ end
 
 function showStats_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],256)
+    c['bitCoded']=(c['bitCoded']|256)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-256
     end
@@ -446,7 +447,7 @@ end
 function sysCall_beforeSimulation()
     removeDlg()
     local c=readInfo()
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],1)==0)
+    local show=simBWF.modifyAuxVisualizationItems((c['bitCoded']&1)==0)
     if not show then
         sim.setModelProperty(model,sim.modelproperty_not_visible)
     end

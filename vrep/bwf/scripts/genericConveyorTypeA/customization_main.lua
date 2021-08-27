@@ -21,7 +21,7 @@ function model.updateConveyor()
     local borderHeight=conf.conveyorSpecific.borderHeight
     local bitCoded=conf.conveyorSpecific.bitCoded
     local wt=conf.conveyorSpecific.wallThickness
-    local re=sim.boolAnd32(bitCoded,16)==0
+    local re=(bitCoded&16)==0
 
     sim.setObjectPosition(model.specHandles.rotJoints[1],model.handle,{-length*0.5,0,-height*0.5})
     sim.setObjectPosition(model.specHandles.rotJoints[2],model.handle,{length*0.5,0,-height*0.5})
@@ -59,71 +59,71 @@ function model.updateConveyor()
     sim.setObjectPosition(model.specHandles.sides[2],model.handle,{0,-(width+wt)*0.5,-height*0.5})
 
     if re then
-        sim.setObjectInt32Parameter(model.specHandles.endParts[1],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[2],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[3],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[4],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[5],sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[6],sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[5],sim.shapeintparam_respondable,1)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[6],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.endParts[1],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.specHandles.endParts[2],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.specHandles.endParts[3],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.specHandles.endParts[4],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.specHandles.endParts[5],sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.specHandles.endParts[6],sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.specHandles.endParts[5],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.endParts[6],sim.shapeintparam_respondable,1)
     else
-        sim.setObjectInt32Parameter(model.specHandles.endParts[1],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[2],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[3],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[4],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[5],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[6],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[5],sim.shapeintparam_respondable,0)
-        sim.setObjectInt32Parameter(model.specHandles.endParts[6],sim.shapeintparam_respondable,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[1],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[2],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[3],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[4],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[5],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[6],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[5],sim.shapeintparam_respondable,0)
+        sim.setObjectInt32Param(model.specHandles.endParts[6],sim.shapeintparam_respondable,0)
     end
 
-    if sim.boolAnd32(bitCoded,1)~=0 then
-        sim.setObjectInt32Parameter(model.specHandles.sides[1],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.sides[1],sim.shapeintparam_respondable,0)
+    if (bitCoded&1)~=0 then
+        sim.setObjectInt32Param(model.specHandles.sides[1],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.sides[1],sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.sides[1],0)
         sim.setObjectProperty(model.specHandles.sides[1],sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.sides[1],sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.sides[1],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.sides[1],sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.sides[1],sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.sides[1],sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.sides[1],sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
-    if sim.boolAnd32(bitCoded,2)~=0 then
-        sim.setObjectInt32Parameter(model.specHandles.sides[2],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.sides[2],sim.shapeintparam_respondable,0)
+    if (bitCoded&2)~=0 then
+        sim.setObjectInt32Param(model.specHandles.sides[2],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.sides[2],sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.sides[2],0)
         sim.setObjectProperty(model.specHandles.sides[2],sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.sides[2],sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.sides[2],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.sides[2],sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.sides[2],sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.sides[2],sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.sides[2],sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
-    if sim.boolAnd32(bitCoded,4)~=0 or (not re) then
-        sim.setObjectInt32Parameter(model.specHandles.sides[3],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.sides[3],sim.shapeintparam_respondable,0)
+    if (bitCoded&4)~=0 or (not re) then
+        sim.setObjectInt32Param(model.specHandles.sides[3],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.sides[3],sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.sides[3],0)
         sim.setObjectProperty(model.specHandles.sides[3],sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.sides[3],sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.sides[3],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.sides[3],sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.sides[3],sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.sides[3],sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.sides[3],sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
-    if sim.boolAnd32(bitCoded,8)~=0 or (not re) then
-        sim.setObjectInt32Parameter(model.specHandles.sides[4],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.sides[4],sim.shapeintparam_respondable,0)
+    if (bitCoded&8)~=0 or (not re) then
+        sim.setObjectInt32Param(model.specHandles.sides[4],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.sides[4],sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.sides[4],0)
         sim.setObjectProperty(model.specHandles.sides[4],sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.sides[4],sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.sides[4],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.sides[4],sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.sides[4],sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.sides[4],sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.sides[4],sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
 
-    if sim.boolAnd32(bitCoded,32)==0 then
+    if (bitCoded&32)==0 then
         local textureID=sim.getShapeTextureId(model.specHandles.textureHolder)
         sim.setShapeTexture(model.specHandles.middleParts[2],textureID,sim.texturemap_plane,12,{0.04,0.04})
         sim.setShapeTexture(model.specHandles.endParts[1],textureID,sim.texturemap_plane,12,{0.04,0.04})

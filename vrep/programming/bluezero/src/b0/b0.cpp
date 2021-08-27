@@ -15,6 +15,7 @@
 #include <boost/algorithm/string_regex.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/asio.hpp>
 
 #ifdef HAVE_POSIX_SIGNALS
 #include <signal.h>
@@ -35,12 +36,19 @@ static void signalHandler(int sig)
 static void setupSignalHandler()
 {
 #ifdef HAVE_POSIX_SIGNALS
-    struct sigaction sa;
+    struct sigaction sa, sa_old;
+
     std::memset(&sa, 0, sizeof(sa));
     sa.sa_handler = signalHandler;
     sigfillset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, NULL);
-    sigaction(SIGTERM, &sa, NULL);
+
+    sigaction(SIGINT, NULL, &sa_old);
+    if(sa_old.sa_handler == SIG_DFL)
+        sigaction(SIGINT, &sa, NULL);
+
+    sigaction(SIGTERM, NULL, &sa_old);
+    if(sa_old.sa_handler == SIG_DFL)
+        sigaction(SIGTERM, &sa, NULL);
 #endif
 }
 
@@ -374,7 +382,7 @@ static bool makeSubstitutions(const b0::Node &node, std::string &name)
 
     if(name.find("%h") != std::string::npos)
     {
-        boost::replace_all(name, "%h", node.hostname());
+        boost::replace_all(name, "%h", b0::getHostName());
         ret = true;
     }
 
@@ -631,6 +639,30 @@ bool quitRequested()
 void quit()
 {
     Global::getInstance().quit();
+}
+
+std::string getHostName()
+{
+    return b0::env::get("B0_HOST_ID", boost::asio::ip::host_name());
+}
+
+int getPID()
+{
+    return ::getpid();
+}
+
+std::string getThreadID()
+{
+    return boost::lexical_cast<std::string>(boost::this_thread::get_id());
+}
+
+int getFreeTCPPort()
+{
+    // by binding the OS socket to port 0, an available port number will be used
+    boost::asio::ip::tcp::endpoint ep(boost::asio::ip::tcp::v4(), 0);
+    boost::asio::io_service io_service;
+    boost::asio::ip::tcp::socket socket(io_service, ep);
+    return socket.local_endpoint().port();
 }
 
 using boost::program_options::value;

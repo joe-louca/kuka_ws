@@ -14,7 +14,7 @@ function model.dlg.refresh()
         local sel=simBWF.getSelectedEditWidget(model.dlg.ui)
         
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
-        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
 
         
         local c=model.readInfo()
@@ -37,7 +37,7 @@ end
 
 function model.dlg.hiddenDuringSimulation_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end

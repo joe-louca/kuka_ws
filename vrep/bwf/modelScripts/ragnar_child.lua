@@ -1,3 +1,17 @@
+simBWF=require('simBWF')
+function sysCall_init()
+    corout=coroutine.create(coroutineMain)
+end
+
+function sysCall_actuation()
+    if coroutine.status(corout)~='dead' then
+        local ok,errorMsg=coroutine.resume(corout)
+        if errorMsg then
+            error(errorMsg)
+        end
+    end
+end
+
 function ragnar_startPickTime()
     -- Call this just before starting a pick motion
     _timeMeasurement2Start=sim.getSimulationTime()
@@ -545,7 +559,7 @@ getAllPartsInStaticWindow=function(windowHandle)
             value['pickPos']=ppos
             value['normalVect']=sim.multiplyVector(transfRot,value['normalVect'])
             value['partHandle']=key -- we add that data
-            local relPos=sim.getObjectPosition(key,ikModeTipDummy)
+            local relPos=sim.getObjectPosition(key,simTipDummy)
             value['sort']=relPos[1]*relPos[1]+relPos[2]*relPos[2]+relPos[3]*relPos[3]
             ret[#ret+1]=value
             cnt=cnt+1
@@ -626,25 +640,25 @@ end
 
 ragnar_attachPart=function(part)
     local partHandle=part['partHandle']
-    if sim.isHandleValid(partHandle)>0 then
+    if sim.isHandle(partHandle) then
         local p=sim.getModelProperty(partHandle)
-        if sim.boolAnd32(p,sim.modelproperty_not_model)==0 then
+        if (p&sim.modelproperty_not_model)==0 then
             -- We have a model
-            p=sim.boolOr32(p,sim.modelproperty_not_dynamic)
+            p=(p|sim.modelproperty_not_dynamic)
             sim.setModelProperty(partHandle,p)
         else
             -- We have a shape
-            sim.setObjectInt32Parameter(partHandle,sim.shapeintparam_static,1)
+            sim.setObjectInt32Param(partHandle,sim.shapeintparam_static,1)
             sim.resetDynamicObject(partHandle)
         end
         if #attachedParts==0 then
             previousPartParent=sim.getObjectParent(partHandle)
-            sim.setObjectParent(partHandle,ikModeTipDummy,true)
+            sim.setObjectParent(partHandle,simTipDummy,true)
             attachedParts[1]=partHandle
         else
             if ragnar_getAttachToTarget() then
                 local sens=sim.createForceSensor(0,{0,1,1,0,0},{0.001,1,1,0,0})
-                sim.setObjectInt32Parameter(sens,sim.objintparam_visibility_layer,0) -- hidden
+                sim.setObjectInt32Param(sens,sim.objintparam_visibility_layer,0) -- hidden
                 sim.setObjectPosition(sens,attachedParts[1],{0,0,0})
                 sim.setObjectParent(attachedParts[1],sens,true)
                 sim.setObjectParent(sens,partHandle,true)
@@ -652,7 +666,7 @@ ragnar_attachPart=function(part)
                 sim.setObjectParent(attachedParts[1],partHandle,true)
             end
             previousPartParent=sim.getObjectParent(partHandle)
-            sim.setObjectParent(partHandle,ikModeTipDummy,true)
+            sim.setObjectParent(partHandle,simTipDummy,true)
             table.insert(attachedParts,1,partHandle)
         end
     end
@@ -661,28 +675,28 @@ end
 ragnar_detachPart=function()
     if #attachedParts>0 then
     
-        if sim.isHandleValid(attachedParts[1])>0 then
+        if sim.isHandle(attachedParts[1]) then
             local p=sim.getModelProperty(attachedParts[1])
-            if sim.boolAnd32(p,sim.modelproperty_not_model)==0 then
+            if (p&sim.modelproperty_not_model)==0 then
                 -- We have a model
-                p=sim.boolOr32(p,sim.modelproperty_not_dynamic)-sim.modelproperty_not_dynamic
+                p=(p|sim.modelproperty_not_dynamic)-sim.modelproperty_not_dynamic
                 sim.setModelProperty(attachedParts[1],p)
             else
                 -- We have a shape
-                sim.setObjectInt32Parameter(attachedParts[1],sim.shapeintparam_static,0)
+                sim.setObjectInt32Param(attachedParts[1],sim.shapeintparam_static,0)
                 sim.resetDynamicObject(attachedParts[1])
             end
             sim.setObjectParent(attachedParts[1],previousPartParent,true)
             for i=2,#attachedParts,1 do
                 -- the child parts (in the stacking):
                 local p=sim.getModelProperty(attachedParts[i])
-                if sim.boolAnd32(p,sim.modelproperty_not_model)==0 then
+                if (p&sim.modelproperty_not_model)==0 then
                     -- We have a model
-                    p=sim.boolOr32(p,sim.modelproperty_not_dynamic)-sim.modelproperty_not_dynamic
+                    p=(p|sim.modelproperty_not_dynamic)-sim.modelproperty_not_dynamic
                     sim.setModelProperty(attachedParts[i],p)
                 else
                     -- We have a shape
-                    sim.setObjectInt32Parameter(attachedParts[i],sim.shapeintparam_static,0)
+                    sim.setObjectInt32Param(attachedParts[i],sim.shapeintparam_static,0)
                     sim.resetDynamicObject(attachedParts[i])
                 end
                 
@@ -696,10 +710,10 @@ ragnar_detachPart=function()
                     sim.setObjectParent(attachedParts[i],previousPartParent,true)
                 end
             end
-            if #attachedParts>1 and (sim.boolAnd32(attachedParts[1],sim.modelproperty_not_model)>0) and ragnar_getAttachToTarget() then
+            if #attachedParts>1 and ((attachedParts[1]&sim.modelproperty_not_model)>0) and ragnar_getAttachToTarget() then
                 -- We need to turn the main stack parent into model:
                 local p=sim.getModelProperty(attachedParts[1])
-                p=sim.boolOr32(p,sim.modelproperty_not_model)-sim.modelproperty_not_model
+                p=(p|sim.modelproperty_not_model)-sim.modelproperty_not_model
                 sim.setModelProperty(attachedParts[1],p)
             end
             attachedParts={}
@@ -711,9 +725,9 @@ ragnar_detachPart=function()
 end
 
 attachPart1ToPart2=function(part1,part2)
-    if (sim.isHandleValid(part1)>0) and (sim.isHandleValid(part2)>0) then
+    if sim.isHandle(part1) and sim.isHandle(part2) then
         local f=sim.createForceSensor(0,{0,1,1,0,0},{0.001,0,0,0,0})
-        sim.setObjectInt32Parameter(f,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(f,sim.objintparam_visibility_layer,256)
         sim.setObjectPosition(f,part1,{0,0,0})
         sim.setObjectParent(part1,f,true)
         sim.setObjectParent(f,part2,true)
@@ -724,56 +738,33 @@ attachPart1ToPart2=function(part1,part2)
         
         local objs=sim.getObjectsInTree(part1,sim.object_shape_type)
         for i=1,#objs,1 do
-            local r,p=sim.getObjectInt32Parameter(part2,sim.shapeintparam_respondable_mask)
-            p=sim.boolAnd32(p,65535-255)
-            sim.setObjectInt32Parameter(objs[i],sim.shapeintparam_respondable_mask,p)
+            local p=sim.getObjectInt32Param(part2,sim.shapeintparam_respondable_mask)
+            p=(p&65535-255)
+            sim.setObjectInt32Param(objs[i],sim.shapeintparam_respondable_mask,p)
             sim.resetDynamicObject(objs[i])
         end
     end
 end
 
 handleKinematics=function()
-    local res=sim.handleIkGroup(mainIkTask)
-    if res==sim.ikresult_fail then
-        if kinematicsFailedDialogHandle==-1 then
-            kinematicsFailedDialogHandle=sim.displayDialog("IK failure report","IK solver failed.",sim.dlgstyle_message,false,"",nil,{1,0.8,0,0,0,0})
-        end
-    else
-        if kinematicsFailedDialogHandle~=-1 then
-            sim.endDialog(kinematicsFailedDialogHandle)
-            kinematicsFailedDialogHandle=-1
-        end
-    end
+    simIK.applyIkEnvironmentToScene(ikEnv,ikGroup)
 end
 
 setFkMode=function()
-    -- disable the platform positional constraints:
-    sim.setIkElementProperties(mainIkTask,ikModeTipDummy,0)
-    -- Set the driving joints into passive mode (not taken into account during IK resolution):
-    sim.setJointMode(fkDrivingJoints[1],sim.jointmode_passive,0)
-    sim.setJointMode(fkDrivingJoints[2],sim.jointmode_passive,0)
-    sim.setJointMode(fkDrivingJoints[3],sim.jointmode_passive,0)
-    sim.setJointMode(fkDrivingJoints[4],sim.jointmode_passive,0)
-    -- In FK mode, we want Ik to be handled automatically
-    sim.setExplicitHandling(mainIkTask,0)
+    simIK.setIkElementFlags(ikEnv,ikGroup,ikElementPlatform,0)
+    for i=1,#fkDrivingJoints_inIkEnv,1 do
+        simIK.setJointMode(ikEnv,fkDrivingJoints_inIkEnv[i],simIK.jointmode_passive)
+    end
     sim.switchThread()
 end
 
 setIkMode=function()
     sim.switchThread()
-    -- In IK mode, we want Ik to be handled in this script:
-    sim.setExplicitHandling(mainIkTask,1)
+    simIK.setIkElementFlags(ikEnv,ikGroup,ikElementPlatform,1)
+    for i=1,#fkDrivingJoints_inIkEnv,1 do
+        simIK.setJointMode(ikEnv,fkDrivingJoints_inIkEnv[i],simIK.jointmode_ik)
+    end
     sim.switchThread()
-    -- Make sure the target dummy has the same pose as the tip dummy:
-    sim.setObjectPosition(ikModeTargetDummy,ikModeTipDummy,{0,0,0})
-    sim.setObjectOrientation(ikModeTargetDummy,ikModeTipDummy,{0,0,0})
-    -- enable the platform positional constraints:
-    sim.setIkElementProperties(mainIkTask,ikModeTipDummy,sim.ik_x_constraint+sim.ik_y_constraint+sim.ik_z_constraint+sim.ik_alpha_beta_constraint+sim.ik_gamma_constraint)
-    -- Set the base joints into ik mode (taken into account during IK resolution):
-    sim.setJointMode(fkDrivingJoints[1],sim.jointmode_ik,0)
-    sim.setJointMode(fkDrivingJoints[2],sim.jointmode_ik,0)
-    sim.setJointMode(fkDrivingJoints[3],sim.jointmode_ik,0)
-    sim.setJointMode(fkDrivingJoints[4],sim.jointmode_ik,0)
 end
 
 --[[
@@ -789,12 +780,12 @@ RobMove = function(blend,nulling)
 --        res,nextPVA,syncTime =simRMLPosition(4,dt,-1,curPVA,MaxVAJ,selVec,tarPV)
 
         newPos = {nextPVA[1],nextPVA[2],nextPVA[3]}
-        sim.setObjectPosition(ikModeTargetDummy,model,newPos)
-        sim.setObjectOrientation(ikModeTargetDummy,model,{0,0,nextPVA[4]})
+        sim.setObjectPosition(simTargetDummy,model,newPos)
+        sim.setObjectOrientation(simTargetDummy,model,{0,0,nextPVA[4]})
         handleKinematics()
-        --sim.setObjectOrientation(ikModeTargetDummy2,model,{0,0,-nextPVA[4]})
+        --sim.setObjectOrientation(simTargetDummy2,model,{0,0,-nextPVA[4]})
         --newPos[4] = -newPos[4]
-        --sim.setObjectPosition(ikModeTargetDummy2,model,newPos)
+        --sim.setObjectPosition(simTargetDummy2,model,newPos)
         curPVA = nextPVA;
     --    txt = simBWF.format(" newPos ( %.2f,%.2f,%.2f) %.2f",newPos[1],newPos[2],newPos[3],dist2go)
         --sim.addStatusbarMessage(txt)
@@ -819,7 +810,7 @@ end
 createDummyToFollowWithOffset=function(parentDummy,posOffset)
     local m=sim.getObjectMatrix(toolHandle,-1)
     local dummyHandleToFollow=sim.createDummy(0.001)
-    sim.setObjectInt32Parameter(dummyHandleToFollow,sim.objintparam_visibility_layer,1024)
+    sim.setObjectInt32Param(dummyHandleToFollow,sim.objintparam_visibility_layer,1024)
     local v={posOffset[1]*m[1]+posOffset[2]*m[2]+posOffset[3]*m[3],posOffset[1]*m[5]+posOffset[2]*m[6]+posOffset[3]*m[7],posOffset[1]*m[9]+posOffset[2]*m[10]+posOffset[3]*m[11]}
     local p=sim.getObjectPosition(parentDummy,-1)
     sim.setObjectPosition(dummyHandleToFollow,-1,{p[1]+v[1],p[2]+v[2],p[3]+v[3]})
@@ -829,7 +820,7 @@ createDummyToFollowWithOffset=function(parentDummy,posOffset)
 end
 
 RobPick = function(partData,attachPart,theStackingShift,approachHeight,blend,nulling,dwTime)
-    local version=sim.getInt32Parameter(sim.intparam_program_version)
+    local version=sim.getInt32Param(sim.intparam_program_version)
     local _dummyHandleToFollow=partData['dummyHandle']
     local dummyHandleToFollow=createDummyToFollowWithOffset(_dummyHandleToFollow,pickOffset)
 
@@ -862,9 +853,9 @@ RobPick = function(partData,attachPart,theStackingShift,approachHeight,blend,nul
         sim.rmlRemove(rmlObj)
 
         newPos = {nextPVA[1],nextPVA[2],nextPVA[3]}
-        sim.setObjectPosition(ikModeTargetDummy,model,newPos)
---ikModeTipDummy
-        sim.setObjectOrientation(ikModeTargetDummy,model,{0,0,nextPVA[4]})
+        sim.setObjectPosition(simTargetDummy,model,newPos)
+--simTipDummy
+        sim.setObjectOrientation(simTargetDummy,model,{0,0,nextPVA[4]})
         handleKinematics()
         curPVA = nextPVA;
     --    txt = simBWF.format(" newPos ( %.2f,%.2f,%.2f) %.2f",newPos[1],newPos[2],newPos[3],dist2go)
@@ -897,7 +888,7 @@ RobPick = function(partData,attachPart,theStackingShift,approachHeight,blend,nul
 end
 
 RobPlace = function(TrackPart,detachPart,approachHeight,blend,nulling,dwTime,attachToTrackingLocation)
-    local version=sim.getInt32Parameter(sim.intparam_program_version)
+    local version=sim.getInt32Param(sim.intparam_program_version)
     local dummyHandleToFollow=createDummyToFollowWithOffset(TrackPart,placeOffset)
     mDone = 0
     app = approachHeight
@@ -940,12 +931,12 @@ RobPlace = function(TrackPart,detachPart,approachHeight,blend,nulling,dwTime,att
 
 
         newPos = {nextPVA[1],nextPVA[2],nextPVA[3]}
-        sim.setObjectPosition(ikModeTargetDummy,model,newPos)
-        --sim.setObjectOrientation(ikModeTargetDummy,-1,{0,0,nextPVA[4]})
+        sim.setObjectPosition(simTargetDummy,model,newPos)
+        --sim.setObjectOrientation(simTargetDummy,-1,{0,0,nextPVA[4]})
         handleKinematics()
-        --sim.setObjectOrientation(ikModeTargetDummy2,model,{0,0,-nextPVA[4]})
+        --sim.setObjectOrientation(simTargetDummy2,model,{0,0,-nextPVA[4]})
         --newPos[4] = -newPos[4]
-        --sim.setObjectPosition(ikModeTargetDummy2,model,newPos)
+        --sim.setObjectPosition(simTargetDummy2,model,newPos)
         curPVA = nextPVA;
     --    txt = simBWF.format(" newPos ( %.2f,%.2f,%.2f) %.2f",newPos[1],newPos[2],newPos[3],dist2go)
         --sim.addStatusbarMessage(txt)
@@ -1007,7 +998,7 @@ ragnar_moveToDropLocation=function(dropLocationInfo,detachPart)
  --   tarPV = {dropPos[1],dropPos[2],dropPos[3],xth,0.0,0.0,0.0,0.0}
  --   RobMove(0.05,0.005)
     local dropDum=sim.createDummy(0.001)
-    sim.setObjectInt32Parameter(dropDum,sim.objintparam_visibility_layer,0)
+    sim.setObjectInt32Param(dropDum,sim.objintparam_visibility_layer,0)
     sim.setObjectPosition(dropDum,model,dropPos)
     local p=sim.getObjectPosition(dropDum,-1)
  --   p[3]=0.9 -- hard-code the drop height for now
@@ -1045,7 +1036,7 @@ end
 ragnar_getAttachToTarget=function()
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.RAGNAR)
     data=sim.unpackTable(data)
-    return(sim.boolAnd32(data['bitCoded'],1024)>0)
+    return((data['bitCoded']&1024)>0)
 end
 
 ragnar_getStacking=function()
@@ -1055,13 +1046,13 @@ end
 ragnar_getPickWithoutTarget=function()
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.RAGNAR)
     data=sim.unpackTable(data)
-    return(sim.boolAnd32(data['bitCoded'],2048)>0)
+    return((data['bitCoded']&2048)>0)
 end
 
 ragnar_getEnabled=function()
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.RAGNAR)
     data=sim.unpackTable(data)
-    return(sim.boolAnd32(data['bitCoded'],64)>0)
+    return((data['bitCoded']&64)>0)
 end
 
 --[[
@@ -1129,20 +1120,76 @@ updateMotionParameters=function()
     -- 2. Update the max vel/accel/jerk vector:
 end
 
-function sysCall_threadmain()
+function movCallback(conf,v,a,handles)
+    for i=1,#handles,1 do
+        sim.setJointPosition(handles[i],conf[i])
+    end
+    handleKinematics()
+end
+
+function moveToConfig(fkDrivingJoints,targetConf,angularVelocity,angularAccel)
+    local v={angularVelocity,angularVelocity,angularVelocity,angularVelocity}
+    local a={angularAccel,angularAccel,angularAccel,angularAccel}
+    local j={1,1,1,1}
+    local currentConf={}
+    for i=1,#fkDrivingJoints,1 do
+        currentConf[i]=sim.getJointPosition(fkDrivingJoints[i])
+    end
+    sim.moveToConfig(-1,currentConf,nil,nil,v,a,j,targetConf,nil,movCallback,fkDrivingJoints)
+end
+
+function coroutineMain()
     -- Begin of the thread code:
     sim.setThreadAutomaticSwitch(false)
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
-    mainIkTask=sim.getIkGroupHandle('Ragnar')
-    ikModeTipDummy=sim.getObjectHandle('Ragnar_InvKinTip')
-    ikModeTargetDummy=sim.getObjectHandle('Ragnar_InvKinTarget')
+    model=sim.getObjectHandle(sim.handle_self)
+    simTipDummy=sim.getObjectHandle('Ragnar_InvKinTip')
+    simTargetDummy=sim.getObjectHandle('Ragnar_InvKinTarget')
+    simTip1=sim.getObjectHandle('Ragnar_RLoopArmTip14')
+    simTarget1=sim.getObjectHandle('Ragnar_RLoopArmTarget14')
+    simTip2=sim.getObjectHandle('Ragnar_RLoopArmTip15')
+    simTarget2=sim.getObjectHandle('Ragnar_RLoopArmTarget15')
+    simTip3=sim.getObjectHandle('Ragnar_RLoopArmTip16')
+    simTarget3=sim.getObjectHandle('Ragnar_RLoopArmTarget16')
+    
+    simNotIkJoints={}
+    simNotIkJoints[1]=sim.getObjectHandle('Ragnar_frontAdjust')
+    simNotIkJoints[2]=sim.getObjectHandle('Ragnar_upperArmAdjust0')
+    simNotIkJoints[3]=sim.getObjectHandle('Ragnar_lowerArmAdjustA0')
+    simNotIkJoints[4]=sim.getObjectHandle('Ragnar_lowerArmAdjustB3')
+    simNotIkJoints[5]=sim.getObjectHandle('Ragnar_upperArmAdjust3')
+    simNotIkJoints[6]=sim.getObjectHandle('Ragnar_lowerArmAdjustB2')
+    simNotIkJoints[7]=sim.getObjectHandle('Ragnar_upperArmAdjust2')
+    simNotIkJoints[8]=sim.getObjectHandle('Ragnar_lowerArmAdjustA1')
+    simNotIkJoints[9]=sim.getObjectHandle('Ragnar_upperArmAdjust1')
+    
+    -- Prepare the ik group, using the convenience function 'simIK.addIkElementFromScene':
+    ikEnv=simIK.createEnvironment()
+
+    ikGroup=simIK.createIkGroup(ikEnv)
+    simIK.setIkGroupCalculation(ikEnv,ikGroup,simIK.method_damped_least_squares,0.001,20)
+    local ikElement,simToIkMap=simIK.addIkElementFromScene(ikEnv,ikGroup,model,simTip1,simTarget1,simIK.constraint_pose)
+    local ikElement,simToIkMap=simIK.addIkElementFromScene(ikEnv,ikGroup,model,simTip2,simTarget2,simIK.constraint_pose)
+    local ikElement,simToIkMap=simIK.addIkElementFromScene(ikEnv,ikGroup,model,simTip3,simTarget3,simIK.constraint_pose)
+    ikElementPlatform,simToIkMap=simIK.addIkElementFromScene(ikEnv,ikGroup,model,simTipDummy,simTargetDummy,simIK.constraint_pose)
+
+    for i=1,#simNotIkJoints,1 do
+        local h=simToIkMap[simNotIkJoints[i]]
+        simIK.setJointMode(ikEnv,h,simIK.jointmode_passive)
+    end
+    
     -- Following are the joints that we control when in FK mode:
     fkDrivingJoints={-1,-1,-1,-1}
     fkDrivingJoints[1]=sim.getObjectHandle('Ragnar_A1DrivingJoint1')
     fkDrivingJoints[2]=sim.getObjectHandle('Ragnar_A1DrivingJoint2')
     fkDrivingJoints[3]=sim.getObjectHandle('Ragnar_A1DrivingJoint3')
     fkDrivingJoints[4]=sim.getObjectHandle('Ragnar_A1DrivingJoint4')
-    -- Following are the joints that we control when in IK mode (we use joints in order to be able to use the sim.moveToJointPositions command here too):
+
+    fkDrivingJoints_inIkEnv={}
+    for i=1,#fkDrivingJoints,1 do
+        fkDrivingJoints_inIkEnv[i]=simToIkMap[fkDrivingJoints[i]]
+    end
+    
+    -- Following are the joints that we control when in IK mode (we use joints in order to be able to use the moveToConfig command here too):
     ikDrivingJoints={-1,-1,-1,-1}
     ikDrivingJoints[1]=sim.getObjectHandle('Ragnar_T_X')
     ikDrivingJoints[2]=sim.getObjectHandle('Ragnar_T_Y')
@@ -1178,7 +1225,7 @@ function sysCall_threadmain()
     _lossTime=0 
 
 
-    if sim.boolAnd32(ragnarSettings['bitCoded'],4096)>0 then
+    if (ragnarSettings['bitCoded']&4096)>0 then
         setFkMode()
         simRemoteApi.start(19999)
     else
@@ -1187,7 +1234,7 @@ function sysCall_threadmain()
 
     totalCycleTime=0
     --totalCycles=0
-    prepareStatisticsDialog(sim.boolAnd32(ragnarSettings['bitCoded'],128)>0)
+    prepareStatisticsDialog((ragnarSettings['bitCoded']&128)>0)
 
     kinematicsFailedDialogHandle=-1
     angularVelocity=2.84*math.pi
@@ -1201,9 +1248,10 @@ function sysCall_threadmain()
 
     -- First, make sure we are in initial position:
     setFkMode()
-    sim.moveToJointPositions(fkDrivingJoints,{0,0,0,0},angularVelocity,angularAccel)
+    moveToConfig(fkDrivingJoints,{0,0,0,0},angularVelocity,angularAccel)
+    moveToConfig(fkDrivingJoints,{0,0,0,0},angularVelocity,angularAccel)
     setIkMode()
-    initialPosition=sim.getObjectPosition(ikModeTipDummy,model)
+    initialPosition=sim.getObjectPosition(simTipDummy,model)
 
     --Now with rotation rotation part - meaning DOF 4
     curPVA = {initialPosition[1],initialPosition[2],initialPosition[3],0.0,

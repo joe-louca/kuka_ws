@@ -437,15 +437,15 @@ function RemoveObjects(...)
     debugFunc("RemoveObjects",...)
     local objHandles,options=...
     local allObjs1=sim.getObjectsInTree(sim.handle_scene,sim.handle_all,0)
-    if sim.boolAnd32(options,2)>0 then
+    if (options & 2)>0 then
         sim.removeObject(sim.handle_all)
     else
-        if sim.boolAnd32(options,1)>0 then
+        if (options & 1)>0 then
             for i=1,#objHandles,1 do
                 local h=objHandles[i]
-                if sim.isHandleValid(h)>0 then
+                if sim.isHandle(h) then
                     local mp=sim.getModelProperty(h)
-                    if sim.boolAnd32(mp,sim.modelproperty_not_model)>0 then
+                    if (mp & sim.modelproperty_not_model)>0 then
                         sim.removeObject(objHandles[i])
                     else
                         sim.removeModel(objHandles[i])
@@ -467,95 +467,219 @@ function CloseScene(...)
     return sim.closeScene()
 end
 
+-- DEPRECATED START
 function SetStringParameter(...)
-    debugFunc("SetStringParameter",...)
-    local paramId,val=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setStringParameter(paramId,val)
+    return SetStringParam(...)
 end
 
 function GetStringParameter(...)
-    debugFunc("GetStringParameter",...)
-    local paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.getStringParameter(paramId)
+    return GetStringParam(...)
 end
 
 function SetFloatParameter(...)
-    debugFunc("SetFloatParameter",...)
-    local paramId,val=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setFloatParameter(paramId,val)
+    return SetFloatParam(...)
 end
 
 function GetFloatParameter(...)
-    debugFunc("GetFloatParameter",...)
-    local paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.getFloatParameter(paramId)
+    return GetFloatParam(...)
 end
 
 function SetIntParameter(...)
-    debugFunc("SetIntParameter",...)
-    local paramId,val=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setInt32Parameter(paramId,val)
+    return SetInt32Param(...)
 end
 
 function GetIntParameter(...)
-    debugFunc("GetIntParameter",...)
-    local paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.getInt32Parameter(paramId)
+    return GetInt32Param(...)
 end
 
 function SetBoolParameter(...)
-    debugFunc("SetBoolParameter",...)
-    local paramId,val=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setBoolParameter(paramId,val)
+    return SetBoolParam(...)
 end
 
 function GetBoolParameter(...)
-    debugFunc("GetBoolParameter",...)
-    local paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.getBoolParameter(paramId)
+    return GetBoolParam(...)
 end
 
 function SetArrayParameter(...)
-    debugFunc("SetArrayParameter",...)
+    return SetArrayParam(...)
+end
+
+function GetArrayParameter(...)
+    return GetArrayParam(...)
+end
+
+function GetObjectFloatParameter(...)
+    return GetObjectFloatParam(...)
+end
+
+function GetObjectIntParameter(...)
+    return GetObjectInt32Param(...)
+end
+
+function GetObjectStringParameter(...)
+    return GetObjectStringParam(...)
+end
+
+function SetObjectFloatParameter(...)
+    return SetObjectFloatParam(...)
+end
+
+function SetObjectIntParameter(...)
+    return SetObjectInt32Param(...)
+end
+
+function SetObjectStringParameter(...)
+    return SetObjectStringParam(...)
+end
+-- DEPRECATED END
+
+function SetStringParam(...)
+    debugFunc("SetStringParam",...)
     local paramId,val=...
     if type(paramId)=='string' then
         paramId=evalStr(paramId)
     end
-    return sim.setArrayParameter(paramId,val)
+    return sim.setStringParam(paramId,val)
 end
 
-function GetArrayParameter(...)
-    debugFunc("GetArrayParameter",...)
+function GetStringParam(...)
+    debugFunc("GetStringParam",...)
     local paramId=...
     if type(paramId)=='string' then
         paramId=evalStr(paramId)
     end
-    return sim.getArrayParameter(paramId)
+    return sim.getStringParam(paramId)
 end
+
+function SetFloatParam(...)
+    debugFunc("SetFloatParam",...)
+    local paramId,val=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setFloatParam(paramId,val)
+end
+
+function GetFloatParam(...)
+    debugFunc("GetFloatParam",...)
+    local paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.getFloatParam(paramId)
+end
+
+function SetInt32Param(...)
+    debugFunc("SetInt32Param",...)
+    local paramId,val=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setInt32Param(paramId,val)
+end
+
+function GetInt32Param(...)
+    debugFunc("GetInt32Param",...)
+    local paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.getInt32Param(paramId)
+end
+
+function SetBoolParam(...)
+    debugFunc("SetBoolParam",...)
+    local paramId,val=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setBoolParam(paramId,val)
+end
+
+function GetBoolParam(...)
+    debugFunc("GetBoolParam",...)
+    local paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.getBoolParam(paramId)
+end
+
+function SetArrayParam(...)
+    debugFunc("SetArrayParam",...)
+    local paramId,val=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setArrayParam(paramId,val)
+end
+
+function GetArrayParam(...)
+    debugFunc("GetArrayParam",...)
+    local paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.getArrayParam(paramId)
+end
+
+function GetObjectFloatParam(...)
+    debugFunc("GetObjectFloatParam",...)
+    local handle,paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    local retV=sim.getObjectFloatParam(handle,paramId)
+    return retV
+end
+
+function GetObjectInt32Param(...)
+    debugFunc("GetObjectInt32Param",...)
+    local handle,paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    local retV=sim.getObjectInt32Param(handle,paramId)
+    return retV
+end
+
+function GetObjectStringParam(...)
+    debugFunc("GetObjectStringParam",...)
+    local handle,paramId=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    local r,retV=sim.getObjectStringParam(handle,paramId)
+    return retV
+end
+
+function SetObjectFloatParam(...)
+    debugFunc("SetObjectFloatParam",...)
+    local handle,paramId,v=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setObjectFloatParam(handle,paramId,v)
+end
+
+function SetObjectInt32Param(...)
+    debugFunc("SetObjectInt32Param",...)
+    local handle,paramId,v=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setObjectInt32Param(handle,paramId,v)
+end
+
+function SetObjectStringParam(...)
+    debugFunc("SetObjectStringParam",...)
+    local handle,paramId,v=...
+    if type(paramId)=='string' then
+        paramId=evalStr(paramId)
+    end
+    return sim.setObjectStringParam(handle,paramId,v)
+end
+
 function DisplayDialog(...)
     debugFunc("DisplayDialog",...)
     local titleText,mainText,dlgType,initText=...
@@ -595,7 +719,15 @@ function GetCollectionHandle(...)
     if string.find(objName,'#')==nil then
         objName=objName..'#'
     end
-    return sim.getCollectionHandle(objName)
+	local retVal=sim.getCollectionHandle(objName..'@silentError')
+	if retVal<0 then
+		-- fallback convenience functionality: new collections do not have any name
+		retVal=sim.getIntegerSignal(objName)
+		if retVal==nil then
+			retVal=sim.getCollectionHandle(objName) -- for correct error reporting
+		end
+	end
+    return retVal
 end
 
 function GetCollisionHandle(...)
@@ -716,63 +848,6 @@ function GetObjectName(...)
         handle=handle+sim.handleflag_altname
     end
     return sim.getObjectName(handle)
-end
-
-function GetObjectFloatParameter(...)
-    debugFunc("GetObjectFloatParameter",...)
-    local handle,paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    local r,retV=sim.getObjectFloatParameter(handle,paramId)
-    return retV
-end
-
-function GetObjectIntParameter(...)
-    debugFunc("GetObjectIntParameter",...)
-    local handle,paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    local r,retV=sim.getObjectInt32Parameter(handle,paramId)
-    return retV
-end
-
-function GetObjectStringParameter(...)
-    debugFunc("GetObjectStringParameter",...)
-    local handle,paramId=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    local r,retV=sim.getObjectStringParameter(handle,paramId)
-    return retV
-end
-
-function SetObjectFloatParameter(...)
-    debugFunc("SetObjectFloatParameter",...)
-    local handle,paramId,v=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setObjectFloatParameter(handle,paramId,v)
-end
-
-function SetObjectIntParameter(...)
-    debugFunc("SetObjectIntParameter",...)
-    local handle,paramId,v=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setObjectInt32Parameter(handle,paramId,v)
-end
-
-function SetObjectStringParameter(...)
-    debugFunc("SetObjectStringParameter",...)
-    local handle,paramId,v=...
-    if type(paramId)=='string' then
-        paramId=evalStr(paramId)
-    end
-    return sim.setObjectStringParameter(handle,paramId,v)
 end
 
 function GetSimulationTime(...)
@@ -910,9 +985,9 @@ function timeStr()
         t=os.date('*t')
         t=string.format('[%02d:%02d:%02d] ',t.hour,t.min,t.sec)
     else
-        local st=sim.getSimulationTime()
-        t=os.date('*t',3600*23+st)
-        t=string.format('[%02d:%02d:%02d.%02d] ',t.hour,t.min,t.sec,st%1)
+        local st=sim.getSimulationTime()+0.001
+        t=os.date('*t',3600*23+math.floor(st))
+        t=string.format('[%02d:%02d:%02d.%02d] ',t.hour,t.min,t.sec,math.floor(100*(st%1)))
     end
     return t
 end
@@ -1538,56 +1613,19 @@ function onConfigRestartNode(ui,id,newVal)
     end
 end
 
-function createConfigDlg()
-    if simUI then
-        if not configUiData then
-            local xml = [[
-            <ui title="BlueZero-based remote API, server-side configuration" closeable="false" resizable="false" activate="false">
-            <group layout="form" flat="true">
-            <label text="Node name"/>
-            <edit on-editing-finished="onConfigNodeNameChanged" id="1"/>
-            <label text="Channel name"/>
-            <edit on-editing-finished="onConfigChannelNameChanged" id="2"/>
-            <label text=""/>
-            <button text="Restart node with above names" checked="false" on-click="onConfigRestartNode" />
-            
-            <label text="Pack strings as binary"/>
-            <checkbox text="" on-change="onPackStrAsBinChanged" id="4" />
-            <label text="Enabled during simulation only"/>
-            <checkbox text="" on-change="onSimOnlyChanged" id="5" />
-            <label text="Debug level"/>
-            <combobox id="3" on-change="onDebugLevelChanged"></combobox>
-            </group>
-            </ui>
-            ]]
-            configUiData={}
-            configUiData.dlg=simUI.create(xml)
-            if previousConfigDlgPos then
-                simUI.setPosition(configUiData.dlg,previousConfigDlgPos[1],previousConfigDlgPos[2],true)
-            end
-            configUiData.nodeName=modelData.nodeName
-            configUiData.channelName=modelData.channelName
-            configUiData.debugLevel=modelData.debugLevel
-            configUiData.packStrAsBin=modelData.packStrAsBin
-            configUiData.duringSimulationOnly=modelData.duringSimulationOnly
-            simUI.setEditValue(configUiData.dlg,1,configUiData.nodeName)
-            simUI.setEditValue(configUiData.dlg,2,configUiData.channelName)
-            simUI.setCheckboxValue(configUiData.dlg,4,configUiData.packStrAsBin and 2 or 0)
-            simUI.setCheckboxValue(configUiData.dlg,5,configUiData.duringSimulationOnly and 2 or 0)
-            updateDebugLevelCombobox()
-        end
-    end
+function onDlgClose()
+	local x,y=simUI.getPosition(configUiData.dlg)
+	previousConfigDlgPos={x,y}
+	simUI.destroy(configUiData.dlg)
+	configUiData=nil
 end
 
-function removeConfigDlg()
-    if simUI then
-        if configUiData then
-            local x,y=simUI.getPosition(configUiData.dlg)
-            previousConfigDlgPos={x,y}
-            simUI.destroy(configUiData.dlg)
-            configUiData=nil
-        end
-    end
+function sysCall_info()
+    return {autoStart=false}
+end
+
+function sysCall_addOnScriptSuspend()
+    return {cmd='cleanup'} -- the clean-up section will be called and the add-on stopped
 end
 
 function sysCall_init()
@@ -1623,16 +1661,9 @@ end
 
 function sysCall_cleanup()
     destroyNode()
-    removeConfigDlg()
 end
 
 function sysCall_nonSimulation()
-    local s=sim.getObjectSelection()
-    if s and #s==1 and s[1]==model then
-        createConfigDlg()
-    else
-        removeConfigDlg()
-    end
     sendAndSpin(0)
 end
 
@@ -1647,7 +1678,6 @@ function sysCall_suspended()
 end
 
 function sysCall_beforeSimulation()
-    removeConfigDlg()
     if modelData.duringSimulationOnly then
         createNode()
     end
@@ -1663,7 +1693,6 @@ end
 function sysCall_beforeInstanceSwitch()
     if model>=0 then
         destroyNode()
-        removeConfigDlg()
     end
 end
 
@@ -1676,12 +1705,40 @@ function sysCall_afterInstanceSwitch()
     end
 end
 
-function sysCall_addOnScriptSuspend()
-    destroyNode()
-end
-
-function sysCall_addOnScriptResume()
-    if not modelData.duringSimulationOnly then
-        createNode()
-    end
+function sysCall_userConfig()
+    local simStopped=sim.getSimulationState()==sim.simulation_stopped
+	local xml ='<ui title="BlueZero-based remote API, server-side configuration" closeable="true" on-close="onDlgClose" modal="true" resizable="false" activate="false" enabled="'..tostring(simStopped)
+	xml=xml..[[">
+	<group layout="form" flat="true">
+	<label text="Node name"/>
+	<edit on-editing-finished="onConfigNodeNameChanged" id="1"/>
+	<label text="Channel name"/>
+	<edit on-editing-finished="onConfigChannelNameChanged" id="2"/>
+	<label text=""/>
+	<button text="Restart node with above names" checked="false" on-click="onConfigRestartNode" />
+	
+	<label text="Pack strings as binary"/>
+	<checkbox text="" on-change="onPackStrAsBinChanged" id="4" />
+	<label text="Enabled during simulation only"/>
+	<checkbox text="" on-change="onSimOnlyChanged" id="5" />
+	<label text="Debug level"/>
+	<combobox id="3" on-change="onDebugLevelChanged"></combobox>
+	</group>
+	</ui>
+	]]
+	configUiData={}
+	configUiData.dlg=simUI.create(xml)
+	if previousConfigDlgPos then
+		simUI.setPosition(configUiData.dlg,previousConfigDlgPos[1],previousConfigDlgPos[2],true)
+	end
+	configUiData.nodeName=modelData.nodeName
+	configUiData.channelName=modelData.channelName
+	configUiData.debugLevel=modelData.debugLevel
+	configUiData.packStrAsBin=modelData.packStrAsBin
+	configUiData.duringSimulationOnly=modelData.duringSimulationOnly
+	simUI.setEditValue(configUiData.dlg,1,configUiData.nodeName)
+	simUI.setEditValue(configUiData.dlg,2,configUiData.channelName)
+	simUI.setCheckboxValue(configUiData.dlg,4,configUiData.packStrAsBin and 2 or 0)
+	simUI.setCheckboxValue(configUiData.dlg,5,configUiData.duringSimulationOnly and 2 or 0)
+	updateDebugLevelCombobox()
 end

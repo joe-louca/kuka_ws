@@ -24,7 +24,7 @@ function model.ext.outputBrSetupMessages()
         msg="WARNING (set-up): Not associated with any RagnarVision object"..nm
     else
         local c=model.readInfo()
-        if sim.boolAnd32(c.bitCoded,1)>0 then
+        if (c.bitCoded&1)>0 then
             msg="WARNING (set-up): Operating in fake detection mode"..nm
         end
     end

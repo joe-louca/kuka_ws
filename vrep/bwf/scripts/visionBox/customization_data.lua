@@ -18,7 +18,7 @@ function model.updatePluginRepresentation()
     data.pos=sim.getObjectPosition(model.handle,-1)
     data.quat=sim.getObjectQuaternion(model.handle,-1)
     data.visionServerName=c.visionBoxServerName
-    if sim.getBoolParameter(sim.boolparam_online_mode)then
+    if false then --sim.getBoolParam(sim.boolparam_online_mode)then
         data.visionJson=c.visionBoxJsonOnline
     else
         data.visionJson=c.visionBoxJsonOffline

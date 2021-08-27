@@ -64,13 +64,13 @@ function model.applyCalibrationData()
             sim.setObjectPosition(model.handle,-1,p)
         end
 
---        local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
---        r=sim.boolOr32(r,1+4+16+32)-(1+4) -- forbid rotation and translation when simulation is not running
---        sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+--        local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+--        r=(r|1+4+16+32)-(1+4) -- forbid rotation and translation when simulation is not running
+--        sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
 --    else
---        local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
---        r=sim.boolOr32(r,1+4+16+32) -- allow rotation and translation when simulation is not running
---        sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+--        local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+--        r=(r|1+4+16+32) -- allow rotation and translation when simulation is not running
+--        sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
     end
 end
 

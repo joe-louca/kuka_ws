@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function getFeederHandleToTrigger(feedersData)
     local errString=nil
     local feederName=getDistributionValue(feederDistribution)
@@ -23,7 +24,7 @@ getDistributionValue=function(distribution)
                 for i=1,#distribution,1 do
                    cnt=cnt+distribution[i][1] 
                 end
-                local p=sim.getFloatParameter(sim.floatparam_rand)*cnt
+                local p=sim.getFloatParam(sim.floatparam_rand)*cnt
                 cnt=0
                 for i=1,#distribution,1 do
                     if cnt+distribution[i][1]>=p then
@@ -33,7 +34,7 @@ getDistributionValue=function(distribution)
                 end
             else
                 local cnt=#distribution
-                local p=1+math.floor(sim.getFloatParameter(sim.floatparam_rand)*cnt-0.0001)
+                local p=1+math.floor(sim.getFloatParam(sim.floatparam_rand)*cnt-0.0001)
                 return distribution[p]
             end
         end
@@ -87,7 +88,7 @@ function sysCall_init()
     conveyorHandle=simBWF.getReferencedObjectHandle(model,2)
     conveyorTriggerDist=data['conveyorDist']
     mode=0 -- 0=frequency, 1=sensor, 2=user, 3=conveyor, 4=multi-feeder
-    local tmp=sim.boolAnd32(data['bitCoded'],4+8+16)
+    local tmp=(data['bitCoded']&4+8+16)
     if tmp==4 then mode=1 end
     if tmp==8 then mode=2 end
     if tmp==12 then mode=3 end
@@ -113,7 +114,7 @@ function sysCall_actuation()
     data=sim.unpackTable(data)
     local triggerFrequency=data['frequency']
     local feederAlgo=data['algorithm']
-    if sim.boolAnd32(data['bitCoded'],2)>0 then
+    if (data['bitCoded']&2)>0 then
         -- The feeder is enabled
         feederDistribution='{'..data['feederDistribution']..'}'
         local f=loadstring("return "..feederDistribution)
@@ -163,11 +164,11 @@ function sysCall_actuation()
             sensorLastState=sensorState
             if feederToTrigger and feederToTrigger>=0 then
                 counter=counter+1
-                if sim.isHandleValid(feederToTrigger)>0 then
+                if sim.isHandle(feederToTrigger) then
                     local data=sim.readCustomDataBlock(feederToTrigger,simBWF.modelTags.PARTFEEDER)
                     if data then
                         data=sim.unpackTable(data)
-                        if sim.boolAnd32(data['bitCoded'],4+8+16)==16 then
+                        if (data['bitCoded']&4+8+16)==16 then
                             data['multiFeederTriggerCnt']=data['multiFeederTriggerCnt']+1
                             sim.writeCustomDataBlock(feederToTrigger,simBWF.modelTags.PARTFEEDER,sim.packTable(data))
                         end
@@ -175,7 +176,7 @@ function sysCall_actuation()
                         data=sim.readCustomDataBlock(feederToTrigger,simBWF.modelTags.MULTIFEEDER)
                         if data then
                             data=sim.unpackTable(data)
-                            if sim.boolAnd32(data['bitCoded'],4+8+16)==16 then
+                            if (data['bitCoded']&4+8+16)==16 then
                                 data['multiFeederTriggerCnt']=data['multiFeederTriggerCnt']+1
                                 sim.writeCustomDataBlock(feederToTrigger,simBWF.modelTags.MULTIFEEDER,sim.packTable(data))
                             end

@@ -1,11 +1,22 @@
+# Make sure to have CoppeliaSim running, with followig scene loaded:
+#
+# scenes/messaging/movementViaRemoteApi.ttt
+#
+# Do not launch simulation, then run this script
+#
+# The client side (i.e. this script) depends on:
+#
+# b0RemoteApi (Python script), which depends several libraries present
+# in the CoppeliaSim folder
+
 import b0RemoteApi
 import math
 
 with b0RemoteApi.RemoteApiClient('b0RemoteApi_pythonClient','b0RemoteApi',60) as client:    
     client.executedMovId='notReady'
 
-    targetArm='threadedBlueArm'
-    #targetArm='nonThreadedRedArm'
+    targetArm='blueArm'
+    #targetArm='redArm'
 
     stringSignalName=targetArm+'_executedMovId'
 

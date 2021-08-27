@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -60,8 +61,8 @@ function sizeChange_callback(ui,id,newVal)
     else
         s=0.021312*(1+(newVal+4)/4)
     end
-    local r,mmin=sim.getObjectFloatParameter(shape,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(shape,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(shape,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(shape,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(shape,s/sz,s/sz,s/sz)
     sim.setObjectPosition(shape,sim.handle_parent,{0,0,-s*0.021416/0.042624})

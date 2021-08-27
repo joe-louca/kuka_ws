@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -153,7 +154,7 @@ function generatePallet()
                 local item={}
                 local pos={palletOffset[1]+(i-1)*palletSeparation,palletOffset[2]+yo,palletOffset[3]}
                 local dummy=sim.createDummy(0.01)
-                local prop=sim.boolOr32(sim.getObjectProperty(dummy),sim.objectproperty_dontshowasinsidemodel+sim.objectproperty_selectmodelbaseinstead)
+                local prop=(sim.getObjectProperty(dummy)|sim.objectproperty_dontshowasinsidemodel+sim.objectproperty_selectmodelbaseinstead)
                 sim.setObjectProperty(dummy,prop)
                 sim.setObjectPosition(dummy,cartridges[cart]['centerH'],pos)
                 sim.setObjectOrientation(dummy,cartridges[cart]['centerH'],{0,0,0})
@@ -187,11 +188,11 @@ function updateConveyor()
     local divs=conf['cartridgeDivisions']
     local stopperOffset=conf['stopperOffsets']
     local rackOffset=conf['cartridgeRackOffset']
-    local rotated=sim.boolAnd32(bitCoded,256)>0
+    local rotated=(bitCoded&256)>0
     local direction=1
     if rotated then direction=-1 end
 
-    local re=sim.boolAnd32(bitCoded,16)==0
+    local re=(bitCoded&16)==0
 ---[[
     sim.setObjectPosition(rotJoints[1],model,{0,-length*0.5,-height*0.5})
     sim.setObjectPosition(rotJoints[2],model,{0,length*0.5,-height*0.5})
@@ -225,26 +226,26 @@ function updateConveyor()
     sim.setObjectPosition(sides[2],model,{(width+wt)*0.5,0,(-height+borderHeight)*0.5})
 
     if re then
-        sim.setObjectInt32Parameter(endParts[1],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(endParts[2],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(endParts[3],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(endParts[4],sim.objintparam_visibility_layer,1)
-        sim.setObjectInt32Parameter(endParts[5],sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(endParts[6],sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(endParts[5],sim.shapeintparam_respondable,1)
-        sim.setObjectInt32Parameter(endParts[6],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(endParts[1],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(endParts[2],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(endParts[3],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(endParts[4],sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(endParts[5],sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(endParts[6],sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(endParts[5],sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(endParts[6],sim.shapeintparam_respondable,1)
     else
-        sim.setObjectInt32Parameter(endParts[1],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(endParts[2],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(endParts[3],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(endParts[4],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(endParts[5],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(endParts[6],sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(endParts[5],sim.shapeintparam_respondable,0)
-        sim.setObjectInt32Parameter(endParts[6],sim.shapeintparam_respondable,0)
+        sim.setObjectInt32Param(endParts[1],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(endParts[2],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(endParts[3],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(endParts[4],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(endParts[5],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(endParts[6],sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(endParts[5],sim.shapeintparam_respondable,0)
+        sim.setObjectInt32Param(endParts[6],sim.shapeintparam_respondable,0)
     end
 
-    if sim.boolAnd32(bitCoded,32)==0 then
+    if (bitCoded&32)==0 then
         local textureID=sim.getShapeTextureId(textureHolder)
         sim.setShapeTexture(middleParts[2],textureID,sim.texturemap_plane,12,{0.04,0.04})
         sim.setShapeTexture(endParts[1],textureID,sim.texturemap_plane,12,{0.04,0.04})
@@ -353,7 +354,7 @@ function updateEnabledDisabledItemsDlg()
 
         -- Conveyor part:
         local c=readInfo()
-        local re=sim.boolAnd32(c['bitCoded'],16)==0
+        local re=(c['bitCoded']&16)==0
         simUI.setEnabled(ui,2,simStopped,true)
         simUI.setEnabled(ui,4,simStopped,true)
         simUI.setEnabled(ui,20,simStopped,true)
@@ -396,11 +397,11 @@ function setDlgItemContent()
         simUI.setEditValue(ui,21,simBWF.format("%.0f",conveyorConfig['borderHeight']/0.001),true)
         simUI.setEditValue(ui,26,simBWF.format("%.0f",conveyorConfig['wallThickness']/0.001),true)
         simUI.setEditValue(ui,44,conveyorConfig['locationName'],true)
-        simUI.setCheckboxValue(ui,45,(sim.boolAnd32(conveyorConfig['bitCoded'],256)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,45,((conveyorConfig['bitCoded']&256)~=0) and 2 or 0,true)
 
-        simUI.setCheckboxValue(ui,27,(sim.boolAnd32(conveyorConfig['bitCoded'],16)==0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,27,((conveyorConfig['bitCoded']&16)==0) and 2 or 0,true)
 
-        simUI.setCheckboxValue(ui,1000,(sim.boolAnd32(conveyorConfig['bitCoded'],64)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,1000,((conveyorConfig['bitCoded']&64)~=0) and 2 or 0,true)
         simUI.setEditValue(ui,10,simBWF.format("%.0f",conveyorConfig['velocity']/0.001),true)
         simUI.setEditValue(ui,12,simBWF.format("%.0f",conveyorConfig['acceleration']/0.001),true)
         simUI.setEditValue(ui,39,simBWF.format("%.0f",conveyorConfig['cartridgeRackOffset']/0.001),true)
@@ -422,7 +423,7 @@ function setDlgItemContent()
         simUI.setEditValue(ui,40,simBWF.format("%.0f , %.0f , %.0f",pallet[1][1]*1000,pallet[1][2]*1000,pallet[1][3]*1000),true)
         simUI.setEditValue(ui,41,simBWF.format("%.0f",pallet[2]),true)
         simUI.setEditValue(ui,42,simBWF.format("%.0f",pallet[3]/0.001),true)
-        simUI.setCheckboxValue(ui,43,(sim.boolAnd32(conveyorConfig['bitCoded'],128)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,43,((conveyorConfig['bitCoded']&128)~=0) and 2 or 0,true)
 
 
         updateStartStopTriggerComboboxes()
@@ -565,7 +566,7 @@ end
 
 function roundedEndsClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],16)
+    conf['bitCoded']=(conf['bitCoded']|16)
     if newVal~=0 then
         conf['bitCoded']=conf['bitCoded']-16
     end
@@ -577,7 +578,7 @@ end
 
 function enabledClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],64)
+    conf['bitCoded']=(conf['bitCoded']|64)
     if newVal==0 then
         conf['bitCoded']=conf['bitCoded']-64
     end
@@ -859,7 +860,7 @@ end
 
 function showPointsClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],128)
+    conf['bitCoded']=(conf['bitCoded']|128)
     if newVal==0 then
         conf['bitCoded']=conf['bitCoded']-128
     end
@@ -870,7 +871,7 @@ end
 
 function rotatedClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],256)
+    conf['bitCoded']=(conf['bitCoded']|256)
     if newVal==0 then
         conf['bitCoded']=conf['bitCoded']-256
     end
@@ -1008,23 +1009,23 @@ end
 
 enableStopper=function(handle,enable)
     if enable then
-        sim.setObjectInt32Parameter(handle,sim.objintparam_visibility_layer,1) -- make it visible
+        sim.setObjectInt32Param(handle,sim.objintparam_visibility_layer,1) -- make it visible
         sim.setObjectSpecialProperty(handle,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable) -- make it collidable, measurable, detectable, etc.
-        sim.setObjectInt32Parameter(handle,sim.shapeintparam_respondable,1) -- make it respondable
+        sim.setObjectInt32Param(handle,sim.shapeintparam_respondable,1) -- make it respondable
         sim.resetDynamicObject(handle)
     else
-        sim.setObjectInt32Parameter(handle,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(handle,sim.objintparam_visibility_layer,0)
         sim.setObjectSpecialProperty(handle,0)
-        sim.setObjectInt32Parameter(handle,sim.shapeintparam_respondable,0)
+        sim.setObjectInt32Param(handle,sim.shapeintparam_respondable,0)
         sim.resetDynamicObject(handle)
     end
 end
 
 makeVisible=function(handle,visible)
     if visible then
-        sim.setObjectInt32Parameter(handle,sim.objintparam_visibility_layer,1) -- make it visible
+        sim.setObjectInt32Param(handle,sim.objintparam_visibility_layer,1) -- make it visible
     else
-        sim.setObjectInt32Parameter(handle,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(handle,sim.objintparam_visibility_layer,0)
     end
 end
 
@@ -1035,9 +1036,9 @@ makeTargetDummiesVisible=function(visible)
             local h=sim.getObjectChild(cartridges[cart]['targets'],i)
             if h<0 then break end
             if visible then
-                sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,4)
+                sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,4)
             else
-                sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,0)
+                sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,0)
             end
             i=i+1
         end

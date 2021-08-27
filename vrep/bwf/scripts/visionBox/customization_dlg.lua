@@ -3,7 +3,7 @@ model.dlg={}
 function model.dlg.updateEnabledDisabledItems()
     if model.dlg.ui then
         local config=model.readInfo()
-        local enable = config.visionBoxServerName~=simBWF.NONE_TEXT and (sim.getSimulationState()~=sim.simulation_stopped or sim.getBoolParameter(sim.boolparam_online_mode)) and not simBWF.getRatatosk()
+        local enable = config.visionBoxServerName~=simBWF.NONE_TEXT and (sim.getSimulationState()~=sim.simulation_stopped ) and not simBWF.getRatatosk()
         simUI.setEnabled(model.dlg.ui,2,enable,false)
 --        simUI.setEnabled(model.dlg.ui,5,simStopped,true) -- simBWF.getReferencedObjectHandle(model,model.objRefIdx.PALLET)>=0,true)
     end
@@ -14,7 +14,7 @@ function model.dlg.refresh()
         local config=model.readInfo()
         local sel=simBWF.getSelectedEditWidget(model.dlg.ui)
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
-        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
 
         model.dlg.updateVisionBoxServerNameCombobox()
         model.dlg.updateCameraComboboxes()
@@ -97,7 +97,7 @@ end
 
 function model.dlg.hiddenDuringSimulation_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -126,7 +126,7 @@ function model.dlg.onAcceptVisionBoxEdit(arg1)
     simBWF.setRatatosk(false)
     model.dlg.updateEnabledDisabledItems()
     local c=model.readInfo()
-    if sim.getBoolParameter(sim.boolparam_online_mode) then
+    if false then --sim.getBoolParam(sim.boolparam_online_mode) then
         c.visionBoxJsonOnline=arg1
     else
         c.visionBoxJsonOffline=arg1
@@ -141,7 +141,7 @@ function model.dlg.edit_callback()
     if c.visionBoxServerName~=simBWF.NONE_TEXT then
         local data={}
         data.visionServerName=c.visionBoxServerName
-        if sim.getBoolParameter(sim.boolparam_online_mode) then
+        if false then --sim.getBoolParam(sim.boolparam_online_mode) then
             data.visionJson=c.visionBoxJsonOnline
         else
             data.visionJson=c.visionBoxJsonOffline

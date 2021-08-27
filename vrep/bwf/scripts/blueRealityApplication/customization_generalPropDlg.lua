@@ -31,49 +31,49 @@ end
 
 function model.generalProperties.oee_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,16)
+    c.bitCoded=(c.bitCoded~16)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
 
 function model.generalProperties.warningAtRunStart_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,32)
+    c.bitCoded=(c.bitCoded~32)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
 
 function model.generalProperties.camerasNoReset_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,64)
+    c.bitCoded=(c.bitCoded~64)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
 
 function model.generalProperties.simplifiedSimulationTime_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,8)
+    c.bitCoded=(c.bitCoded~8)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
 
 function model.generalProperties.simulationTime_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,4)
+    c.bitCoded=(c.bitCoded~4)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
 
 function model.generalProperties.packMLState_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,1)
+    c.bitCoded=(c.bitCoded~1)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
 
 function model.generalProperties.packMLStateChangeButtons_callback(ui,id)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,2)
+    c.bitCoded=(c.bitCoded~2)
     model.writeInfo(c)
     model.generalProperties.refreshDlg()
 end
@@ -141,21 +141,21 @@ function model.generalProperties.refreshDlg()
     local sel=simBWF.getSelectedEditWidget(model.generalProperties.ui)
     
     simUI.setEditValue(model.generalProperties.ui,1,c.masterIp)
-    simUI.setCheckboxValue(model.generalProperties.ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],1)~=0),true)
-    simUI.setCheckboxValue(model.generalProperties.ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],2)~=0),true)
-    simUI.setCheckboxValue(model.generalProperties.ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],4)~=0),true)
-    simUI.setCheckboxValue(model.generalProperties.ui,6,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],8)~=0),true)
-    simUI.setCheckboxValue(model.generalProperties.ui,7,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],16)~=0),true)
-    simUI.setCheckboxValue(model.generalProperties.ui,8,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],32)~=0),true)
-    simUI.setCheckboxValue(model.generalProperties.ui,9,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],64)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,3,simBWF.getCheckboxValFromBool((c['bitCoded']&1)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,4,simBWF.getCheckboxValFromBool((c['bitCoded']&2)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,5,simBWF.getCheckboxValFromBool((c['bitCoded']&4)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,6,simBWF.getCheckboxValFromBool((c['bitCoded']&8)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,7,simBWF.getCheckboxValFromBool((c['bitCoded']&16)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,8,simBWF.getCheckboxValFromBool((c['bitCoded']&32)~=0),true)
+    simUI.setCheckboxValue(model.generalProperties.ui,9,simBWF.getCheckboxValFromBool((c['bitCoded']&64)~=0),true)
     simUI.setEditValue(model.generalProperties.ui,10,simBWF.format("%.1f",c['deactivationTime']),true)
     
     local simStopped=sim.getSimulationState()==sim.simulation_stopped
     simUI.setEnabled(model.generalProperties.ui,1,simStopped,true)
     simUI.setEnabled(model.generalProperties.ui,2,simStopped,true)
     
---    simUI.setEnabled(model.generalProperties.ui,4,sim.boolAnd32(c['bitCoded'],1)~=0,true)
-    simUI.setEnabled(model.generalProperties.ui,6,sim.boolAnd32(c['bitCoded'],4)~=0,true)
+--    simUI.setEnabled(model.generalProperties.ui,4,(c['bitCoded']&1)~=0,true)
+    simUI.setEnabled(model.generalProperties.ui,6,(c['bitCoded']&4)~=0,true)
     
     simBWF.setSelectedEditWidget(model.generalProperties.ui,sel)
 end

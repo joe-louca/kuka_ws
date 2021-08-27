@@ -22,7 +22,7 @@ function model.updatePluginRepresentation()
     data.palletId=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.PALLET)
     
 --    data.cameraId=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.CAMERA)
-    data.fakeOperation=sim.boolAnd32(c.bitCoded,8)>0
+    data.fakeOperation=(c.bitCoded&8)>0
     data.imageProcessingParameters=c.imgProcessingParams
     
     local packedData=sim.packTable(data)

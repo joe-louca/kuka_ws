@@ -60,47 +60,47 @@ function model.updateConveyor()
     sim.setObjectPosition(model.specHandles.rightSide,model.handle,{0,-(width+wt)*0.5,-baseThickness*0.5})
     sim.setObjectPosition(model.specHandles.pad,sim.handle_parent,{0,padHeight*0.5,0})
 
-    if sim.boolAnd32(bitCoded,1)~=0 then
-        sim.setObjectInt32Parameter(model.specHandles.leftSide,sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.leftSide,sim.shapeintparam_respondable,0)
+    if (bitCoded&1)~=0 then
+        sim.setObjectInt32Param(model.specHandles.leftSide,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.leftSide,sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.leftSide,0)
         sim.setObjectProperty(model.specHandles.leftSide,sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.leftSide,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.leftSide,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.leftSide,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.leftSide,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.leftSide,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.leftSide,sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
-    if sim.boolAnd32(bitCoded,2)~=0 then
-        sim.setObjectInt32Parameter(model.specHandles.rightSide,sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.rightSide,sim.shapeintparam_respondable,0)
+    if (bitCoded&2)~=0 then
+        sim.setObjectInt32Param(model.specHandles.rightSide,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.rightSide,sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.rightSide,0)
         sim.setObjectProperty(model.specHandles.rightSide,sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.rightSide,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.rightSide,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.rightSide,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.rightSide,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.rightSide,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.rightSide,sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
-    if sim.boolAnd32(bitCoded,4)~=0 then
-        sim.setObjectInt32Parameter(model.specHandles.frontSide,sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.frontSide,sim.shapeintparam_respondable,0)
+    if (bitCoded&4)~=0 then
+        sim.setObjectInt32Param(model.specHandles.frontSide,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.frontSide,sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.frontSide,0)
         sim.setObjectProperty(model.specHandles.frontSide,sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.frontSide,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.frontSide,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.frontSide,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.frontSide,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.frontSide,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.frontSide,sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
-    if sim.boolAnd32(bitCoded,8)~=0 then
-        sim.setObjectInt32Parameter(model.specHandles.backSide,sim.objintparam_visibility_layer,0)
-        sim.setObjectInt32Parameter(model.specHandles.backSide,sim.shapeintparam_respondable,0)
+    if (bitCoded&8)~=0 then
+        sim.setObjectInt32Param(model.specHandles.backSide,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.specHandles.backSide,sim.shapeintparam_respondable,0)
         sim.setObjectSpecialProperty(model.specHandles.backSide,0)
         sim.setObjectProperty(model.specHandles.backSide,sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(model.specHandles.backSide,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(model.specHandles.backSide,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(model.specHandles.backSide,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.backSide,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(model.specHandles.backSide,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         sim.setObjectProperty(model.specHandles.backSide,sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
     end
@@ -151,10 +151,10 @@ function model.updateConveyor()
         local p=sim.copyPasteObjects({model.specHandles.pad},0)[1]
         sim.setObjectParent(p,pb,true)
         sim.setObjectParent(pb,model.specHandles.path,true)
-        sim.setObjectInt32Parameter(p,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(p,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(p,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(p,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(p,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
-        sim.setObjectFloatParameter(pb,sim.dummyfloatparam_follow_path_offset,i*dx)
+        sim.setObjectFloatParam(pb,sim.dummyfloatparam_follow_path_offset,i*dx)
     end
 --]]
 end

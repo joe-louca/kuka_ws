@@ -15,14 +15,14 @@
   <td >
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
-<h1><a href="../apiOverview.htm">Regular API</a> function</h1>
+<h1>Regular API function</h1>
 <h3 class=subsectionBar><a name="simCheckDistance" id="simCheckDistance"></a>simCheckDistance / sim.checkDistance </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Checks the minimum distance between two entities. Detection is silent (no visual feedback) compared to <a href="simHandleDistance.htm">sim.handleDistance</a>. Also, the measurable flags of the entities are overridden if the entities are objects. See also <a href="simReadDistance.htm">sim.readDistance</a>.<br></td>
+<td class=apiTableRightDescr>Checks the minimum distance between two entities. The measurable flags of the entities are overridden if the entities are objects.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
@@ -56,7 +56,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>number result,table_7 distanceData=sim.checkDistance(number entity1Handle,number entity2Handle,number threshold)<br></td> 
+<td class=apiTableRightLSyn>int result,table[7] distanceData,table[2] objectHandlePair=sim.checkDistance(int entity1Handle,int entity2Handle,float threshold=0)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -75,8 +75,8 @@ Lua return values
 </td> 
 <td class=apiTableRightLRet>
 <div><strong>result</strong>: 0 or 1 (1 if distance is smaller than threshold)</div>
-<div><strong>distanceData</strong>: distanceData[1]-distanceData[6] represents the distance segment, distanceData[7] is the distance between the entities. distanceData is nil if result is different from 1<br>
-</div>
+<div><strong>distanceData</strong>: distanceData[1]-distanceData[6] represents the distance segment, distanceData[7] is the distance between the entities.</div>
+<div><strong>objectHandlePair</strong>: the handles of the two objects that hold the minimum distance segment.</div>
 </td> 
 </tr> 
 
@@ -86,15 +86,13 @@ Remote API equiv.
 </td> 
 <td class=remApiTableRightCParam>
 <div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxCheckDistance">simxCheckDistance</a></div>
-<div>Legacy remote API: -</div>
+<div>Legacy remote API: <a href="../b0RemoteApi-cpp.htm#simxCheckDistance">simxCheckDistance</a></div>
 </td> 
 </tr> 
 
 </table> 
 
-<br>
-<p><a href="../apiFunctions.htm">All regular API functions on one page</a></p>
-<br>
+
 <br>
 </td>
 </tr>

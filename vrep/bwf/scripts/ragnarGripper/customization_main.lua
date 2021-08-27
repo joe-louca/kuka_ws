@@ -1,17 +1,17 @@
 function model.isPartDetected(partHandle)
     local shapesToTest={}
-    if sim.boolAnd32(sim.getModelProperty(partHandle),sim.modelproperty_not_model)>0 then
+    if (sim.getModelProperty(partHandle)&sim.modelproperty_not_model)>0 then
         -- We have a single shape which is not a model. Is the shape detectable?
-        if sim.boolAnd32(sim.getObjectSpecialProperty(partHandle),sim.objectspecialproperty_detectable_all)>0 then
+        if (sim.getObjectSpecialProperty(partHandle)&sim.objectspecialproperty_detectable_all)>0 then
             shapesToTest[1]=partHandle -- yes, it is detectable
         end
     else
         -- We have a model. Does the model have the detectable flags overridden?
-        if sim.boolAnd32(sim.getModelProperty(partHandle),sim.modelproperty_not_detectable)==0 then
+        if (sim.getModelProperty(partHandle)&sim.modelproperty_not_detectable)==0 then
             -- No, now take all model shapes that are detectable:
             local t=sim.getObjectsInTree(partHandle,sim.object_shape_type,0)
             for i=1,#t,1 do
-                if sim.boolAnd32(sim.getObjectSpecialProperty(t[i]),sim.objectspecialproperty_detectable_all)>0 then
+                if (sim.getObjectSpecialProperty(t[i])&sim.objectspecialproperty_detectable_all)>0 then
                     shapesToTest[#shapesToTest+1]=t[i]
                 end
             end
@@ -35,9 +35,9 @@ function model.updateAppearance()
     data.subtype=model.getGripperTypeString(data.gripperType)
     model.writeInfo(data)
     if data.gripperType[9]==0 then
-        sim.setObjectInt32Parameter(model.handles.nails,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.nails,sim.objintparam_visibility_layer,0)
     else
-        sim.setObjectInt32Parameter(model.handles.nails,sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.handles.nails,sim.objintparam_visibility_layer,1)
     end
     model.dlg.refresh()
 end

@@ -1,4 +1,4 @@
-This is the Ubuntu release V4.1.0, rev. 1, 64bit
+This is the Ubuntu release V4.2.0, rev. 1, 64bit
 
 ****************************
 ****************************

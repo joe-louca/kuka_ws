@@ -1,3 +1,4 @@
+simBWF=
 function sysCall_init()
     model.codeVersion=1
     model.online=simBWF.isSystemOnline()
@@ -7,7 +8,7 @@ end
 function sysCall_sensing()
     local data=model.readInfo()
     
-    if sim.boolAnd32(data.bitCoded,1)>0 then
+    if (data.bitCoded&1)>0 then
         if not model.packMlDlg.dlg_wasClosed then
             model.packMlDlg.createDlg()
         end
@@ -16,7 +17,7 @@ function sysCall_sensing()
         model.packMlDlg.dlg_wasClosed=nil
     end
 
-    if sim.boolAnd32(data.bitCoded,2)>0 then
+    if (data.bitCoded&2)>0 then
         if not model.packMlButtons.dlg_wasClosed then
             model.packMlButtons.createDlg()
         end
@@ -26,8 +27,8 @@ function sysCall_sensing()
     end
     
     
-    model.simplifiedTimeDisplay=sim.boolAnd32(data.bitCoded,8)>0
-    if sim.boolAnd32(data.bitCoded,4)>0 then
+    model.simplifiedTimeDisplay=(data.bitCoded&8)>0
+    if (data.bitCoded&4)>0 then
         if model.simplifiedTimeDisplay~=model.previousSimplifiedTimeDisplay then
             model.timeDlg.closeDlg()
             model.timeDlg.timeUi_previousDlgPos=nil

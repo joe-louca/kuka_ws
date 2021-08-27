@@ -1,12 +1,12 @@
 function model.setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     if z then
         sim.scaleObject(h,x/sx,y/sy,z/sz)
@@ -18,9 +18,9 @@ end
 function model.setEngineDamping(bulletLinDamp,bulletAngDamp,odeSoftErp)
     local l=sim.getObjectsInTree(model.handle,sim.object_shape_type,0)
     for i=1,#l,1 do
-        sim.setEngineFloatParameter(sim.bullet_body_lineardamping,l[i],bulletLinDamp)
-        sim.setEngineFloatParameter(sim.bullet_body_angulardamping,l[i],bulletAngDamp)
-        sim.setEngineFloatParameter(sim.ode_body_softerp,l[i],odeSoftErp)
+        sim.setEngineFloatParam(sim.bullet_body_lineardamping,l[i],bulletLinDamp)
+        sim.setEngineFloatParam(sim.bullet_body_angulardamping,l[i],bulletAngDamp)
+        sim.setEngineFloatParam(sim.ode_body_softerp,l[i],odeSoftErp)
     end
 end
 

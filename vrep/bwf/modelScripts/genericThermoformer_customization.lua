@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -142,14 +143,14 @@ print("dwellT, travelT",dt,tt)
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -201,11 +202,11 @@ showSamplesAndPallets=function(show)
     end
     local samples=sim.getObjectsInTree(sampleHolder,sim.handle_all,1)
     for i=1,#samples,1 do
-        sim.setObjectInt32Parameter(samples[i],sim.objintparam_visibility_layer,lay)
+        sim.setObjectInt32Param(samples[i],sim.objintparam_visibility_layer,lay)
     end
     local pallets=sim.getObjectsInTree(palletHolder,sim.handle_all,1)
     for i=1,#pallets,1 do
-        sim.setObjectInt32Parameter(pallets[i],sim.objintparam_visibility_layer,lay)
+        sim.setObjectInt32Param(pallets[i],sim.objintparam_visibility_layer,lay)
     end
 end
 
@@ -242,8 +243,8 @@ function updateThermoformer()
             local boxModel=simBWF.createOpenBox({extrusionWidth+wt*2,extrusionLength+wt*2,extrusionDepth+wt},wt,wt,200,1,true,false,conf['color'])
             sim.setObjectSpecialProperty(boxModel,0)
             local p=sim.getObjectProperty(boxModel)
-            p=sim.boolOr32(p,sim.objectproperty_selectmodelbaseinstead)
-            p=sim.boolOr32(p,sim.objectproperty_dontshowasinsidemodel)
+            p=(p|sim.objectproperty_selectmodelbaseinstead)
+            p=(p|sim.objectproperty_dontshowasinsidemodel)
             sim.setObjectProperty(boxModel,p)
             sim.setObjectPosition(boxModel,sampleHolder,objRelPos)
             sim.setObjectParent(boxModel,sampleHolder,true)
@@ -591,7 +592,7 @@ end
 
 function enabledClicked(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],64)
+    c['bitCoded']=(c['bitCoded']|64)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-64
     end
@@ -657,7 +658,7 @@ function setDlgItemContent()
     if ui then
         local config=readInfo()
         local sel=simBWF.getSelectedEditWidget(ui)
-        simUI.setCheckboxValue(ui,15,(sim.boolAnd32(config['bitCoded'],64)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,15,((config['bitCoded']&64)~=0) and 2 or 0,true)
         simUI.setEditValue(ui,11,simBWF.format("%.0f",config['velocity']/0.001),true)
         simUI.setEditValue(ui,12,simBWF.format("%.0f",config['acceleration']/0.001),true)
         simUI.setEditValue(ui,9,simBWF.format("%.0f",config['pullLength']/0.001),true)

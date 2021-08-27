@@ -96,7 +96,7 @@ function model.packMlDlg.createDlg()
         end
         model.packMlDlg.ui=simBWF.createCustomUi(xml,'Current PackML state',model.packMlDlg.packMLState_previousDlgPos,true,'model.packMlDlg.onClose',false,false,false,'layout="none"',{702,390})
 
-        local img=sim.loadImage(0,sim.getStringParameter(sim.stringparam_application_path).."/BlueWorkforce/resources/packML-run.png")
+        local img=sim.loadImage(0,sim.getStringParam(sim.stringparam_application_path).."/BlueWorkforce/resources/packML-run.png")
         simUI.setImageData(model.packMlDlg.ui,1000,img,702,390)
     end
 end

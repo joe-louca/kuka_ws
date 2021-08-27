@@ -27,7 +27,7 @@ useGlFinish_visionSensors = false // recommended to keep false. Graphic card dep
 vsync = 0 // recommended to keep at 0. Graphic card dependent.
 debugOpenGl = false
 stereoDist = 0 // 0=no stereo, otherwise the intra occular distance (0.0635 for the human eyes).
-highResDisplay = -1 // -1=automatic, 0=disabled, 1=enabled.
+highResDisplay = -1 // -1=none, 2=enabled, 1=special.
 noEdgesWhenMouseDownInCameraView = false // if true, rendering is faster during mouse/view interaction
 noTexturesWhenMouseDownInCameraView = false // if true, rendering is faster during mouse/view interaction
 noCustomUisWhenMouseDownInCameraView = true // if true, rendering is faster during mouse/view interaction
@@ -50,9 +50,8 @@ modelBrowserInitiallyVisible = true
 sceneHierarchyInitiallyVisible = true
 sceneHierarchyHiddenDuringSimulation = false
 scriptEditorFont =  // empty=default.
+scriptEditorBoldFont = false
 scriptEditorFontSize = -1 // -1=default.
-auxConsoleFont =  // empty=default
-auxConsoleFontSize = -1 // -1=default.
 mainScriptColor_background = 190,175,175
 mainScriptColor_selection = 128,128,255
 mainScriptColor_comment = 0,140,0
@@ -113,8 +112,6 @@ defaultDirectoryForScenes =  // absolute path, e.g. d:/myScenes (or leave empty 
 defaultDirectoryForModels =  // absolute path, e.g. d:/myModels (or leave empty for default path)
 defaultDirectoryForCadFiles =  // absolute path, e.g. d:/myCadFiles (or leave empty for default path)
 defaultDirectoryForMiscFiles =  // absolute path, e.g. d:/myMiscFiles (or leave empty for default path)
-defaultDirectoryForExternalScriptEditor =  // absolute path, e.g. d:/myScriptTempFiles (or leave empty for default path)
-defaultDirectoryForRemoteApiFiles =  // absolute path, e.g. d:/myRemoteApiTransfers (or leave empty for default path)
 
 
 // Serialization
@@ -156,17 +153,17 @@ colorAdjust_backCompatibility = 1 // recommended to keep 1.0
 specificGpuTweak = false
 useAlternateSerialPortRoutines = false
 disableOpenGlBasedCustomUi = false
-changeScriptCodeForNewApiNotation = 1 // 1=enabled, 0=disabled.
-supportOldApiNotation = true
+showOldDlgs = false
+keepOldThreadedScripts = false
 enableOldMirrorObjects = false
-useOldIk = false
+threadedScriptsStoppingGraceTime = 0
 
 
 // Various
 // =================================================
 mouseWheelZoomFactor = 1
 dynamicActivityRange = 1000
-objectTranslationStepSize = 0.0249999985
+objectTranslationStepSize = 0.0250000004
 objectRotationStepSize = 5
 processorCoreAffinity = 0 // recommended to keep 0 (-1:os default, 0:all threads on same core, m: affinity mask (bit1=core1, bit2=core2, etc.))
 freeServerPortStart = 20000

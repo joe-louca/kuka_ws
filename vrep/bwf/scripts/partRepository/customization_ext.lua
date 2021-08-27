@@ -19,7 +19,7 @@ function model.ext.insertPart(objectHandle)
     sim.removeObjectFromSelection(sim.handle_all,-1)
     model.insertPart(objectHandle)
     model.dlg.removeDlg()
-    sim.setBoolParameter(sim.boolparam_br_partrepository,true)
+    sim.setBoolParam(sim.boolparam_br_partrepository,true)
     model.dlg.showOrHideDlgIfNeeded()
     model.dlg.selectedPartId=objectHandle
     model.dlg.refresh()

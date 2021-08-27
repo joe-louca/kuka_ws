@@ -19,14 +19,14 @@
 	<!-- Kuka -->
 	<group if="$(arg kuka)">
 		<node pkg="launch" type="run_iiwaPy3.sh" name="kuka_connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-		<node pkg="launch" type="run_cop_sim_KUKA.sh" name="run_cop_sim_KUKA" output="screen"/>
 		<node pkg="scripts" type="kuka_pos_delay.py" name="kuka_pos_delay" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
 	</group>
 	<group unless="$(arg kuka)">
 		<node pkg="launch" type="run_cop_sim_only_KUKA.sh" name="run_cop_sim_KUKA" output="screen"/>
 		<node pkg="scripts" type="sim_kuka_pos_sub.py" name="sim_kuka_pos_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>		
 		<node pkg="scripts" type="sim_kuka_jpos_sub.py" name="sim_kuka_jpos_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-		<node pkg="scripts" type="kuka_pos_delay.py" name="kuka_pos_delay" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		<node pkg="scripts" type="kuka_pos_delay.py" name="kuka_pos_delay" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		<node pkg="scripts" type="sim_ft_delay.py" name="sim_ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
 	</group>	
 			
 	<!-- Robotiq -->	
@@ -39,8 +39,7 @@
 	<!-- Axia -->		
 	<group if="$(arg axia)">
 		<node pkg="netft_utils" type="netft_node" name="axia_connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
-		<node pkg="scripts" type="netft_sub.py" name="netft_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>			
-		<node pkg="scripts" type="ft_TF_delay.py" name="ft_TF_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		<node pkg="scripts" type="ft_delay.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
 	</group>
 
 	<!-- User input -->

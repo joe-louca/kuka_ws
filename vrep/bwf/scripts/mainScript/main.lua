@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function sysCall_init()
     sim.handleSimulationStart()
     sim.openModule(sim.handle_all)

@@ -436,7 +436,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Remotely calls a CoppeliaSim script function. When calling <a href="simulationScripts.htm">simulation scripts</a>, then simulation must be running (and threaded scripts must still be running, i.e. not ended yet). Refer to <a href="remoteApiExtension.htm">this section</a> for additional details. </td>
+<td class=apiTableRightDescr>Remotely calls a CoppeliaSim script function. When calling <a href="simulationScripts.htm">simulation scripts</a>, then simulation must be running. Refer to <a href="remoteApiExtension.htm">this section</a> for additional details. </td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -507,6 +507,124 @@ Other languages
 
 
 <h3 class=subsectionBar>
+<a name="simxCheckCollision" id="simxCheckCollision"></a>simxCheckCollision 
+(regular API equivalent: <a href="regularApi/simCheckCollision.htm">sim.checkCollision</a>)</h3>
+
+
+<table class=apiTable>
+<tr class=apiTableTr> 
+<td class=apiTableLeftDescr>
+Description 
+</td> 
+<td class=apiTableRightDescr>Checks whether two entities collide.</td>
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCSyn>
+C synopsis
+</td> 
+<td class=remApiTableRightCSyn>simxInt simxCheckCollision(simxInt clientID,simxInt entity1,simxInt entity2,simxUChar* collisionState,simxInt operationMode)</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCParam>C parameters</td> 
+<td class=remApiTableRightCParam>
+<div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
+<div><strong>entity1</strong>: the handle of the first entity.</div>
+<div><strong>entity2</strong>: the handle of the second entity.</div>
+<div><strong>collisionState</strong>: a pointer to a value receiving the collision state (0: not colliding)</div>
+<div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation modes for this function are simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
+</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCRet>
+C return value
+</td> 
+<td class=remApiTableRightCRet>
+<div>a <a href="remoteApiConstants.htm#functionErrorCodes">remote API function return code</a></div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftLanguages>
+Other languages
+</td> 
+<td class=remApiTableRightLanguages>
+<a href="remoteApiFunctionsPython.htm#simxCheckCollision">Python</a>, <a href="remoteApiFunctionsJava.htm#simxCheckCollision">Java</a>, <a href="remoteApiFunctionsMatlab.htm#simxCheckCollision">Matlab</a>, <a href="remoteApiFunctionsOctave.htm#simxCheckCollision">Octave</a>, <a href="remoteApiFunctionsLua.htm#simxCheckCollision">Lua</a></td> 
+</tr> 
+</table> 
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 class=subsectionBar>
+<a name="simxCheckDistance" id="simxCheckDistance"></a>simxCheckDistance 
+(regular API equivalent: <a href="regularApi/simCheckDistance.htm">sim.checkDistance</a>)</h3>
+
+
+<table class=apiTable>
+<tr class=apiTableTr> 
+<td class=apiTableLeftDescr>
+Description 
+</td> 
+<td class=apiTableRightDescr>Measures the distance between two entities.</td>
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCSyn>
+C synopsis
+</td> 
+<td class=remApiTableRightCSyn>simxInt simxCheckDistance(simxInt clientID,simxInt entity1,simxInt entity2,simxFloat* minimumDistance,simxInt operationMode)</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCParam>C parameters</td> 
+<td class=remApiTableRightCParam>
+<div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
+<div><strong>entity1</strong>: the handle of the first entity.</div>
+<div><strong>entity2</strong>: the handle of the second entity.</div>
+<div><strong>minimumDistance</strong>: a pointer to a value receiving the minimum distance.</div>
+<div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation modes for this function are simx_opmode_streaming (the first call) and simx_opmode_buffer (the following calls)
+</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCRet>
+C return value
+</td> 
+<td class=remApiTableRightCRet>
+<div>a <a href="remoteApiConstants.htm#functionErrorCodes">remote API function return code</a></div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftLanguages>
+Other languages
+</td> 
+<td class=remApiTableRightLanguages>
+<a href="remoteApiFunctionsPython.htm#simxCheckDistance">Python</a>, <a href="remoteApiFunctionsJava.htm#simxCheckDistance">Java</a>, <a href="remoteApiFunctionsMatlab.htm#simxCheckDistance">Matlab</a>, <a href="remoteApiFunctionsOctave.htm#simxCheckDistance">Octave</a>, <a href="remoteApiFunctionsLua.htm#simxCheckDistance">Lua</a></td> 
+</tr> 
+</table> 
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 class=subsectionBar>
 <a name="simxClearFloatSignal" id="simxClearFloatSignal"></a>simxClearFloatSignal 
 (regular API equivalent: <a href="regularApi/simClearDoubleSignal.htm">sim.clearDoubleSignal</a>)</h3>
 
@@ -528,7 +646,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>signalName</strong>: name of the signal or an empty string to clear all float signals</div>
+<div><strong>signalName</strong>: name of the signal</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_oneshot
 </div>
 </td> 
@@ -585,7 +703,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>signalName</strong>: name of the signal or an empty string to clear all integer signals</div>
+<div><strong>signalName</strong>: name of the signal</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_oneshot
 </div>
 </td> 
@@ -642,7 +760,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>signalName</strong>: name of the signal or an empty string to clear all string signals</div>
+<div><strong>signalName</strong>: name of the signal</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_oneshot
 </div>
 </td> 
@@ -743,7 +861,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Copies and pastes objects, together with all their associated calculation objects and child scripts. To copy and paste whole models, you can simply copy and paste the model base object.</td>
+<td class=apiTableRightDescr>Copies and pastes objects, together with all their associated child scripts. To copy and paste whole models, you can simply copy and paste the model base object.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1203,7 +1321,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetArrayParameter" id="simxGetArrayParameter"></a>simxGetArrayParameter 
-(regular API equivalent: <a href="regularApi/simGetArrayParameter.htm">sim.getArrayParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetArrayParam.htm">sim.getArrayParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -1261,7 +1379,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetBooleanParameter" id="simxGetBooleanParameter"></a>simxGetBooleanParameter 
-(regular API equivalent: <a href="regularApi/simGetBoolParameter.htm">sim.getBoolParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetBoolParam.htm">sim.getBoolParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -1269,7 +1387,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a boolean value. See the <a href="apiConstants.htm#booleanParameters">Boolean parameter identifiers</a>. See also <a href="#simxSetBooleanParameter">simxSetBooleanParameter</a>, <a href="#simxGetIntegerParameter">simxGetIntegerParameter</a>, <a href="#simxGetFloatingParameter">simxGetFloatingParameter</a>, <a href="#simxGetArrayParameter">simxGetArrayParameter</a> and <a href="#simxGetStringParameter">simxGetStringParameter</a>.</td>
+<td class=apiTableRightDescr>Retrieves a boolean value. See the <a href="apiConstants.htm#booleanParameters">boolean parameter identifiers</a>. See also <a href="#simxSetBooleanParameter">simxSetBooleanParameter</a>, <a href="#simxGetIntegerParameter">simxGetIntegerParameter</a>, <a href="#simxGetFloatingParameter">simxGetFloatingParameter</a>, <a href="#simxGetArrayParameter">simxGetArrayParameter</a> and <a href="#simxGetStringParameter">simxGetStringParameter</a>.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1281,7 +1399,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">Boolean parameter identifier</a></div>
+<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">boolean parameter identifier</a></div>
 <div><strong>paramValue</strong>: a pointer that will receive the parameter value</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_blocking (if not called on a regular basis)
 </div>
@@ -1318,8 +1436,7 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxGetCollectionHandle" id="simxGetCollectionHandle"></a>simxGetCollectionHandle 
-(regular API equivalent: <a href="regularApi/simGetCollectionHandle.htm">sim.getCollectionHandle</a>)</h3>
+<a name="simxGetCollectionHandle" id="simxGetCollectionHandle"></a>simxGetCollectionHandle</h3>
 
 
 <table class=apiTable>
@@ -1327,7 +1444,15 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a collection handle based on its name. If the client application is launched from a <a href="childScripts.htm">child script</a>, then you could also let the child script figure out what handle correspond to what collection, and send the handles as additional arguments to the client application during its launch. See also <a href="#simxGetObjectGroupData">simxGetObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>This is a convenience function. Since CoppeliaSim V4.2.0, collections should be dynamically created and do not have a name anymore. This function will first try to retrieve a static collection with the specified name (for backward compatibility's sake). If such a collection does not exist, it will try to return the integer signal with the specified name. On CoppeliaSim's side, one could do:
+
+<pre class=lightRedBoxNoMarginAndSmall>
+local collectionHandle=sim.createCollection(0)
+sim.addItemToCollection(collectionHandle,..)
+..
+sim.setIntegerSignal('collectionName',collectionHandle)</pre>
+
+</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1339,7 +1464,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>collectionName</strong>: name of the collection. If possibe, don't rely on the <a href="accessingGeneralObjects.htm">automatic name adjustment mechanism</a>, and always specify the full collection name, including the #: if the collection is &quot;myCollection&quot;, specify &quot;myCollection#&quot;, if the collection is &quot;myCollection#0&quot;, specify &quot;myCollection#0&quot;, etc.</div>
+<div><strong>collectionName</strong>: name of the collection.</div>
 <div><strong>handle</strong>: pointer to a value that will receive the handle</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_blocking
 </div>
@@ -1376,8 +1501,7 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxGetCollisionHandle" id="simxGetCollisionHandle"></a>simxGetCollisionHandle 
-(regular API equivalent: <a href="regularApi/simGetCollisionHandle.htm">sim.getCollisionHandle</a>)</h3>
+<a name="simxGetCollisionHandle" id="simxGetCollisionHandle"></a>simxGetCollisionHandle</h3>
 
 
 <table class=apiTable>
@@ -1385,7 +1509,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a collision  object handle based on its name. If the client application is launched from a <a href="childScripts.htm">child script</a>, then you could also let the child script figure out what handle correspond to what collision object, and send the handles as additional arguments to the client application during its launch. See also <a href="#simxGetObjectGroupData">simxGetObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckCollision">simxCheckCollision</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1397,7 +1521,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>collisionObjectName</strong>: name of the collision object. If possibe, don't rely on the <a href="accessingGeneralObjects.htm">automatic name adjustment mechanism</a>, and always specify the full collision object name, including the #: if the collision object is &quot;myCollision&quot;, specify &quot;myCollision#&quot;, if the collision object is &quot;myCollision#0&quot;, specify &quot;myCollision#0&quot;, etc.</div>
+<div><strong>collisionObjectName</strong>: name of the collision object.</div>
 <div><strong>handle</strong>: pointer to a value that will receive the handle</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_blocking
 </div>
@@ -1602,8 +1726,7 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxGetDistanceHandle" id="simxGetDistanceHandle"></a>simxGetDistanceHandle 
-(regular API equivalent: <a href="regularApi/simGetDistanceHandle.htm">sim.getDistanceHandle</a>)</h3>
+<a name="simxGetDistanceHandle" id="simxGetDistanceHandle"></a>simxGetDistanceHandle</h3>
 
 
 <table class=apiTable>
@@ -1611,7 +1734,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a distance  object handle based on its name. If the client application is launched from a <a href="childScripts.htm">child script</a>, then you could also let the child script figure out what handle correspond to what distance object, and send the handles as additional arguments to the client application during its launch.  See also <a href="#simxGetObjectGroupData">simxGetObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckDistance">simxCheckDistance</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1623,7 +1746,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>distanceObjectName</strong>: name of the distance object. If possibe, don't rely on the <a href="accessingGeneralObjects.htm">automatic name adjustment mechanism</a>, and always specify the full distance object name, including the #: if the distance object is &quot;myDistance&quot;, specify &quot;myDistance#&quot;, if the distance object is &quot;myDistance#0&quot;, specify &quot;myDistance#0&quot;, etc.</div>
+<div><strong>distanceObjectName</strong>: name of the distance object.</div>
 <div><strong>handle</strong>: pointer to a value that will receive the handle</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_blocking
 </div>
@@ -1661,7 +1784,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetFloatingParameter" id="simxGetFloatingParameter"></a>simxGetFloatingParameter 
-(regular API equivalent: <a href="regularApi/simGetFloatParameter.htm">sim.getFloatParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetFloatParam.htm">sim.getFloatParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -1833,7 +1956,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetIntegerParameter" id="simxGetIntegerParameter"></a>simxGetIntegerParameter 
-(regular API equivalent: <a href="regularApi/simGetInt32Parameter.htm">sim.getInt32Parameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetInt32Param.htm">sim.getInt32Param</a>)</h3>
 
 
 <table class=apiTable>
@@ -2420,7 +2543,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetObjectFloatParameter" id="simxGetObjectFloatParameter"></a>simxGetObjectFloatParameter 
-(regular API equivalent: <a href="regularApi/simGetObjectFloatParameter.htm">sim.getObjectFloatParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetObjectFloatParam.htm">sim.getObjectFloatParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -2582,7 +2705,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>objectName</strong>: name of the object. If possibe, don't rely on the <a href="accessingGeneralObjects.htm">automatic name adjustment mechanism</a>, and always specify the full object name, including the #: if the object is &quot;myJoint&quot;, specify &quot;myJoint#&quot;, if the object is &quot;myJoint#0&quot;, specify &quot;myJoint#0&quot;, etc.</div>
+<div><strong>objectName</strong>: name of the object.</div>
 <div><strong>handle</strong>: pointer to a value that will receive the handle</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_blocking
 </div>
@@ -2620,7 +2743,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetObjectIntParameter" id="simxGetObjectIntParameter"></a>simxGetObjectIntParameter 
-(regular API equivalent: <a href="regularApi/simGetObjectInt32Parameter.htm">sim.getObjectInt32Parameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetObjectInt32Param.htm">simGetObjectInt32Param</a>)</h3>
 
 
 <table class=apiTable>
@@ -3194,7 +3317,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetStringParameter" id="simxGetStringParameter"></a>simxGetStringParameter 
-(regular API equivalent: <a href="regularApi/simGetStringParameter.htm">sim.getStringParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simGetStringParam.htm">sim.getStringParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -3926,8 +4049,7 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxReadCollision" id="simxReadCollision"></a>simxReadCollision 
-(regular API equivalent: <a href="regularApi/simReadCollision.htm">sim.readCollision</a>)</h3>
+<a name="simxReadCollision" id="simxReadCollision"></a>simxReadCollision</h3>
 
 
 <table class=apiTable>
@@ -3935,7 +4057,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Reads the collision state of a registered collision object. This function doesn't perform collision detection, it merely reads the result from a previous call to <a href="regularApi/simHandleCollision.htm">sim.handleCollision</a> (sim.handleCollision is called in the default main script). See also <a href="#simxGetObjectGroupData">simxGetObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckCollision">simxCheckCollision</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -3984,8 +4106,7 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxReadDistance" id="simxReadDistance"></a>simxReadDistance 
-(regular API equivalent: <a href="regularApi/simReadDistance.htm">sim.readDistance</a>)</h3>
+<a name="simxReadDistance" id="simxReadDistance"></a>simxReadDistance</h3>
 
 
 <table class=apiTable>
@@ -3993,7 +4114,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Reads the distance that a  registered distance object measured. This function doesn't perform minimum distance calculation, it merely reads the result from a previous call to <a href="regularApi/simHandleDistance.htm">sim.handleDistance</a> (sim.handleDistance is called in the default main script). See also <a href="#simxGetObjectGroupData">simxGetObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckDistance">simxCheckDistance</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -4209,7 +4330,7 @@ while (simxGetConnectionId(cid)!=-1)
 }</pre>
 
 <br>
-Server side (CoppeliaSim), from a non-threaded child script:
+Server side (CoppeliaSim), from a child script:
 <pre class=lightRedBoxNoMarginAndSmall>
 function sysCall_init()
     -- initialization phase:
@@ -4528,7 +4649,7 @@ Description
 
 <h3 class=subsectionBar>
 <a name="simxSetArrayParameter" id="simxSetArrayParameter"></a>simxSetArrayParameter 
-(regular API equivalent: <a href="regularApi/simSetArrayParameter.htm">sim.setArrayParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simSetArrayParam.htm">sim.setArrayParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -4586,7 +4707,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetBooleanParameter" id="simxSetBooleanParameter"></a>simxSetBooleanParameter 
-(regular API equivalent: <a href="regularApi/simSetBoolParameter.htm">sim.setBoolParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simSetBoolParam.htm">sim.setBoolParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -4606,7 +4727,7 @@ C synopsis
 <td class=remApiTableLeftCParam>C parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simxStart</a>.</div>
-<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">Boolean parameter identifier</a></div>
+<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">boolean parameter identifier</a></div>
 <div><strong>paramValue</strong>: the parameter value</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx_opmode_oneshot
 </div>
@@ -4644,7 +4765,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetFloatingParameter" id="simxSetFloatingParameter"></a>simxSetFloatingParameter 
-(regular API equivalent: <a href="regularApi/simSetFloatParameter.htm">sim.setFloatParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simSetFloatParam.htm">sim.setFloatParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -4760,7 +4881,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetIntegerParameter" id="simxSetIntegerParameter"></a>simxSetIntegerParameter 
-(regular API equivalent: <a href="regularApi/simSetInt32Parameter.htm">sim.setInt32Parameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simSetInt32Param.htm">sim.setInt32Param</a>)</h3>
 
 
 <table class=apiTable>
@@ -5177,7 +5298,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetObjectFloatParameter" id="simxSetObjectFloatParameter"></a>simxSetObjectFloatParameter 
-(regular API equivalent: <a href="regularApi/simSetObjectFloatParameter.htm">sim.setObjectFloatParameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simSetObjectFloatParam.htm">sim.setObjectFloatParam</a>)</h3>
 
 
 <table class=apiTable>
@@ -5236,7 +5357,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetObjectIntParameter" id="simxSetObjectIntParameter"></a>simxSetObjectIntParameter 
-(regular API equivalent: <a href="regularApi/simSetObjectInt32Parameter.htm">sim.setObjectInt32Parameter</a>)</h3>
+(regular API equivalent: <a href="regularApi/simSetObjectInt32Param.htm">sim.setObjectInt32Param</a>)</h3>
 
 
 <table class=apiTable>

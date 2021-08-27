@@ -56,14 +56,14 @@ function model.getFakeDetectedPartsInWindow()
 end
 
 function model.getObjectSize(h)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     return {sx,sy,sz}
 end
@@ -81,8 +81,8 @@ function sysCall_init()
         model.lastImgUpdateTimeInMs=sim.getSystemTimeInMs(-1)-1000
     end
     local data=model.readInfo()
-    model.fakeDetection=sim.boolAnd32(data.bitCoded,8)~=0
-    model.showDetections=sim.boolAnd32(data.bitCoded,4)~=0
+    model.fakeDetection=(data.bitCoded&8)~=0
+    model.showDetections=(data.bitCoded&4)~=0
 
 -- Following currently not used anymore, but keep in case people change their mind again:
 --[=[    

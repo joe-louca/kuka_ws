@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -41,7 +42,7 @@ function setDlgItemContent()
     if ui then
         local config=readInfo()
         local sel=simBWF.getSelectedEditWidget(ui)
-        simUI.setCheckboxValue(ui,1,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
+        simUI.setCheckboxValue(ui,1,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
         local sel=simBWF.getSelectedEditWidget(ui)
         simBWF.setSelectedEditWidget(ui,sel)
     end
@@ -49,7 +50,7 @@ end
 
 function simplified_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolXor32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']~1)
     writeInfo(c)
     simBWF.markUndoPoint()
     setDlgItemContent()
@@ -119,11 +120,11 @@ function sysCall_nonSimulation()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,1)
 end
 
 function sysCall_beforeSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,0)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,0)
     removeDlg()
 end
 
@@ -139,7 +140,7 @@ end
 function sysCall_cleanup()
     removeDlg()
     removeFromPluginRepresentation()
-    if sim.isHandleValid(model)==1 then
+    if sim.isHandle(model) then
         -- the associated object might already have been destroyed
         simBWF.writeSessionPersistentObjectData(model,"dlgPosAndSize",previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos)
     end

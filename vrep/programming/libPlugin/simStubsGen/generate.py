@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import argparse
 import os
 import os.path
@@ -20,19 +18,15 @@ parser.add_argument("--gen-lua-xml", help='generate XML translation of Lua docst
 parser.add_argument("--gen-reference-xml", help='generate merged XML (from callbacks.xml and lua.xml)', action='store_true')
 parser.add_argument("--gen-reference-html", help='generate HTML documentation (from reference.xml or callbacks.xml)', action='store_true')
 parser.add_argument("--gen-lua-calltips", help='generate C++ code for Lua calltips', action='store_true')
-parser.add_argument("--gen-notepadplusplus-stuff", help='generate syntax hilighting stuff for notepad++', action='store_true')
-parser.add_argument("--gen-deprecated-txt", help='generate deprecated functions mapping for CoppeliaSim', action='store_true')
+parser.add_argument("--gen-lua-typechecker", help='generate Lua code for type-checking', action='store_true')
+parser.add_argument("--gen-api-index", help='generate api index mapping for CodeEditor plugin', action='store_true')
+parser.add_argument("--gen-cmake-meta", help='generate cmake metadata', action='store_true')
 parser.add_argument("--gen-all", help='generate everything', action='store_true')
 parser.add_argument("--verbose", help='print commands being executed', action='store_true')
 args = parser.parse_args()
 
 if args is False:
     SystemExit
-
-args.verbose = True
-
-if args.verbose:
-    print(' '.join(['"%s"' % arg if ' ' in arg else arg for arg in sys.argv]))
 
 self_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -69,11 +63,25 @@ if args.gen_all:
     args.gen_reference_xml = True
     args.gen_reference_html = True
     args.gen_lua_calltips = True
-    args.gen_notepadplusplus_stuff = True
-    args.gen_deprecated_txt = True
+    args.gen_lua_typechecker = True
+    args.gen_api_index = True
+if args.gen_api_index:
+    args.gen_reference_xml = True
+if args.gen_lua_calltips:
+    args.gen_lua_xml = True
 if args.gen_reference_xml:
     input_xml = output('reference.xml')
     args.gen_lua_xml = True
+if args.gen_lua_typechecker:
+    args.gen_lua_xml = True
+
+if args.lua_file:
+    lua_require = os.path.splitext(os.path.basename(args.lua_file))[0]
+else:
+    lua_require = ''
+
+if args.verbose:
+    print(' '.join(['"%s"' % arg if ' ' in arg else arg for arg in sys.argv]))
 
 # create output dir if needed:
 try:
@@ -84,15 +92,16 @@ except OSError as exc:
 
 plugin = parse(args.xml_file)
 
-if args.gen_stubs:
-    for fn in ('stubs.cpp', 'stubs.h', 'stubsPlusPlus.cpp'):
-        runtool('external/pycpp/pycpp', '-p', 'xml_file=' + args.xml_file, '-i', rel('cpp/' + fn), '-o', output(fn), '-P', self_dir)
+if args.gen_cmake_meta:
+    runtool('generate_cmake_metadata', args.xml_file, output('meta.cmake'))
+    sys.exit(0)
 
 if args.gen_lua_xml:
     if not args.lua_file:
-        print('no lua file defined. skipping lua_to_xml')
+        print('no lua file defined. skipping generate_lua_xml')
+        args.gen_lua_xml = False
     else:
-        runtool('lua_to_xml', args.lua_file, output('lua.xml'))
+        runtool('generate_lua_xml', args.xml_file, args.lua_file, output('lua.xml'))
 
 if args.gen_reference_xml:
     if not args.lua_file:
@@ -102,23 +111,45 @@ if args.gen_reference_xml:
         runtool('merge_xml', args.xml_file, output('lua.xml'), output('reference.xml'))
 
 if args.gen_reference_html:
+    xsltproc_in = input_xml
+    xsltproc_out = output('reference.html')
+    xsltproc_xsl = rel('xsl/reference.xsl')
     if os.name == 'nt':
-        print('skipping xsltproc because a known bug on Windows')
-    else:
-        runprogram('xsltproc', '-o', output('reference.html'), rel('xsl/reference.xsl'), input_xml)
+        # on windows xsltproc will raise a I/O error if path contains backslashes
+        xsltproc_in = xsltproc_in.replace('\\', '/')
+        xsltproc_out = xsltproc_out.replace('\\', '/')
+        xsltproc_xsl = xsltproc_xsl.replace('\\', '/')
+    runprogram('xsltproc', '-o', xsltproc_out, xsltproc_xsl, xsltproc_in)
 
 if args.gen_lua_calltips:
-    if not plugin.short_name:
-        print('plugin short-name not defined. skipping generate_lua_calltips')
-    elif not args.lua_file:
+    if not args.lua_file:
         print('no lua file defined. skipping gen_lua_calltips')
+        args.gen_lua_calltips = False
     else:
-        runtool('generate_lua_calltips', plugin.name, plugin.short_name, args.lua_file, output('lua_calltips.cpp'))
+        runtool('generate_lua_calltips', output('lua.xml'), output('lua_calltips.cpp'))
 
-if args.gen_notepadplusplus_stuff:
-    runtool('generate_notepadplusplus_xml', input_xml, output('np++.xml'))
-    runtool('generate_notepadplusplus_txt', input_xml, output('np++.txt'))
+if args.gen_lua_typechecker:
+    if not args.lua_file:
+        print('no lua file defined. skipping gen_lua_typechecker')
+        args.gen_lua_typechecker = False
+    else:
+        lua_require += '-typecheck'
+        runtool('generate_lua_typechecker', args.lua_file, output('lua.xml'), output(f'{lua_require}.lua'))
 
-if args.gen_deprecated_txt:
-    runtool('generate_deprecated_txt', args.xml_file, output('deprecated_mapping.txt'))
+if args.gen_api_index:
+    runtool('generate_api_index', input_xml, output('index.json'))
+
+if args.gen_stubs:
+    tool = [
+        'external/pycpp/pycpp',
+        '-p', 'xml_file=' + args.xml_file,
+        '-p', f'have_lua_calltips={args.gen_lua_calltips}',
+        '-P', self_dir
+    ]
+    if lua_require:
+        tool.extend([
+            '-p', f'lua_require={lua_require}',
+        ])
+    for fn in ('stubs.cpp', 'stubs.h', 'plugin.h', 'stubsPlusPlus.cpp'):
+        runtool(*tool, '-i', rel('cpp/' + fn), '-o', output(fn))
 

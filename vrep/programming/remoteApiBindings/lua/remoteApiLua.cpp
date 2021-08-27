@@ -252,8 +252,8 @@ int LUA_CLEARFLOATSIGNAL_CALLBACK(lua_State* L)
 // --------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------
-#define LUA_CLEARINTEGERSIGNAL_COMMAND "simx.clearIntegerSignal"
-#define LUA_CLEARINTEGERSIGNAL_COMMANDOLD "simxClearIntegerSignal"
+#define LUA_CLEARINTEGERSIGNAL_COMMAND "simx.clearInt32Signal"
+#define LUA_CLEARINTEGERSIGNAL_COMMANDOLD "simxClearInt32Signal"
 const int inArgs_CLEARINTEGERSIGNAL[]={
     3,
     sim_lua_arg_int,0,
@@ -267,7 +267,7 @@ int LUA_CLEARINTEGERSIGNAL_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxClearIntegerSignal(_clientId,inData->at(1).stringData[0].c_str(),inData->at(2).intData[0]);
+        int res=simxClearInt32Signal(_clientId,inData->at(1).stringData[0].c_str(),inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -481,7 +481,30 @@ int LUA_SETBOOLEANPARAMETER_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetBooleanParameter(_clientId,inData->at(1).intData[0],inData->at(2).boolData[0],inData->at(3).intData[0]);
+        int res=simxSetBoolParam(_clientId,inData->at(1).intData[0],inData->at(2).boolData[0],inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_SETBOOLPARAM_COMMAND "simx.setBoolParam"
+const int inArgs_SETBOOLPARAM[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_bool,0,
+    sim_lua_arg_int,0,
+};
+int LUA_SETBOOLPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_SETBOOLPARAM,inArgs_SETBOOLPARAM[0],LUA_SETBOOLPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int res=simxSetBoolParam(_clientId,inData->at(1).intData[0],inData->at(2).boolData[0],inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -549,7 +572,30 @@ int LUA_SETFLOATINGPARAMETER_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetFloatingParameter(_clientId,inData->at(1).intData[0],inData->at(2).floatData[0],inData->at(3).intData[0]);
+        int res=simxSetFloatParam(_clientId,inData->at(1).intData[0],inData->at(2).floatData[0],inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_SETFLOATPARAM_COMMAND "simx.setFloatParam"
+const int inArgs_SETFLOATPARAM[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_float,0,
+    sim_lua_arg_int,0,
+};
+int LUA_SETFLOATPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_SETFLOATPARAM,inArgs_SETFLOATPARAM[0],LUA_SETFLOATPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int res=simxSetFloatParam(_clientId,inData->at(1).intData[0],inData->at(2).floatData[0],inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -573,7 +619,30 @@ int LUA_SETINTEGERPARAMETER_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetIntegerParameter(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).intData[0]);
+        int res=simxSetInt32Param(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_SETINT32PARAM_COMMAND "simx.setInt32Param"
+const int inArgs_SETINT32PARAM[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_SETINT32PARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_SETINT32PARAM,inArgs_SETINT32PARAM[0],LUA_SETINT32PARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int res=simxSetInt32Param(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -597,7 +666,30 @@ int LUA_SETARRAYPARAMETER_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetArrayParameter(_clientId,inData->at(1).intData[0],&inData->at(2).floatData[0],inData->at(3).intData[0]);
+        int res=simxSetArrayParam(_clientId,inData->at(1).intData[0],&inData->at(2).floatData[0],inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_SETARRAYPARAM_COMMAND "simx.setArrayParam"
+const int inArgs_SETARRAYPARAM[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_float|sim_lua_arg_table,3,
+    sim_lua_arg_int,0,
+};
+int LUA_SETARRAYPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_SETARRAYPARAM,inArgs_SETARRAYPARAM[0],LUA_SETARRAYPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int res=simxSetArrayParam(_clientId,inData->at(1).intData[0],&inData->at(2).floatData[0],inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -621,7 +713,32 @@ int LUA_GETBOOLEANPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         unsigned char p;
-        int res=simxGetBooleanParameter(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        int res=simxGetBoolParam(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(p!=0));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETBOOLPARAM_COMMAND "simx.getBoolParam"
+const int inArgs_GETBOOLPARAM[]={
+    3,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETBOOLPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETBOOLPARAM,inArgs_GETBOOLPARAM[0],LUA_GETBOOLPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        unsigned char p;
+        int res=simxGetBoolParam(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(p!=0));
@@ -647,7 +764,32 @@ int LUA_GETFLOATINGPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         float p;
-        int res=simxGetFloatingParameter(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        int res=simxGetFloatParam(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(p));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETFLOATPARAM_COMMAND "simx.getFloatParam"
+const int inArgs_GETFLOATPARAM[]={
+    3,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETFLOATPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETFLOATPARAM,inArgs_GETFLOATPARAM[0],LUA_GETFLOATPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        float p;
+        int res=simxGetFloatParam(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(p));
@@ -673,7 +815,32 @@ int LUA_GETINTEGERPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         int p;
-        int res=simxGetIntegerParameter(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        int res=simxGetInt32Param(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(p));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETINT32PARAM_COMMAND "simx.getInt32Param"
+const int inArgs_GETINT32PARAM[]={
+    3,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETINT32PARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETINT32PARAM,inArgs_GETINT32PARAM[0],LUA_GETINT32PARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int p;
+        int res=simxGetInt32Param(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(p));
@@ -699,7 +866,32 @@ int LUA_GETARRAYPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         std::vector<float> p(3,0.0f);
-        int res=simxGetArrayParameter(_clientId,inData->at(1).intData[0],&p[0],inData->at(2).intData[0]);
+        int res=simxGetArrayParam(_clientId,inData->at(1).intData[0],&p[0],inData->at(2).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(p));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETARRAYPARAM_COMMAND "simx.getArrayParam"
+const int inArgs_GETARRAYPARAM[]={
+    3,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETARRAYPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETARRAYPARAM,inArgs_GETARRAYPARAM[0],LUA_GETARRAYPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        std::vector<float> p(3,0.0f);
+        int res=simxGetArrayParam(_clientId,inData->at(1).intData[0],&p[0],inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(p));
@@ -725,7 +917,32 @@ int LUA_GETSTRINGPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         char* p;
-        int res=simxGetStringParameter(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        int res=simxGetStringParam(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(std::string(p)));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETSTRINGPARAM_COMMAND "simx.getStringParam"
+const int inArgs_GETSTRINGPARAM[]={
+    3,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETSTRINGPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETSTRINGPARAM,inArgs_GETSTRINGPARAM[0],LUA_GETSTRINGPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        char* p;
+        int res=simxGetStringParam(_clientId,inData->at(1).intData[0],&p,inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(std::string(p)));
@@ -759,8 +976,8 @@ int LUA_SETFLOATSIGNAL_CALLBACK(lua_State* L)
 // --------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------
-#define LUA_SETINTEGERSIGNAL_COMMAND "simx.setIntegerSignal"
-#define LUA_SETINTEGERSIGNAL_COMMANDOLD "simxSetIntegerSignal"
+#define LUA_SETINTEGERSIGNAL_COMMAND "simx.setInt32Signal"
+#define LUA_SETINTEGERSIGNAL_COMMANDOLD "simxSetInt32Signal"
 const int inArgs_SETINTEGERSIGNAL[]={
     4,
     sim_lua_arg_int,0,
@@ -775,7 +992,7 @@ int LUA_SETINTEGERSIGNAL_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetIntegerSignal(_clientId,inData->at(1).stringData[0].c_str(),inData->at(2).intData[0],inData->at(3).intData[0]);
+        int res=simxSetInt32Signal(_clientId,inData->at(1).stringData[0].c_str(),inData->at(2).intData[0],inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -833,8 +1050,8 @@ int LUA_GETFLOATSIGNAL_CALLBACK(lua_State* L)
 // --------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------
-#define LUA_GETINTEGERSIGNAL_COMMAND "simx.getIntegerSignal"
-#define LUA_GETINTEGERSIGNAL_COMMANDOLD "simxGetIntegerSignal"
+#define LUA_GETINTEGERSIGNAL_COMMAND "simx.getInt32Signal"
+#define LUA_GETINTEGERSIGNAL_COMMANDOLD "simxGetInt32Signal"
 const int inArgs_GETINTEGERSIGNAL[]={
     3,
     sim_lua_arg_int,0,
@@ -849,7 +1066,7 @@ int LUA_GETINTEGERSIGNAL_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         int signalValue;
-        int res=simxGetIntegerSignal(_clientId,inData->at(1).stringData[0].c_str(),&signalValue,inData->at(2).intData[0]);
+        int res=simxGetInt32Signal(_clientId,inData->at(1).stringData[0].c_str(),&signalValue,inData->at(2).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(signalValue));
@@ -1448,7 +1665,33 @@ int LUA_GETOBJECTFLOATPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         float param;
-        int res=simxGetObjectFloatParameter(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&param,inData->at(3).intData[0]);
+        int res=simxGetObjectFloatParam(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&param,inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(param));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETOBJECTFLOATPARAM_COMMAND "simx.getObjectFloatParam"
+const int inArgs_GETOBJECTFLOATPARAM[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETOBJECTFLOATPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETOBJECTFLOATPARAM,inArgs_GETOBJECTFLOATPARAM[0],LUA_GETOBJECTFLOATPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        float param;
+        int res=simxGetObjectFloatParam(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&param,inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(param));
@@ -1475,7 +1718,33 @@ int LUA_GETOBJECTINTPARAMETER_CALLBACK(lua_State* L)
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
         int param;
-        int res=simxGetObjectIntParameter(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&param,inData->at(3).intData[0]);
+        int res=simxGetObjectInt32Param(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&param,inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(param));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_GETOBJECTINT32PARAM_COMMAND "simx.getObjectInt32Param"
+const int inArgs_GETOBJECTINT32PARAM[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_GETOBJECTINT32PARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_GETOBJECTINT32PARAM,inArgs_GETOBJECTINT32PARAM[0],LUA_GETOBJECTINT32PARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int param;
+        int res=simxGetObjectInt32Param(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&param,inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(param));
@@ -2178,6 +2447,58 @@ int LUA_READDISTANCE_CALLBACK(lua_State* L)
         int _clientId=inData->at(0).intData[0];
         float dist;
         int res=simxReadDistance(_clientId,inData->at(1).intData[0],&dist,inData->at(2).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(dist));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_CHECKCOLLISION_COMMAND "simx.checkCollision"
+const int inArgs_CHECKCOLLISION[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_CHECKCOLLISION_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_CHECKCOLLISION,inArgs_CHECKCOLLISION[0],LUA_CHECKCOLLISION_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        unsigned char collState;
+        int res=simxCheckCollision(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&collState,inData->at(3).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+        if (res==0)
+            D.pushOutData(CLuaDataItem(collState!=0));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_CHECKDISTANCE_COMMAND "simx.checkDistance"
+const int inArgs_CHECKDISTANCE[]={
+    4,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_CHECKDISTANCE_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_CHECKDISTANCE,inArgs_CHECKDISTANCE[0],LUA_CHECKDISTANCE_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        float dist;
+        int res=simxCheckDistance(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],&dist,inData->at(3).intData[0]);
         D.pushOutData(CLuaDataItem(res));
         if (res==0)
             D.pushOutData(CLuaDataItem(dist));
@@ -2955,7 +3276,31 @@ int LUA_SETOBJECTFLOATPARAMETER_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetObjectFloatParameter(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).floatData[0],inData->at(4).intData[0]);
+        int res=simxSetObjectFloatParam(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).floatData[0],inData->at(4).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_SETOBJECTFLOATPARAM_COMMAND "simx.setObjectFloatParam"
+const int inArgs_SETOBJECTFLOATPARAM[]={
+    5,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_float,0,
+    sim_lua_arg_int,0,
+};
+int LUA_SETOBJECTFLOATPARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_SETOBJECTFLOATPARAM,inArgs_SETOBJECTFLOATPARAM[0],LUA_SETOBJECTFLOATPARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int res=simxSetObjectFloatParam(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).floatData[0],inData->at(4).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -2980,7 +3325,31 @@ int LUA_SETOBJECTINTPARAMETER_CALLBACK(lua_State* L)
     {
         std::vector<CLuaDataItem>* inData=D.getInDataPtr();
         int _clientId=inData->at(0).intData[0];
-        int res=simxSetObjectIntParameter(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).intData[0],inData->at(4).intData[0]);
+        int res=simxSetObjectInt32Param(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).intData[0],inData->at(4).intData[0]);
+        D.pushOutData(CLuaDataItem(res));
+    }
+    return(D.writeDataToLua(L));
+}
+// --------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------
+#define LUA_SETOBJECTINT32PARAM_COMMAND "simx.setObjectInt32Param"
+const int inArgs_SETOBJECTINT32PARAM[]={
+    5,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+    sim_lua_arg_int,0,
+};
+int LUA_SETOBJECTINT32PARAM_CALLBACK(lua_State* L)
+{
+    CLuaData D;
+    if (D.readDataFromLua(L,inArgs_SETOBJECTINT32PARAM,inArgs_SETOBJECTINT32PARAM[0],LUA_SETOBJECTINT32PARAM_COMMAND))
+    {
+        std::vector<CLuaDataItem>* inData=D.getInDataPtr();
+        int _clientId=inData->at(0).intData[0];
+        int res=simxSetObjectInt32Param(_clientId,inData->at(1).intData[0],inData->at(2).intData[0],inData->at(3).intData[0],inData->at(4).intData[0]);
         D.pushOutData(CLuaDataItem(res));
     }
     return(D.writeDataToLua(L));
@@ -3008,18 +3377,20 @@ void lua_registerN(lua_State* L,char const* funcName,lua_CFunction functionCallb
     {
         name.erase(name.begin(),name.begin()+5);
 
-        lua_getfield(L,LUA_GLOBALSINDEX,"simx");
+        lua_rawgeti(L,LUA_REGISTRYINDEX,LUA_RIDX_GLOBALS); // table of globals
+        lua_getfield(L,-1,"simx");
         if (!lua_istable(L,-1))
         { // we first need to create the table
             lua_createtable(L,0,1);
-            lua_setfield(L,LUA_GLOBALSINDEX,"simx");
+            lua_setfield(L,-3,"simx");
             lua_pop(L,1);
-            lua_getfield(L,LUA_GLOBALSINDEX,"simx");
+            lua_getfield(L,-1,"simx");
         }
         lua_pushstring(L,name.c_str());
         lua_pushcfunction(L,functionCallback);
         lua_settable(L,-3);
         lua_pop(L,1);
+        lua_pop(L,1); // pop table of globals
     }
     else
         lua_register(L,funcName,functionCallback);
@@ -3034,7 +3405,6 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
 
     luaL_dostring(L,"simx={}");
     luaL_dostring(L,"sim={}");
-
 
     lua_registerN(L,LUA_START_COMMAND,LUA_START_CALLBACK);
     lua_registerN(L,LUA_FINISH_COMMAND,LUA_FINISH_CALLBACK);
@@ -3053,17 +3423,17 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     lua_registerN(L,LUA_LOADSCENE_COMMAND,LUA_LOADSCENE_CALLBACK);
     lua_registerN(L,LUA_LOADMODEL_COMMAND,LUA_LOADMODEL_CALLBACK);
     lua_registerN(L,LUA_LOADUI_COMMAND,LUA_LOADUI_CALLBACK);
-    lua_registerN(L,LUA_SETBOOLEANPARAMETER_COMMAND,LUA_SETBOOLEANPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETBOOLPARAM_COMMAND,LUA_SETBOOLPARAM_CALLBACK);
     lua_registerN(L,LUA_STARTSIMULATION_COMMAND,LUA_STARTSIMULATION_CALLBACK);
     lua_registerN(L,LUA_STOPSIMULATION_COMMAND,LUA_STOPSIMULATION_CALLBACK);
-    lua_registerN(L,LUA_SETFLOATINGPARAMETER_COMMAND,LUA_SETFLOATINGPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_SETINTEGERPARAMETER_COMMAND,LUA_SETINTEGERPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_SETARRAYPARAMETER_COMMAND,LUA_SETARRAYPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_GETBOOLEANPARAMETER_COMMAND,LUA_GETBOOLEANPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_GETFLOATINGPARAMETER_COMMAND,LUA_GETFLOATINGPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_GETINTEGERPARAMETER_COMMAND,LUA_GETINTEGERPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_GETARRAYPARAMETER_COMMAND,LUA_GETARRAYPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_GETSTRINGPARAMETER_COMMAND,LUA_GETSTRINGPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETFLOATPARAM_COMMAND,LUA_SETFLOATPARAM_CALLBACK);
+    lua_registerN(L,LUA_SETINT32PARAM_COMMAND,LUA_SETINT32PARAM_CALLBACK);
+    lua_registerN(L,LUA_SETARRAYPARAM_COMMAND,LUA_SETARRAYPARAM_CALLBACK);
+    lua_registerN(L,LUA_GETBOOLPARAM_COMMAND,LUA_GETBOOLPARAM_CALLBACK);
+    lua_registerN(L,LUA_GETFLOATPARAM_COMMAND,LUA_GETFLOATPARAM_CALLBACK);
+    lua_registerN(L,LUA_GETINT32PARAM_COMMAND,LUA_GETINT32PARAM_CALLBACK);
+    lua_registerN(L,LUA_GETARRAYPARAM_COMMAND,LUA_GETARRAYPARAM_CALLBACK);
+    lua_registerN(L,LUA_GETSTRINGPARAM_COMMAND,LUA_GETSTRINGPARAM_CALLBACK);
     lua_registerN(L,LUA_SETFLOATSIGNAL_COMMAND,LUA_SETFLOATSIGNAL_CALLBACK);
     lua_registerN(L,LUA_SETINTEGERSIGNAL_COMMAND,LUA_SETINTEGERSIGNAL_CALLBACK);
     lua_registerN(L,LUA_SETSTRINGSIGNAL_COMMAND,LUA_SETSTRINGSIGNAL_CALLBACK);
@@ -3090,8 +3460,8 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     lua_registerN(L,LUA_GETLASTERRORS_COMMAND,LUA_GETLASTERRORS_CALLBACK);
     lua_registerN(L,LUA_GETMODELPROPERTY_COMMAND,LUA_GETMODELPROPERTY_CALLBACK);
     lua_registerN(L,LUA_GETOBJECTCHILD_COMMAND,LUA_GETOBJECTCHILD_CALLBACK);
-    lua_registerN(L,LUA_GETOBJECTFLOATPARAMETER_COMMAND,LUA_GETOBJECTFLOATPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_GETOBJECTINTPARAMETER_COMMAND,LUA_GETOBJECTINTPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETOBJECTFLOATPARAM_COMMAND,LUA_GETOBJECTFLOATPARAM_CALLBACK);
+    lua_registerN(L,LUA_GETOBJECTINT32PARAM_COMMAND,LUA_GETOBJECTINT32PARAM_CALLBACK);
     lua_registerN(L,LUA_GETOBJECTGROUPDATA_COMMAND,LUA_GETOBJECTGROUPDATA_CALLBACK);
     lua_registerN(L,LUA_CALLSCRIPTFUNCTION_COMMAND,LUA_CALLSCRIPTFUNCTION_CALLBACK);
     lua_registerN(L,LUA_GETOBJECTORIENTATION_COMMAND,LUA_GETOBJECTORIENTATION_CALLBACK);
@@ -3114,6 +3484,8 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     lua_registerN(L,LUA_QUERY_COMMAND,LUA_QUERY_CALLBACK);
     lua_registerN(L,LUA_READCOLLISION_COMMAND,LUA_READCOLLISION_CALLBACK);
     lua_registerN(L,LUA_READDISTANCE_COMMAND,LUA_READDISTANCE_CALLBACK);
+    lua_registerN(L,LUA_CHECKCOLLISION_COMMAND,LUA_CHECKCOLLISION_CALLBACK);
+    lua_registerN(L,LUA_CHECKDISTANCE_COMMAND,LUA_CHECKDISTANCE_CALLBACK);
     lua_registerN(L,LUA_READFORCESENSOR_COMMAND,LUA_READFORCESENSOR_CALLBACK);
     lua_registerN(L,LUA_READPROXIMITYSENSOR_COMMAND,LUA_READPROXIMITYSENSOR_CALLBACK);
     lua_registerN(L,LUA_READSTRINGSTREAM_COMMAND,LUA_READSTRINGSTREAM_CALLBACK);
@@ -3140,14 +3512,27 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     lua_registerN(L,LUA_SYNCHRONOUS_COMMAND,LUA_SYNCHRONOUS_CALLBACK);
     lua_registerN(L,LUA_SYNCHRONOUSTRIGGER_COMMAND,LUA_SYNCHRONOUSTRIGGER_CALLBACK);
     lua_registerN(L,LUA_TRANSFERFILE_COMMAND,LUA_TRANSFERFILE_CALLBACK);
-    lua_registerN(L,LUA_SETOBJECTFLOATPARAMETER_COMMAND,LUA_SETOBJECTFLOATPARAMETER_CALLBACK);
-    lua_registerN(L,LUA_SETOBJECTINTPARAMETER_COMMAND,LUA_SETOBJECTINTPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETOBJECTFLOATPARAM_COMMAND,LUA_SETOBJECTFLOATPARAM_CALLBACK);
+    lua_registerN(L,LUA_SETOBJECTINT32PARAM_COMMAND,LUA_SETOBJECTINT32PARAM_CALLBACK);
     lua_registerN(L,LUA_PACKINTS_COMMAND,LUA_PACKINTS_CALLBACK);
     lua_registerN(L,LUA_PACKFLOATS_COMMAND,LUA_PACKFLOATS_CALLBACK);
     lua_registerN(L,LUA_UNPACKINTS_COMMAND,LUA_UNPACKINTS_CALLBACK);
     lua_registerN(L,LUA_UNPACKFLOATS_COMMAND,LUA_UNPACKFLOATS_CALLBACK);
 
     // For backward compatibility:
+    lua_registerN(L,LUA_SETBOOLEANPARAMETER_COMMAND,LUA_SETBOOLEANPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETFLOATINGPARAMETER_COMMAND,LUA_SETFLOATINGPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETINTEGERPARAMETER_COMMAND,LUA_SETINTEGERPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETARRAYPARAMETER_COMMAND,LUA_SETARRAYPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETBOOLEANPARAMETER_COMMAND,LUA_GETBOOLEANPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETFLOATINGPARAMETER_COMMAND,LUA_GETFLOATINGPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETINTEGERPARAMETER_COMMAND,LUA_GETINTEGERPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETARRAYPARAMETER_COMMAND,LUA_GETARRAYPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETSTRINGPARAMETER_COMMAND,LUA_GETSTRINGPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETOBJECTFLOATPARAMETER_COMMAND,LUA_GETOBJECTFLOATPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_GETOBJECTINTPARAMETER_COMMAND,LUA_GETOBJECTINTPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETOBJECTFLOATPARAMETER_COMMAND,LUA_SETOBJECTFLOATPARAMETER_CALLBACK);
+    lua_registerN(L,LUA_SETOBJECTINTPARAMETER_COMMAND,LUA_SETOBJECTINTPARAMETER_CALLBACK);
     lua_register(L,LUA_START_COMMANDOLD,LUA_START_CALLBACK);
     lua_register(L,LUA_FINISH_COMMANDOLD,LUA_FINISH_CALLBACK);
     lua_register(L,LUA_ADDSTATUSBARMESSAGE_COMMANDOLD,LUA_ADDSTATUSBARMESSAGE_CALLBACK);
@@ -3256,6 +3641,9 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     lua_register(L,LUA_PACKFLOATS_COMMANDOLD,LUA_PACKFLOATS_CALLBACK);
     lua_register(L,LUA_UNPACKINTS_COMMANDOLD,LUA_UNPACKINTS_CALLBACK);
     lua_register(L,LUA_UNPACKFLOATS_COMMANDOLD,LUA_UNPACKFLOATS_CALLBACK);
+    lua_registerN(L,"simx.clearIntegerSignal",LUA_CLEARINTEGERSIGNAL_CALLBACK);
+    lua_registerN(L,"simx.setIntegerSignal",LUA_SETINTEGERSIGNAL_CALLBACK);
+    lua_registerN(L,"simx.getIntegerSignal",LUA_GETINTEGERSIGNAL_CALLBACK);
 
 
 
@@ -3281,13 +3669,11 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariableN(L,"sim.appobj_distance_type",(boost::lexical_cast<std::string>(int(sim_appobj_distance_type))).c_str());
     registerVariableN(L,"sim.appobj_simulation_type",(boost::lexical_cast<std::string>(int(sim_appobj_simulation_type))).c_str());
     registerVariableN(L,"sim.appobj_ik_type",(boost::lexical_cast<std::string>(int(sim_appobj_ik_type))).c_str());
-    registerVariableN(L,"sim.appobj_constraintsolver_type",(boost::lexical_cast<std::string>(int(sim_appobj_constraintsolver_type))).c_str());
     registerVariableN(L,"sim.appobj_collection_type",(boost::lexical_cast<std::string>(int(sim_appobj_collection_type))).c_str());
     registerVariableN(L,"sim.appobj_ui_type",(boost::lexical_cast<std::string>(int(sim_appobj_ui_type))).c_str());
     registerVariableN(L,"sim.appobj_script_type",(boost::lexical_cast<std::string>(int(sim_appobj_script_type))).c_str());
     registerVariableN(L,"sim.appobj_pathplanning_type",(boost::lexical_cast<std::string>(int(sim_appobj_pathplanning_type))).c_str());
     registerVariableN(L,"sim.appobj_texture_type",(boost::lexical_cast<std::string>(int(sim_appobj_texture_type))).c_str());
-    registerVariableN(L,"sim.appobj_motionplanning_type",(boost::lexical_cast<std::string>(int(sim_appobj_motionplanning_type))).c_str());
 
     registerVariableN(L,"sim.light_omnidirectional_subtype",(boost::lexical_cast<std::string>(int(sim_light_omnidirectional_subtype))).c_str());
     registerVariableN(L,"sim.light_spot_subtype",(boost::lexical_cast<std::string>(int(sim_light_spot_subtype))).c_str());
@@ -3317,14 +3703,12 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariableN(L,"sim.objectspecialproperty_detectable_capacitive",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_detectable_capacitive))).c_str());
     registerVariableN(L,"sim.objectspecialproperty_renderable",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_renderable))).c_str());
     registerVariableN(L,"sim.objectspecialproperty_detectable_all",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_detectable_all))).c_str());
-    registerVariableN(L,"sim.objectspecialproperty_cuttable",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_cuttable))).c_str());
     registerVariableN(L,"sim.objectspecialproperty_pathplanning_ignored",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_pathplanning_ignored))).c_str());
 
     registerVariableN(L,"sim.modelproperty_not_collidable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_collidable))).c_str());
     registerVariableN(L,"sim.modelproperty_not_measurable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_measurable))).c_str());
     registerVariableN(L,"sim.modelproperty_not_renderable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_renderable))).c_str());
     registerVariableN(L,"sim.modelproperty_not_detectable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_detectable))).c_str());
-    registerVariableN(L,"sim.modelproperty_not_cuttable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_cuttable))).c_str());
     registerVariableN(L,"sim.modelproperty_not_dynamic",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_dynamic))).c_str());
     registerVariableN(L,"sim.modelproperty_not_respondable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_respondable))).c_str());
     registerVariableN(L,"sim.modelproperty_not_reset",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_reset))).c_str());
@@ -3428,7 +3812,6 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariableN(L,"sim.boolparam_video_recording_triggered",(boost::lexical_cast<std::string>(int(sim_boolparam_video_recording_triggered))).c_str());
     registerVariableN(L,"sim.boolparam_reserved1",(boost::lexical_cast<std::string>(int(sim_boolparam_reserved1))).c_str());
     registerVariableN(L,"sim.boolparam_reserved2",(boost::lexical_cast<std::string>(int(sim_boolparam_reserved2))).c_str());
-    registerVariableN(L,"sim.boolparam_threaded_rendering_enabled",(boost::lexical_cast<std::string>(int(sim_boolparam_threaded_rendering_enabled))).c_str());
     registerVariableN(L,"sim.boolparam_fullscreen",(boost::lexical_cast<std::string>(int(sim_boolparam_fullscreen))).c_str());
     registerVariableN(L,"sim.boolparam_headless",(boost::lexical_cast<std::string>(int(sim_boolparam_headless))).c_str());
     registerVariableN(L,"sim.boolparam_hierarchy_toolbarbutton_enabled",(boost::lexical_cast<std::string>(int(sim_boolparam_hierarchy_toolbarbutton_enabled))).c_str());
@@ -3460,8 +3843,6 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariableN(L,"sim.intparam_edit_mode_type",(boost::lexical_cast<std::string>(int(sim_intparam_edit_mode_type))).c_str());
     registerVariableN(L,"sim.intparam_server_port_next",(boost::lexical_cast<std::string>(int(sim_intparam_server_port_next))).c_str());
     registerVariableN(L,"sim.intparam_qt_version",(boost::lexical_cast<std::string>(int(sim_intparam_qt_version))).c_str());
-    registerVariableN(L,"sim.intparam_event_flags_read",(boost::lexical_cast<std::string>(int(sim_intparam_event_flags_read))).c_str());
-    registerVariableN(L,"sim.intparam_event_flags_read_clear",(boost::lexical_cast<std::string>(int(sim_intparam_event_flags_read_clear))).c_str());
     registerVariableN(L,"sim.intparam_platform",(boost::lexical_cast<std::string>(int(sim_intparam_platform))).c_str());
     registerVariableN(L,"sim.intparam_scene_unique_id",(boost::lexical_cast<std::string>(int(sim_intparam_scene_unique_id))).c_str());
     registerVariableN(L,"sim.intparam_work_thread_count, /* 0-256. 0 to disable",(boost::lexical_cast<std::string>(int(sim_intparam_work_thread_count))).c_str());
@@ -3652,13 +4033,10 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariableN(L,"sim.pplanfloatparam_delta_min",(boost::lexical_cast<std::string>(int(sim_pplanfloatparam_delta_min))).c_str());
     registerVariableN(L,"sim.pplanfloatparam_delta_range",(boost::lexical_cast<std::string>(int(sim_pplanfloatparam_delta_range))).c_str());
 
-    registerVariableN(L,"sim.mplanintparam_nodes_computed",(boost::lexical_cast<std::string>(int(sim_mplanintparam_nodes_computed))).c_str());
-    registerVariableN(L,"sim.mplanintparam_prepare_nodes",(boost::lexical_cast<std::string>(int(sim_mplanintparam_prepare_nodes))).c_str());
-    registerVariableN(L,"sim.mplanintparam_clear_nodes",(boost::lexical_cast<std::string>(int(sim_mplanintparam_clear_nodes))).c_str());
 
     registerVariableN(L,"sim.jointmode_passive",(boost::lexical_cast<std::string>(int(sim_jointmode_passive))).c_str());
     registerVariableN(L,"sim.jointmode_motion",(boost::lexical_cast<std::string>(int(sim_jointmode_motion_deprecated))).c_str());
-    registerVariableN(L,"sim.jointmode_ik",(boost::lexical_cast<std::string>(int(sim_jointmode_ik))).c_str());
+    registerVariableN(L,"sim.jointmode_ik",(boost::lexical_cast<std::string>(int(sim_jointmode_ik_deprecated))).c_str());
     registerVariableN(L,"sim.jointmode_dependent",(boost::lexical_cast<std::string>(int(sim_jointmode_dependent))).c_str());
     registerVariableN(L,"sim.jointmode_force",(boost::lexical_cast<std::string>(int(sim_jointmode_force))).c_str());
 
@@ -3724,13 +4102,11 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariable(L,"sim_appobj_distance_type",(boost::lexical_cast<std::string>(int(sim_appobj_distance_type))).c_str());
     registerVariable(L,"sim_appobj_simulation_type",(boost::lexical_cast<std::string>(int(sim_appobj_simulation_type))).c_str());
     registerVariable(L,"sim_appobj_ik_type",(boost::lexical_cast<std::string>(int(sim_appobj_ik_type))).c_str());
-    registerVariable(L,"sim_appobj_constraintsolver_type",(boost::lexical_cast<std::string>(int(sim_appobj_constraintsolver_type))).c_str());
     registerVariable(L,"sim_appobj_collection_type",(boost::lexical_cast<std::string>(int(sim_appobj_collection_type))).c_str());
     registerVariable(L,"sim_appobj_ui_type",(boost::lexical_cast<std::string>(int(sim_appobj_ui_type))).c_str());
     registerVariable(L,"sim_appobj_script_type",(boost::lexical_cast<std::string>(int(sim_appobj_script_type))).c_str());
     registerVariable(L,"sim_appobj_pathplanning_type",(boost::lexical_cast<std::string>(int(sim_appobj_pathplanning_type))).c_str());
     registerVariable(L,"sim_appobj_texture_type",(boost::lexical_cast<std::string>(int(sim_appobj_texture_type))).c_str());
-    registerVariable(L,"sim_appobj_motionplanning_type",(boost::lexical_cast<std::string>(int(sim_appobj_motionplanning_type))).c_str());
 
     registerVariable(L,"sim_light_omnidirectional_subtype",(boost::lexical_cast<std::string>(int(sim_light_omnidirectional_subtype))).c_str());
     registerVariable(L,"sim_light_spot_subtype",(boost::lexical_cast<std::string>(int(sim_light_spot_subtype))).c_str());
@@ -3760,14 +4136,12 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariable(L,"sim_objectspecialproperty_detectable_capacitive",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_detectable_capacitive))).c_str());
     registerVariable(L,"sim_objectspecialproperty_renderable",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_renderable))).c_str());
     registerVariable(L,"sim_objectspecialproperty_detectable_all",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_detectable_all))).c_str());
-    registerVariable(L,"sim_objectspecialproperty_cuttable",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_cuttable))).c_str());
     registerVariable(L,"sim_objectspecialproperty_pathplanning_ignored",(boost::lexical_cast<std::string>(int(sim_objectspecialproperty_pathplanning_ignored))).c_str());
 
     registerVariable(L,"sim_modelproperty_not_collidable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_collidable))).c_str());
     registerVariable(L,"sim_modelproperty_not_measurable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_measurable))).c_str());
     registerVariable(L,"sim_modelproperty_not_renderable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_renderable))).c_str());
     registerVariable(L,"sim_modelproperty_not_detectable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_detectable))).c_str());
-    registerVariable(L,"sim_modelproperty_not_cuttable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_cuttable))).c_str());
     registerVariable(L,"sim_modelproperty_not_dynamic",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_dynamic))).c_str());
     registerVariable(L,"sim_modelproperty_not_respondable",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_respondable))).c_str());
     registerVariable(L,"sim_modelproperty_not_reset",(boost::lexical_cast<std::string>(int(sim_modelproperty_not_reset))).c_str());
@@ -3871,7 +4245,6 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariable(L,"sim_boolparam_video_recording_triggered",(boost::lexical_cast<std::string>(int(sim_boolparam_video_recording_triggered))).c_str());
     registerVariable(L,"sim_boolparam_reserved1",(boost::lexical_cast<std::string>(int(sim_boolparam_reserved1))).c_str());
     registerVariable(L,"sim_boolparam_reserved2",(boost::lexical_cast<std::string>(int(sim_boolparam_reserved2))).c_str());
-    registerVariable(L,"sim_boolparam_threaded_rendering_enabled",(boost::lexical_cast<std::string>(int(sim_boolparam_threaded_rendering_enabled))).c_str());
     registerVariable(L,"sim_boolparam_fullscreen",(boost::lexical_cast<std::string>(int(sim_boolparam_fullscreen))).c_str());
     registerVariable(L,"sim_boolparam_headless",(boost::lexical_cast<std::string>(int(sim_boolparam_headless))).c_str());
     registerVariable(L,"sim_boolparam_hierarchy_toolbarbutton_enabled",(boost::lexical_cast<std::string>(int(sim_boolparam_hierarchy_toolbarbutton_enabled))).c_str());
@@ -3903,8 +4276,6 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariable(L,"sim_intparam_edit_mode_type",(boost::lexical_cast<std::string>(int(sim_intparam_edit_mode_type))).c_str());
     registerVariable(L,"sim_intparam_server_port_next",(boost::lexical_cast<std::string>(int(sim_intparam_server_port_next))).c_str());
     registerVariable(L,"sim_intparam_qt_version",(boost::lexical_cast<std::string>(int(sim_intparam_qt_version))).c_str());
-    registerVariable(L,"sim_intparam_event_flags_read",(boost::lexical_cast<std::string>(int(sim_intparam_event_flags_read))).c_str());
-    registerVariable(L,"sim_intparam_event_flags_read_clear",(boost::lexical_cast<std::string>(int(sim_intparam_event_flags_read_clear))).c_str());
     registerVariable(L,"sim_intparam_platform",(boost::lexical_cast<std::string>(int(sim_intparam_platform))).c_str());
     registerVariable(L,"sim_intparam_scene_unique_id",(boost::lexical_cast<std::string>(int(sim_intparam_scene_unique_id))).c_str());
     registerVariable(L,"sim_intparam_work_thread_count, /* 0-256. 0 to disable",(boost::lexical_cast<std::string>(int(sim_intparam_work_thread_count))).c_str());
@@ -4095,13 +4466,9 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariable(L,"sim_pplanfloatparam_delta_min",(boost::lexical_cast<std::string>(int(sim_pplanfloatparam_delta_min))).c_str());
     registerVariable(L,"sim_pplanfloatparam_delta_range",(boost::lexical_cast<std::string>(int(sim_pplanfloatparam_delta_range))).c_str());
 
-    registerVariable(L,"sim_mplanintparam_nodes_computed",(boost::lexical_cast<std::string>(int(sim_mplanintparam_nodes_computed))).c_str());
-    registerVariable(L,"sim_mplanintparam_prepare_nodes",(boost::lexical_cast<std::string>(int(sim_mplanintparam_prepare_nodes))).c_str());
-    registerVariable(L,"sim_mplanintparam_clear_nodes",(boost::lexical_cast<std::string>(int(sim_mplanintparam_clear_nodes))).c_str());
-
     registerVariable(L,"sim_jointmode_passive",(boost::lexical_cast<std::string>(int(sim_jointmode_passive))).c_str());
     registerVariable(L,"sim_jointmode_motion",(boost::lexical_cast<std::string>(int(sim_jointmode_motion_deprecated))).c_str());
-    registerVariable(L,"sim_jointmode_ik",(boost::lexical_cast<std::string>(int(sim_jointmode_ik))).c_str());
+    registerVariable(L,"sim_jointmode_ik",(boost::lexical_cast<std::string>(int(sim_jointmode_ik_deprecated))).c_str());
     registerVariable(L,"sim_jointmode_dependent",(boost::lexical_cast<std::string>(int(sim_jointmode_dependent))).c_str());
     registerVariable(L,"sim_jointmode_force",(boost::lexical_cast<std::string>(int(sim_jointmode_force))).c_str());
 
@@ -4140,18 +4507,6 @@ extern "C" int luaopen_remoteApiLua(lua_State *L) {
     registerVariable(L,"simx_cmdheaderoffset_cmd",(boost::lexical_cast<std::string>(int(simx_cmdheaderoffset_cmd))).c_str());
     registerVariable(L,"simx_cmdheaderoffset_sim_time",(boost::lexical_cast<std::string>(int(simx_cmdheaderoffset_sim_time))).c_str());
     registerVariable(L,"simx_cmdheaderoffset_status",(boost::lexical_cast<std::string>(int(simx_cmdheaderoffset_status))).c_str());
-
-
-
-
-
-
-
-
-
-
-
-
 
     return 1;
 }

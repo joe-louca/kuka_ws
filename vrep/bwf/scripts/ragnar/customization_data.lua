@@ -56,8 +56,8 @@ function model.updatePluginRepresentation()
     data.waitingLocationAfterPlace=c.waitLocAfterPickOrPlace[2]
     -- Following not really transmitted, but required to track pose change
     data.robotPose={sim.getObjectPosition(model.handle,-1),sim.getObjectOrientation(model.handle,-1)}
-    data.pickWithoutTargetInSight=(sim.boolAnd32(c.jobBitCoded,2048)~=0)
-    data.ignorePartDestinations=(sim.boolAnd32(c.jobBitCoded,4096)~=0)
+    data.pickWithoutTargetInSight=((c.jobBitCoded&2048)~=0)
+    data.ignorePartDestinations=((c.jobBitCoded&4096)~=0)
     
     local packedData=sim.packTable(data)
     if packedData~=model._previousPackedPluginData then -- update the plugin only if the data is different from last time here
@@ -72,7 +72,7 @@ end
 
 function model.handleJobConsistency(removeJobsExceptCurrent)
     -- Make sure stored jobs are consistent with current scene:
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     local gripper=model.getGripper()
     local data=model.readInfo()
     simBWF.handleJobConsistencyInObjectReferences(model.handle,model.objRefJobInfo,data.jobData)
@@ -92,12 +92,12 @@ function model.handleJobConsistency(removeJobsExceptCurrent)
             newJob.platform={}
             newJob.gripper={}
             if gripper>=0 then
-                newJob.gripper.id=sim.getObjectStringParameter(gripper,sim.objstringparam_unique_id)
+                newJob.gripper.id=sim.getObjectStringParam(gripper,sim.objstringparam_unique_id)
                 newJob.gripper.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',gripper))
                 newJob.gripper.altName=sim.getObjectName(gripper+sim.handleflag_altname)
             end
             if model.platform>=0 then
-                newJob.platform.id=sim.getObjectStringParameter(model.platform,sim.objstringparam_unique_id)
+                newJob.platform.id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
                 newJob.platform.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.platform))
                 newJob.platform.altName=sim.getObjectName(model.platform+sim.handleflag_altname)
             end
@@ -132,14 +132,14 @@ function model.createNewJob()
     -- Job was created by the system. Reflect changes in this model:
     -- 1. Create a new job:
     local oldJobName=model.currentJob
-    local newJobName=sim.getStringParameter(sim.stringparam_job)
+    local newJobName='default' --=sim.getStringParam(sim.stringparam_job)
     model.currentJob=newJobName
     model.updateJobDataFromCurrentSituation(oldJobName)
     local data=model.readInfo()
     local objRef_jobIndex=simBWF.createNewJobInObjectReferences(model.handle,model.objRefJobInfo,data.jobData)
     data.jobData.jobs[newJobName]={jobIndex=objRef_jobIndex,platform={},gripper={}}
     if model.gripper>=0 then
-        local id=sim.getObjectStringParameter(model.gripper,sim.objstringparam_unique_id)
+        local id=sim.getObjectStringParam(model.gripper,sim.objstringparam_unique_id)
         data.jobData.jobs[newJobName].gripper.id=id
         data.jobData.jobs[newJobName].gripper.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.gripper))
         data.jobData.jobs[newJobName].gripper.altName=sim.getObjectName(model.gripper+sim.handleflag_altname)
@@ -147,7 +147,7 @@ function model.createNewJob()
         data.jobData.jobs[newJobName].gripper={}
     end
     if model.platform>=0 then
-        local id=sim.getObjectStringParameter(model.platform,sim.objstringparam_unique_id)
+        local id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
         data.jobData.jobs[newJobName].platform.id=id
         data.jobData.jobs[newJobName].platform.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.platform))
         data.jobData.jobs[newJobName].platform.altName=sim.getObjectName(model.platform+sim.handleflag_altname)
@@ -178,7 +178,7 @@ end
 function model.renameJob()
     -- Job was renamed by the system. Reflect changes in this model:
     local oldJobName=model.currentJob
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     local data=model.readInfo()
     data.jobData.jobs[model.currentJob]=data.jobData.jobs[oldJobName]
     data.jobData.jobs[oldJobName]=nil
@@ -221,7 +221,7 @@ function model.removeNonReferencedJobModels()
 end
 
 function model.switchFromJobToCurrent(oldJobName)
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     
     -- Serialize the platform and gripper if present, update the job data for the old job:
     model.updateJobDataFromCurrentSituation(oldJobName)
@@ -262,10 +262,10 @@ function model.switchFromJobToCurrent(oldJobName)
     end
     data.jobData.activeJobInModel=model.currentJob
     model.writeInfo(data)
-    model.hideHousing(sim.boolAnd32(data.jobBitCoded,8)~=0)
+    model.hideHousing((data.jobBitCoded&8)~=0)
     local s=0
     if data.frameType~=C.FRAMETYPELIST[1] then
-        if sim.boolAnd32(data.jobBitCoded,16)~=0 then
+        if (data.jobBitCoded&16)~=0 then
             s=2
         else
             s=1
@@ -279,7 +279,7 @@ function model.updateJobDataFromCurrentSituation(jobName)
     -- Serialize the platform and gripper if present:
     local serializedJobModels=model.readJobModelInfo()
     if model.gripper>=0 then
-        local id=sim.getObjectStringParameter(model.gripper,sim.objstringparam_unique_id)
+        local id=sim.getObjectStringParam(model.gripper,sim.objstringparam_unique_id)
         serializedJobModels[id]=sim.saveModel(model.gripper)
     end
     if model.platform>=0 then
@@ -289,7 +289,7 @@ function model.updateJobDataFromCurrentSituation(jobName)
             attachPt=sim.getObjectParent(model.gripper)
             sim.setObjectParent(model.gripper,-1,true)
         end
-        local id=sim.getObjectStringParameter(model.platform,sim.objstringparam_unique_id)
+        local id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
         serializedJobModels[id]=sim.saveModel(model.platform)
         if model.gripper>=0 then
             -- reattach the gripper
@@ -300,7 +300,7 @@ function model.updateJobDataFromCurrentSituation(jobName)
     -- Update the job data:
     local data=model.readInfo()
     if model.gripper>=0 then
-        local id=sim.getObjectStringParameter(model.gripper,sim.objstringparam_unique_id)
+        local id=sim.getObjectStringParam(model.gripper,sim.objstringparam_unique_id)
         data.jobData.jobs[jobName].gripper.id=id
         data.jobData.jobs[jobName].gripper.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.gripper))
         data.jobData.jobs[jobName].gripper.altName=sim.getObjectName(model.gripper+sim.handleflag_altname)
@@ -308,7 +308,7 @@ function model.updateJobDataFromCurrentSituation(jobName)
         data.jobData.jobs[jobName].gripper={}
     end
     if model.platform>=0 then
-        local id=sim.getObjectStringParameter(model.platform,sim.objstringparam_unique_id)
+        local id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
         data.jobData.jobs[jobName].platform.id=id
         data.jobData.jobs[jobName].platform.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.platform))
         data.jobData.jobs[jobName].platform.altName=sim.getObjectName(model.platform+sim.handleflag_altname)

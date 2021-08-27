@@ -89,7 +89,7 @@ function sysCall_nonSimulation()
     model.dlg.showOrHideDlgIfNeeded()
     local hideBalls=false
     if sim.getSimulationState()~=sim.simulation_stopped then
-        hideBalls=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],2)~=0)
+        hideBalls=simBWF.modifyAuxVisualizationItems((c['bitCoded']&2)~=0)
     end
     model.setGreenAndBlueCalibrationBallsInPlace()
     model.showOrHideCalibrationBalls(not hideBalls)
@@ -110,7 +110,7 @@ function sysCall_afterSimulation()
         sim.setObjectMatrix(model.handle,-1,model.locationFrameNormalM)
         model.locationFrameNormalM=nil
     end
-    sim.setObjectInt32Parameter(model.handles.frameShape,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handles.frameShape,sim.objintparam_visibility_layer,1)
     model.dlg.showOrHideDlgIfNeeded()
     model.dlg.updateEnabledDisabledItems()
     model.updatePluginRepresentation()

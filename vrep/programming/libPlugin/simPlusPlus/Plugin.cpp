@@ -19,28 +19,28 @@ namespace sim
 
     void Plugin::setExtVersion(const std::string &s)
     {
-        simSetModuleInfo(name_.c_str(), sim_moduleinfo_extversionstr, s.c_str(), 0);
+        simSetModuleInfo(pluginNameAndVersion.c_str(), sim_moduleinfo_extversionstr, s.c_str(), 0);
     }
 
     void Plugin::setExtVersion(int i)
     {
-        simSetModuleInfo(name_.c_str(), sim_moduleinfo_extversionint, 0, i);
+        simSetModuleInfo(pluginNameAndVersion.c_str(), sim_moduleinfo_extversionint, 0, i);
     }
 
     void Plugin::setBuildDate(const std::string &s)
     {
-        simSetModuleInfo(name_.c_str(), sim_moduleinfo_builddatestr, s.c_str(), 0);
+        simSetModuleInfo(pluginNameAndVersion.c_str(), sim_moduleinfo_builddatestr, s.c_str(), 0);
     }
 
     void Plugin::setVerbosity(int i)
     {
-        simSetModuleInfo(name_.c_str(), sim_moduleinfo_verbosity, 0, i);
+        simSetModuleInfo(pluginNameAndVersion.c_str(), sim_moduleinfo_verbosity, 0, i);
     }
 
     int Plugin::getVerbosity()
     {
         int v = sim_verbosity_default;
-        simGetModuleInfo(name_.c_str(), sim_moduleinfo_verbosity, nullptr, &v);
+        simGetModuleInfo(pluginNameAndVersion.c_str(), sim_moduleinfo_verbosity, nullptr, &v);
         return v;
     }
 
@@ -588,6 +588,11 @@ namespace sim
                 onPickSelectDown(auxiliaryData[0]);
             }
             break;
+        case sim_message_eventcallback_scriptstatedestroyed:
+            {
+                onScriptStateDestroyed(auxiliaryData[0]);
+            }
+            break;
         }
 
         // Keep following unchanged:
@@ -817,6 +822,10 @@ namespace sim
     }
 
     void Plugin::onPickSelectDown(int objectID)
+    {
+    }
+
+    void Plugin::onScriptStateDestroyed(int scriptID)
     {
     }
 }

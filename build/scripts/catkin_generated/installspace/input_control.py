@@ -87,10 +87,19 @@ class INPUT_CONTROL:
                 pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
                 pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
 
-                pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
+                sim_pos_cmd_x = kuka_pos[0] + pos_step_size * ax[0] / 1000
+                sim_pos_cmd_y = kuka_pos[1] + pos_step_size * ax[1] / 1000
+                sim_pos_cmd_z = kuka_pos[2] + pos_step_size * ax[2] / 1000               
+                sim_pos_cmd_yaw = kuka_pos[3] + rot_step_size * ax[5]
+                sim_pos_cmd_pitch = kuka_pos[4] + rot_step_size * ax[4]
+                sim_pos_cmd_roll = kuka_pos[5] + rot_step_size * ax[3]
 
+                pos_cmd = [pos_cmd_x, pos_cmd_y, pos_cmd_z, pos_cmd_yaw, pos_cmd_pitch, pos_cmd_roll]
+                sim_pos_cmd = [sim_pos_cmd_x, sim_pos_cmd_y, sim_pos_cmd_z, sim_pos_cmd_yaw, sim_pos_cmd_pitch, sim_pos_cmd_roll]
+                
                 # Send delayed delayed commands to param server for kuka  
                 rospy.set_param('delayed_pos_cmd', pos_cmd)
+                rospy.set_param('delayed_sim_pos_cmd', sim_pos_cmd)
 
                 # If gripper button is pressed, toggle gripper pose
                 button_press_previous = button_press_current

@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function getPartToDrop(distributionExtent,partDistribution,destinationDistribution,shiftDistribution,rotationDistribution,massDistribution,scalingDistribution,partsData)
     local errString=nil
     local dropName=getDistributionValue(partDistribution)
@@ -42,7 +43,7 @@ setItemMass=function(handle,m)
                 end
             end
             if sim.getObjectType(handle)==sim.object_shape_type then
-                local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+                local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
                 if p==0 then
                     local m0,i0,com0=sim.getShapeMassAndInertia(handle)
                     currentMass=currentMass+m0
@@ -67,7 +68,7 @@ setItemMass=function(handle,m)
                 end
             end
             if sim.getObjectType(handle)==sim.object_shape_type then
-                local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+                local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
                 if p==0 then
                     local transf=sim.getObjectMatrix(handle,-1)
                     local m0,i0,com0=sim.getShapeMassAndInertia(handle,transf)
@@ -84,10 +85,10 @@ end
 deactivatePart=function(handle,isModel)
     if isModel then
         local p=sim.getModelProperty(handle)
-        p=sim.boolOr32(p,sim.modelproperty_not_dynamic)
+        p=(p|sim.modelproperty_not_dynamic)
         sim.setModelProperty(handle,p)
     else
-        sim.setObjectInt32Parameter(handle,sim.shapeintparam_static,1) -- we make it static now!
+        sim.setObjectInt32Param(handle,sim.shapeintparam_static,1) -- we make it static now!
     end
     sim.resetDynamicObject(handle) -- important, otherwise the dynamics engine doesn't notice the change!
 end
@@ -113,7 +114,7 @@ getDistributionValue=function(distribution)
                 for i=1,#distribution,1 do
                    cnt=cnt+distribution[i][1] 
                 end
-                local p=sim.getFloatParameter(sim.floatparam_rand)*cnt
+                local p=sim.getFloatParam(sim.floatparam_rand)*cnt
                 cnt=0
                 for i=1,#distribution,1 do
                     if cnt+distribution[i][1]>=p then
@@ -123,7 +124,7 @@ getDistributionValue=function(distribution)
                 end
             else
                 local cnt=#distribution
-                local p=1+math.floor(sim.getFloatParameter(sim.floatparam_rand)*cnt-0.0001)
+                local p=1+math.floor(sim.getFloatParam(sim.floatparam_rand)*cnt-0.0001)
                 return distribution[p]
             end
         end
@@ -172,13 +173,13 @@ regenerateOrRemoveLabels=function(partH,enabledLabels)
                     data=sim.unpackTable(data)
                     if data['labelIndex']==ind then
                         local bits={1,2,4}
-                        if (sim.boolAnd32(bits[ind],enabledLabels)>0) then
+                        if ((bits[ind]&enabledLabels)>0) then
                             -- We want to regenerate the position of this label
                             if labelData then
                                 local bitC=labelData['bitCoded']
                                 local smallLabelSize=labelData['smallLabelSize']
                                 local largeLabelSize=labelData['largeLabelSize']
-                                local useLargeLabel=(sim.boolAnd32(bitC,64*(2^(ind-1)))>0)
+                                local useLargeLabel=((bitC&64*(2^(ind-1)))>0)
                                 local labelSize=smallLabelSize
                                 if useLargeLabel then
                                     labelSize=largeLabelSize
@@ -211,19 +212,19 @@ makeInvisibleOrNonRespondableToOtherParts=function(handle,invisible,nonRespondab
     if invisible then
         local objs=sim.getObjectsInTree(handle)
         for i=1,#objs,1 do
-            sim.setObjectInt32Parameter(objs[i],sim.objintparam_visibility_layer,0)
+            sim.setObjectInt32Param(objs[i],sim.objintparam_visibility_layer,0)
             local p=sim.getObjectSpecialProperty(objs[i])
-            local p=sim.boolOr32(p,sim.objectspecialproperty_renderable)-sim.objectspecialproperty_renderable
+            local p=(p|sim.objectspecialproperty_renderable)-sim.objectspecialproperty_renderable
             sim.setObjectSpecialProperty(objs[i],p)
         end
     end
     objs=sim.getObjectsInTree(handle,sim.object_shape_type)
     for i=1,#objs,1 do
-        local r,m=sim.getObjectInt32Parameter(objs[i],sim.shapeintparam_respondable_mask)
+        local m=sim.getObjectInt32Param(objs[i],sim.shapeintparam_respondable_mask)
         if nonRespondableToOtherParts then
-            sim.setObjectInt32Parameter(objs[i],sim.shapeintparam_respondable_mask,sim.boolOr32(m,65280)-32512)
+            sim.setObjectInt32Param(objs[i],sim.shapeintparam_respondable_mask,(m|65280)-32512)
         else
-            sim.setObjectInt32Parameter(objs[i],sim.shapeintparam_respondable_mask,sim.boolOr32(m,65280)-32768)
+            sim.setObjectInt32Param(objs[i],sim.shapeintparam_respondable_mask,(m|65280)-32768)
         end
     end
 end
@@ -335,7 +336,7 @@ function getBaseAndParts(h)
     for i=1,#objs,1 do
         local o=objs[i]
         local p=sim.getModelProperty(o)
-        local isModel=sim.boolAnd32(p,sim.modelproperty_not_model)==0
+        local isModel=(p&sim.modelproperty_not_model)==0
         if isModel then
             otherModels[#otherModels+1]=o
         end
@@ -354,7 +355,7 @@ function getBaseAndParts(h)
                     break
                 end
                 local p=sim.getModelProperty(child)
-                local isModel=sim.boolAnd32(p,sim.modelproperty_not_model)==0
+                local isModel=(p&sim.modelproperty_not_model)==0
                 if not isModel then
                     toParse[#toParse+1]=child
                 end
@@ -372,7 +373,7 @@ function sysCall_init()
     largeLabel=sim.getObjectHandle('genericFeeder_largeLabel')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.PARTFEEDER)
     data=sim.unpackTable(data)
-    prepareStatisticsDialog(sim.boolAnd32(data['bitCoded'],128)>0)
+    prepareStatisticsDialog((data['bitCoded']&128)>0)
     productionCount=0
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,3)
     startTriggerSensor=simBWF.getReferencedObjectHandle(model,4)
@@ -380,7 +381,7 @@ function sysCall_init()
     conveyorHandle=simBWF.getReferencedObjectHandle(model,2)
     conveyorTriggerDist=data['conveyorDist']
     mode=0 -- 0=frequency, 1=sensor, 2=user, 3=conveyor, 4=multi-feeder
-    local tmp=sim.boolAnd32(data['bitCoded'],4+8+16)
+    local tmp=(data['bitCoded']&4+8+16)
     if tmp==4 then mode=1 end
     if tmp==8 then mode=2 end
     if tmp==12 then mode=3 end
@@ -425,7 +426,7 @@ function sysCall_actuation()
     local distributionExtent={data['length'],data['width'],data['height']}
     local dropFrequency=data['frequency']
     local feederAlgo=data['algorithm']
-    local enabled=sim.boolAnd32(data['bitCoded'],2)>0
+    local enabled=(data['bitCoded']&2)>0
     if enabled then
         if not wasEnabled then
             fromStartStopTriggerEnable=true
@@ -551,7 +552,7 @@ function sysCall_actuation()
                     local hmitems,itemsOnBase=getBaseAndParts(h)
                     if not hmitems then
                         local p=sim.getModelProperty(h)
-                        local isModel=sim.boolAnd32(p,sim.modelproperty_not_model)==0
+                        local isModel=(p&sim.modelproperty_not_model)==0
                         local tble
                         if isModel then
                             tble=sim.copyPasteObjects({h},1)
@@ -562,8 +563,8 @@ function sysCall_actuation()
                         sim.setObjectParent(h,producedPartsDummy,true)
                         local data=sim.readCustomDataBlock(h,simBWF.modelTags.PART)
                         data=sim.unpackTable(data)
-                        local invisible=sim.boolAnd32(data['bitCoded'],1)>0
-                        local nonRespondableToOtherParts=sim.boolAnd32(data['bitCoded'],2)>0
+                        local invisible=(data['bitCoded']&1)>0
+                        local nonRespondableToOtherParts=(data['bitCoded']&2)>0
                         makeInvisibleOrNonRespondableToOtherParts(h,invisible,nonRespondableToOtherParts)
                         
                         -- Destination:
@@ -638,7 +639,7 @@ function sysCall_actuation()
                         tble=sim.copyPasteObjects(hmitems,0)
                         h=tble[1]
                         local p=sim.getModelProperty(h)
-                        local isModel=sim.boolAnd32(p,sim.modelproperty_not_model)==0
+                        local isModel=(p&sim.modelproperty_not_model)==0
                         sim.setObjectParent(h,producedPartsDummy,true)
                         if not itemPosition then
                             itemPosition={0,0,0} -- default
@@ -664,8 +665,8 @@ function sysCall_actuation()
                             tble=sim.copyPasteObjects({ih},1) -- is always a model
                             iih=tble[1]
                             sim.setObjectParent(h,producedPartsDummy,true)
-                            local invisible=sim.boolAnd32(data['bitCoded'],1)>0
-                            local nonRespondableToOtherParts=sim.boolAnd32(data['bitCoded'],2)>0
+                            local invisible=(data['bitCoded']&1)>0
+                            local nonRespondableToOtherParts=(data['bitCoded']&2)>0
                             makeInvisibleOrNonRespondableToOtherParts(h,invisible,nonRespondableToOtherParts)
                             if itemDestination and itemDestination~='<DEFAULT>' then
                                 data['destination']=itemDestination
@@ -690,7 +691,7 @@ function sysCall_actuation()
     i=1
     while i<=#allProducedParts do
         local h=allProducedParts[i][1]
-        if sim.isHandleValid(h)>0 then
+        if sim.isHandle(h) then
             local data=sim.readCustomDataBlock(h,simBWF.modelTags.PART)
             if not data then
                 data=sim.readCustomDataBlock(h,'XYZ_FEEDERPARTDUMMY_INFO')

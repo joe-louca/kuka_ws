@@ -20,8 +20,8 @@ end
 
 function model.startSimulation()
     if not model.simulation then
-        sim.setBoolParameter(sim.boolparam_realtime_simulation,false)
-        sim.setArrayParameter(sim.arrayparam_background_color2,{0.8,0.8,1})
+        sim.setBoolParam(sim.boolparam_realtime_simulation,false)
+        sim.setArrayParam(sim.arrayparam_background_color2,{0.8,0.8,1})
         model.simulation=true
         simBWF.query('simulation_start',{})
     end
@@ -29,7 +29,7 @@ end
 
 function model.stopSimulation()
     if model.simulation then
-        sim.setArrayParameter(sim.arrayparam_background_color2,{0.8,0.87,0.92})
+        sim.setArrayParam(sim.arrayparam_background_color2,{0.8,0.87,0.92})
         model.simulation=false
         simBWF.query('simulation_stop',{})
     end
@@ -97,7 +97,7 @@ function model.handleOutputMessageDisplay()
         msgs=sim.unpackTable(msgs)
         local txt=''
         for i=1,#msgs,1 do
-            if msgs[i][2]~=simBWF.MSG_WARN or sim.boolAnd32(c.bitCoded,32)>0 then
+            if msgs[i][2]~=simBWF.MSG_WARN or (c.bitCoded&32)>0 then
                 txt=txt..msgs[i][1]..'\n'
             end
         end
@@ -165,8 +165,8 @@ function sysCall_init()
     model.http=require("socket.http")
     model.ltn12=require("ltn12")
 
-    sim.setBoolParameter(sim.boolparam_br_jobfunc,true)
-    sim.setBoolParameter(sim.boolparam_online_mode,false)
+    --sim.setBoolParam(sim.boolparam_br_jobfunc,true)
+    --sim.setBoolParam(sim.boolparam_online_mode,false)
     simBWF.query('online_toggle',{state=false})
 
     model.online=false
@@ -220,7 +220,7 @@ function sysCall_nonSimulation()
     model.actions.roiRequest_executeIfNeeded()
     model.actions.sopRequest_executeIfNeeded()
     
-    local onlSw=sim.getBoolParameter(sim.boolparam_online_mode)
+    local onlSw=false--sim.getBoolParam(sim.boolparam_online_mode)
     if model.onlineSwitch~=onlSw then
         simBWF.query('online_toggle',{state=onlSw})
         model.onlineSwitch=onlSw
@@ -244,21 +244,21 @@ end
 
 function sysCall_afterSimulation()
     simBWF.query('simulation_toggle',{run=false})
-    if sim.getBoolParameter(sim.boolparam_online_mode) then
+    if false then --sim.getBoolParam(sim.boolparam_online_mode) then
         if model.online then
-            sim.setArrayParameter(sim.arrayparam_background_color2,{0.8,0.87,0.92})
+            sim.setArrayParam(sim.arrayparam_background_color2,{0.8,0.87,0.92})
             sim.clearIntegerSignal('__brOnline__')
             model.online=false
 --            simBWF.query('online_stop',{})
         end
     else
         if model.simulation then
-            sim.setArrayParameter(sim.arrayparam_background_color2,{0.8,0.87,0.92})
+            sim.setArrayParam(sim.arrayparam_background_color2,{0.8,0.87,0.92})
             model.simulation=false
 --            simBWF.query('simulation_stop',{})
         end
     end
-    sim.setObjectInt32Parameter(model.handle,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handle,sim.objintparam_visibility_layer,1)
     if messageConsole then
         sim.auxiliaryConsoleClose(messageConsole)
         messageConsole=nil
@@ -266,7 +266,7 @@ function sysCall_afterSimulation()
     sim.clearStringSignal('__brMessages__')
     
     local c=model.readInfo()
-    if sim.boolAnd32(c.bitCoded,64)>0 then
+    if (c.bitCoded&64)>0 then
         local allCams=sim.getObjectsInTree(sim.handle_scene,sim.object_camera_type)
         for i=1,#allCams,1 do
             local m=model.cameraMatrices[allCams[i]]
@@ -289,19 +289,19 @@ function sysCall_beforeSimulation()
     if model.dev then
         model.dev.removeDlg()
     end
-    sim.setObjectInt32Parameter(model.handle,sim.objintparam_visibility_layer,0)
-    if sim.getBoolParameter(sim.boolparam_online_mode) then
+    sim.setObjectInt32Param(model.handle,sim.objintparam_visibility_layer,0)
+    if false then --sim.getBoolParam(sim.boolparam_online_mode) then
         if not model.online then
-            sim.setBoolParameter(sim.boolparam_realtime_simulation,true)
-            sim.setArrayParameter(sim.arrayparam_background_color2,{0.8,1,0.8})
+            sim.setBoolParam(sim.boolparam_realtime_simulation,true)
+            sim.setArrayParam(sim.arrayparam_background_color2,{0.8,1,0.8})
             sim.setIntegerSignal('__brOnline__',1)
             model.online=true
     --        simBWF.query('online_start',{})
         end
     else
         if not model.simulation then
-            sim.setBoolParameter(sim.boolparam_realtime_simulation,false)
-            sim.setArrayParameter(sim.arrayparam_background_color2,{0.8,0.8,1})
+            sim.setBoolParam(sim.boolparam_realtime_simulation,false)
+            sim.setArrayParam(sim.arrayparam_background_color2,{0.8,0.8,1})
             model.simulation=true
     --        simBWF.query('simulation_start',{})
         end
@@ -334,7 +334,7 @@ function sysCall_cleanup()
     end
 --    simBWF.announcePalletWasDestroyed(-1) -- all pallets were destroyed
 --    simBWF.announcePalletsHaveBeenUpdated({})
-    if sim.isHandleValid(model.handle)==1 then
+    if sim.isHandle(model.handle) then
         -- The associated model might already have been destroyed (if it destroys itself in the init phase)
         model.removeFromPluginRepresentation_brApp()
         simBWF.writeSessionPersistentObjectData(model.handle,"dlgPosAndSize",model.floor.previousDlgPos)
@@ -347,10 +347,10 @@ function sysCall_xr(brData)
         model.actions.variousActionDlg()
     end
     if (brCallIndex==3) then
-        sim.setBoolParameter(sim.boolparam_br_partrepository,not sim.getBoolParameter(sim.boolparam_br_partrepository))
+        sim.setBoolParam(sim.boolparam_br_partrepository,not sim.getBoolParam(sim.boolparam_br_partrepository))
     end
     if (brCallIndex==4) then
-        sim.setBoolParameter(sim.boolparam_br_palletrepository,not sim.getBoolParameter(sim.boolparam_br_palletrepository))
+        --sim.setBoolParam(sim.boolparam_br_palletrepository,not sim.getBoolParam(sim.boolparam_br_palletrepository))
     end
     if (brCallIndex==5) then
         model.generalProperties.openDlg()

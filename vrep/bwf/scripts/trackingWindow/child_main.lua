@@ -12,9 +12,9 @@ function sysCall_init()
     model.codeVersion=1
     
     local data=model.readInfo()
-    model.showPoints=sim.boolAnd32(data.bitCoded,4)>0
+    model.showPoints=(data.bitCoded&4)>0
     model.isPick=(data.type==0)
-    model.createParts=model.isPick and (sim.boolAnd32(data.bitCoded,8)>0)
+    model.createParts=model.isPick and ((data.bitCoded&8)>0)
     model.robot=model.getAssociatedRobotHandle()
     if model.robot>=0 then
         model.robotRef=simBWF.callCustomizationScriptFunction('model.ext.getReferenceObject',model.robot)

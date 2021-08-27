@@ -33,8 +33,8 @@ function model.simCamDisp.removeDisplay()
 end
 
 function model.simCamDisp.updateDisplay()
-    local res,nclipp=sim.getObjectFloatParameter(model.handles.sensor,sim.visionfloatparam_near_clipping)
-    local res,fclipp=sim.getObjectFloatParameter(model.handles.sensor,sim.visionfloatparam_far_clipping)
+    local nclipp=sim.getObjectFloatParam(model.handles.sensor,sim.visionfloatparam_near_clipping)
+    local fclipp=sim.getObjectFloatParam(model.handles.sensor,sim.visionfloatparam_far_clipping)
     local rgbRaw=sim.getVisionSensorCharImage(model.handles.sensor)
     local depthRaw=sim.getVisionSensorDepthBuffer(model.handles.sensor+sim.handleflag_codedstring)
     local depth=sim.transformBuffer(depthRaw,sim.buffer_float,1000*(fclipp-nclipp),1000*nclipp,sim.buffer_uint16)

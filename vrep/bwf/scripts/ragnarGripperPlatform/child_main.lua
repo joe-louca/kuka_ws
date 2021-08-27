@@ -17,7 +17,7 @@ function sysCall_init()
     end
     
     model.modelData=model.readInfo()
-    if sim.boolAnd32(model.modelData.bitCoded,1)>0 then
+    if (model.modelData.bitCoded&1)>0 then
         local obj=sim.getObjectsInTree(model.handle,sim.object_shape_type,0)
         for i=1,#obj,1 do
             local res,col=sim.getShapeColor(obj[i],'RAGNARPLATFORM',sim.colorcomponent_ambient)
@@ -32,7 +32,7 @@ function sysCall_init()
 end
 
 function sysCall_sensing()
-    if sim.boolAnd32(model.modelData.bitCoded,1)>0 then
+    if (model.modelData.bitCoded&1)>0 then
         local data={}
         data.id=model.gripper
         local res,retDat=simBWF.query('get_gripperState',data)
@@ -59,7 +59,7 @@ function sysCall_sensing()
 end
 
 function sysCall_cleanup()
-    if sim.boolAnd32(model.modelData.bitCoded,1)>0 then
+    if (model.modelData.bitCoded&1)>0 then
         model.setPlatformColor(model.platformOriginalCol)
     end
 end

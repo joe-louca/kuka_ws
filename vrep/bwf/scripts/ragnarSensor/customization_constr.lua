@@ -3,7 +3,7 @@ function model.alignCalibrationBallsWithInputAndReturnRedBall()
     if conveyorHandle>=0 then
         -- Work with thresholds here, otherwise the scene modifies itself continuously little by little:
         local c=model.readInfo()
-        local flipped=sim.boolAnd32(c.bitCoded,2)>0
+        local flipped=(c.bitCoded&2)>0
         local p=sim.getObjectOrientation(model.handle,conveyorHandle)
         if flipped then
             local correct=(math.abs(p[1])>0.1*math.pi/180) or (math.abs(p[2])>0.1*math.pi/180)
@@ -43,13 +43,13 @@ function model.alignCalibrationBallsWithInputAndReturnRedBall()
                 sim.setObjectPosition(model.handle,h,{p[1],0,0})
             end
             
-            local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
-            r=sim.boolOr32(r,1+4)-(1+4) -- forbid rotation and translation when simulation is not running
-            sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+            local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+            r=(r|1+4)-(1+4) -- forbid rotation and translation when simulation is not running
+            sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
         else
-            local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
-            r=sim.boolOr32(r,1+4) -- allow rotation and translation when simulation is not running
-            sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+            local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+            r=(r|1+4) -- allow rotation and translation when simulation is not running
+            sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
         end
     end
     return model.handle
@@ -76,11 +76,11 @@ function model.adjustSensor()
         p[2]=1.0
         correct=true
     end
-    local r,minZ=sim.getObjectFloatParameter(model.handles.sensor,sim.objfloatparam_objbbox_min_z)
-    local r,maxZ=sim.getObjectFloatParameter(model.handles.sensor,sim.objfloatparam_objbbox_max_z)
+    local minZ=sim.getObjectFloatParam(model.handles.sensor,sim.objfloatparam_objbbox_min_z)
+    local maxZ=sim.getObjectFloatParam(model.handles.sensor,sim.objfloatparam_objbbox_max_z)
     local s=maxZ-minZ
-    local r,minX=sim.getObjectFloatParameter(model.handles.sensor,sim.objfloatparam_objbbox_min_x)
-    local r,maxX=sim.getObjectFloatParameter(model.handles.sensor,sim.objfloatparam_objbbox_max_x)
+    local minX=sim.getObjectFloatParam(model.handles.sensor,sim.objfloatparam_objbbox_min_x)
+    local maxX=sim.getObjectFloatParam(model.handles.sensor,sim.objfloatparam_objbbox_max_x)
     local sx=maxX-minX
     if math.abs(p[2]-s)>0.001 then
         correct=true

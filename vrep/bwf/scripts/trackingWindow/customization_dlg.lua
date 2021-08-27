@@ -147,7 +147,7 @@ end
 function model.dlg.updateEnabledDisabledItems()
     if model.dlg.ui then
         local config=model.readInfo()
-        local startStopLine=sim.boolAnd32(config['bitCoded'],16)~=0
+        local startStopLine=(config['bitCoded']&16)~=0
         local simStopped=sim.getSimulationState()==sim.simulation_stopped
         simUI.setEnabled(model.dlg.ui,1365,simStopped,true)
         simUI.setEnabled(model.dlg.ui,23,simStopped,true)
@@ -176,14 +176,14 @@ function model.dlg.refresh()
         local d=config['calibrationBallOffset']
         simUI.setEditValue(model.dlg.ui,23,simBWF.format("%.0f , %.0f , %.0f",d[1]/0.001,d[2]/0.001,d[3]/0.001),true)
 
-        simUI.setCheckboxValue(model.dlg.ui,50,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],16)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,50,simBWF.getCheckboxValFromBool((config['bitCoded']&16)~=0),true)
         simUI.setEditValue(model.dlg.ui,51,simBWF.format("%.0f",config['stopLinePos']/0.001),true)
         simUI.setEditValue(model.dlg.ui,52,simBWF.format("%.0f",config['startLinePos']/0.001),true)
         simUI.setEditValue(model.dlg.ui,61,simBWF.format("%.0f",config['upstreamMarginPos']/0.001),true)
-        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,1,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,2,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],8)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,1,simBWF.getCheckboxValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,2,simBWF.getCheckboxValFromBool((config['bitCoded']&8)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,5,simBWF.getCheckboxValFromBool((config['bitCoded']&4)~=0),true)
 
         local c=model.readInfo()
         local loc=model.getAvailableInputs()
@@ -197,7 +197,7 @@ end
 
 function model.dlg.hidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -208,7 +208,7 @@ end
 
 function model.dlg.calibrationBallsHidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -219,7 +219,7 @@ end
 
 function model.dlg.createParts_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end
@@ -230,7 +230,7 @@ end
 
 function model.dlg.showPoints_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -301,7 +301,7 @@ end
 
 function model.dlg.startStopLine_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],16)
+    c['bitCoded']=(c['bitCoded']|16)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-16
     end

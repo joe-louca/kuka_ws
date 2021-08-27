@@ -19,12 +19,12 @@ end
 -------------------------------------------------------
 model.specHandles={}
 
-local err=sim.getInt32Parameter(sim.intparam_error_report_mode)
-sim.setInt32Parameter(sim.intparam_error_report_mode,0) -- do not report errors
+local err=sim.getInt32Param(sim.intparam_error_report_mode)
+sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
 model.specHandles.rotJoints={}
 model.specHandles.rotJoints[1]=sim.getObjectHandle('genericConveyorTypeA_jointB')
 model.specHandles.rotJoints[2]=sim.getObjectHandle('genericConveyorTypeA_jointC')
-sim.setInt32Parameter(sim.intparam_error_report_mode,err) -- report errors again
+sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
 
 model.specHandles.middleParts={}
 model.specHandles.middleParts[1]=sim.getObjectHandle('genericConveyorTypeA_sides')
@@ -32,11 +32,11 @@ model.specHandles.middleParts[2]=sim.getObjectHandle('genericConveyorTypeA_textu
 model.specHandles.middleParts[3]=sim.getObjectHandle('genericConveyorTypeA_forwarderA')
 
 model.specHandles.endParts={}
-local err=sim.getInt32Parameter(sim.intparam_error_report_mode)
-sim.setInt32Parameter(sim.intparam_error_report_mode,0) -- do not report errors
+local err=sim.getInt32Param(sim.intparam_error_report_mode)
+sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
 model.specHandles.endParts[1]=sim.getObjectHandle('genericConveyorTypeA_textureB')
 model.specHandles.endParts[2]=sim.getObjectHandle('genericConveyorTypeA_textureC')
-sim.setInt32Parameter(sim.intparam_error_report_mode,err) -- report errors again
+sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
 model.specHandles.endParts[3]=sim.getObjectHandle('genericConveyorTypeA_B')
 model.specHandles.endParts[4]=sim.getObjectHandle('genericConveyorTypeA_C')
 model.specHandles.endParts[5]=sim.getObjectHandle('genericConveyorTypeA_forwarderB')

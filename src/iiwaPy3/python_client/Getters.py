@@ -34,7 +34,7 @@ class Getters:
         i=0
         while len(eefPos)==0: # Keeps trying (up-to numOfIterations) until data is read successfully
             theCommand='Eef_pos'
-            eefPos=self.send(theCommand,6)      # THIS LINE DOESNT WORK?
+            eefPos=self.send(theCommand,6)  
             i=i+1
             if i==self.numOfIterations:
                 return eefPos # break

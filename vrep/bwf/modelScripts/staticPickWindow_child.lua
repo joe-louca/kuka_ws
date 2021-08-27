@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 displayParts=function(trackingWindowParts)
     sim.addDrawingObjectItem(sphere1Container,nil)
     sim.addDrawingObjectItem(lineContainerR,nil)
@@ -29,7 +30,7 @@ getPartMass=function(partHandle)
     local m=0
     if partHandle>=0 then
         local modProp=sim.getModelProperty(partHandle)
-        if sim.boolAnd32(modProp,sim.modelproperty_not_model)==0 then
+        if (modProp&sim.modelproperty_not_model)==0 then
             local objects={partHandle}
             while #objects>0 do
                 handle=objects[#objects]
@@ -45,7 +46,7 @@ getPartMass=function(partHandle)
                     end
                 end
                 if sim.getObjectType(handle)==sim.object_shape_type then
-                    local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+                    local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
                     if p==0 then
                         m=m+sim.getShapeMassAndInertia(handle)
                     end
@@ -63,25 +64,25 @@ getAxesWithOrderingAccordingToSize=function(partHandle)
     local sx=0
     local sy=0
     local sz=0
-    if sim.boolAnd32(modProp,sim.modelproperty_not_model)==0 then
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_min_x )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_max_x )
+    if (modProp&sim.modelproperty_not_model)==0 then
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_min_x )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_max_x )
         sx=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_min_y )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_max_y )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_min_y )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_max_y )
         sy=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_min_z )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_max_z )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_min_z )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_max_z )
         sz=mmax-mmin
     else
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_min_x )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_max_x )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_min_x )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_max_x )
         sx=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_min_y )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_max_y )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_min_y )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_max_y )
         sy=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_min_z )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_max_z )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_min_z )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_max_z )
         sz=mmax-mmin
     end
     local m=sim.getObjectMatrix(partHandle,-1)
@@ -126,7 +127,7 @@ getAllPartsInWindow=function()
                 partData['mass']=getPartMass(partHandle)
                 local h=sim.createDummy(0.005)
                 sim.setObjectParent(h,model,true)
-                sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,1024)
+                sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,1024)
                 sim.setObjectPosition(h,-1,partData['transform'][1])
                 sim.setObjectQuaternion(h,-1,partData['transform'][2])
                 partData['dummyHandle']=h
@@ -154,7 +155,7 @@ function sysCall_init()
     width=data['width']
     length=data['length']
     height=data['height']
-    showPoints=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(data['bitCoded'],4)>0)
+    showPoints=simBWF.modifyAuxVisualizationItems((data['bitCoded']&4)>0)
     sphere1Container=sim.addDrawingObject(sim.drawing_spherepoints,0.015,0,-1,9999,{0,1,0})
     lineContainerR=sim.addDrawingObject(sim.drawing_lines,2,0,-1,9999,{1,0,0})
     lineContainerG=sim.addDrawingObject(sim.drawing_lines,2,0,-1,9999,{0,1,0})

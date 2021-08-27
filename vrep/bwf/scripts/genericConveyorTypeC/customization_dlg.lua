@@ -68,7 +68,7 @@ end
 
 function model.dlg.leftSideOpenClicked(ui,id,newVal)
     local conf=model.readInfo()
-    conf.conveyorSpecific.bitCoded=sim.boolOr32(conf.conveyorSpecific.bitCoded,1)
+    conf.conveyorSpecific.bitCoded=(conf.conveyorSpecific.bitCoded|1)
     if newVal==0 then
         conf.conveyorSpecific.bitCoded=conf.conveyorSpecific.bitCoded-1
     end
@@ -80,7 +80,7 @@ end
 
 function model.dlg.rightSideOpenClicked(ui,id,newVal)
     local conf=model.readInfo()
-    conf.conveyorSpecific.bitCoded=sim.boolOr32(conf.conveyorSpecific.bitCoded,2)
+    conf.conveyorSpecific.bitCoded=(conf.conveyorSpecific.bitCoded|2)
     if newVal==0 then
         conf.conveyorSpecific.bitCoded=conf.conveyorSpecific.bitCoded-2
     end
@@ -92,7 +92,7 @@ end
 
 function model.dlg.frontSideOpenClicked(ui,id,newVal)
     local conf=model.readInfo()
-    conf.conveyorSpecific.bitCoded=sim.boolOr32(conf.conveyorSpecific.bitCoded,4)
+    conf.conveyorSpecific.bitCoded=(conf.conveyorSpecific.bitCoded|4)
     if newVal==0 then
         conf.conveyorSpecific.bitCoded=conf.conveyorSpecific.bitCoded-4
     end
@@ -104,7 +104,7 @@ end
 
 function model.dlg.backSideOpenClicked(ui,id,newVal)
     local conf=model.readInfo()
-    conf.conveyorSpecific.bitCoded=sim.boolOr32(conf.conveyorSpecific.bitCoded,8)
+    conf.conveyorSpecific.bitCoded=(conf.conveyorSpecific.bitCoded|8)
     if newVal==0 then
         conf.conveyorSpecific.bitCoded=conf.conveyorSpecific.bitCoded-8
     end
@@ -176,10 +176,10 @@ function model.dlg.refresh_specific()
         simUI.setEditValue(model.dlg.ui,3002,simBWF.format("%.0f",config.conveyorSpecific.padSpacing/0.001),true)
         simUI.setEditValue(model.dlg.ui,3001,simBWF.format("%.0f",config.conveyorSpecific.padThickness/0.001),true)
         simUI.setEditValue(model.dlg.ui,3008,simBWF.format("%.0f",config.conveyorSpecific.wallThickness/0.001),true)
-        simUI.setCheckboxValue(model.dlg.ui,3004,(sim.boolAnd32(config.conveyorSpecific.bitCoded,1)~=0) and 2 or 0,true)
-        simUI.setCheckboxValue(model.dlg.ui,3005,(sim.boolAnd32(config.conveyorSpecific.bitCoded,2)~=0) and 2 or 0,true)
-        simUI.setCheckboxValue(model.dlg.ui,3006,(sim.boolAnd32(config.conveyorSpecific.bitCoded,4)~=0) and 2 or 0,true)
-        simUI.setCheckboxValue(model.dlg.ui,3007,(sim.boolAnd32(config.conveyorSpecific.bitCoded,8)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(model.dlg.ui,3004,((config.conveyorSpecific.bitCoded&1)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(model.dlg.ui,3005,((config.conveyorSpecific.bitCoded&2)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(model.dlg.ui,3006,((config.conveyorSpecific.bitCoded&4)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(model.dlg.ui,3007,((config.conveyorSpecific.bitCoded&8)~=0) and 2 or 0,true)
         simUI.setLabelText(model.dlg.ui,3003,simBWF.format("%.0f",model.getActualPadSpacing()/0.001),true)
     end
 end

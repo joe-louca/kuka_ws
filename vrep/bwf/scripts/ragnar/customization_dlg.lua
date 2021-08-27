@@ -55,17 +55,17 @@ end
 
 function model.dlg.visualizeWorkspaceClick_callback(uiHandle,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],256)
+    c['bitCoded']=(c['bitCoded']|256)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-256
     end
     model.writeInfo(c)
 
     if newVal>0 then
-        sim.setObjectInt32Parameter(model.handles.ragnarWs,sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.handles.ragnarWs,sim.objintparam_visibility_layer,1)
         model.workspaceUpdateRequest=sim.getSystemTimeInMs(-1) -- to trigger recomputation
     else
-        sim.setObjectInt32Parameter(model.handles.ragnarWs,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.ragnarWs,sim.objintparam_visibility_layer,0)
     end
     simBWF.markUndoPoint()
     model.dlg.refresh()
@@ -73,7 +73,7 @@ end
 
 function model.dlg.visualizeWorkspaceSimClick_callback(uiHandle,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],512)
+    c['bitCoded']=(c['bitCoded']|512)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-512
     end
@@ -84,16 +84,16 @@ end
 
 function model.dlg.visualizeWsBoxClick_callback(uiHandle,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
     model.writeInfo(c)
 
     if newVal>0 then
-        sim.setObjectInt32Parameter(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,1)
     else
-        sim.setObjectInt32Parameter(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,0)
     end
     simBWF.markUndoPoint()
     model.dlg.refresh()
@@ -101,7 +101,7 @@ end
 
 function model.dlg.visualizeWsBoxSimClick_callback(uiHandle,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -112,7 +112,7 @@ end
 
 function model.dlg.enabledClicked_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],64)
+    c['bitCoded']=(c['bitCoded']|64)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-64
     end
@@ -123,7 +123,7 @@ end
 
 function model.dlg.hideHousingClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['jobBitCoded']=sim.boolOr32(c['jobBitCoded'],8)
+    c['jobBitCoded']=(c['jobBitCoded']|8)
     if newVal==0 then
         c['jobBitCoded']=c['jobBitCoded']-8
     end
@@ -136,7 +136,7 @@ end
 function model.dlg.hideFrameClick_callback(ui,id,newVal)
     -- Hiding the frame, but it can still be present!
     local c=model.readInfo()
-    c['jobBitCoded']=sim.boolOr32(c['jobBitCoded'],16)
+    c['jobBitCoded']=(c['jobBitCoded']|16)
     local s=2 -- hidden
     if newVal==0 then
         c['jobBitCoded']=c['jobBitCoded']-16
@@ -153,7 +153,7 @@ end
 
 function model.dlg.attachPartClicked_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['jobBitCoded']=sim.boolOr32(c['jobBitCoded'],1024)
+    c['jobBitCoded']=(c['jobBitCoded']|1024)
     if newVal==0 then
         c['jobBitCoded']=c['jobBitCoded']-1024
     end
@@ -164,7 +164,7 @@ end
 
 function model.dlg.ignorePartDestinationsClicked_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['jobBitCoded']=sim.boolOr32(c['jobBitCoded'],4096)
+    c['jobBitCoded']=(c['jobBitCoded']|4096)
     if newVal==0 then
         c['jobBitCoded']=c['jobBitCoded']-4096
     end
@@ -175,7 +175,7 @@ end
 
 function model.dlg.pickWithoutTargetClicked_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['jobBitCoded']=sim.boolOr32(c['jobBitCoded'],2048)
+    c['jobBitCoded']=(c['jobBitCoded']|2048)
     if newVal==0 then
         c['jobBitCoded']=c['jobBitCoded']-2048
     end
@@ -256,7 +256,7 @@ function model.dlg.frameTypeChange_callback(uiHandle,id,newIndex)
     local newType=model.dlg.frameType_comboboxItems[newIndex+1][2]
     local c=model.readInfo()
     c['frameType']=newType
-    c['jobBitCoded']=sim.boolOr32(c['jobBitCoded'],16)-16 -- reset the 'hide' flag (frame could be present but hidden)
+    c['jobBitCoded']=(c['jobBitCoded']|16)-16 -- reset the 'hide' flag (frame could be present but hidden)
 
     local s=0
     if newType~=C.FRAMETYPELIST[1] then
@@ -730,12 +730,12 @@ function model.dlg.updateEnabledDisabledItems()
 
 
         simUI.setEnabled(model.dlg.ui,3,simStopped,true)
-        simUI.setEnabled(model.dlg.ui,305,simStopped and sim.boolAnd32(c.bitCoded,256)>0,true)
+        simUI.setEnabled(model.dlg.ui,305,simStopped and (c.bitCoded&256)>0,true)
 
         simUI.setEnabled(model.dlg.ui,3002,simStopped,true)
-        simUI.setEnabled(model.dlg.ui,3003,simStopped and sim.boolAnd32(c.bitCoded,1)>0,true)
-        simUI.setEnabled(model.dlg.ui,3000,simStopped and sim.boolAnd32(c.bitCoded,1)>0,true)
-        simUI.setEnabled(model.dlg.ui,3001,simStopped and sim.boolAnd32(c.bitCoded,1)>0,true)
+        simUI.setEnabled(model.dlg.ui,3003,simStopped and (c.bitCoded&1)>0,true)
+        simUI.setEnabled(model.dlg.ui,3000,simStopped and (c.bitCoded&1)>0,true)
+        simUI.setEnabled(model.dlg.ui,3001,simStopped and (c.bitCoded&1)>0,true)
 
         simUI.setEnabled(model.dlg.ui,312,c.frameType~=0,true)
 
@@ -782,11 +782,11 @@ function model.dlg.refresh()
         simUI.setSliderValue(model.dlg.ui,92,(c['secondaryArmLengthInMM']-400)/50,true)
         simUI.setSliderValue(model.dlg.ui,94,c['frameHeightInMM']/50,true)
 
-        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],256)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,305,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],512)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool((c['bitCoded']&256)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,305,simBWF.getCheckboxValFromBool((c['bitCoded']&512)~=0),true)
 
-        simUI.setCheckboxValue(model.dlg.ui,3002,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,3003,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],4)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3002,simBWF.getCheckboxValFromBool((c['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3003,simBWF.getCheckboxValFromBool((c['bitCoded']&4)~=0),true)
 
         for i=1,2,1 do
             local wsBoxPt=c.wsBox[i]
@@ -801,12 +801,12 @@ function model.dlg.refresh()
 
 
 
-        simUI.setCheckboxValue(model.dlg.ui,1000,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],64)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,311,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['jobBitCoded'],8)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,312,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['jobBitCoded'],16)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,2000,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['jobBitCoded'],1024)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,2001,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['jobBitCoded'],2048)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,2002,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['jobBitCoded'],4096)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,1000,simBWF.getCheckboxValFromBool((c['bitCoded']&64)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,311,simBWF.getCheckboxValFromBool((c['jobBitCoded']&8)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,312,simBWF.getCheckboxValFromBool((c['jobBitCoded']&16)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,2000,simBWF.getCheckboxValFromBool((c['jobBitCoded']&1024)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,2001,simBWF.getCheckboxValFromBool((c['jobBitCoded']&2048)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,2002,simBWF.getCheckboxValFromBool((c['jobBitCoded']&4096)~=0),true)
 
         simUI.setCheckboxValue(model.dlg.ui,1304,simBWF.getCheckboxValFromBool(c.showPlot[1]),true)
         simUI.setCheckboxValue(model.dlg.ui,1306,simBWF.getCheckboxValFromBool(c.showTrajectory[1]),true)

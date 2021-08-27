@@ -12,7 +12,7 @@ function model.hideHousing(hide)
         if hide then
             l=0
         end
-        sim.setObjectInt32Parameter(model.handles.housingItems[i],sim.objintparam_visibility_layer,l)
+        sim.setObjectInt32Param(model.handles.housingItems[i],sim.objintparam_visibility_layer,l)
     end
 end
 
@@ -136,7 +136,7 @@ end
 function model.getPlatformUniqueId()
     local retVal=''
     if model.platform>=0 then
-        retVal=sim.getObjectStringParameter(model.platform,sim.objstringparam_unique_id)
+        retVal=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
     end
     return retVal
 end
@@ -148,7 +148,7 @@ end
 function model.getGripperUniqueId()
     local retVal=''
     if model.gripper>=0 then
-        retVal=sim.getObjectStringParameter(model.gripper,sim.objstringparam_unique_id)
+        retVal=sim.getObjectStringParam(model.gripper,sim.objstringparam_unique_id)
     end
     return retVal
 end
@@ -237,8 +237,8 @@ function model.adjustRobot()
     -- Scale the central elements in the X-direction:
     for i=1,#model.handles.centralCover,1 do
         local h=model.handles.centralCover[i]
-        local r,minX=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-        local r,maxX=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+        local minX=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+        local maxX=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
         local s=maxX-minX
         local desiredXSize=((a*28/30)-0.233+0.025+0.03)*2
         if desiredXSize<0.049 then
@@ -251,8 +251,8 @@ function model.adjustRobot()
     -- Scale the "Ragnar Robot" meshes:
     for i=1,2,1 do
         local h=model.handles.nameElement[i]
-        local r,minZ=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-        local r,maxZ=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+        local minZ=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+        local maxZ=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
         local s=maxZ-minZ
         local d=0.3391
         if a<0.399 then
@@ -280,8 +280,8 @@ function model.adjustRobot()
 
     for i=1,4,1 do
         local h=model.handles.primaryArms[i]
-        local r,minZ=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-        local r,maxZ=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+        local minZ=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+        local maxZ=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
         local s=maxZ-minZ
         local d=0.242+primaryAdjust
         sim.scaleObject(h,1,1,d/s)
@@ -289,11 +289,11 @@ function model.adjustRobot()
 
     for i=1,8,1 do
         local h=model.handles.secondaryArms[i]
-        local r,minZ=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-        local r,maxZ=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+        local minZ=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+        local maxZ=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
         local s=maxZ-minZ
-        local r,minX=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-        local r,maxX=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+        local minX=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+        local maxX=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
         local sx=maxX-minX
         local d=0.5+secondaryAdjust
         local diam=0.01
@@ -382,14 +382,14 @@ function model.setArmLength(primaryArmLengthInMM,secondaryArmLengthInMM)
 end
 
 function model.setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -453,7 +453,7 @@ function model.executeIk(platformInNominalConfig)
                     local t=j/steps
                     local pos={start[1]*(1-t)+goal[1]*t,start[2]*(1-t)+goal[2]*t,start[3]*(1-t)+goal[3]*t}
                     sim.setObjectPosition(ld,-1,pos)
-                    sim.handleIkGroup(model.handles.ikGroups[i])
+                    simIK.applyIkEnvironmentToScene(model.handles.ikEnv,model.handles.ikGroups[i])
                 end
             end
         end
@@ -574,7 +574,7 @@ function model.attachPlatformToEmptySpot(newPlatform)
             local dum=sim.copyPasteObjects({objs[i]},0)[1]
             sim.setObjectParent(dum,objs[i],true)
             sim.setLinkDummy(model.handles.ikTips[data.index],dum)
-            sim.setObjectInt32Parameter(dum,sim.dummyintparam_link_type,sim.dummy_linktype_ik_tip_target)
+            sim.setObjectInt32Param(dum,sim.dummyintparam_link_type,sim.dummy_linktype_ik_tip_target)
         end
     end
     model.platform=newPlatform
@@ -604,6 +604,60 @@ function sysCall_init()
             end
         end
     end
+    
+    -- IK
+    local targets={}
+    targets[1]=sim.getObjectHandle('RagnarGripperPlatform_ikPt1')
+    targets[2]=sim.getObjectHandle('RagnarGripperPlatform_ikPt2')
+    targets[3]=sim.getObjectHandle('RagnarGripperPlatform_ikPt3')
+    targets[4]=sim.getObjectHandle('RagnarGripperPlatform_ikPt4')
+    model.handles.ikEnv=simIK.createEnvironment()
+    model.handles.ikGroups={}
+    model.handles.ikGroups[1]=simIK.createIkGroup(model.handles.ikEnv)
+    local ikElement,simToIkMap1=simIK.addIkElementFromScene(model.handles.ikEnv,model.handles.ikGroups[1],model.handles.ragnarRef,model.handles.ikTips[1],targets[1],simIK.constraint_position)
+    model.handles.ikGroups[2]=simIK.createIkGroup(model.handles.ikEnv)
+    local ikElement,simToIkMap2=simIK.addIkElementFromScene(model.handles.ikEnv,model.handles.ikGroups[2],model.handles.ragnarRef,model.handles.ikTips[2],targets[2],simIK.constraint_position)
+    model.handles.ikGroups[3]=simIK.createIkGroup(model.handles.ikEnv)
+    local ikElement,simToIkMap3=simIK.addIkElementFromScene(model.handles.ikEnv,model.handles.ikGroups[3],model.handles.ragnarRef,model.handles.ikTips[3],targets[3],simIK.constraint_position)
+    model.handles.ikGroups[4]=simIK.createIkGroup(model.handles.ikEnv)
+    local ikElement,simToIkMap4=simIK.addIkElementFromScene(model.handles.ikEnv,model.handles.ikGroups[4],model.handles.ragnarRef,model.handles.ikTips[4],targets[4],simIK.constraint_position)
+    
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_secondaryArm1a_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_primaryArm1_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_motor1_adjust')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_xRotLeftFront')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_zRotLeftFront')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_xOffsetLeftFront')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_yOffsetLeft')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap1[sim.getObjectHandle('Ragnar_zOffset')],simIK.jointmode_passive)
+    
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_secondaryArm4a_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_primaryArm4_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_motor4_adjust')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_xRotLeftRear')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_zRotLeftRear')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_xOffsetLeftRear')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_yOffsetLeft')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap4[sim.getObjectHandle('Ragnar_zOffset')],simIK.jointmode_passive)
+    
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_secondaryArm2a_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_primaryArm2_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_motor2_adjust')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_xRotRightFront')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_zRotRightFront')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_xOffsetRightFront')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_yOffsetRight')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap2[sim.getObjectHandle('Ragnar_zOffset')],simIK.jointmode_passive)
+    
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_secondaryArm3a_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_primaryArm3_adjustJ2')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_motor3_adjust')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_xRotRightRear')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_zRotRightRear')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_xOffsetRightRear')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_yOffsetRight')],simIK.jointmode_passive)
+    simIK.setJointMode(model.handles.ikEnv,simToIkMap3[sim.getObjectHandle('Ragnar_zOffset')],simIK.jointmode_passive)
+
     model.platformUniqueId=model.getPlatformUniqueId()
     model.gripperUniqueId=model.getGripperUniqueId()
     model.handleJobConsistency(simBWF.isModelACopy_ifYesRemoveCopyTag(model.handle))
@@ -642,15 +696,15 @@ function sysCall_afterSimulation()
     end
     model.dlg.updateEnabledDisabledItems()
     local c=model.readInfo()
-    if sim.boolAnd32(c['bitCoded'],256)==256 then
-        sim.setObjectInt32Parameter(model.handles.ragnarWs,sim.objintparam_visibility_layer,1)
+    if (c['bitCoded']&256)==256 then
+        sim.setObjectInt32Param(model.handles.ragnarWs,sim.objintparam_visibility_layer,1)
     else
-        sim.setObjectInt32Parameter(model.handles.ragnarWs,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.ragnarWs,sim.objintparam_visibility_layer,0)
     end
-    if sim.boolAnd32(c['bitCoded'],1)==1 then
-        sim.setObjectInt32Parameter(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,1)
+    if (c['bitCoded']&1)==1 then
+        sim.setObjectInt32Param(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,1)
     else
-        sim.setObjectInt32Parameter(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,0)
     end
 end
 
@@ -659,19 +713,19 @@ function sysCall_beforeSimulation()
     model.ext.outputBrSetupMessages()
     model.ext.outputPluginSetupMessages()
     local c=model.readInfo()
-    local showWs=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],256+512)==256+512)
+    local showWs=simBWF.modifyAuxVisualizationItems((c['bitCoded']&256+512)==256+512)
     if showWs then
-        sim.setObjectInt32Parameter(model.handles.ragnarWs,sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.handles.ragnarWs,sim.objintparam_visibility_layer,1)
     else
-        sim.setObjectInt32Parameter(model.handles.ragnarWs,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.ragnarWs,sim.objintparam_visibility_layer,0)
     end
-    local showWsBox=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],1+4)==1+4)
+    local showWsBox=simBWF.modifyAuxVisualizationItems((c['bitCoded']&1+4)==1+4)
     if showWsBox then
-        sim.setObjectInt32Parameter(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,1)
     else
-        sim.setObjectInt32Parameter(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.ragnarWsBox,sim.objintparam_visibility_layer,0)
     end
-    if sim.getBoolParameter(sim.boolparam_online_mode) then
+    if false then --sim.getBoolParam(sim.boolparam_online_mode) then
         model.ragnarNormalM=sim.getObjectMatrix(model.handle,-1)
         model.applyCalibrationData() -- can potentially change the position/orientation of the robot
         model.setAttachedLocationFramesIntoCalibrationPose()

@@ -12,9 +12,9 @@ function sysCall_init()
     model.codeVersion=1
     
     local data=model.readInfo()
-    model.showPoints=sim.boolAnd32(data.bitCoded,16)>0
+    model.showPoints=(data.bitCoded&16)>0
     model.isPick=(data.type==0)
-    model.createParts=model.isPick and (sim.boolAnd32(data.bitCoded,8)>0)
+    model.createParts=model.isPick and ((data.bitCoded&8)>0)
     model.robot=model.getAssociatedRobotHandle()
     model.m=sim.getObjectMatrix(model.handle,-1)
     model.sphereContainer=sim.addDrawingObject(sim.drawing_spherepoints,0.007,0,-1,9999,{1,0,1})

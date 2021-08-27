@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -57,15 +58,15 @@ function setDlgItemContent()
     if ui then
         local config=readInfo()
         local sel=simBWF.getSelectedEditWidget(ui)
-        simUI.setCheckboxValue(ui,1,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)~=0),true)
+        simUI.setCheckboxValue(ui,1,simBWF.getCheckboxValFromBool((config['bitCoded']&4)~=0),true)
         simUI.setEditValue(ui,2,simBWF.format("%.0f",config['deactivationTime']),true)
-        simUI.setEnabled(ui,2,sim.boolAnd32(config['bitCoded'],4)~=0,true)
-        simUI.setCheckboxValue(ui,6,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],8)~=0),true)
-        simUI.setCheckboxValue(ui,7,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],16)~=0),true)
+        simUI.setEnabled(ui,2,(config['bitCoded']&4)~=0,true)
+        simUI.setCheckboxValue(ui,6,simBWF.getCheckboxValFromBool((config['bitCoded']&8)~=0),true)
+        simUI.setCheckboxValue(ui,7,simBWF.getCheckboxValFromBool((config['bitCoded']&16)~=0),true)
 
-        simUI.setRadiobuttonValue(ui,3,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],3)==0),true)
-        simUI.setRadiobuttonValue(ui,4,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],3)==1),true)
-        simUI.setRadiobuttonValue(ui,5,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],3)==2),true)
+        simUI.setRadiobuttonValue(ui,3,simBWF.getRadiobuttonValFromBool((config['bitCoded']&3)==0),true)
+        simUI.setRadiobuttonValue(ui,4,simBWF.getRadiobuttonValFromBool((config['bitCoded']&3)==1),true)
+        simUI.setRadiobuttonValue(ui,5,simBWF.getRadiobuttonValFromBool((config['bitCoded']&3)==2),true)
         local sel=simBWF.getSelectedEditWidget(ui)
         simBWF.setSelectedEditWidget(ui,sel)
     end
@@ -73,7 +74,7 @@ end
 
 function visualArtifactsNoOverrideClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1+2)
+    c['bitCoded']=(c['bitCoded']|1+2)
     c['bitCoded']=c['bitCoded']-3
     simBWF.markUndoPoint()
     writeInfo(c)
@@ -82,7 +83,7 @@ end
 
 function visualArtifactsForceHideClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1+2)
+    c['bitCoded']=(c['bitCoded']|1+2)
     c['bitCoded']=c['bitCoded']-2
     simBWF.markUndoPoint()
     writeInfo(c)
@@ -91,7 +92,7 @@ end
 
 function visualArtifactsForceShowClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1+2)
+    c['bitCoded']=(c['bitCoded']|1+2)
     c['bitCoded']=c['bitCoded']-1
     simBWF.markUndoPoint()
     writeInfo(c)
@@ -100,7 +101,7 @@ end
 
 function deactivationTimeToggle_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolXor32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']~4)
     simBWF.markUndoPoint()
     writeInfo(c)
     setDlgItemContent()
@@ -108,7 +109,7 @@ end
 
 function overlappingToggle_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolXor32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']~8)
     simBWF.markUndoPoint()
     writeInfo(c)
     setDlgItemContent()
@@ -116,7 +117,7 @@ end
 
 function disableDialogs_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolXor32(c['bitCoded'],16)
+    c['bitCoded']=(c['bitCoded']~16)
     simBWF.markUndoPoint()
     writeInfo(c)
     setDlgItemContent()
@@ -217,11 +218,11 @@ function sysCall_nonSimulation()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,1)
 end
 
 function sysCall_beforeSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,0)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,0)
     removeDlg()
 end
 
@@ -237,7 +238,7 @@ end
 function sysCall_cleanup()
     removeDlg()
     removeFromPluginRepresentation()
-    if sim.isHandleValid(model)==1 then
+    if sim.isHandle(model) then
         -- the associated object might already have been destroyed
         simBWF.writeSessionPersistentObjectData(model,"dlgPosAndSize",previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos)
     end

@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     if z then
         sim.scaleObject(h,x/sx,y/sy,z/sz)
@@ -136,18 +137,18 @@ function updateModel()
 
     setObjectSize(smallLabel,smallLabelSize[1],smallLabelSize[2])
     -- Scale also the texture:
-    sim.setObjectFloatParameter(smallLabel,sim.shapefloatparam_texture_scaling_y,0.11*smallLabelSize[1]/0.075)
-    sim.setObjectFloatParameter(smallLabel,sim.shapefloatparam_texture_scaling_x,0.11*smallLabelSize[2]/0.0375)
-    sim.setObjectFloatParameter(smallLabel,sim.shapefloatparam_texture_y,0.037*smallLabelSize[2]/0.0375)
+    sim.setObjectFloatParam(smallLabel,sim.shapefloatparam_texture_scaling_y,0.11*smallLabelSize[1]/0.075)
+    sim.setObjectFloatParam(smallLabel,sim.shapefloatparam_texture_scaling_x,0.11*smallLabelSize[2]/0.0375)
+    sim.setObjectFloatParam(smallLabel,sim.shapefloatparam_texture_y,0.037*smallLabelSize[2]/0.0375)
 
     setObjectSize(largeLabel,largeLabelSize[1],largeLabelSize[2])
     -- Scale also the texture:
-    sim.setObjectFloatParameter(largeLabel,sim.shapefloatparam_texture_scaling_y,0.11*largeLabelSize[1]/0.075)
-    sim.setObjectFloatParameter(largeLabel,sim.shapefloatparam_texture_scaling_x,0.11*largeLabelSize[2]/0.1125)
+    sim.setObjectFloatParam(largeLabel,sim.shapefloatparam_texture_scaling_y,0.11*largeLabelSize[1]/0.075)
+    sim.setObjectFloatParam(largeLabel,sim.shapefloatparam_texture_scaling_x,0.11*largeLabelSize[2]/0.1125)
 
     local textureId=sim.getShapeTextureId(texture)
 
-    if sim.boolAnd32(bitCText,4)>0 then
+    if (bitCText&4)>0 then
         -- textured
         sim.setShapeTexture(convex,textureId,sim.texturemap_plane,4+8,{0.3,0.3})
     else
@@ -167,8 +168,8 @@ function updateModel()
     end
     
     -- Now process the label:
-    if sim.boolAnd32(bitC,8)>0 then
-        local useLargeLabel=(sim.boolAnd32(bitC,64)>0)
+    if (bitC&8)>0 then
+        local useLargeLabel=((bitC&64)>0)
         local labelSize=smallLabelSize
         local modelLabelHandle=smallLabel
         if useLargeLabel then
@@ -177,7 +178,7 @@ function updateModel()
         end
         local h=sim.copyPasteObjects({modelLabelHandle},0)[1]
         sim.setObjectParent(h,model,true)
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,255) -- make it visible
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,255) -- make it visible
         sim.setObjectSpecialProperty(h,sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable) -- make renderable and detectable
         local code=partLabelC['placementCode'][1]
         local toExecute='local boxSizeX='..boxSize[1]..'\n'
@@ -212,19 +213,19 @@ function setDlgItemContent()
         local size=partConf['largeLabelSize']
         simUI.setEditValue(ui,51,simBWF.format("%.0f , %.0f",size[1]*1000,size[2]*1000),true)
 
-        simUI.setCheckboxValue(ui,40,simBWF.getCheckboxValFromBool(sim.boolAnd32(partConf['bitCoded'],8)~=0),true)
+        simUI.setCheckboxValue(ui,40,simBWF.getCheckboxValFromBool((partConf['bitCoded']&8)~=0),true)
 
-        simUI.setCheckboxValue(ui,41,simBWF.getCheckboxValFromBool(sim.boolAnd32(partConf['bitCoded'],64)~=0),true)
+        simUI.setCheckboxValue(ui,41,simBWF.getCheckboxValFromBool((partConf['bitCoded']&64)~=0),true)
 
-        simUI.setCheckboxValue(ui,888,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)~=0),true)
+        simUI.setCheckboxValue(ui,888,simBWF.getCheckboxValFromBool((config['bitCoded']&4)~=0),true)
         simUI.setEditValue(ui,20,simBWF.format("%.2f",config['mass']),true)
         local red,green,blue=getColor()
         simUI.setSliderValue(ui,30,red*100,true)
         simUI.setSliderValue(ui,31,green*100,true)
         simUI.setSliderValue(ui,32,blue*100,true)
 
-        simUI.setEnabled(ui,41,sim.boolAnd32(partConf['bitCoded'],8)~=0,true)
-        simUI.setEnabled(ui,42,sim.boolAnd32(partConf['bitCoded'],8)~=0,true)
+        simUI.setEnabled(ui,41,(partConf['bitCoded']&8)~=0,true)
+        simUI.setEnabled(ui,42,(partConf['bitCoded']&8)~=0,true)
 
         simBWF.setSelectedEditWidget(ui,sel)
     end
@@ -317,7 +318,7 @@ end
 
 function texture_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -330,7 +331,7 @@ end
 function label1_callback(ui,id,newVal)
     local inf=readPartInfo()
     local c=inf['labelData']
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end
@@ -344,7 +345,7 @@ end
 function largeLabel1_callback(ui,id,newVal)
     local inf=readPartInfo()
     local c=inf['labelData']
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],64)
+    c['bitCoded']=(c['bitCoded']|64)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-64
     end

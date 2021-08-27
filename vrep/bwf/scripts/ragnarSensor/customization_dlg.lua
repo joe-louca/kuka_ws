@@ -23,7 +23,7 @@ function model.dlg.refresh()
         local d=config['calibrationBallDistance']
         simUI.setEditValue(model.dlg.ui,233,simBWF.format("%.0f",d/0.001),true)
         
-        simUI.setCheckboxValue(model.dlg.ui,24,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.bitCoded,2)>0))
+        simUI.setCheckboxValue(model.dlg.ui,24,simBWF.getCheckboxValFromBool((config.bitCoded&2)>0))
         
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
         simUI.setEditValue(model.dlg.ui,6,simBWF.format("%.0f",config.detectionWidth/0.001),true)
@@ -115,7 +115,7 @@ end
 
 function model.dlg.flipped180Click_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end

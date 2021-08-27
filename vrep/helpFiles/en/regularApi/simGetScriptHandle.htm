@@ -15,14 +15,14 @@
   <td >
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
-<h1><a href="../apiOverview.htm">Regular API</a> function</h1>
+<h1>Regular API function</h1>
 <h3 class=subsectionBar><a name="simGetScriptHandle" id="simGetScriptHandle"></a>simGetScriptHandle / sim.getScriptHandle </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves the handle of a script. A script doesn't directly have a name assigned, however the script inherits the name of its associated object, if it has one. See also the section on <a href="../accessingGeneralObjects.htm">accessing general-type objects</a> and <a href="simIsHandleValid.htm">sim.isHandleValid</a>.<br></td>
+<td class=apiTableRightDescr>Retrieves the handle of a script. A script doesn't directly have a name assigned, however the script inherits the name of its associated object, if it has one. See also the section on <a href="../accessingGeneralObjects.htm">accessing general-type objects</a> and <a href="simIsHandle.htm">sim.isHandle</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
@@ -49,7 +49,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>number scriptHandle=sim.getScriptHandle(string scriptName)</td> 
+<td class=apiTableRightLSyn>int scriptHandle=sim.getScriptHandle(string scriptName)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -68,9 +68,7 @@ Lua return values
 </tr> 
 </table> 
 
-<br>
-<p><a href="../apiFunctions.htm">All regular API functions on one page</a></p>
-<br>
+
 <br>
 </td>
 </tr>

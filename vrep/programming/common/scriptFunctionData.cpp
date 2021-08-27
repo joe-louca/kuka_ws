@@ -286,7 +286,7 @@ bool CScriptFunctionData::_readData(int stack,const int* expectedArguments,int r
                 {
                     int l;
                     char* str=simGetStackStringValue(stack,&l);
-                    if (str!=NULL)
+                    if (str!=nullptr)
                     {
                         std::string str2(str);
                         simReleaseBuffer(str);
@@ -300,7 +300,7 @@ bool CScriptFunctionData::_readData(int stack,const int* expectedArguments,int r
                 {
                     int l;
                     char* str=simGetStackStringValue(stack,&l);
-                    if (str!=NULL)
+                    if (str!=nullptr)
                     {
                         if ( (l<expectedArguments[1+i*2+1])&&(expectedArguments[1+i*2+1]!=0) )
                         {

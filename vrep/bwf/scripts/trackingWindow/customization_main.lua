@@ -1,12 +1,12 @@
 function model.setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -55,17 +55,17 @@ function model.setSizes()
     local h=c['sizes'][3]
     local offsets=c['offsets']
     local l={offsets[1]+c['sizes'][1],offsets[1]}
-    local slEnabled=sim.boolAnd32(c['bitCoded'],16)>0
+    local slEnabled=(c['bitCoded']&16)>0
     if slEnabled then
-        local r,lay=sim.getObjectInt32Parameter(model.handles.trackBox1,sim.objintparam_visibility_layer)
-        sim.setObjectInt32Parameter(model.handles.stopLineBox,sim.objintparam_visibility_layer,lay)
+        local lay=sim.getObjectInt32Param(model.handles.trackBox1,sim.objintparam_visibility_layer)
+        sim.setObjectInt32Param(model.handles.stopLineBox,sim.objintparam_visibility_layer,lay)
         if model.handles.startLineBox>=0 then
-            sim.setObjectInt32Parameter(model.handles.startLineBox,sim.objintparam_visibility_layer,lay) -- might not exist on old models
+            sim.setObjectInt32Param(model.handles.startLineBox,sim.objintparam_visibility_layer,lay) -- might not exist on old models
         end
     else
-        sim.setObjectInt32Parameter(model.handles.stopLineBox,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handles.stopLineBox,sim.objintparam_visibility_layer,0)
         if model.handles.startLineBox>=0 then
-            sim.setObjectInt32Parameter(model.handles.startLineBox,sim.objintparam_visibility_layer,0) -- might not exist on old models
+            sim.setObjectInt32Param(model.handles.startLineBox,sim.objintparam_visibility_layer,0) -- might not exist on old models
         end
     end
     if model.isPick then
@@ -181,7 +181,7 @@ function sysCall_nonSimulation()
     local c=model.readInfo()
     local hideBalls=false
     if sim.getSimulationState()~=sim.simulation_stopped then
-        hideBalls=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],2)~=0)
+        hideBalls=simBWF.modifyAuxVisualizationItems((c['bitCoded']&2)~=0)
     end
     model.showOrHideCalibrationBalls(not hideBalls)
     model.alignCalibrationBallsWithInputAndReturnRedBall()
@@ -206,16 +206,16 @@ function sysCall_suspended()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(model.handles.trackBox1,sim.objintparam_visibility_layer,1)
-    sim.setObjectInt32Parameter(model.handles.trackBox2,sim.objintparam_visibility_layer,1)
-    sim.setObjectInt32Parameter(model.handles.refFrame,sim.objintparam_visibility_layer,1)
-    sim.setObjectInt32Parameter(model.handles.upstreamMarginBox,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handles.trackBox1,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handles.trackBox2,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handles.refFrame,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handles.upstreamMarginBox,sim.objintparam_visibility_layer,1)
     local c=model.readInfo()
-    local showStartStopLine=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],16)~=0)
+    local showStartStopLine=simBWF.modifyAuxVisualizationItems((c['bitCoded']&16)~=0)
     if showStartStopLine then
-        sim.setObjectInt32Parameter(model.handles.stopLineBox,sim.objintparam_visibility_layer,1)
+        sim.setObjectInt32Param(model.handles.stopLineBox,sim.objintparam_visibility_layer,1)
         if model.handles.startLineBox>=0 then
-            sim.setObjectInt32Parameter(model.handles.startLineBox,sim.objintparam_visibility_layer,1) -- might not exist on old models
+            sim.setObjectInt32Param(model.handles.startLineBox,sim.objintparam_visibility_layer,1) -- might not exist on old models
         end
     end
     model.dlg.showOrHideDlgIfNeeded()
@@ -227,19 +227,19 @@ function sysCall_beforeSimulation()
     model.ext.outputBrSetupMessages()
     model.ext.outputPluginSetupMessages()
     local c=model.readInfo()
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],1)==0)
+    local show=simBWF.modifyAuxVisualizationItems((c['bitCoded']&1)==0)
     if not show then
-        sim.setObjectInt32Parameter(model.handles.trackBox1,sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(model.handles.trackBox2,sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(model.handles.refFrame,sim.objintparam_visibility_layer,256)
-        sim.setObjectInt32Parameter(model.handles.stopLineBox,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.handles.trackBox1,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.handles.trackBox2,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.handles.refFrame,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.handles.stopLineBox,sim.objintparam_visibility_layer,256)
         if model.handles.startLineBox>=0 then
-            sim.setObjectInt32Parameter(model.handles.startLineBox,sim.objintparam_visibility_layer,256) -- might not exist on old models
+            sim.setObjectInt32Param(model.handles.startLineBox,sim.objintparam_visibility_layer,256) -- might not exist on old models
         end
-        sim.setObjectInt32Parameter(model.handles.upstreamMarginBox,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(model.handles.upstreamMarginBox,sim.objintparam_visibility_layer,256)
     end
     local hideBalls=false
-    hideBalls=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],2)~=0)
+    hideBalls=simBWF.modifyAuxVisualizationItems((c['bitCoded']&2)~=0)
     model.showOrHideCalibrationBalls(not hideBalls)
 --    model.alignCalibrationBallsWithInputAndReturnRedBall()
 --    model.setGreenAndBlueCalibrationBallsInPlace()

@@ -179,7 +179,7 @@ function model.dlg.createDlg()
 end
 
 function model.dlg.onClose()
-    sim.setBoolParameter(sim.boolparam_br_palletrepository,false)
+    --sim.setBoolParam(sim.boolparam_br_palletrepository,false)
     model.dlg.removeDlg()
 end
 
@@ -199,11 +199,13 @@ function model.dlg.removeDlg()
 end
 
 function model.dlg.showOrHideDlgIfNeeded()
-    if sim.getBoolParameter(sim.boolparam_br_palletrepository) then
+--[[
+    if sim.getBoolParam(sim.boolparam_br_palletrepository) then
         model.dlg.showDlg()
     else
         model.dlg.removeDlg()
     end
+    --]]
 end
 
 function model.dlg.init()

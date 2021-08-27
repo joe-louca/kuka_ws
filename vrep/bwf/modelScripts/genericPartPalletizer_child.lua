@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 displayTrackingLocations=function(yDistOffset,trackingLocations)
     sim.addDrawingObjectItem(decorationContainer,nil)
     local m=sim.getObjectMatrix(model,-1)
@@ -27,7 +28,7 @@ displayConsoleIfNeeded=function(info)
         sim.auxiliaryConsolePrint(console,nil)
         for key,value in pairs(info) do
             local str='<DESTROYED OBJECT>:\n'
-            if sim.isHandleValid(key)>0 then
+            if sim.isHandle(key) then
                 str=sim.getObjectName(key)..':\n'
             end
             str=str..'    handle: '..key..', partName: '..value['partName']..', destinationName: '..value['destinationName']..'\n'
@@ -147,7 +148,7 @@ placeItem=function(part,location,yOffset)
     p[2]=p[2]+yOffset
     sim.setObjectPosition(part,model,p)
     local prop=sim.getModelProperty(part)
-    if sim.boolAnd32(prop,sim.modelproperty_not_model)==0 then
+    if (prop&sim.modelproperty_not_model)==0 then
         -- We have a model
         local l=sim.getObjectsInTree(part)
         for i=1,#l,1 do
@@ -188,8 +189,8 @@ function sysCall_init()
     width=palletizerData['width']
     length=palletizerData['length']
     height=palletizerData['height']
-    enabled=(sim.boolAnd32(palletizerData['bitCoded'],2)>0)
-    showPoints=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(palletizerData['bitCoded'],4)>0)
+    enabled=((palletizerData['bitCoded']&2)>0)
+    showPoints=simBWF.modifyAuxVisualizationItems((palletizerData['bitCoded']&4)>0)
     decorationContainer=sim.addDrawingObject(sim.drawing_spherepoints,0.015,0,-1,9999,{1,1,0})
     previousTime=0
     processedParts={}

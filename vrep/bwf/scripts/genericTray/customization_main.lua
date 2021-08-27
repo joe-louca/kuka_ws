@@ -2,7 +2,7 @@ function model.setColor1(red,green,blue,spec)
     sim.setShapeColor(model.handle,nil,sim.colorcomponent_ambient_diffuse,{red,green,blue})
     sim.setShapeColor(model.handle,nil,sim.colorcomponent_specular,{spec,spec,spec})
     local c=model.readInfo()
-    if sim.boolAnd32(c.partSpecific['bitCoded'],1)~=0 then
+    if (c.partSpecific['bitCoded']&1)~=0 then
         model.setColor2(red,green,blue,spec)
         simUI.setSliderValue(model.dlg.ui,30,red*100,true)
         simUI.setSliderValue(model.dlg.ui,31,green*100,true)
@@ -31,14 +31,14 @@ function model.getColor2()
 end
 
 function model.setShapeSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -130,7 +130,7 @@ function model.updateTray()
         local sss=w/pr
         local rr={pr-1,pr}
         local indent={sss,sss*0.5}
-        if sim.boolAnd32(pr,1)==0 then
+        if (pr&1)==0 then
             -- rows is even
             if not firstRowOdd then
                 indent={sss*0.5,sss}
@@ -144,7 +144,7 @@ function model.updateTray()
             end
         end
         for i=1,pc,1 do
-            local li=sim.boolAnd32(i,1)+1
+            local li=(i&1)+1
             for j=1,rr[li],1 do
                 local h=sim.copyPasteObjects({model.specHandles.borderElement},0)[1]
                 model.setShapeSize(h,pt,l/pc,ph)
@@ -160,11 +160,11 @@ function model.updateTray()
         mass=mass*0.5
         model.specHandles.border=sim.groupShapes(borders)
         sim.setObjectParent(model.specHandles.border,model.specHandles.connection,true)
-        sim.setObjectInt32Parameter(model.specHandles.border,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(model.specHandles.border,sim.objintparam_visibility_layer,1+256)
         sim.setObjectSpecialProperty(model.specHandles.border,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
-        sim.setObjectInt32Parameter(model.specHandles.border,sim.shapeintparam_static,0)
-        sim.setObjectInt32Parameter(model.specHandles.border,sim.shapeintparam_respondable,1)
-        local p=sim.boolOr32(sim.getObjectProperty(model.specHandles.border),sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_dontshowasinsidemodel
+        sim.setObjectInt32Param(model.specHandles.border,sim.shapeintparam_static,0)
+        sim.setObjectInt32Param(model.specHandles.border,sim.shapeintparam_respondable,1)
+        local p=(sim.getObjectProperty(model.specHandles.border)|sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_dontshowasinsidemodel
         sim.setObjectProperty(model.specHandles.border,p)
         model.setShapeMass(model.specHandles.border,mass)
     end

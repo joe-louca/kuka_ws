@@ -5,7 +5,7 @@ function model.dev.refreshDlg()
         local config=model.readInfo()
         local sel=simBWF.getSelectedEditWidget(model.dev.ui)
         simUI.setCheckboxValue(model.dev.ui,8,simBWF.getCheckboxValFromBool(sim.getIntegerSignal('__brTesting__')==1),true)
- --       simUI.setCheckboxValue(model.dev.ui,5,simBWF.getCheckboxValFromBool(sim.getBoolParameter(sim.boolparam_online_mode)),true)
+ --       simUI.setCheckboxValue(model.dev.ui,5,simBWF.getCheckboxValFromBool(sim.getBoolParam(sim.boolparam_online_mode)),true)
         simBWF.setSelectedEditWidget(model.dev.ui,sel)
     end
 end
@@ -20,8 +20,8 @@ end
 
 --[[
 function model.dev.connectWhenRunning_callback(ui,id,val)
-    local s=sim.getBoolParameter(sim.boolparam_online_mode)
-    sim.setBoolParameter(sim.boolparam_online_mode,not s)
+    local s=sim.getBoolParam(sim.boolparam_online_mode)
+    sim.setBoolParam(sim.boolparam_online_mode,not s)
 end
 --]]
 
@@ -60,7 +60,7 @@ function model.dev.removeDlg()
 end
 
 function model.dev.showOrHideDlgIfNeeded()
-    if sim.getInt32Parameter(sim_intparam_compilation_version)==1 then
+    if sim.getInt32Param(sim_intparam_compilation_version)==1 then
         -- Do not show this helper dlg in BlueReality, only in V-REP PRO
         local s=sim.getObjectSelection()
         if s and #s>=1 and s[#s]==model.handle then

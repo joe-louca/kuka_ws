@@ -234,7 +234,7 @@ end
 
 function sysCall_cleanup()
     model.dlg.removeDlg()
---    if sim.isHandleValid(model.handle)==1 then
+--    if sim.isHandle(model.handle) then
         -- The associated model might already have been destroyed (if it destroys itself in the init phase)
         model.removeFromPluginRepresentation()
 --    end

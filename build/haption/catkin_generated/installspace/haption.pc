@@ -1,0 +1,8 @@
+prefix=/home/joe/kuka_ws/install
+
+Name: haption
+Description: Description of haption
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lhaption
+Requires: roscpp

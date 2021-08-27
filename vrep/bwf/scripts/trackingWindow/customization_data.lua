@@ -27,7 +27,7 @@ function model.updatePluginRepresentation()
     data.stopLineDist=c['stopLinePos']
     data.startLineDist=c['startLinePos']
     data.upstreamMarginDist=-c['upstreamMarginPos']
-    data.stopLine=sim.boolAnd32(c['bitCoded'],16)>0
+    data.stopLine=(c['bitCoded']&16)>0
     data.inputObjectId=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.INPUT)
     data.lineControlPartHandle=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.PARTTYPE)
     data.calibrationBallOffset=c['calibrationBallOffset']

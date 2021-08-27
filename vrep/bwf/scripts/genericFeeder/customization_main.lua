@@ -6,14 +6,14 @@ function model.setModelSize()
             v[i]=0.05
         end
     end
-    local r,mmin=sim.getObjectFloatParameter(model.handle,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(model.handle,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(model.handle,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(model.handle,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(model.handle,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(model.handle,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(model.handle,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(model.handle,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(model.handle,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(model.handle,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(model.handle,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(model.handle,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(model.handle,v[1]/sx,v[2]/sy,v[3]/sz)
 end
@@ -89,7 +89,7 @@ end
 
 function sysCall_afterSimulation()
     model.dlg.updateEnabledDisabledItems()
-    sim.setObjectInt32Parameter(model.handle,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handle,sim.objintparam_visibility_layer,1)
     local conf=model.readInfo()
     conf['multiFeederTriggerCnt']=0
     model.writeInfo(conf)
@@ -102,9 +102,9 @@ function sysCall_beforeSimulation()
     local conf=model.readInfo()
     conf['multiFeederTriggerCnt']=0
     model.writeInfo(conf)
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(conf['bitCoded'],1)==0)
+    local show=simBWF.modifyAuxVisualizationItems((conf['bitCoded']&1)==0)
     if not show then
-        sim.setObjectInt32Parameter(model.handle,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model.handle,sim.objintparam_visibility_layer,0)
     end
 end
 

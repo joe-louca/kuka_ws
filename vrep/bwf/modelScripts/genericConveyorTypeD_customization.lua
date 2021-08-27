@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -142,14 +143,14 @@ function getColor2()
 end
 
 function setShapeSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -274,7 +275,7 @@ function setDlgItemContent()
         simUI.setEditValue(ui,4,simBWF.format("%.0f",config['width']/0.001),true)
         simUI.setEditValue(ui,21,simBWF.format("%.0f",config['padSpacing']/0.001),true)
         simUI.setEditValue(ui,28,simBWF.format("%.0f",config['height']/0.001),true)
-        simUI.setCheckboxValue(ui,1000,(sim.boolAnd32(config['bitCoded'],64)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,1000,((config['bitCoded']&64)~=0) and 2 or 0,true)
         simUI.setLabelText(ui,26,simBWF.format("%.0f",getActualPadSpacing()/0.001),true)
 
 
@@ -380,9 +381,9 @@ function updateConveyor()
         pad=sim.groupShapes(walls)
         sim.reorientShapeBoundingBox(pad,-1)
     end
-    sim.setObjectInt32Parameter(pad,sim.objintparam_visibility_layer,1+256)
+    sim.setObjectInt32Param(pad,sim.objintparam_visibility_layer,1+256)
     sim.setObjectProperty(pad,sim.objectproperty_selectable+sim.objectproperty_selectmodelbaseinstead)
-    sim.setObjectInt32Parameter(pad,sim.shapeintparam_respondable,1)
+    sim.setObjectInt32Param(pad,sim.shapeintparam_respondable,1)
     sim.setObjectSpecialProperty(pad,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
     sim.setObjectPosition(pad,padBase,{(pthickness+pwheight)*0.5,plength*0.5,0})
     sim.setObjectOrientation(pad,padBase,{0,-math.pi/2,math.pi/2})
@@ -392,10 +393,10 @@ function updateConveyor()
         local p=sim.copyPasteObjects({pad},0)[1]
         sim.setObjectParent(p,pb,true)
         sim.setObjectParent(pb,path,true)
-        sim.setObjectInt32Parameter(p,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(p,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(p,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(p,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(p,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
-        sim.setObjectFloatParameter(pb,sim.dummyfloatparam_follow_path_offset,i*dx)
+        sim.setObjectFloatParam(pb,sim.dummyfloatparam_follow_path_offset,i*dx)
     end
     -- Delete the first pad:
     sim.removeObject(pad)
@@ -656,7 +657,7 @@ end
 
 function enabledClicked(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],64)
+    c['bitCoded']=(c['bitCoded']|64)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-64
     end

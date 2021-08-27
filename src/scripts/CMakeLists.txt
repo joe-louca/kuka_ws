@@ -57,9 +57,10 @@ catkin_install_python(PROGRAMS
    src/input/joy_sub.py
    src/input/falcon_sub.py
    src/input/input_control.py
+   src/input/haption_delay_sub.py
    
-   src/feedback/netft_sub.py
-   src/feedback/ft_TF_delay.py
+   src/feedback/ft_delay.py   
+   src/feedback/sim_ft_delay.py
    src/feedback/vrep_cam1_sub.py
    src/feedback/HUD.py
    src/feedback/joy_vibrate.py
@@ -72,9 +73,7 @@ catkin_install_python(PROGRAMS
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
-add_executable(
-falcon_node src/input/falcon_pub.cpp
-)
+add_executable(falcon_node src/input/falcon_pub.cpp)
 
 add_dependencies(falcon_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 

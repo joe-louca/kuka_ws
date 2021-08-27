@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function getTriggerType()
     if stopTriggerSensor~=-1 then
         local data=sim.readCustomDataBlock(stopTriggerSensor,'XYZ_BINARYSENSOR_INFO')
@@ -47,7 +48,7 @@ getPartMass=function(part)
             end
         end
         if sim.getObjectType(handle)==sim.object_shape_type then
-            local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+            local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
             if p==0 then
                 local m0,i0,com0=sim.getShapeMassAndInertia(handle)
                 currentMass=currentMass+m0
@@ -59,18 +60,18 @@ end
 
 function isPartDetected(partHandle)
     local shapesToTest={}
-    if sim.boolAnd32(sim.getModelProperty(partHandle),sim.modelproperty_not_model)>0 then
+    if (sim.getModelProperty(partHandle)&sim.modelproperty_not_model)>0 then
         -- We have a single shape which is not a model. Is the shape detectable?
-        if sim.boolAnd32(sim.getObjectSpecialProperty(partHandle),sim.objectspecialproperty_detectable_all)>0 then
+        if (sim.getObjectSpecialProperty(partHandle)&sim.objectspecialproperty_detectable_all)>0 then
             shapesToTest[1]=partHandle -- yes, it is detectable
         end
     else
         -- We have a model. Does the model have the detectable flags overridden?
-        if sim.boolAnd32(sim.getModelProperty(partHandle),sim.modelproperty_not_detectable)==0 then
+        if (sim.getModelProperty(partHandle)&sim.modelproperty_not_detectable)==0 then
             -- No, now take all model shapes that are detectable:
             local t=sim.getObjectsInTree(partHandle,sim.object_shape_type,0)
             for i=1,#t,1 do
-                if sim.boolAnd32(sim.getObjectSpecialProperty(t[i]),sim.objectspecialproperty_detectable_all)>0 then
+                if (sim.getObjectSpecialProperty(t[i])&sim.objectspecialproperty_detectable_all)>0 then
                     shapesToTest[#shapesToTest+1]=t[i]
                 end
             end
@@ -121,10 +122,10 @@ handlePartAtLocation=function(h)
     sim.setObjectPosition(s,h,{0,0,0})
     sim.setObjectOrientation(s,h,{0,0,0})
     sim.setShapeColor(s,'',sim.colorcomponent_ambient_diffuse,color)
-    sim.setObjectInt32Parameter(s,sim.objintparam_visibility_layer,1+256)
+    sim.setObjectInt32Param(s,sim.objintparam_visibility_layer,1+256)
     sim.setObjectSpecialProperty(s,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
     local p=sim.getObjectProperty(s)
-    p=sim.boolOr32(p,sim.objectproperty_dontshowasinsidemodel)
+    p=(p|sim.objectproperty_dontshowasinsidemodel)
     sim.setObjectProperty(s,p)
     local data=sim.readCustomDataBlock(h,simBWF.modelTags.PART)
     data=sim.unpackTable(data)
@@ -171,7 +172,7 @@ function sysCall_actuation()
     if movementUnderway then
         local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
         data=sim.unpackTable(data)
-        local enabled=sim.boolAnd32(data['bitCoded'],64)>0
+        local enabled=(data['bitCoded']&64)>0
         local stopRequests=data['stopRequests']
         local trigger=getTriggerType()
         if trigger>0 then
@@ -226,7 +227,7 @@ function sysCall_actuation()
     else
         local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
         data=sim.unpackTable(data)
-        enabled=sim.boolAnd32(data['bitCoded'],64)>0
+        enabled=(data['bitCoded']&64)>0
         if enabled then
             if t-dwellStart>dwellTime then
                 local i=1
@@ -236,7 +237,7 @@ function sysCall_actuation()
                     if p[2]>(cuttingStationIndex-1.5)*movementDist then
                         table.remove(partsToMove,i)
                         local h2=handlePartAtLocation(h)
-                        sim.setObjectInt32Parameter(h,sim.shapeintparam_static,0)
+                        sim.setObjectInt32Param(h,sim.shapeintparam_static,0)
                     else
                         i=i+1
                     end
@@ -246,12 +247,12 @@ function sysCall_actuation()
                 local samples=sim.getObjectsInTree(sampleHolder,sim.handle_all,1)
                 local objects=sim.copyPasteObjects(samples,0)
                 for i=1,#objects,1 do
-                    sim.setObjectInt32Parameter(objects[i],sim.objintparam_visibility_layer,1+256)
+                    sim.setObjectInt32Param(objects[i],sim.objintparam_visibility_layer,1+256)
                     sim.setObjectSpecialProperty(objects[i],sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
                     local p=sim.getObjectProperty(objects[i])
-                    p=sim.boolOr32(p,sim.objectproperty_selectmodelbaseinstead+sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_selectmodelbaseinstead-sim.objectproperty_dontshowasinsidemodel
+                    p=(p|sim.objectproperty_selectmodelbaseinstead+sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_selectmodelbaseinstead-sim.objectproperty_dontshowasinsidemodel
                     sim.setObjectProperty(objects[i],p)
-                    sim.setObjectInt32Parameter(objects[i],sim.shapeintparam_respondable,1)
+                    sim.setObjectInt32Param(objects[i],sim.shapeintparam_respondable,1)
                     sim.setObjectParent(objects[i],partHolder,true)
                     partsToMove[#partsToMove+1]=objects[i]
                     local dta=sim.readCustomDataBlock(objects[i],simBWF.modelTags.PART)
@@ -272,7 +273,7 @@ function sysCall_actuation()
     i=1
     while i<=#allProducedParts do
         local h=allProducedParts[i][1]
-        if sim.isHandleValid(h)>0 then
+        if sim.isHandle(h) then
             local data=sim.readCustomDataBlock(h,simBWF.modelTags.PART)
             data=sim.unpackTable(data)
             local p=sim.getObjectPosition(h,-1)
@@ -289,7 +290,7 @@ function sysCall_actuation()
                     deactivate=true
                 end
                 if deactivate then
-                    sim.setObjectInt32Parameter(h,sim.shapeintparam_static,1) -- we make it static now!
+                    sim.setObjectInt32Param(h,sim.shapeintparam_static,1) -- we make it static now!
                     sim.resetDynamicObject(h) -- important, otherwise the dynamics engine doesn't notice the change!
                     allProducedParts[i][5]=false
                 end

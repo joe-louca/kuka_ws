@@ -21,13 +21,13 @@ function model.alignCalibrationBallsWithInputAndReturnRedBall()
             sim.setObjectPosition(model.handle,h,{p[1],p[2],p[3]})
         end
         
-        local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
-        r=sim.boolOr32(r,1+4)-(1+4) -- forbid rotation and translation when simulation is not running
-        sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+        local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+        r=(r|1+4)-(1+4) -- forbid rotation and translation when simulation is not running
+        sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
     else
-        local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
-        r=sim.boolOr32(r,1+4) -- allow rotation and translation when simulation is not running
-        sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+        local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+        r=(r|1+4) -- allow rotation and translation when simulation is not running
+        sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
     end
     return model.handle
 end

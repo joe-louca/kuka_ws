@@ -42,14 +42,14 @@ function model.dlg.refresh()
         model.dlg.comboInput=simBWF.populateCombobox(model.dlg.ui,232,loc,{},simBWF.getObjectAltNameOrNone(simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.INPUT)),true,{{simBWF.NONE_TEXT,-1}})
         
         
-        simUI.setCheckboxValue(model.dlg.ui,24,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.bitCoded,2)>0))
-        simUI.setCheckboxValue(model.dlg.ui,23,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.bitCoded,1)>0))
+        simUI.setCheckboxValue(model.dlg.ui,24,simBWF.getCheckboxValFromBool((config.bitCoded&2)>0))
+        simUI.setCheckboxValue(model.dlg.ui,23,simBWF.getCheckboxValFromBool((config.bitCoded&1)>0))
         simUI.setEditValue(model.dlg.ui,25,simBWF.format("%.0f",config.detectorDiameter/0.001),true)
         simUI.setEditValue(model.dlg.ui,27,simBWF.format("%.0f",config.detectorHeight/0.001),true)
         simUI.setEditValue(model.dlg.ui,26,simBWF.format("%.0f",config.detectorHeightOffset/0.001),true)
         
-        simUI.setCheckboxValue(model.dlg.ui,29,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.bitCoded,4)>0))
-        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.bitCoded,8)>0))
+        simUI.setCheckboxValue(model.dlg.ui,29,simBWF.getCheckboxValFromBool((config.bitCoded&4)>0))
+        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool((config.bitCoded&8)>0))
 
         local pallets=simBWF.getAvailablePallets()
         local refPallet=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.PALLET)
@@ -81,10 +81,10 @@ function model.dlg.updateEnabledDisabledItems()
         simUI.setEnabled(model.dlg.ui,232,simStopped,true)
         simUI.setEnabled(model.dlg.ui,233,simStopped and simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.INPUT)>=0,true)
         
-        simUI.setEnabled(model.dlg.ui,25,simStopped and sim.boolAnd32(c.bitCoded,8)~=0,true)
-        simUI.setEnabled(model.dlg.ui,27,simStopped and sim.boolAnd32(c.bitCoded,8)~=0,true)
-        simUI.setEnabled(model.dlg.ui,26,simStopped and sim.boolAnd32(c.bitCoded,8)~=0,true)
-        simUI.setEnabled(model.dlg.ui,234,simStopped and sim.boolAnd32(c.bitCoded,8)~=0,true)
+        simUI.setEnabled(model.dlg.ui,25,simStopped and (c.bitCoded&8)~=0,true)
+        simUI.setEnabled(model.dlg.ui,27,simStopped and (c.bitCoded&8)~=0,true)
+        simUI.setEnabled(model.dlg.ui,26,simStopped and (c.bitCoded&8)~=0,true)
+        simUI.setEnabled(model.dlg.ui,234,simStopped and (c.bitCoded&8)~=0,true)
         
         simUI.setEnabled(model.dlg.ui,29,simStopped,true)
         simUI.setEnabled(model.dlg.ui,30,simStopped,true)
@@ -269,7 +269,7 @@ end
 
 function model.dlg.hideDetectorBoxClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -280,7 +280,7 @@ end
 
 function model.dlg.flipped180Click_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -292,7 +292,7 @@ end
 
 function model.dlg.showDetectionsClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -303,7 +303,7 @@ end
 
 function model.dlg.fakeOperationClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end

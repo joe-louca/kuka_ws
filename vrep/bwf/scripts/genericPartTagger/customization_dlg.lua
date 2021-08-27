@@ -6,14 +6,14 @@ function model.dlg.refreshDlg()
         local sel=simBWF.getSelectedEditWidget(model.dlg.ui)
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
         simUI.setEditValue(model.dlg.ui,20,simBWF.format("%.0f , %.0f , %.0f",config.size[1]*1000,config.size[2]*1000,config.size[3]*1000),true)
-        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],8)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,32,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],16)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,4,simBWF.getCheckboxValFromBool((config['bitCoded']&8)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,32,simBWF.getCheckboxValFromBool((config['bitCoded']&16)~=0),true)
         
         local enabled=sim.getSimulationState()==sim.simulation_stopped
         simUI.setEnabled(model.dlg.ui,1365,enabled,true)
         simUI.setEnabled(model.dlg.ui,20,enabled,true)
-        simUI.setEnabled(model.dlg.ui,26,(sim.boolAnd32(config['bitCoded'],16)~=0)and enabled,true)
+        simUI.setEnabled(model.dlg.ui,26,((config['bitCoded']&16)~=0)and enabled,true)
         simUI.setEnabled(model.dlg.ui,3,enabled,true)
         simUI.setEnabled(model.dlg.ui,4,enabled,true)
         simUI.setEnabled(model.dlg.ui,32,enabled,true)
@@ -24,7 +24,7 @@ end
 
 function model.dlg.hidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -35,7 +35,7 @@ end
 
 function model.dlg.console_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end
@@ -134,7 +134,7 @@ end
 
 function model.dlg.partColorEnable_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],16)
+    c['bitCoded']=(c['bitCoded']|16)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-16
     end

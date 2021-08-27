@@ -17,7 +17,7 @@ function model.readInfo()
     data['subtype']='thermoformer'
 
     if data['bitCoded'] then
-        data['enabled']=sim.boolAnd32(data['bitCoded'],64)>0
+        data['enabled']=(data['bitCoded']&64)>0
     end
 
     if not data['enabled'] then

@@ -37,7 +37,7 @@ function model.readInfo()
     end
 
     if data['bitCoded'] then
-        data['enabled']=sim.boolAnd32(data['bitCoded'],64)>0
+        data['enabled']=(data['bitCoded']&64)>0
     end
 
     if not data['enabled'] then
@@ -81,7 +81,7 @@ function model.readInfo()
         end
         if data['bitCoded'] then
             data.conveyorSpecific.bitCoded=data.bitCoded
-            data.conveyorSpecific.bitCoded=sim.boolOr32(data.conveyorSpecific.bitCoded,64)-64
+            data.conveyorSpecific.bitCoded=(data.conveyorSpecific.bitCoded|64)-64
             data['bitCoded']=nil -- 1+2+4+8
         end
     end

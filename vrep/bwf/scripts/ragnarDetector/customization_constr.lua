@@ -6,7 +6,7 @@ function model.alignCalibrationBallsWithInputAndReturnRedBall()
 
         -- Work with thresholds here, otherwise the scene modifies itself continuously little by little:
         local c=model.readInfo()
-        local flipped=sim.boolAnd32(c.bitCoded,2)>0
+        local flipped=(c.bitCoded&2)>0
         local p=sim.getObjectOrientation(model.handles.calibrationBalls[1],conveyorHandle)
         if flipped then
             local correct=(math.abs(p[1])>0.1*math.pi/180) or (math.abs(p[2])>0.1*math.pi/180)
@@ -46,13 +46,13 @@ function model.alignCalibrationBallsWithInputAndReturnRedBall()
                 sim.setObjectPosition(model.handle,h,{p[1],0,0})
             end
             
-            local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
-            r=sim.boolOr32(r,1+4)-(1+4) -- forbid rotation and translation when simulation is not running
-            sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+            local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+            r=(r|1+4)-(1+4) -- forbid rotation and translation when simulation is not running
+            sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
         else
-            local r,p=sim.getObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions)
-            r=sim.boolOr32(r,1+4) -- allow rotation and translation when simulation is not running
-            sim.setObjectInt32Parameter(model.handle,sim.objintparam_manipulation_permissions,r)
+            local p=sim.getObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions)
+            r=(r|1+4) -- allow rotation and translation when simulation is not running
+            sim.setObjectInt32Param(model.handle,sim.objintparam_manipulation_permissions,r)
         end
     end
     return model.handle

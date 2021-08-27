@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 simpleDisplayParts=function(parts)
     sim.addDrawingObjectItem(sphere3Container,nil)
     for key,value in pairs(parts) do
@@ -21,7 +22,7 @@ displayParts=function(trackingWindowParts)
         if decoration then
             for i=1,#decoration,1 do
                 local h=decoration[i]['dummyHandle']
-                local stage=sim.boolAnd32(decoration[i]['processingStage'],1+2)
+                local stage=(decoration[i]['processingStage']&1+2)
                 local p=sim.getObjectPosition(h,-1)
                 sim.addDrawingObjectItem(decorationContainers[stage+1],{p[1],p[2],p[3],0,0,1})
             end
@@ -41,7 +42,7 @@ displayTargets=function(targets)
         sim.addDrawingObjectItem(decorationContainers[i],nil)
     end
     for key,value in pairs(targets) do
-        local stage=sim.boolAnd32(value['processingStage'],1+2)
+        local stage=(value['processingStage']&1+2)
         local p=sim.getObjectPosition(key,-1)
         sim.addDrawingObjectItem(decorationContainers[stage+1],{p[1],p[2],p[3],0,0,1})
     end
@@ -60,7 +61,7 @@ displayConsoleIfNeeded=function(info)
         sim.auxiliaryConsolePrint(console,nil)
         for key,value in pairs(info) do
             local str='<DESTROYED OBJECT>:\n'
-            if sim.isHandleValid(key)>0 then
+            if sim.isHandle(key) then
                 str=sim.getObjectName(key)..':\n'
             end
             str=str..'    handle: '..key..', partName: '..value['partName']..', destinationName: '..value['destinationName']..'\n'
@@ -193,7 +194,7 @@ end
 attachDummiesAndDecorate=function(part,partData)
     local h=sim.createDummy(0.005)
     sim.setObjectParent(h,model,true)
-    sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,1024)
+    sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,1024)
     
 --    orientDummyAccordingToAxes(h,partData['axes'])
     sim.setObjectQuaternion(h,-1,partData['transform'][2])
@@ -220,7 +221,7 @@ attachDummiesAndDecorate=function(part,partData)
 
             sim.setObjectPosition(h2,h,allItems[i]['pos'])
             sim.setObjectOrientation(h2,h,allItems[i]['orient'])
-            sim.setObjectInt32Parameter(h2,sim.objintparam_visibility_layer,1024)
+            sim.setObjectInt32Param(h2,sim.objintparam_visibility_layer,1024)
             allItems[i]['dummyHandle']=h2
         end
     end
@@ -232,14 +233,14 @@ function sysCall_init()
     stopLineShape=sim.getObjectHandle('genericTrackingWindow_stopLine')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.TRACKINGWINDOW)
     data=sim.unpackTable(data)
-    local err=sim.getInt32Parameter(sim.intparam_error_report_mode)
-    sim.setInt32Parameter(sim.intparam_error_report_mode,0)
+    local err=sim.getInt32Param(sim.intparam_error_report_mode)
+    sim.setInt32Param(sim.intparam_error_report_mode,0)
     local suff=sim.getNameSuffix(nil)
     sim.setNameSuffix(-1)
     conveyorHandle=simBWF.getReferencedObjectHandle(model,simBWF.OLDTRACKINGWINDOW_CONVEYOR_REF)
     inputHandle=simBWF.getReferencedObjectHandle(model,simBWF.OLDTRACKINGWINDOW_INPUT_REF)
     sim.setNameSuffix(suff)
-    sim.setInt32Parameter(sim.intparam_error_report_mode,err)
+    sim.setInt32Param(sim.intparam_error_report_mode,err)
     conveyorVector={1,0,0}
     previousConveyorEncoderDistance=0
     if conveyorHandle>=0 then
@@ -255,12 +256,12 @@ function sysCall_init()
     transferLength=data['transferLength']
     transferStart=data['transferStart']
     height=data['height']
-    if sim.boolAnd32(data['bitCoded'],2)>0 then
+    if (data['bitCoded']&2)>0 then
         console=sim.auxiliaryConsoleOpen('Parts/targets in tracking window',1000,4,nil,{600,300},nil,{0.9,1,0.9})
     end
-    showPoints=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(data['bitCoded'],4)>0)
-    overridePallet=(sim.boolAnd32(data['bitCoded'],8)>0)
-    stopLine=(sim.boolAnd32(data['bitCoded'],16)>0)
+    showPoints=simBWF.modifyAuxVisualizationItems((data['bitCoded']&4)>0)
+    overridePallet=((data['bitCoded']&8)>0)
+    stopLine=((data['bitCoded']&16)>0)
     sphere1Container=sim.addDrawingObject(sim.drawing_spherepoints,0.015,0,-1,9999,{0,1,0})
     sphere3Container=sim.addDrawingObject(sim.drawing_spherepoints,0.01,0,-1,9999,{1,1,1})
     decorationContainers={}

@@ -158,10 +158,10 @@ function model.dlg.refresh()
         local config=model.readInfo()
         local sel=simBWF.getSelectedEditWidget(model.dlg.ui)
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
-        simUI.setCheckboxValue(model.dlg.ui,1,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],8)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],16)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,1,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,4,simBWF.getCheckboxValFromBool((config['bitCoded']&8)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,5,simBWF.getCheckboxValFromBool((config['bitCoded']&16)~=0),true)
 
         local pallets=simBWF.getAvailablePallets()
         local refPallet=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.PALLET)
@@ -188,7 +188,7 @@ end
 
 function model.dlg.hidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -206,7 +206,7 @@ end
 
 function model.dlg.calibrationBallsHidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -217,7 +217,7 @@ end
 
 function model.dlg.createParts_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end
@@ -228,7 +228,7 @@ end
 
 function model.dlg.showPallet_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],16)
+    c['bitCoded']=(c['bitCoded']|16)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-16
     end

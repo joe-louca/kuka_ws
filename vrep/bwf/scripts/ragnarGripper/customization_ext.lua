@@ -48,7 +48,7 @@ function model.ext.attachOrDetachDetectedPart(dat)
         local part=parts[i]
         local p=sim.getModelProperty(part)
         -- Make the item dynamic, respondable and detectable again (detaching), or disable those flags (attaching):
-        p=sim.boolOr32(p,sim.modelproperty_not_dynamic+sim.modelproperty_not_respondable+sim.modelproperty_not_detectable)
+        p=(p|sim.modelproperty_not_dynamic+sim.modelproperty_not_respondable+sim.modelproperty_not_detectable)
         if not attach then
             p=p-(sim.modelproperty_not_dynamic+sim.modelproperty_not_respondable+sim.modelproperty_not_detectable)
         end
@@ -58,7 +58,7 @@ function model.ext.attachOrDetachDetectedPart(dat)
             -- detaching
             newParent=data.previousParentParent
             data.previousParentParent=nil
-            if sim.boolAnd32(data.bitCoded,16)>0 then
+            if (data.bitCoded&16)>0 then
                 data.bitCoded=data.bitCoded-16
                 data.attachStartCmd=sim.getSimulationTime()
             end

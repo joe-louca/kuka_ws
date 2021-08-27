@@ -1,5 +1,6 @@
+simBWF=require('simBWF')
 json=require("dkjson")
-http = require("socket.http")
+http = require("socket")
 ltn12 = require("ltn12")
 
 function removeFromPluginRepresentation()
@@ -92,8 +93,8 @@ function displayPartProperties()
         local prop=readPartInfo(h)
         simUI.setEditValue(ui1,5,prop['name'],true)
         simUI.setEditValue(ui1,6,prop['destination'],true)
-        simUI.setCheckboxValue(ui1,41,simBWF.getCheckboxValFromBool(sim.boolAnd32(prop['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(ui1,42,simBWF.getCheckboxValFromBool(sim.boolAnd32(prop['bitCoded'],2)~=0),true)
+        simUI.setCheckboxValue(ui1,41,simBWF.getCheckboxValFromBool((prop['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(ui1,42,simBWF.getCheckboxValFromBool((prop['bitCoded']&2)~=0),true)
     end
 end
 
@@ -165,7 +166,7 @@ end
 function invisiblePart_callback(ui,id,newVal)
     local h=parts[partIndex+1][2]
     local c=readPartInfo(h)
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -176,7 +177,7 @@ end
 function invisibleToOtherParts_callback(ui,id,newVal)
     local h=parts[partIndex+1][2]
     local c=readPartInfo(h)
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -238,7 +239,7 @@ end
 function removePart_callback(ui,id,newVal)
     local h=parts[partIndex+1][2]
     local p=sim.getModelProperty(h)
-    if sim.boolAnd32(p,sim.modelproperty_not_model)>0 then
+    if (p&sim.modelproperty_not_model)>0 then
         sim.removeObject(h)
     else
         sim.removeModel(h)
@@ -335,18 +336,18 @@ function visualizePart_callback(ui,id,newVal)
         visualizeData={}
         visualizeData.ui=simBWF.createCustomUi(xml,"Part and pallet visualization",previousVisualizeDlgPos and previousVisualizeDlgPos or 'center',true,'onVisualizeCloseClicked',true--[[,activate,additionalUiAttribute--]])
         visualizeData.sensor=sim.createVisionSensor(1+2+128,{512,512,0,0},{0.001,5,60*math.pi/180,0.1,0.1,0.1,0.4,0.5,0.5,0,0})
-        sim.setObjectInt32Parameter(visualizeData.sensor,sim.objintparam_visibility_layer ,0)
-        local p=sim.boolOr32(sim.getObjectProperty(visualizeData.sensor),sim.objectproperty_dontshowasinsidemodel)
+        sim.setObjectInt32Param(visualizeData.sensor,sim.objintparam_visibility_layer ,0)
+        local p=(sim.getObjectProperty(visualizeData.sensor)|sim.objectproperty_dontshowasinsidemodel)
         sim.setObjectProperty(visualizeData.sensor,p)
 
         local part=parts[partIndex+1][2]
         local info=readPartInfo(part)
-        if sim.boolAnd32(sim.getModelProperty(part),sim.modelproperty_not_model)>0 then
+        if (sim.getModelProperty(part)&sim.modelproperty_not_model)>0 then
             part=sim.copyPasteObjects({part},0)
             part=part[1]
-            sim.setObjectInt32Parameter(part,sim.objintparam_visibility_layer,1)
+            sim.setObjectInt32Param(part,sim.objintparam_visibility_layer,1)
             sim.setObjectSpecialProperty(part,sim.objectspecialproperty_renderable+sim.objectspecialproperty_detectable_all)
-            local prop=sim.boolOr32(sim.getObjectProperty(part),sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_dontshowasinsidemodel
+            local prop=(sim.getObjectProperty(part)|sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_dontshowasinsidemodel
             sim.setObjectProperty(part,prop)
             sim.setModelProperty(part,sim.modelproperty_not_visible+sim.modelproperty_not_renderable+sim.modelproperty_not_showasinsidemodel) -- makes it a model
         else
@@ -357,20 +358,20 @@ function visualizePart_callback(ui,id,newVal)
         visualizeData.part=part
         visualizeData.collection=sim.createCollection('',0)
         sim.addObjectToCollection(visualizeData.collection,part,sim.handle_tree,0)
-        sim.setObjectInt32Parameter(visualizeData.sensor,sim.visionintparam_entity_to_render,visualizeData.collection)
+        sim.setObjectInt32Param(visualizeData.sensor,sim.visionintparam_entity_to_render,visualizeData.collection)
         sim.setObjectParent(visualizeData.part,functionalPartHolder,true)
         sim.setObjectParent(visualizeData.sensor,visualizeData.part,true)
         visualizeData.params={0.35,math.pi/4,math.pi/4}
         
         if #info['palletPoints']>0 then
             -- Check the detection point (for the z-position of the pallet):
-            local res,bbMax=sim.getObjectFloatParameter(visualizeData.part,sim.objfloatparam_modelbbox_max_z)
+            local bbMax=sim.getObjectFloatParam(visualizeData.part,sim.objfloatparam_modelbbox_max_z)
             sim.setObjectPosition(proxSensor,visualizeData.part,{0,0,bbMax*1.001})
             sim.setObjectOrientation(proxSensor,visualizeData.part,{math.pi,0,0})
             local shapes=sim.getObjectsInTree(visualizeData.part,sim.object_shape_type,0)
             local zMin=1
             for i=1,#shapes,1 do
-                if sim.boolAnd32(sim.getObjectSpecialProperty(shapes[i]),sim.objectspecialproperty_detectable_all)>0 then
+                if (sim.getObjectSpecialProperty(shapes[i])&sim.objectspecialproperty_detectable_all)>0 then
                     local r,dist=sim.checkProximitySensor(proxSensor,shapes[i])
                     if r>0 and dist<zMin then
                         zMin=dist
@@ -1082,8 +1083,8 @@ function sysCall_init()
 
     
     -- Following because of a bug in V-REP V3.3.3 and before:
-    local p=sim.boolOr32(sim.getModelProperty(originalPartHolder),sim.modelproperty_scripts_inactive)
-    if sim.getInt32Parameter(sim.intparam_program_version)>30303 then
+    local p=(sim.getModelProperty(originalPartHolder)|sim.modelproperty_scripts_inactive)
+    if sim.getInt32Param(sim.intparam_program_version)>30303 then
         sim.setModelProperty(originalPartHolder,p)
     else
         sim.setModelProperty(originalPartHolder,p-sim.modelproperty_scripts_inactive)
@@ -1165,13 +1166,13 @@ checkPotentialNewParts=function(potentialParts)
                 writePartInfo(h,data) -- attach the XYZ_FEEDERPART_INFO tag
                 sim.setObjectPosition(h,model,{0,0,0}) -- keep the orientation as it is
 
-                if sim.boolAnd32(sim.getModelProperty(h),sim.modelproperty_not_model)>0 then
+                if (sim.getModelProperty(h)&sim.modelproperty_not_model)>0 then
                     -- Shape
-                    local p=sim.boolOr32(sim.getObjectProperty(h),sim.objectproperty_dontshowasinsidemodel)
+                    local p=(sim.getObjectProperty(h)|sim.objectproperty_dontshowasinsidemodel)
                     sim.setObjectProperty(h,p)
                 else
                     -- Model
-                    local p=sim.boolOr32(sim.getModelProperty(h),sim.modelproperty_not_showasinsidemodel)
+                    local p=(sim.getModelProperty(h)|sim.modelproperty_not_showasinsidemodel)
                     sim.setModelProperty(h,p)
                 end
                 createPalletPointsIfNeeded(h)
@@ -1200,13 +1201,13 @@ checkPotentialNewParts=function(potentialParts)
             -- just in case we are adding an item that was already tagged previously
             sim.setObjectPosition(h,model,{0,0,0}) -- keep the orientation as it is
             -- Make the model static, non-respondable, non-collidable, non-measurable, non-visible, etc.
-            if sim.boolAnd32(sim.getModelProperty(h),sim.modelproperty_not_model)>0 then
+            if (sim.getModelProperty(h)&sim.modelproperty_not_model)>0 then
                 -- Shape
-                local p=sim.boolOr32(sim.getObjectProperty(h),sim.objectproperty_dontshowasinsidemodel)
+                local p=(sim.getObjectProperty(h)|sim.objectproperty_dontshowasinsidemodel)
                 sim.setObjectProperty(h,p)
             else
                 -- Model
-                local p=sim.boolOr32(sim.getModelProperty(h),sim.modelproperty_not_showasinsidemodel)
+                local p=(sim.getModelProperty(h)|sim.modelproperty_not_showasinsidemodel)
                 sim.setModelProperty(h,p)
             end
             createPalletPointsIfNeeded(h)
@@ -1252,11 +1253,11 @@ function sysCall_nonSimulation()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,1)
 end
 
 function sysCall_beforeSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,0)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,0)
     removeDlg1()
 end
 
@@ -1363,7 +1364,7 @@ end
 function sysCall_cleanup()
     removeDlg1()
     removeFromPluginRepresentation()
-    if sim.isHandleValid(model)==1 then
+    if sim.isHandle(model) then
         -- The associated model might already have been destroyed
         simBWF.writeSessionPersistentObjectData(model,"dlgPosAndSize",previousPalletDlgPos,algoDlgSize,algoDlgPos,previousDlg1Pos)
     end

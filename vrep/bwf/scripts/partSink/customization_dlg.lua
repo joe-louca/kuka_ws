@@ -7,16 +7,16 @@ function model.dlg.refresh()
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
 
         simUI.setEditValue(model.dlg.ui,20,simBWF.format("%.0f , %.0f , %.0f",config.width*1000,config.length*1000,config.height*1000),true)
-        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)==0),true)
-        simUI.setCheckboxValue(model.dlg.ui,6,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],128)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,3,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,4,simBWF.getCheckboxValFromBool((config['bitCoded']&2)==0),true)
+        simUI.setCheckboxValue(model.dlg.ui,6,simBWF.getCheckboxValFromBool((config['bitCoded']&128)~=0),true)
         simBWF.setSelectedEditWidget(model.dlg.ui,sel)
     end
 end
 
 function model.dlg.hidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -27,7 +27,7 @@ end
 
 function model.dlg.showStatisticsClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],128)
+    c['bitCoded']=(c['bitCoded']|128)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-128
     end
@@ -38,7 +38,7 @@ end
 
 function model.dlg.enabled_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal~=0 then
         c['bitCoded']=c['bitCoded']-2
     end

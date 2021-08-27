@@ -15,17 +15,14 @@
   <td >
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
-<h1><a href="../apiOverview.htm">Regular API</a> function</h1>
+<h1>Regular API function</h1>
 <h3 class=subsectionBar><a name="simGetIkGroupMatrix" id="simGetIkGroupMatrix"></a>simGetIkGroupMatrix / sim.getIkGroupMatrix </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr><div>Retrieves various information from an IK group, such as the Jacobian. For the result to be valid, the Jacobian must previously have been computed via the <a href="simComputeJacobian.htm">sim.computeJacobian</a>, <a href="simHandleIkGroup.htm">sim.handleIkGroup</a> or <a href="simCheckIkGroup.htm">sim.checkIkGroup</a> functions. Following situations have to be differentiated:</div>
-<div class=tab><strong>a)</strong> If you call <a href="simComputeJacobian.htm">sim.computeJacobian</a> just before calling sim.getIkGroupMatrix, then the returned Jacobian will be the one at the current state/configuration of the mechanism. This is the recommended way to retrieve the Jacobian.</div>
-<div class=tab><strong>b)</strong> If you call <a href="simHandleIkGroup.htm">sim.handleIkGroup</a> or <a href="simCheckIkGroup.htm">sim.checkIkGroup</a> just before calling sim.getIkGroupMatrix, then the returned Jacobian will be the one <strong>computed last, while trying to reach the target</strong> (since it usually takes at least 2-3 iterations to reach a target because of the linearization), which is not the current state/configuration of the mechanism, unless the target overlaps the tip.</div>
-<div>See also <a href="simGetIkGroupHandle.htm">sim.getIkGroupHandle</a>.</div></td>
+<td class=apiTableRightDescr><div>DEPRECATED. Use the <a href="../kinematicsPlugin.htm">kinematic plugin</a> functionality instead.<br></div><div>Retrieves various information from an IK group, such as the Jacobian. For the result to be valid, the Jacobian must previously have been computed.</div></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
@@ -85,7 +82,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table matrix,table_2 matrixSize=sim.getIkGroupMatrix(number ikGroupHandle,number options)</td> 
+<td class=apiTableRightLSyn>table[] matrix,table[2] matrixSize=sim.getIkGroupMatrix(int ikGroupHandle,int options)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -131,9 +128,7 @@ Lua return values
 </tr> 
 </table> 
 
-<br>
-<p><a href="../apiFunctions.htm">All regular API functions on one page</a></p>
-<br>
+
 <br>
 </td>
 </tr>

@@ -1,6 +1,7 @@
+simBWF=require('simBWF')
 local isCustomizationScript=sim.getScriptAttribute(sim.getScriptHandle(sim.handle_self),sim.scriptattribute_scripttype)==sim.scripttype_customizationscript
 
-if not sim.isPluginLoaded('Bwf') then
+if false then -- if not sim.isPluginLoaded('Bwf') then
     function sysCall_init()
     end
 else

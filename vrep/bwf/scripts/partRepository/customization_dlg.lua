@@ -173,11 +173,11 @@ function model.dlg.refresh()
         
         if model.dlg.selectedPartId>=0 then
             local c=model.getPartData(model.dlg.selectedPartId)
-            simUI.setCheckboxValue(model.dlg.ui,41,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],1)~=0),true)
-            simUI.setCheckboxValue(model.dlg.ui,42,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],2)~=0),true)
-            simUI.setCheckboxValue(model.dlg.ui,9,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],4)~=0),true)
-            simUI.setCheckboxValue(model.dlg.ui,11,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],8)~=0),true)
-            simUI.setCheckboxValue(model.dlg.ui,44,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],16)~=0),true)
+            simUI.setCheckboxValue(model.dlg.ui,41,simBWF.getCheckboxValFromBool((c['bitCoded']&1)~=0),true)
+            simUI.setCheckboxValue(model.dlg.ui,42,simBWF.getCheckboxValFromBool((c['bitCoded']&2)~=0),true)
+            simUI.setCheckboxValue(model.dlg.ui,9,simBWF.getCheckboxValFromBool((c['bitCoded']&4)~=0),true)
+            simUI.setCheckboxValue(model.dlg.ui,11,simBWF.getCheckboxValFromBool((c['bitCoded']&8)~=0),true)
+            simUI.setCheckboxValue(model.dlg.ui,44,simBWF.getCheckboxValFromBool((c['bitCoded']&16)~=0),true)
             
             local pallets=simBWF.getAvailablePallets()
             local selected=simBWF.NONE_TEXT
@@ -266,7 +266,7 @@ end
 function model.dlg.invisiblePart_callback(ui,id,newVal)
     if model.dlg.selectedPartId>=0 then
         local c=model.getPartData(model.dlg.selectedPartId)
-        c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+        c['bitCoded']=(c['bitCoded']|1)
         if newVal==0 then
             c['bitCoded']=c['bitCoded']-1
         end
@@ -279,7 +279,7 @@ end
 function model.dlg.invisibleToOtherParts_callback(ui,id,newVal)
     if model.dlg.selectedPartId>=0 then
         local c=model.getPartData(model.dlg.selectedPartId)
-        c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+        c['bitCoded']=(c['bitCoded']|2)
         if newVal==0 then
             c['bitCoded']=c['bitCoded']-2
         end
@@ -292,7 +292,7 @@ end
 function model.dlg.attachPart_callback(ui,id,newVal)
     if model.dlg.selectedPartId>=0 then
         local c=model.getPartData(model.dlg.selectedPartId)
-        c['bitCoded']=sim.boolOr32(c['bitCoded'],16)
+        c['bitCoded']=(c['bitCoded']|16)
         if newVal==0 then
             c['bitCoded']=c['bitCoded']-16
         end
@@ -305,7 +305,7 @@ end
 function model.dlg.ignoreBasePart_callback(ui,id,newVal)
     if model.dlg.selectedPartId>=0 then
         local c=model.getPartData(model.dlg.selectedPartId)
-        c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+        c['bitCoded']=(c['bitCoded']|4)
         if newVal==0 then
             c['bitCoded']=c['bitCoded']-4
         end
@@ -318,7 +318,7 @@ end
 function model.dlg.usePalletColors_callback(ui,id,newVal)
     if model.dlg.selectedPartId>=0 then
         local c=model.getPartData(model.dlg.selectedPartId)
-        c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+        c['bitCoded']=(c['bitCoded']|8)
         if newVal==0 then
             c['bitCoded']=c['bitCoded']-8
         end
@@ -429,7 +429,7 @@ function model.dlg.createDlg()
 end
 
 function model.dlg.onCloseDlg()
-    sim.setBoolParameter(sim.boolparam_br_partrepository,false)
+    sim.setBoolParam(sim.boolparam_br_partrepository,false)
     model.dlg.removeDlg()
 end
 
@@ -449,7 +449,7 @@ function model.dlg.removeDlg()
 end
 
 function model.dlg.showOrHideDlgIfNeeded()
-    if sim.getBoolParameter(sim.boolparam_br_partrepository) then
+    if sim.getBoolParam(sim.boolparam_br_partrepository) then
         model.dlg.showDlg()
     else
         model.dlg.removeDlg()

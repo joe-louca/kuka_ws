@@ -34,7 +34,7 @@ function model.updatePluginRepresentation_generalProperties()
     local data={}
     data.id=model.handle
     data.masterIp=c.masterIp
-    data.sceneName=sim.getStringParameter(sim.stringparam_scene_name)
+    data.sceneName=sim.getStringParam(sim.stringparam_scene_name)
     data.jobName=model.currentJob
     data.appObjectName=sim.getObjectName(model.handle)
     
@@ -53,14 +53,14 @@ function model.handleJobConsistency(removeJobsExceptCurrent)
     -- Make sure stored jobs are consistent with current scene:
 
 
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
 end
 
 function model.createNewJob()
     -- Create new job menu bar cmd
     local sel=sim.getObjectSelection()
     local oldJob=model.currentJob
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     local cmd='createNewJob'
     model.relayJobCommand(cmd,'Creating a new Job...')
     sim.removeObjectFromSelection(sim.handle_all)
@@ -72,7 +72,7 @@ function model.deleteJob()
     -- Delete current job menu bar cmd
     local sel=sim.getObjectSelection()
     local oldJob=model.currentJob
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     local cmd='deleteJob'
     model.relayJobCommand(cmd,'Deleting current Job...')
     sim.removeObjectFromSelection(sim.handle_all)
@@ -84,7 +84,7 @@ function model.renameJob()
     -- Rename job menu bar cmd
     local sel=sim.getObjectSelection()
     local oldJob=model.currentJob
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     local cmd='renameJob'
     model.relayJobCommand(cmd,nil)
     sim.removeObjectFromSelection(sim.handle_all)
@@ -96,7 +96,7 @@ function model.switchJob()
     -- Switch job menu bar cmd
     local sel=sim.getObjectSelection()
     local oldJob=model.currentJob
-    model.currentJob=sim.getStringParameter(sim.stringparam_job)
+    model.currentJob='default' --=sim.getStringParam(sim.stringparam_job)
     local cmd='switchJob'
     model.relayJobCommand(cmd,'\nSwitching to another Job...\n')
     sim.removeObjectFromSelection(sim.handle_all)

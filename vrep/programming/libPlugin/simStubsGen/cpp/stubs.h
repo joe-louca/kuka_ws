@@ -4,39 +4,13 @@
 #ifndef STUBS_H__INCLUDED
 #define STUBS_H__INCLUDED
 
-#include <simLib.h>
+#include <simPlusPlus/Lib.h>
 #include <string>
 #include <vector>
+#include <boost/algorithm/string.hpp>
 #include <boost/assign/list_of.hpp>
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
-
-struct exception : public std::exception
-{
-    std::string s;
-    exception(std::string s_) : s(s_) {}
-    ~exception() throw() {}
-    const char* what() const throw() {return s.c_str();}
-};
-
-void log(int v, const std::string &msg);
-void log(int v, boost::format &fmt);
-
-template<typename... Arguments>
-static void log(int v, const std::string &fmt, Arguments&&... args)
-{
-    try
-    {
-        boost::format fmt_(fmt);
-        log(v, fmt_, std::forward<Arguments>(args)...);
-    }
-    catch(boost::io::too_many_args &ex)
-    {
-        std::string s = fmt;
-        s += " (error during formatting)";
-        log(v, s);
-    }
-}
 
 class FuncTracer
 {
@@ -69,58 +43,123 @@ void simThread();
 
 #define ASSERT_THREAD(ID) \
     if(UI_THREAD == NULL) {\
-        log(sim_verbosity_debug, "warning: cannot check ASSERT_THREAD(" #ID ") because global variable UI_THREAD is not set yet.");\
+        sim::addLog(sim_verbosity_debug, "warning: cannot check ASSERT_THREAD(" #ID ") because global variable UI_THREAD is not set yet.");\
     } else if(strcmp(#ID, "UI") == 0) {\
         if(QThread::currentThreadId() != UI_THREAD) {\
-            log(sim_verbosity_errors, boost::format("%s:%d %s should be called from UI thread") % __FILE__ % __LINE__ % __FUNC__);\
+            sim::addLog(sim_verbosity_errors, "%s:%d %s should be called from UI thread", __FILE__, __LINE__, __FUNC__);\
             exit(1);\
         }\
     } else if(strcmp(#ID, "!UI") == 0) {\
         if(QThread::currentThreadId() == UI_THREAD) {\
-            log(sim_verbosity_errors, boost::format("%s:%d %s should NOT be called from UI thread") % __FILE__ % __LINE__ % __FUNC__);\
+            sim::addLog(sim_verbosity_errors, "%s:%d %s should NOT be called from UI thread", __FILE__, __LINE__, __FUNC__);\
             exit(1);\
         }\
     } else {\
-        log(sim_verbosity_debug, "warning: cannot check ASSERT_THREAD(" #ID "). Can check only UI and !UI.");\
+        sim::addLog(sim_verbosity_debug, "warning: cannot check ASSERT_THREAD(" #ID "). Can check only UI and !UI.");\
     }
 #endif // QT_COMPIL
 
-simInt simRegisterScriptCallbackFunctionE(const simChar *funcNameAtPluginName, const simChar *callTips, simVoid (*callBack)(struct SScriptCallBack *cb));
-simInt simRegisterScriptVariableE(const simChar *varName, const simChar *varValue, simInt stackID);
-simVoid simCallScriptFunctionExE(simInt scriptHandleOrType,const simChar* functionNameAtScriptName,simInt stackId);
-simInt simCreateStackE();
-simVoid simReleaseStackE(simInt stackHandle);
-simInt simCopyStackE(simInt stackHandle);
-simVoid simPushNullOntoStackE(simInt stackHandle);
-simVoid simPushBoolOntoStackE(simInt stackHandle, simBool value);
-simVoid simPushInt32OntoStackE(simInt stackHandle, simInt value);
-simVoid simPushFloatOntoStackE(simInt stackHandle, simFloat value);
-simVoid simPushDoubleOntoStackE(simInt stackHandle, simDouble value);
-simVoid simPushStringOntoStackE(simInt stackHandle, const simChar *value, simInt stringSize);
-simVoid simPushUInt8TableOntoStackE(simInt stackHandle, const simUChar *values, simInt valueCnt);
-simVoid simPushInt32TableOntoStackE(simInt stackHandle, const simInt *values, simInt valueCnt);
-simVoid simPushFloatTableOntoStackE(simInt stackHandle, const simFloat *values, simInt valueCnt);
-simVoid simPushDoubleTableOntoStackE(simInt stackHandle, const simDouble *values, simInt valueCnt);
-simVoid simPushTableOntoStackE(simInt stackHandle);
-simVoid simInsertDataIntoStackTableE(simInt stackHandle);
-simInt simGetStackSizeE(simInt stackHandle);
-simInt simPopStackItemE(simInt stackHandle, simInt count);
-simVoid simMoveStackItemToTopE(simInt stackHandle, simInt cIndex);
-simInt simIsStackValueNullE(simInt stackHandle);
-simInt simGetStackBoolValueE(simInt stackHandle, simBool *boolValue);
-simInt simGetStackInt32ValueE(simInt stackHandle, simInt *numberValue);
-simInt simGetStackFloatValueE(simInt stackHandle, simFloat *numberValue);
-simInt simGetStackDoubleValueE(simInt stackHandle, simDouble *numberValue);
-simChar* simGetStackStringValueE(simInt stackHandle, simInt *stringSize);
-simInt simGetStackTableInfoE(simInt stackHandle, simInt infoType);
-simInt simGetStackUInt8TableE(simInt stackHandle, simUChar *array, simInt count);
-simInt simGetStackInt32TableE(simInt stackHandle, simInt *array, simInt count);
-simInt simGetStackFloatTableE(simInt stackHandle, simFloat *array, simInt count);
-simInt simGetStackDoubleTableE(simInt stackHandle, simDouble *array, simInt count);
-simVoid simUnfoldStackTableE(simInt stackHandle);
-simInt simGetInt32ParameterE(simInt parameter);
-simChar* simCreateBufferE(simInt size);
-simVoid simReleaseBufferE(simChar *buffer);
+template<typename T>
+struct Grid
+{
+    std::vector<int> dims;
+    std::vector<T> data;
+};
+
+struct ReadOptions
+{
+    std::vector<size_t> minSize;
+    std::vector<size_t> maxSize;
+
+    ReadOptions& setBounds(size_t dim, size_t minSize_, size_t maxSize_)
+    {
+        while(minSize.size() <= dim) minSize.push_back(0);
+        while(maxSize.size() <= dim) maxSize.push_back(std::numeric_limits<size_t>::max());
+        minSize[dim] = minSize_;
+        maxSize[dim] = maxSize_;
+        return *this;
+    }
+
+    ReadOptions& setBounds(size_t dim, const std::string &s)
+    {
+        if(s == "*") return setBounds(dim, 0, -1);
+        auto n = s.find("..");
+        if(n == std::string::npos)
+        {
+            int f = std::stoi(s);
+            return setBounds(dim, f, f);
+        }
+        else
+        {
+            std::string smin = s.substr(0, n);
+            std::string smax = s.substr(n + 2);
+            int min = std::stoi(smin);
+            int max = smax == "*" ? -1 : std::stoi(smax);
+            return setBounds(dim, min, max);
+        }
+    }
+
+    ReadOptions& setBounds(const std::string &s)
+    {
+        if(s != "")
+        {
+            std::vector<std::string> ss;
+            boost::split(ss, s, boost::is_any_of(", "));
+            for(size_t dim = 0; dim < ss.size(); dim++)
+                setBounds(dim, ss.at(dim));
+        }
+        return *this;
+    }
+
+    void validateTableSize(size_t sz) const
+    {
+        if(minSize.empty() || maxSize.empty()) return;
+        if(minSize[0] == maxSize[0])
+        {
+            if(sz != minSize[0])
+                throw sim::exception("must have exactly %d elements", minSize[0]);
+        }
+        else
+        {
+            if(sz < minSize[0])
+                throw sim::exception("must have at least %d elements", minSize[0]);
+            if(sz > maxSize[0])
+                throw sim::exception("must have at most %d elements", maxSize[0]);
+        }
+    }
+
+    void validateSize(size_t dim, size_t sz) const
+    {
+        if(dim >= minSize.size() || dim >= maxSize.size()) return;
+        if(minSize[dim] == maxSize[dim])
+        {
+            if(sz != minSize[dim])
+                throw sim::exception("dimension %d must have exactly %d elements", dim + 1, minSize[dim]);
+        }
+        else
+        {
+            if(sz < minSize[dim])
+                throw sim::exception("dimension %d must have at least %d elements", dim + 1, minSize[dim]);
+            if(sz > maxSize[dim])
+                throw sim::exception("dimension %d must have at most %d elements", dim + 1, maxSize[dim]);
+        }
+    }
+
+    template<typename T>
+    void validateSize(const std::vector<T> &szs) const
+    {
+        size_t n = std::min(minSize.size(), maxSize.size());
+        if(n && szs.size() != n)
+            throw sim::exception("incorrect dimension count: %d (should be %d)", szs.size(), n);
+        for(size_t dim = 0; dim < n; dim++)
+            validateSize(dim, szs.at(dim));
+    }
+};
+
+struct WriteOptions
+{
+    void *dummy{nullptr};
+};
 
 #py for struct in plugin.structs:
 struct `struct.name`
@@ -130,34 +169,27 @@ struct `struct.name`
 #py endfor
 
     `struct.name`();
+    `struct.name`(`', '.join(f'const {f.ctype()} &{f.name}_' for f in struct.fields)`) : `', '.join(f'{f.name}({f.name}_)' for f in struct.fields)` {}
 };
 
 #py endfor
-void read__bool(int stack, bool *value);
-void read__int(int stack, int *value);
-void read__float(int stack, float *value);
-void read__double(int stack, double *value);
-void read__std__string(int stack, std::string *value);
-void read__boost__optional__bool__(int stack, boost::optional<bool> *value);
-void read__boost__optional__int__(int stack, boost::optional<int> *value);
-void read__boost__optional__float__(int stack, boost::optional<float> *value);
-void read__boost__optional__double__(int stack, boost::optional<double> *value);
-void read__boost__optional__std__string__(int stack, boost::optional<std::string> *value);
+void readFromStack(int stack, bool *value, const ReadOptions &rdopt = {});
+void readFromStack(int stack, int *value, const ReadOptions &rdopt = {});
+void readFromStack(int stack, long *value, const ReadOptions &rdopt = {});
+void readFromStack(int stack, float *value, const ReadOptions &rdopt = {});
+void readFromStack(int stack, double *value, const ReadOptions &rdopt = {});
+void readFromStack(int stack, std::string *value, const ReadOptions &rdopt = {});
 #py for struct in plugin.structs:
-void read__`struct.name`(int stack, `struct.name` *value);
+void readFromStack(int stack, `struct.name` *value, const ReadOptions &rdopt = {});
 #py endfor
-void write__bool(bool value, int stack);
-void write__int(int value, int stack);
-void write__float(float value, int stack);
-void write__double(double value, int stack);
-void write__std__string(std::string value, int stack);
-void write__boost__optional__bool__(boost::optional<bool> value, int stack);
-void write__boost__optional__int__(boost::optional<int> value, int stack);
-void write__boost__optional__float__(boost::optional<float> value, int stack);
-void write__boost__optional__double__(boost::optional<double> value, int stack);
-void write__boost__optional__std__string__(boost::optional<std::string> value, int stack);
+void writeToStack(const bool &value, int stack, const WriteOptions &wropt = {});
+void writeToStack(const int &value, int stack, const WriteOptions &wropt = {});
+void writeToStack(const long &value, int stack, const WriteOptions &wropt = {});
+void writeToStack(const float &value, int stack, const WriteOptions &wropt = {});
+void writeToStack(const double &value, int stack, const WriteOptions &wropt = {});
+void writeToStack(const std::string &value, int stack, const WriteOptions &wropt = {});
 #py for struct in plugin.structs:
-void write__`struct.name`(`struct.name` *value, int stack);
+void writeToStack(const `struct.name` &value, int stack, const WriteOptions &wropt = {});
 #py endfor
 
 bool registerScriptStuff();
@@ -167,9 +199,6 @@ enum `enum.name`
 {
 #py for i, item in enumerate(enum.items):
     sim_`plugin.name.lower()`_`enum.item_prefix``item.name` = `item.value`,
-#py if plugin.short_name and plugin.name.lower() != plugin.short_name.lower():
-    sim_`plugin.short_name.lower()`_`enum.item_prefix``item.name` = `item.value`,
-#py endif
 #py endfor
 };
 
@@ -177,69 +206,68 @@ const char* `enum.name.lower()`_string(`enum.name` x);
 
 #py endfor
 #py for cmd in plugin.commands:
-struct `cmd.name`_in
+struct `cmd.c_in_name`
 {
-    int _scriptID;
-    int _stackID;
+    SScriptCallBack _;
 #py for p in cmd.params:
     `p.ctype()` `p.name`;
 #py endfor
 
-    `cmd.name`_in();
+    `cmd.c_in_name`();
 };
 
-struct `cmd.name`_out
+struct `cmd.c_out_name`
 {
 #py for p in cmd.returns:
     `p.ctype()` `p.name`;
 #py endfor
 
-    `cmd.name`_out();
+    `cmd.c_out_name`();
 };
 
-void `cmd.name`(SScriptCallBack *p, `cmd.name`_in *in, `cmd.name`_out *out);
+void `cmd.c_name`(SScriptCallBack *p, `cmd.c_in_name` *in, `cmd.c_out_name` *out);
 #py if len(cmd.returns) == 1:
-`cmd.returns[0].ctype()` `cmd.name`(`cmd.c_arg_list(pre_args=['SScriptCallBack *p'], defaults=True)`);
+`cmd.returns[0].ctype()` `cmd.c_name`(`cmd.c_arg_list(pre_args=['SScriptCallBack *p'], defaults=True)`);
 #py endif
 #py if len(cmd.returns) == 0:
-void `cmd.name`(`cmd.c_arg_list(pre_args=['SScriptCallBack *p'], defaults=True)`);
+void `cmd.c_name`(`cmd.c_arg_list(pre_args=['SScriptCallBack *p'], defaults=True)`);
 #py endif
-void `cmd.name`(`cmd.c_arg_list(pre_args=['SScriptCallBack *p', '%s_out *out' % cmd.name], defaults=True)`);
-void `cmd.name`_callback(SScriptCallBack *p);
+void `cmd.c_name`(`cmd.c_arg_list(pre_args=['SScriptCallBack *p', '%s *out' % cmd.c_out_name], defaults=True)`);
+void `cmd.c_name`_callback(SScriptCallBack *p);
 
 #py endfor
 #py for fn in plugin.script_functions:
-struct `fn.name`_in
+struct `fn.c_in_name`
 {
 #py for p in fn.params:
     `p.ctype()` `p.name`;
 #py endfor
 
-    `fn.name`_in();
+    `fn.c_in_name`();
 };
 
-struct `fn.name`_out
+struct `fn.c_out_name`
 {
 #py for p in fn.returns:
     `p.ctype()` `p.name`;
 #py endfor
 
-    `fn.name`_out();
+    `fn.c_out_name`();
 };
 
 #py if len(fn.returns) == 1:
-`fn.returns[0].ctype()` `fn.name`(`fn.c_arg_list(pre_args=['simInt scriptId', 'const char *func'], defaults=True)`);
+`fn.returns[0].ctype()` `fn.c_name`(`fn.c_arg_list(pre_args=['simInt scriptId', 'const char *func'], defaults=True)`);
 #py endif
 #py if len(fn.returns) == 0:
-void `fn.name`(`fn.c_arg_list(pre_args=['simInt scriptId', 'const char *func'], defaults=True)`);
+void `fn.c_name`(`fn.c_arg_list(pre_args=['simInt scriptId', 'const char *func'], defaults=True)`);
 #py endif
-bool `fn.name`(simInt scriptId, const char *func, `fn.name`_in *in_args, `fn.name`_out *out_args);
+bool `fn.c_name`(simInt scriptId, const char *func, `fn.c_in_name` *in_args, `fn.c_out_name` *out_args);
 
 #py endfor
 // following functions must be implemented in the plugin
 
 #py for cmd in plugin.commands:
-void `cmd.name`(SScriptCallBack *p, const char *cmd, `cmd.name`_in *in, `cmd.name`_out *out);
+void `cmd.c_name`(SScriptCallBack *p, const char *cmd, `cmd.c_in_name` *in, `cmd.c_out_name` *out);
 #py endfor
 
 #endif // STUBS_H__INCLUDED

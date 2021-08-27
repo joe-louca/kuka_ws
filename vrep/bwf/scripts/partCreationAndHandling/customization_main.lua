@@ -37,7 +37,7 @@ function model.canScaleObjectNonIsometrically(objHandle,scaleAxisX,scaleAxisY,sc
         return false
     end
     if t==sim.object_proximitysensor_type then
-        local r,p=sim.getObjectInt32Parameter(objHandle,sim.proxintparam_volume_type)
+        local p=sim.getObjectInt32Param(objHandle,sim.proxintparam_volume_type)
         if p==sim.volume_cylinder then
             return xIsY
         end
@@ -53,7 +53,7 @@ function model.canScaleObjectNonIsometrically(objHandle,scaleAxisX,scaleAxisY,sc
         return true
     end
     if t==sim.object_mill_type then
-        local r,p=sim.getObjectInt32Parameter(objHandle,sim.millintparam_volume_type)
+        local p=sim.getObjectInt32Param(objHandle,sim.millintparam_volume_type)
         if p==sim.volume_cylinder then
             return xIsY
         end
@@ -70,7 +70,7 @@ function model.canScaleObjectNonIsometrically(objHandle,scaleAxisX,scaleAxisY,sc
     end
     if t==sim.object_shape_type then
         local r,pt=sim.getShapeGeomInfo(objHandle)
-        if sim.boolAnd32(r,1)~=0 then
+        if (r&1)~=0 then
             return false -- compound
         end
         if pt==sim.pure_primitive_spheroid then
@@ -293,17 +293,17 @@ function model.makeInvisibleOrNonRespondableToOtherParts(handle,invisible,nonRes
     if invisible then
         local objs=sim.getObjectsInTree(handle)
         for i=1,#objs,1 do
-            sim.setObjectInt32Parameter(objs[i],sim.objintparam_visibility_layer,0)
+            sim.setObjectInt32Param(objs[i],sim.objintparam_visibility_layer,0)
             local p=sim.getObjectSpecialProperty(objs[i])
-            local p=sim.boolOr32(p,sim.objectspecialproperty_renderable)-sim.objectspecialproperty_renderable
+            local p=(p|sim.objectspecialproperty_renderable)-sim.objectspecialproperty_renderable
             sim.setObjectSpecialProperty(objs[i],p)
         end
     end
     objs=sim.getObjectsInTree(handle,sim.object_shape_type)
     for i=1,#objs,1 do
-        local r,m=sim.getObjectInt32Parameter(objs[i],sim.shapeintparam_respondable_mask)
+        local m=sim.getObjectInt32Param(objs[i],sim.shapeintparam_respondable_mask)
         if nonRespondableToOtherParts then
-            sim.setObjectInt32Parameter(objs[i],sim.shapeintparam_respondable_mask,sim.boolOr32(m,255)-255)
+            sim.setObjectInt32Param(objs[i],sim.shapeintparam_respondable_mask,(m|255)-255)
         end
     end
 end
@@ -356,7 +356,7 @@ function model.setItemMass(handle,m)
                 end
             end
             if sim.getObjectType(handle)==sim.object_shape_type then
-                local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+                local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
                 if p==0 then
                     local m0,i0,com0=sim.getShapeMassAndInertia(handle)
                     currentMass=currentMass+m0
@@ -381,7 +381,7 @@ function model.setItemMass(handle,m)
                 end
             end
             if sim.getObjectType(handle)==sim.object_shape_type then
-                local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+                local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
                 if p==0 then
                     local transf=sim.getObjectMatrix(handle,-1)
                     local m0,i0,com0=sim.getShapeMassAndInertia(handle,transf)
@@ -408,13 +408,13 @@ function model.regenerateOrRemoveLabels(partH,enabledLabels)
                     data=sim.unpackTable(data)
                     if data['labelIndex']==ind then
                         local bits={1,2,4}
-                        if (sim.boolAnd32(bits[ind],enabledLabels)>0) then
+                        if ((bits[ind]&enabledLabels)>0) then
                             -- We want to regenerate the position of this label
                             if labelData then
                                 local bitC=labelData['bitCoded']
                                 local smallLabelSize=labelData['smallLabelSize']
                                 local largeLabelSize=labelData['largeLabelSize']
-                                local useLargeLabel=(sim.boolAnd32(bitC,64*(2^(ind-1)))>0)
+                                local useLargeLabel=((bitC&64*(2^(ind-1)))>0)
                                 local labelSize=smallLabelSize
                                 if useLargeLabel then
                                     labelSize=largeLabelSize
@@ -452,10 +452,10 @@ function model.instanciatePart(partHandle,itemPosition,itemOrientation,itemMass,
     sim.setObjectParent(basePartCopy,model.handle,true)
     local basePartCopyData=sim.readCustomDataBlock(basePartCopy,simBWF.modelTags.PART)
     basePartCopyData=sim.unpackTable(basePartCopyData)
-    local invisible=sim.boolAnd32(basePartCopyData['bitCoded'],1)>0
-    local nonRespondableToOtherParts=sim.boolAnd32(basePartCopyData['bitCoded'],2)>0
-    local ignoreBasePart=sim.boolAnd32(basePartCopyData['bitCoded'],4)>0
-    local usePalletColors=sim.boolAnd32(basePartCopyData['bitCoded'],8)>0
+    local invisible=(basePartCopyData['bitCoded']&1)>0
+    local nonRespondableToOtherParts=(basePartCopyData['bitCoded']&2)>0
+    local ignoreBasePart=(basePartCopyData['bitCoded']&4)>0
+    local usePalletColors=(basePartCopyData['bitCoded']&8)>0
     model.makeInvisibleOrNonRespondableToOtherParts(basePartCopy,invisible,nonRespondableToOtherParts)
     
     -- Destination:
@@ -540,8 +540,8 @@ function model.instanciatePart(partHandle,itemPosition,itemOrientation,itemMass,
                 sim.setObjectParent(childPartCopy,model.handle,true)
                 local data=sim.readCustomDataBlock(childPartCopy,simBWF.modelTags.PART)
                 data=sim.unpackTable(data)
-                local invisible=sim.boolAnd32(data['bitCoded'],1)>0
-                local nonRespondableToOtherParts=sim.boolAnd32(data['bitCoded'],2)>0
+                local invisible=(data['bitCoded']&1)>0
+                local nonRespondableToOtherParts=(data['bitCoded']&2)>0
                 model.makeInvisibleOrNonRespondableToOtherParts(childPartCopy,invisible,nonRespondableToOtherParts)
                 -- Correct for the part frame location (the template has its origine centered x/y, and at the bottom of z):
                 local minMaxX=data.vertMinMax[1]
@@ -611,7 +611,7 @@ function model.tryToAttach(part)
                     local data=sim.readCustomDataBlock(pp,simBWF.modelTags.PART)
                     if data then
                         local sens=sim.createForceSensor(0,{0,1,1,0,0},{0.001,1,1,0,0})
-                        sim.setObjectInt32Parameter(sens,sim.objintparam_visibility_layer,0) -- hidden
+                        sim.setObjectInt32Param(sens,sim.objintparam_visibility_layer,0) -- hidden
                         sim.setObjectPosition(sens,part,{0,0,0})
                         sim.setObjectParent(part,sens,true)
                         sim.setObjectParent(sens,part2,true)
@@ -635,7 +635,7 @@ function model.handleCreatedParts()
     local i=1
     while i<=#allProducedParts do
         local h=allProducedParts[i][1]
-        if sim.isHandleValid(h)>0 then
+        if sim.isHandle(h) then
             local dataName=simBWF.modelTags.PART
             local data=sim.readCustomDataBlock(h,dataName)
             data=sim.unpackTable(data)
@@ -661,7 +661,7 @@ function model.handleCreatedParts()
                 end
                 if deactivate then
                     local prop=sim.getModelProperty(h)
-                    prop=sim.boolOr32(prop,sim.modelproperty_not_dynamic)
+                    prop=(prop|sim.modelproperty_not_dynamic)
                     sim.setModelProperty(h,prop)
                     sim.resetDynamicObject(h) -- important, otherwise the dynamics engine doesn't notice the change!
                     allProducedParts[i][5]=false

@@ -41,18 +41,18 @@ function model.updateModel()
 
     model.setObjectSize(model.specHandles.smallLabel,smallLabelSize[1],smallLabelSize[2])
     -- Scale also the texture:
-    sim.setObjectFloatParameter(model.specHandles.smallLabel,sim.shapefloatparam_texture_scaling_y,0.11*smallLabelSize[1]/0.075)
-    sim.setObjectFloatParameter(model.specHandles.smallLabel,sim.shapefloatparam_texture_scaling_x,0.11*smallLabelSize[2]/0.0375)
-    sim.setObjectFloatParameter(model.specHandles.smallLabel,sim.shapefloatparam_texture_y,0.037*smallLabelSize[2]/0.0375)
+    sim.setObjectFloatParam(model.specHandles.smallLabel,sim.shapefloatparam_texture_scaling_y,0.11*smallLabelSize[1]/0.075)
+    sim.setObjectFloatParam(model.specHandles.smallLabel,sim.shapefloatparam_texture_scaling_x,0.11*smallLabelSize[2]/0.0375)
+    sim.setObjectFloatParam(model.specHandles.smallLabel,sim.shapefloatparam_texture_y,0.037*smallLabelSize[2]/0.0375)
 
     model.setObjectSize(model.specHandles.largeLabel,largeLabelSize[1],largeLabelSize[2])
     -- Scale also the texture:
-    sim.setObjectFloatParameter(model.specHandles.largeLabel,sim.shapefloatparam_texture_scaling_y,0.11*largeLabelSize[1]/0.075)
-    sim.setObjectFloatParameter(model.specHandles.largeLabel,sim.shapefloatparam_texture_scaling_x,0.11*largeLabelSize[2]/0.1125)
+    sim.setObjectFloatParam(model.specHandles.largeLabel,sim.shapefloatparam_texture_scaling_y,0.11*largeLabelSize[1]/0.075)
+    sim.setObjectFloatParam(model.specHandles.largeLabel,sim.shapefloatparam_texture_scaling_x,0.11*largeLabelSize[2]/0.1125)
 
     local textureId=sim.getShapeTextureId(model.specHandles.texture)
 
-    if sim.boolAnd32(bitCText,4)>0 then
+    if (bitCText&4)>0 then
         -- textured
         sim.setShapeTexture(model.specHandles.convex,textureId,sim.texturemap_plane,4+8,{0.3,0.3})
     else
@@ -72,8 +72,8 @@ function model.updateModel()
     end
     
     -- Now process the label:
-    if sim.boolAnd32(bitC,8)>0 then
-        local useLargeLabel=(sim.boolAnd32(bitC,64)>0)
+    if (bitC&8)>0 then
+        local useLargeLabel=((bitC&64)>0)
         local labelSize=smallLabelSize
         local modelLabelHandle=model.specHandles.smallLabel
         if useLargeLabel then
@@ -82,7 +82,7 @@ function model.updateModel()
         end
         local h=sim.copyPasteObjects({modelLabelHandle},0)[1]
         sim.setObjectParent(h,model.handle,true)
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,255) -- make it visible
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,255) -- make it visible
         sim.setObjectSpecialProperty(h,sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable) -- make renderable and detectable
         local code=partLabelC['placementCode'][1]
         local toExecute='local boxSizeX='..boxSize[1]..'\n'

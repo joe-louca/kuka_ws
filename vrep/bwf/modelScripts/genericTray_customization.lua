@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -71,7 +72,7 @@ function setColor1(red,green,blue,spec)
     sim.setShapeColor(model,nil,sim.colorcomponent_ambient_diffuse,{red,green,blue})
     sim.setShapeColor(model,nil,sim.colorcomponent_specular,{spec,spec,spec})
     local c=readInfo()
-    if sim.boolAnd32(c['bitCoded'],1)~=0 then
+    if (c['bitCoded']&1)~=0 then
         setColor2(red,green,blue,spec)
         simUI.setSliderValue(ui,30,red*100,true)
         simUI.setSliderValue(ui,31,green*100,true)
@@ -100,14 +101,14 @@ function getColor2()
 end
 
 function setShapeSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -128,11 +129,11 @@ function setDlgItemContent()
         simUI.setEditValue(ui,4,simBWF.format("%.0f",config['borderHeight']/0.001),true)
         simUI.setEditValue(ui,5,simBWF.format("%.0f",config['borderThickness']/0.001),true)
         simUI.setEditValue(ui,6,simBWF.format("%.2f",config['mass']),true)
-        simUI.setCheckboxValue(ui,19,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
+        simUI.setCheckboxValue(ui,19,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
         local off=config['placeOffset']
         simUI.setEditValue(ui,40,simBWF.format("%.0f , %.0f , %.0f",off[1]*1000,off[2]*1000,off[3]*1000),true)
 
-        simUI.setEnabled(ui,29,sim.boolAnd32(config['bitCoded'],1)==0,true)
+        simUI.setEnabled(ui,29,(config['bitCoded']&1)==0,true)
         local pocketT=config['pocketType']
         simUI.setEnabled(ui,204,pocketT==1,true)
         simUI.setEnabled(ui,205,pocketT==2,true)
@@ -237,7 +238,7 @@ function updateTray()
         local sss=w/pr
         local rr={pr-1,pr}
         local indent={sss,sss*0.5}
-        if sim.boolAnd32(pr,1)==0 then
+        if (pr&1)==0 then
             -- rows is even
             if not firstRowOdd then
                 indent={sss*0.5,sss}
@@ -251,7 +252,7 @@ function updateTray()
             end
         end
         for i=1,pc,1 do
-            local li=sim.boolAnd32(i,1)+1
+            local li=(i&1)+1
             for j=1,rr[li],1 do
                 local h=sim.copyPasteObjects({borderElement},0)[1]
                 setShapeSize(h,pt,l/pc,ph)
@@ -267,11 +268,11 @@ function updateTray()
         mass=mass*0.5
         border=sim.groupShapes(borders)
         sim.setObjectParent(border,connection,true)
-        sim.setObjectInt32Parameter(border,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(border,sim.objintparam_visibility_layer,1+256)
         sim.setObjectSpecialProperty(border,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
-        sim.setObjectInt32Parameter(border,sim.shapeintparam_static,0)
-        sim.setObjectInt32Parameter(border,sim.shapeintparam_respondable,1)
-        local p=sim.boolOr32(sim.getObjectProperty(border),sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_dontshowasinsidemodel
+        sim.setObjectInt32Param(border,sim.shapeintparam_static,0)
+        sim.setObjectInt32Param(border,sim.shapeintparam_respondable,1)
+        local p=(sim.getObjectProperty(border)|sim.objectproperty_dontshowasinsidemodel)-sim.objectproperty_dontshowasinsidemodel
         sim.setObjectProperty(border,p)
         setShapeMass(border,mass)
     end
@@ -394,7 +395,7 @@ end
 
 function sameColors_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end

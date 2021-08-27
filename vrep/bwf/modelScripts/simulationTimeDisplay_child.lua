@@ -1,9 +1,10 @@
+simBWF=require('simBWF')
 function sysCall_init()
     model=sim.getObjectAssociatedWithScript(sim.handle_self)
     local data=sim.readCustomDataBlock(model,'XYZ_SIMULATIONTIME_INFO')
     data=sim.unpackTable(data)
-    simplified=sim.boolAnd32(data['bitCoded'],1)==1
-    if not sim.getBoolParameter(sim_boolparam_headless) then
+    simplified=(data['bitCoded']&1)==1
+    if not sim.getBoolParam(sim.boolparam_headless) then
         if simplified then
             local xml =[[
                     <label text="Time " style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>

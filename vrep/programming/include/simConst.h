@@ -1,11 +1,11 @@
 #if !defined(SIMCONST_INCLUDED_)
 #define SIMCONST_INCLUDED_
 
-#define SIM_PROGRAM_VERSION_NB 40100
-#define SIM_PROGRAM_VERSION "4.1.0."
+#define SIM_PROGRAM_VERSION_NB 40200
+#define SIM_PROGRAM_VERSION "4.2.0."
 
-#define SIM_PROGRAM_REVISION_NB 1
-#define SIM_PROGRAM_REVISION "(rev. 1)"
+#define SIM_PROGRAM_REVISION_NB 6
+#define SIM_PROGRAM_REVISION "(rev. 6)"
 
 #define SIM_PROGRAM_FULL_VERSION_NB ((SIM_PROGRAM_VERSION_NB) * 100 + (SIM_PROGRAM_REVISION_NB))
 
@@ -19,13 +19,13 @@ enum {
         sim_object_proximitysensor_type,
         sim_object_reserved1,
         sim_object_reserved2,
-        sim_object_path_type,
+        sim_object_path_type,               /* deprecated */
         sim_object_visionsensor_type,
         sim_object_reserved3,
-        sim_object_mill_type,
+        sim_object_mill_type,               /* deprecated */
         sim_object_forcesensor_type,
         sim_object_light_type,
-        sim_object_mirror_type,
+        sim_object_mirror_type,             /* deprecated */
         sim_object_octree_type,
         sim_object_pointcloud_type,
         sim_object_type_end=sim_object_path_type+100
@@ -34,28 +34,29 @@ enum {
 /* General object types. Values are serialized */
 enum {
     sim_appobj_object_type=sim_object_type_end+1,
-    sim_appobj_collision_type,
-    sim_appobj_distance_type,
+    sim_appobj_collision_type, /* deprecated */
+    sim_appobj_distance_type, /* deprecated */
     sim_appobj_simulation_type,
-    sim_appobj_ik_type,
-    sim_appobj_constraintsolver_type_old,
+    sim_appobj_ik_type, /* deprecated */
+    sim_appobj_constraintsolver_type_old, /* deprecated */
     sim_appobj_collection_type,
-    sim_appobj_ui_type,
+    sim_appobj_ui_type, /* deprecated */
     sim_appobj_script_type,
-    sim_appobj_pathplanning_type,
+    sim_appobj_pathplanning_type, /* deprecated */
     sim_appobj_RESERVED_type,
     sim_appobj_texture_type,
-    sim_appobj_motionplanning_type_old
+    sim_appobj_motionplanning_type_old /* deprecated */
 };
 
-/* Ik calculation methods. Values are serialized */
+/* Ik calculation methods. DEPRECATED */
 enum {
-        sim_ik_pseudo_inverse_method=0,
+        sim_ik_pseudo_inverse_method=0, /* with a tiny little bit of hard-coded damping */
         sim_ik_damped_least_squares_method,
-        sim_ik_jacobian_transpose_method
+        sim_ik_jacobian_transpose_method,
+        sim_ik_undamped_pseudo_inverse_method
 };
 
-/* Ik constraints. Values are serialized */
+/* Ik constraints. DEPRECATED */
 enum {
         sim_ik_x_constraint=1,
         sim_ik_y_constraint=2,
@@ -65,7 +66,7 @@ enum {
         sim_ik_avoidance_constraint_old=64 /* not supported anymore */
 };
 
-/* Ik calculation results */
+/* Ik calculation results. DEPRECATED */
 enum {
     sim_ikresult_not_performed=0,
     sim_ikresult_success,
@@ -263,6 +264,8 @@ enum { /* Check the documentation instead of comments below!! */
 
         sim_message_eventcallback_lastinstancepass,
         sim_message_eventcallback_uipass,             /* Called from the UI thread, just after sim_message_eventcallback_instancepass was called from the SIM thread */
+        sim_message_eventcallback_scriptstatedestroyed,
+        sim_message_eventcallback_scriptdestroyed,
 
         sim_message_simulation_start_resume_request=0x1000,
         sim_message_simulation_pause_request,
@@ -322,6 +325,7 @@ enum { /* Scene object properties. Combine with the | operator */
     sim_objectproperty_depthinvisible           =0x1000,
     sim_objectproperty_cannotdelete             =0x2000,
     sim_objectproperty_cannotdeleteduringsim    =0x4000,
+    sim_objectproperty_hierarchyhiddenmodelchild=0x8000,
 };
 
 enum { /* DEPRECATED, check below */
@@ -418,18 +422,23 @@ enum { /* Script types (serialized!) */
     sim_scripttype_mainscript=0,
     sim_scripttype_childscript,
     sim_scripttype_addonscript,
-    sim_scripttype_addonfunction,
+    sim_scripttype_addonfunction, /* deprecated */
     sim_scripttype_jointctrlcallback_old, /* deprecated */
     sim_scripttype_contactcallback_old, /* deprecated */
     sim_scripttype_customizationscript,
     sim_scripttype_generalcallback_old, /* deprecated */
     sim_scripttype_sandboxscript, /* special */
-    sim_scripttype_threaded=0x00f0          /* Combine with sim_scripttype_childscript if you want */
+#if COPPELIASIM_ENABLE_DEPRECATED_SINCE >= 20201014
+    sim_scripttype_threaded=0x00f0 /* deprecated, do not use */
+#else
+    sim_scripttype_threaded_old=0x00f0 /* deprecated, do not use */
+#endif
 };
 
 enum { /* System callbacks */
-    sim_syscb_init=0,
+    sim_syscb_info=0,
     sim_syscb_cleanup, /* last time called. Do some clean-up */
+    sim_syscb_init,
     sim_syscb_nonsimulation, /* called while simulation not running */
     sim_syscb_beforesimulation, /* called just before simulation starts */
     sim_syscb_aftersimulation, /* called just after simulation ended */
@@ -442,7 +451,7 @@ enum { /* System callbacks */
     sim_syscb_afterinstanceswitch, /* called just after an instance switch (switch to another scene) */
     sim_syscb_beforecopy, /* called just before objects are copied (in an object copy/cut operation, or a model save operation). Arg1 is a map with 'objectHandles' keys */
     sim_syscb_aftercopy, /* called just after objects were copied. Arg1 is a map with 'objectHandles' keys */
-    sim_syscb_aos_run, /* special for add-on scripts */
+    sim_syscb_aos_run_old, /* deprecated */
     sim_syscb_aos_suspend, /* special for add-on scripts */
     sim_syscb_aos_resume, /* special for add-on scripts */
     sim_syscb_jointcallback, /* called by the physics engine for a dynamically enabled joint */
@@ -460,9 +469,6 @@ enum { /* System callbacks */
     sim_syscb_vision, /* called just after a vision sensor image was acquired, for processing */
     sim_syscb_trigger, /* called by vision, proximity or force/torque sensors when they trigger */
     sim_syscb_userconfig, /* called for the customization script, when the user double-clicks the script simulation parameters icon */
-    sim_syscb_xr=sim_syscb_init+200, /* reserved for XR */
-    sim_syscb_br=sim_syscb_xr, /* reserved for XR */
-    /* sim_syscb_xrend=sim_syscb_xr+1000  reserved for XR */
 };
 
 enum { /* Script attributes */
@@ -549,6 +555,7 @@ enum { /* special handle flags: */
     sim_handleflag_codedstring          =0x00400000,
     sim_handleflag_wxyzquaternion       =0x00400000,
     sim_handleflag_reljointbaseframe    =0x00400000,
+    sim_handleflag_setmultiple          =0x00400000,
     sim_handleflag_abscoords            =0x00800000,
     sim_handleflag_depthbuffer          =0x00800000,
     sim_handleflag_depthbuffermeters    =0x00800000,
@@ -615,7 +622,8 @@ enum { /* drawing objects: */
     sim_drawing_quadpoints,         /* 6 values per point (3 for quad position, 3 for quad normal vector) (quad size in meters) */
     sim_drawing_discpoints,         /* 6 values per point (3 for disc position, 3 for disc normal vector) (disc size in meters) */
     sim_drawing_cubepoints,         /* 6 values per point (3 for cube position, 3 for cube normal vector) (cube size in meters) */
-    sim_drawing_spherepoints,           /* 3 values per point (sphere size in meters) */
+    sim_drawing_spherepoints,       /* 3 values per point (sphere size in meters) */
+    sim_drawing_linestrip,
 
     /* following can be or-combined: */
     sim_drawing_itemcolors              =0x000020, /* +3 values per item (each item has its own ambient color (r,g,b values)). Mutually exclusive with sim_drawing_vertexcolors */
@@ -682,7 +690,7 @@ enum { /* Boolean parameters: */
     sim_boolparam_console_visible,
     sim_boolparam_collision_handling_enabled,
     sim_boolparam_distance_handling_enabled,
-    sim_boolparam_ik_handling_enabled,
+    sim_boolparam_ik_handling_enabled, /* deprecated */
     sim_boolparam_gcs_handling_enabled,
     sim_boolparam_dynamics_handling_enabled,
     sim_boolparam_joint_motion_handling_enabled_deprecated,
@@ -781,6 +789,8 @@ enum { /* Integer parameters: */
     sim_intparam_statusbarverbosity, /* see  sim_verbosity_none, sim_verbosity_errors, etc. */
     sim_intparam_dlgverbosity, /* see  sim_verbosity_none, sim_verbosity_errors, etc. */
     sim_intparam_videoencoder_index,
+    sim_intparam_exitcode,
+    sim_intparam_bugfix1,
 };
 
 enum { /* uint64 parameters: */
@@ -827,6 +837,10 @@ enum { /* String parameters: */
     sim_stringparam_dlgverbosity, /* can only be written */
     sim_stringparam_consolelogfilter,
     sim_stringparam_startupscriptstring,
+    sim_stringparam_uniqueid, /* can only be read */
+    sim_stringparam_tempdir, /* can only be read */
+    sim_stringparam_tempscenedir, /* can only be read */
+    sim_stringparam_datadir, /* can only be read */
 };
 
 enum { /* Array parameters: */
@@ -859,11 +873,12 @@ enum { /* UI properties: */
 
 enum { /* Joint modes: */
     sim_jointmode_passive=0,
-    sim_jointmode_motion_deprecated,
-    sim_jointmode_ik,
-    sim_jointmode_reserved_previously_ikdependent,
+    sim_jointmode_motion_deprecated, /* deprecated */
+    sim_jointmode_ik_deprecated, /* deprecated */
+    sim_jointmode_reserved_previously_ikdependent, /* deprecated */
     sim_jointmode_dependent,
-    sim_jointmode_force
+    sim_jointmode_force,
+    sim_jointmode_hybrid_deprecated=32 /* deprecated */
 };
 
 enum { /* verbosity */
@@ -901,7 +916,7 @@ enum { /* Navigation and selection modes with the mouse. Lower byte values are m
     sim_navigation_camerazoom               =0x000003,
     sim_navigation_cameratilt               =0x000004,
     sim_navigation_cameraangle              =0x000005,
-    sim_navigation_camerafly                =0x000006,
+    sim_navigation_camerafly_old            =0x000006, // deprecated
     sim_navigation_objectshift              =0x000007,
     sim_navigation_objectrotate             =0x000008,
     sim_navigation_reserved2                =0x000009,
@@ -985,11 +1000,11 @@ enum { /* pure primitives type */
 
 enum { /* dummy-dummy link types */
     sim_dummy_linktype_dynamics_loop_closure=0,
-    sim_dummy_linktype_dynamics_force_constraint,
-    sim_dummy_linktype_gcs_loop_closure,
-    sim_dummy_linktype_gcs_tip,
-    sim_dummy_linktype_gcs_target,
-    sim_dummy_linktype_ik_tip_target,
+    sim_dummy_linktype_dynamics_force_constraint, /* deprecated */
+    sim_dummy_linktype_gcs_loop_closure, /* deprecated */
+    sim_dummy_linktype_gcs_tip, /* deprecated */
+    sim_dummy_linktype_gcs_target, /* deprecated */
+    sim_dummy_linktype_ik_tip_target, /* deprecated */
     sim_dummy_linktype_reserved
 };
 
@@ -1018,7 +1033,7 @@ enum { /* Holonomic path planning types */
     sim_holonomicpathplanning_xyzabg    // 6 Dof
 };
 
-enum { /* resource lock types */
+enum { /* deprecated */
     sim_lock_ui_wants_to_read=0,
     sim_lock_ui_wants_to_write,
     sim_lock_nonui_wants_to_write
@@ -1187,7 +1202,7 @@ enum { /* Object int/float/string parameters */
     sim_jointfloatparam_upper_limit= 2017,
     sim_jointfloatparam_kc_k= 2018,
     sim_jointfloatparam_kc_c= 2019,
-    sim_jointfloatparam_ik_weight= 2021,
+    sim_jointfloatparam_ik_weight= 2021, /* deprecated */
     sim_jointfloatparam_error_x= 2022,
     sim_jointfloatparam_error_y= 2023,
     sim_jointfloatparam_error_z= 2024,
@@ -1200,6 +1215,8 @@ enum { /* Object int/float/string parameters */
     sim_jointintparam_vortex_dep_handle= 2031,
     sim_jointfloatparam_vortex_dep_multiplication= 2032,
     sim_jointfloatparam_vortex_dep_offset= 2033,
+    sim_jointfloatparam_screw_pitch= 2034,
+    sim_jointfloatparam_step_size= 2035, /* deprecated */
 
     /* shapes */
     sim_shapefloatparam_init_velocity_x= 3000,
@@ -1233,6 +1250,7 @@ enum { /* Object int/float/string parameters */
     sim_shapefloatparam_shading_angle= 3025,
     sim_shapefloatparam_edge_angle= 3026,
     sim_shapeintparam_edge_borders_hidden= 3027,
+    sim_shapeintparam_component_cnt= 3028,
 
     /* proximity sensors */
     sim_proxintparam_ray_invisibility= 4000,
@@ -1273,6 +1291,10 @@ enum { /* Object int/float/string parameters */
     sim_dummyintparam_link_type= 10000,
     sim_dummyintparam_follow_path= 10001,
     sim_dummyfloatparam_follow_path_offset= 10002,
+    sim_dummyfloatparam_size= 10003,
+
+    /* graphs */
+    sim_graphintparam_needs_refresh= 10500,
 
     /* mills */
     sim_millintparam_volume_type= 11000,
@@ -1711,6 +1733,13 @@ enum { /* Image combination */
     sim_imgcomb_horizontal
 };
 
+enum { /* Graph data stream transformations */
+    sim_stream_transf_raw=0,
+    sim_stream_transf_derivative,
+    sim_stream_transf_integral,
+    sim_stream_transf_cumulative
+};
+
 enum { /* Default dynamic materials */
     sim_dynmat_default=2310013, /* i.e. SIM_IDSTART_DEFDYNMATERIAL */
     sim_dynmat_highfriction,
@@ -1895,6 +1924,8 @@ enum {  simx_cmdnull_start              =0,
         simx_cmd_get_object_group_data,
         simx_cmd_get_object_orientation2,
         simx_cmd_get_object_position2,
+        simx_cmd_check_collision,
+        simx_cmd_check_distance,
 
         simx_cmd8bytes_custom_start     =0x002800,
         simx_cmd_get_object_quaternion,

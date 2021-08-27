@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -232,10 +233,10 @@ function updateEnabledDisabledItemsDlg1()
     if ui1 then
         local enabled=sim.getSimulationState()==sim.simulation_stopped
         local config=readInfo()
-        local freq=sim.boolAnd32(config['bitCoded'],4+8+16)==0
-        local sens=sim.boolAnd32(config['bitCoded'],4+8+16)==4
-        local user=sim.boolAnd32(config['bitCoded'],4+8+16)==8
-        local conv=sim.boolAnd32(config['bitCoded'],4+8+16)==12
+        local freq=(config['bitCoded']&4+8+16)==0
+        local sens=(config['bitCoded']&4+8+16)==4
+        local user=(config['bitCoded']&4+8+16)==8
+        local conv=(config['bitCoded']&4+8+16)==12
         simUI.setEnabled(ui1,2,enabled and freq,true)
         simUI.setEnabled(ui1,999,enabled and sens,true)
         simUI.setEnabled(ui1,3,enabled and user,true)
@@ -258,13 +259,13 @@ function setDlgItemContent()
         local sel=simBWF.getSelectedEditWidget(ui1)
         simUI.setEditValue(ui1,62,simBWF.format("%.0f",config['conveyorDist']/0.001),true)
         simUI.setEditValue(ui1,2,simBWF.format("%.2f",config['frequency']),true)
-        simUI.setCheckboxValue(ui1,30,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(ui1,40,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setRadiobuttonValue(ui1,1000,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==0),true)
-        simUI.setRadiobuttonValue(ui1,1001,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==4),true)
-        simUI.setRadiobuttonValue(ui1,1002,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==8),true)
-        simUI.setRadiobuttonValue(ui1,1003,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==12),true)
-        simUI.setRadiobuttonValue(ui1,1004,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==16),true)
+        simUI.setCheckboxValue(ui1,30,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(ui1,40,simBWF.getCheckboxValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setRadiobuttonValue(ui1,1000,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==0),true)
+        simUI.setRadiobuttonValue(ui1,1001,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==4),true)
+        simUI.setRadiobuttonValue(ui1,1002,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==8),true)
+        simUI.setRadiobuttonValue(ui1,1003,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==12),true)
+        simUI.setRadiobuttonValue(ui1,1004,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==16),true)
         simBWF.setSelectedEditWidget(ui1,sel)
     end
 end
@@ -272,7 +273,7 @@ end
 
 function hidden_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -282,7 +283,7 @@ end
 
 function enabled_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -294,7 +295,7 @@ function triggerTypeClick_callback(ui,id)
     local c=readInfo()
     local w={4+8+16,8+16,4+16,16,4+8}
     local v=w[id-1000+1]
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4+8+16)-v
+    c['bitCoded']=(c['bitCoded']|4+8+16)-v
     simBWF.markUndoPoint()
     writeInfo(c)
     setDlgItemContent()
@@ -415,7 +416,7 @@ end
 
 function sysCall_afterSimulation()
     updateEnabledDisabledItemsDlg1()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,1)
     local conf=readInfo()
     conf['multiFeederTriggerCnt']=0
     writeInfo(conf)
@@ -426,9 +427,9 @@ function sysCall_beforeSimulation()
     local conf=readInfo()
     conf['multiFeederTriggerCnt']=0
     writeInfo(conf)
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(conf['bitCoded'],1)==0)
+    local show=simBWF.modifyAuxVisualizationItems((conf['bitCoded']&1)==0)
     if not show then
-        sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,0)
     end
 end
 

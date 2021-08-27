@@ -167,7 +167,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,number consoleHandle=simx.auxiliaryConsoleOpen(number clientID,string title,number maxLines,number mode,table_2 position,table_2 size,table_3 textColor,table_3 backgroundColor,number operationMode)</div>
+<div>number returnCode,number consoleHandle=simx.auxiliaryConsoleOpen(number clientID,string title,number maxLines,number mode,table[2] position,table[2] size,table[3] textColor,table[3] backgroundColor,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -404,7 +404,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Remotely calls a CoppeliaSim script function. When calling <a href="simulationScripts.htm">simulation scripts</a>, then simulation must be running (and threaded scripts must still be running, i.e. not ended yet). Refer to <a href="remoteApiExtension.htm">this section</a> for additional details.</td>
+<td class=apiTableRightDescr>Remotely calls a CoppeliaSim script function. When calling <a href="simulationScripts.htm">simulation scripts</a>, then simulation must be running. Refer to <a href="remoteApiExtension.htm">this section</a> for additional details.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -412,7 +412,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table outInts,table outFloats,table outStrings,string outBuffer=simx.callScriptFunction(number clientID,string scriptDescription,number scriptHandleOrType,string functionName,table inInts,table inFloats,table inStrings,string inBuffer,number operationMode)</div>
+<div>number returnCode,table[] outInts,table[] outFloats,table[] outStrings,string outBuffer=simx.callScriptFunction(number clientID,string scriptDescription,number scriptHandleOrType,string functionName,table[] inInts,table[] inFloats,table[] inStrings,string inBuffer,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -468,6 +468,128 @@ Other languages
 
 
 <h3 class=subsectionBar>
+<a name="simxCheckCollision" id="simxCheckCollision"></a><a name="simx.checkCollision" id="simx.checkCollision"></a>simx.checkCollision
+(regular API equivalent: <a href="regularApi/simCheckCollision.htm">sim.checkCollision</a>)
+</h3>
+<table class=apiTable>
+<tr class=apiTableTr> 
+<td class=apiTableLeftDescr>
+Description 
+</td> 
+<td class=apiTableRightDescr>Checks whether two entities collide.</td>
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCSyn>
+Lua synopsis
+</td> 
+<td class=remApiTableRightCSyn>
+
+<div>number returnCode,boolean collisionState=simx.checkCollision(number clientID,number entity1,number entity2,number operationMode)</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCParam>Lua Parameters</td> 
+<td class=remApiTableRightCParam>
+<div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
+<div><strong>entity1</strong>: the handle of the first entity.</div>
+<div><strong>entity2</strong>: the handle of the second entity.</div>
+<div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation modes for this function are simx.opmode_streaming (the first call) and simx.opmode_buffer (the following calls)
+</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCRet>
+Lua return values
+</td> 
+<td class=remApiTableRightCRet>
+<div><strong>returnCode</strong>: a <a href="remoteApiConstants.htm#functionErrorCodes">remote API function return code</a></div>
+<div><strong>collisionState</strong>: the collision state</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftLanguages>
+Other languages
+</td> 
+<td class=remApiTableRightLanguages>
+<a href="remoteApiFunctionsPython.htm#simxCheckCollision">Python</a>, <a href="remoteApiFunctionsJava.htm#simxCheckCollision">Java</a>, <a href="remoteApiFunctionsMatlab.htm#simxCheckCollision">Matlab</a>, <a href="remoteApiFunctionsOctave.htm#simxCheckCollision">Octave</a>, <a href="remoteApiFunctions.htm#simxCheckCollision">C/C++</a></td> 
+</tr> 
+</table> 
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 class=subsectionBar>
+<a name="simxCheckDistance" id="simxCheckDistance"></a><a name="simx.checkDistance" id="simx.checkDistance"></a>simx.checkDistance
+(regular API equivalent: <a href="regularApi/simCheckDistance.htm">sim.checkDistance</a>)
+</h3>
+<table class=apiTable>
+<tr class=apiTableTr> 
+<td class=apiTableLeftDescr>
+Description 
+</td> 
+<td class=apiTableRightDescr>Measures the distance between two entities.</td>
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCSyn>
+Lua synopsis
+</td> 
+<td class=remApiTableRightCSyn>
+
+<div>number returnCode,number minimumDistance=simx.checkDistance(number clientID,number distanceObjectHandle,number operationMode)</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCParam>Lua Parameters</td> 
+<td class=remApiTableRightCParam>
+<div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
+<div><strong>entity1</strong>: the handle of the first entity.</div>
+<div><strong>entity2</strong>: the handle of the second entity.</div>
+<div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation modes for this function are simx.opmode_streaming (the first call) and simx.opmode_buffer (the following calls)
+</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftCRet>
+Lua return values
+</td> 
+<td class=remApiTableRightCRet>
+<div><strong>returnCode</strong>: a <a href="remoteApiConstants.htm#functionErrorCodes">remote API function return code</a></div>
+<div><strong>minimumDistance</strong>: the minimum distance.</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=remApiTableLeftLanguages>
+Other languages
+</td> 
+<td class=remApiTableRightLanguages>
+<a href="remoteApiFunctionsPython.htm#simxCheckDistance">Python</a>, <a href="remoteApiFunctionsJava.htm#simxCheckDistance">Java</a>, <a href="remoteApiFunctionsMatlab.htm#simxCheckDistance">Matlab</a>, <a href="remoteApiFunctionsOctave.htm#simxCheckDistance">Octave</a>, <a href="remoteApiFunctions.htm#simxcheckDistance">C/C++</a></td> 
+</tr> 
+</table> 
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 class=subsectionBar>
 <a name="simxClearFloatSignal" id="simxClearFloatSignal"></a><a name="simx.clearFloatSignal" id="simx.clearFloatSignal"></a>simx.clearFloatSignal
 (regular API equivalent: <a href="regularApi/simClearDoubleSignal.htm">sim.clearDoubleSignal</a>)
 </h3>
@@ -491,7 +613,7 @@ Lua synopsis
 <td class=remApiTableLeftCParam>Lua Parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
-<div><strong>signalName</strong>: name of the signal or an empty string to clear all float signals</div>
+<div><strong>signalName</strong>: name of the signal</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx.opmode_oneshot
 </div>
 </td> 
@@ -550,7 +672,7 @@ Lua synopsis
 <td class=remApiTableLeftCParam>Lua Parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
-<div><strong>signalName</strong>: name of the signal or an empty string to clear all integer signals</div>
+<div><strong>signalName</strong>: name of the signal</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx.opmode_oneshot
 </div>
 </td> 
@@ -609,7 +731,7 @@ Lua synopsis
 <td class=remApiTableLeftCParam>Lua Parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
-<div><strong>signalName</strong>: name of the signal or an empty string to clear all string signals</div>
+<div><strong>signalName</strong>: name of the signal</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx.opmode_oneshot
 </div>
 </td> 
@@ -712,7 +834,7 @@ Other languages
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Copies and pastes objects, together with all their associated calculation objects and child scripts. To copy and paste whole models, you can simply copy and paste the model base object.</td>
+<td class=apiTableRightDescr>Copies and pastes objects, together with all their associated child scripts. To copy and paste whole models, you can simply copy and paste the model base object.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -720,7 +842,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table newObjectHandles=simx.copyPasteObjects(number clientID,table objectHandles,number operationMode)</div>
+<div>number returnCode,table[] newObjectHandles=simx.copyPasteObjects(number clientID,table[] objectHandles,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -784,7 +906,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,number dummyHandle=simx.createDummy(number clientID,number size,table_12 colors,number operationMode)</div>
+<div>number returnCode,number dummyHandle=simx.createDummy(number clientID,number size,table[12] colors,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -847,7 +969,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,number dialogHandle,number uiHandle=simx.displayDialog(number clientID,string titleText,string mainText,number dialogType,string initialText,table_6 titleColors,table_6 dialogColors,number operationMode)</div>
+<div>number returnCode,number dialogHandle,number uiHandle=simx.displayDialog(number clientID,string titleText,string mainText,number dialogType,string initialText,table[6] titleColors,table[6] dialogColors,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -1067,7 +1189,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetArrayParameter" id="simxGetArrayParameter"></a><a name="simx.getArrayParameter" id="simx.getArrayParameter"></a>simx.getArrayParameter
-(regular API equivalent: <a href="regularApi/simGetArrayParameter.htm">sim.getArrayParameter</a>)
+(regular API equivalent: <a href="regularApi/simGetArrayParam.htm">sim.getArrayParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -1082,7 +1204,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table_3 paramValues=simx.getArrayParameter(number clientID,number paramIdentifier,number operationMode)</div>
+<div>number returnCode,table[3] paramValues=simx.getArrayParameter(number clientID,number paramIdentifier,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -1127,14 +1249,14 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetBooleanParameter" id="simxGetBooleanParameter"></a><a name="simx.getBooleanParameter" id="simx.getBooleanParameter"></a>simx.getBooleanParameter
-(regular API equivalent: <a href="regularApi/simGetBoolParameter.htm">sim.getBoolParameter</a>)
+(regular API equivalent: <a href="regularApi/simGetBoolParam.htm">sim.getBoolParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a boolean value. See the <a href="apiConstants.htm#booleanParameters">Boolean parameter identifiers</a>. See also <a href="#simxSetBooleanParameter">simx.setBooleanParameter</a>, <a href="#simxGetIntegerParameter">simx.getIntegerParameter</a>, <a href="#simxGetFloatingParameter">simx.getFloatingParameter</a>, <a href="#simxGetArrayParameter">simx.getArrayParameter</a> and <a href="#simxGetStringParameter">simx.getStringParameter</a>.</td>
+<td class=apiTableRightDescr>Retrieves a boolean value. See the <a href="apiConstants.htm#booleanParameters">boolean parameter identifiers</a>. See also <a href="#simxSetBooleanParameter">simx.setBooleanParameter</a>, <a href="#simxGetIntegerParameter">simx.getIntegerParameter</a>, <a href="#simxGetFloatingParameter">simx.getFloatingParameter</a>, <a href="#simxGetArrayParameter">simx.getArrayParameter</a> and <a href="#simxGetStringParameter">simx.getStringParameter</a>.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1149,7 +1271,7 @@ Lua synopsis
 <td class=remApiTableLeftCParam>Lua Parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
-<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">Boolean parameter identifier</a></div>
+<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">boolean parameter identifier</a></div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx.opmode_blocking (if not called on a regular basis)
 </div>
 </td> 
@@ -1186,15 +1308,19 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxGetCollectionHandle" id="simxGetCollectionHandle"></a><a name="simx.getCollectionHandle" id="simx.getCollectionHandle"></a>simx.getCollectionHandle
-(regular API equivalent: <a href="regularApi/simGetCollectionHandle.htm">sim.getCollectionHandle</a>)
-</h3>
+<a name="simxGetCollectionHandle" id="simxGetCollectionHandle"></a><a name="simx.getCollectionHandle" id="simx.getCollectionHandle"></a>simx.getCollectionHandle</h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a collection handle based on its name.</td>
+<td class=apiTableRightDescr>This is a convenience function. Since CoppeliaSim V4.2.0, collections should be dynamically created and do not have a name anymore. This function will first try to retrieve a static collection with the specified name (for backward compatibility's sake). If such a collection does not exist, it will try to return the integer signal with the specified name. On CoppeliaSim's side, one could do:
+
+<pre class=lightRedBoxNoMarginAndSmall>
+local collectionHandle=sim.createCollection(0)
+sim.addItemToCollection(collectionHandle,..)
+..
+sim.setIntegerSignal('collectionName',collectionHandle)</pre></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1247,14 +1373,13 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetCollisionHandle" id="simxGetCollisionHandle"></a><a name="simx.getCollisionHandle" id="simx.getCollisionHandle"></a>simx.getCollisionHandle
-(regular API equivalent: <a href="regularApi/simGetCollisionHandle.htm">sim.getCollisionHandle</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a collision object handle based on its name. See also <a href="#simxReadCollision">simx.readCollision</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckCollision">simx.checkCollision</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1481,15 +1606,13 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxGetDistanceHandle" id="simxGetDistanceHandle"></a><a name="simx.getDistanceHandle" id="simx.getDistanceHandle"></a>simx.getDistanceHandle
-(regular API equivalent: <a href="regularApi/simGetDistanceHandle.htm">sim.getDistanceHandle</a>)
-</h3>
+<a name="simxGetDistanceHandle" id="simxGetDistanceHandle"></a><a name="simx.getDistanceHandle" id="simx.getDistanceHandle"></a>simx.getDistanceHandle</h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a distance object handle based on its name. See also <a href="#simxReadDistance">simx.readDistance</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckDistance">simx.checkDistance</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -1542,7 +1665,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetFloatingParameter" id="simxGetFloatingParameter"></a><a name="simx.getFloatingParameter" id="simx.getFloatingParameter"></a>simx.getFloatingParameter
-(regular API equivalent: <a href="regularApi/simGetFloatParameter.htm">sim.getFloatParameter</a>)
+(regular API equivalent: <a href="regularApi/simGetFloatParam.htm">sim.getFloatParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -1721,7 +1844,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetIntegerParameter" id="simxGetIntegerParameter"></a><a name="simx.getIntegerParameter" id="simx.getIntegerParameter"></a>simx.getIntegerParameter
-(regular API equivalent: <a href="regularApi/simGetInt32Parameter.htm">sim.getInt32Parameter</a>)
+(regular API equivalent: <a href="regularApi/simGetInt32Param.htm">sim.getInt32Param</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -1983,7 +2106,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table_12 matrix=simx.getJointMatrix(number clientID,number jointHandle,number operationMode)</div>
+<div>number returnCode,table[12] matrix=simx.getJointMatrix(number clientID,number jointHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2164,7 +2287,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table errorStrings=simx.getLastErrors(number clientID,number operationMode)</div>
+<div>number returnCode,table[] errorStrings=simx.getLastErrors(number clientID,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2329,7 +2452,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetObjectFloatParameter" id="simxGetObjectFloatParameter"></a><a name="simx.getObjectFloatParameter" id="simx.getObjectFloatParameter"></a>simx.getObjectFloatParameter
-(regular API equivalent: <a href="regularApi/simGetObjectFloatParameter.htm">sim.getObjectFloatParameter</a>)
+(regular API equivalent: <a href="regularApi/simGetObjectFloatParam.htm">sim.getObjectFloatParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -2404,7 +2527,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table handles,table intData,table floatData,table stringData=simx.getObjectGroupData(number clientID,number objectType,number dataType,number operationMode)</div>
+<div>number returnCode,table[] handles,table[] intData,table[] floatData,table[] stringData=simx.getObjectGroupData(number clientID,number objectType,number dataType,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2533,7 +2656,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetObjectIntParameter" id="simxGetObjectIntParameter"></a><a name="simx.getObjectIntParameter" id="simx.getObjectIntParameter"></a>simx.getObjectIntParameter
-(regular API equivalent: <a href="regularApi/simGetObjectInt32Parameter.htm">sim.getObjectInt32Parameter</a>)
+(regular API equivalent: <a href="regularApi/simGetObjectInt32Param.htm">simGetObjectInt32Param</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -2609,7 +2732,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table_3 eulerAngles=simx.getObjectOrientation(number clientID,number objectHandle,number relativeToObjectHandle,number operationMode)</div>
+<div>number returnCode,table[3] eulerAngles=simx.getObjectOrientation(number clientID,number objectHandle,number relativeToObjectHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2730,7 +2853,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table_3 position=simx.getObjectPosition(number clientID,number objectHandle,number relativeToObjectHandle,number operationMode)</div>
+<div>number returnCode,table[3] position=simx.getObjectPosition(number clientID,number objectHandle,number relativeToObjectHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2791,7 +2914,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table_4 quat=simx.getObjectQuaternion(number clientID,number objectHandle,number relativeToObjectHandle,number operationMode)</div>
+<div>number returnCode,table[4] quat=simx.getObjectQuaternion(number clientID,number objectHandle,number relativeToObjectHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2852,7 +2975,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table objectHandles=simx.getObjects(number clientID,number objectType,number operationMode)</div>
+<div>number returnCode,table[] objectHandles=simx.getObjects(number clientID,number objectType,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2912,7 +3035,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table objectHandles=simx.getObjectSelection(number clientID,number operationMode)</div>
+<div>number returnCode,table[] objectHandles=simx.getObjectSelection(number clientID,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -2971,7 +3094,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table_3 linearVelocity,table_3 angularVelocity=simx.getObjectVelocity(number clientID,number objectHandlenumber operationMode)</div>
+<div>number returnCode,table[3] linearVelocity,table[3] angularVelocity=simx.getObjectVelocity(number clientID,number objectHandlenumber operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -3126,7 +3249,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxGetStringParameter" id="simxGetStringParameter"></a><a name="simx.getStringParameter" id="simx.getStringParameter"></a>simx.getStringParameter
-(regular API equivalent: <a href="regularApi/simGetStringParameter.htm">sim.getStringParameter</a>)
+(regular API equivalent: <a href="regularApi/simGetStringParam.htm">sim.getStringParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -3365,7 +3488,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,table buffer,table_2 resolution=simx.getVisionSensorDepthBuffer(number clientID,number sensorHandle,number operationMode)</div>
+<div>number returnCode,table[] buffer,table[2] resolution=simx.getVisionSensorDepthBuffer(number clientID,number sensorHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -3426,7 +3549,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,string image,table_2 resolution=simx.getVisionSensorImage(number clientID,number sensorHandle,number options,number operationMode)</div>
+<div>number returnCode,string image,table[2] resolution=simx.getVisionSensorImage(number clientID,number sensorHandle,number options,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -3648,7 +3771,7 @@ Description
 Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
-<div>string packedData=simx.packFloats(table floatValues)</div>
+<div>string packedData=simx.packFloats(table[] floatValues)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -3707,7 +3830,7 @@ Description
 <td class=remApiTableLeftCSyn>
 Lua synopsis
 </td> 
-<td class=remApiTableRightCSyn>string packedData=simx.packInts(table intValues)</td> 
+<td class=remApiTableRightCSyn>string packedData=simx.packInts(table[] intValues)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCParam>Lua parameters</td> 
@@ -3968,15 +4091,13 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxReadCollision" id="simxReadCollision"></a><a name="simx.readCollision" id="simx.readCollision"></a>simx.readCollision
-(regular API equivalent: <a href="regularApi/simReadCollision.htm">sim.readCollision</a>)
-</h3>
+<a name="simxReadCollision" id="simxReadCollision"></a><a name="simx.readCollision" id="simx.readCollision"></a>simx.readCollision</h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Reads the collision state of a registered collision object. This function doesn't perform collision detection, it merely reads the result from a previous call to <a href="regularApi/simHandleCollision.htm">sim.handleCollision</a> (sim.handleCollision is called in the default main script). See also <a href="#simxGetObjectGroupData">simx.getObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckCollision">simx.checkCollision</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -4028,15 +4149,13 @@ Other languages
 
 
 <h3 class=subsectionBar>
-<a name="simxReadDistance" id="simxReadDistance"></a><a name="simx.readDistance" id="simx.readDistance"></a>simx.readDistance
-(regular API equivalent: <a href="regularApi/simReadDistance.htm">sim.readDistance</a>)
-</h3>
+<a name="simxReadDistance" id="simxReadDistance"></a><a name="simx.readDistance" id="simx.readDistance"></a>simx.readDistance</h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Reads the distance that a  registered distance object measured. This function doesn't perform minimum distance calculation, it merely reads the result from a previous call to <a href="regularApi/simHandleDistance.htm">sim.handleDistance</a> (sim.handleDistance is called in the default main script). See also <a href="#simxGetObjectGroupData">simx.getObjectGroupData</a>.</td>
+<td class=apiTableRightDescr>DEPRECATED. see <a href="#simxCheckDistance">simx.checkDistance</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCSyn>
@@ -4104,7 +4223,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,number state,table_3 forceVector,table_3 torqueVector=simx.readForceSensor(number clientID,number forceSensorHandle,number operationMode)</div>
+<div>number returnCode,number state,table[3] forceVector,table[3] torqueVector=simx.readForceSensor(number clientID,number forceSensorHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -4168,7 +4287,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,boolean detectionState,table_3 detectedPoint,number detectedObjectHandle,table_3 detectedSurfaceNormalVector=simx.readProximitySensor(number clientID,number sensorHandle,number operationMode)</div>
+<div>number returnCode,boolean detectionState,table[3] detectedPoint,number detectedObjectHandle,table[3] detectedSurfaceNormalVector=simx.readProximitySensor(number clientID,number sensorHandle,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -4256,7 +4375,7 @@ while simx.getConnectionId(cid)~=-1 then
 end</pre>
 
 <br>
-Server side (CoppeliaSim), from a non-threaded child script:
+Server side (CoppeliaSim), from a child script:
 <pre class=lightRedBoxNoMarginAndSmall>
 function sysCall_init()
     -- initialization phase:
@@ -4342,7 +4461,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode,boolean detectionState,table packet1,table packet2, ... =simx.readVisionSensor(number clientID,number sensorHandlenumber operationMode)</div>
+<div>number returnCode,boolean detectionState,table[] packet1,table[] packet2, ... =simx.readVisionSensor(number clientID,number sensorHandlenumber operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -4535,7 +4654,7 @@ Description
 
 <h3 class=subsectionBar>
 <a name="simxSetArrayParameter" id="simxSetArrayParameter"></a><a name="simx.setArrayParameter" id="simx.setArrayParameter"></a>simx.setArrayParameter
-(regular API equivalent: <a href="regularApi/simSetArrayParameter.htm">sim.setArrayParameter</a>)
+(regular API equivalent: <a href="regularApi/simSetArrayParam.htm">sim.setArrayParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -4550,7 +4669,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode=simx.setArrayParameter(number clientID,number paramIdentifier,table_3 paramValues,number operationMode)</div>
+<div>number returnCode=simx.setArrayParameter(number clientID,number paramIdentifier,table[3] paramValues,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -4595,7 +4714,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetBooleanParameter" id="simxSetBooleanParameter"></a><a name="simx.setBooleanParameter" id="simx.setBooleanParameter"></a>simx.setBooleanParameter
-(regular API equivalent: <a href="regularApi/simSetBoolParameter.htm">sim.setBoolParameter</a>)
+(regular API equivalent: <a href="regularApi/simSetBoolParam.htm">sim.setBoolParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -4617,7 +4736,7 @@ Lua synopsis
 <td class=remApiTableLeftCParam>Lua Parameters</td> 
 <td class=remApiTableRightCParam>
 <div><strong>clientID</strong>: the client ID. refer to <a href="#simxStart">simx.start</a>.</div>
-<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">Boolean parameter identifier</a></div>
+<div><strong>paramIdentifier</strong>: a <a href="apiConstants.htm#booleanParameters">boolean parameter identifier</a></div>
 <div><strong>paramValue</strong>: the parameter value</div>
 <div><strong>operationMode</strong>: a <a href="remoteApiConstants.htm#operationModes">remote API function operation mode</a>. Recommended operation mode for this function is simx.opmode_oneshot
 </div>
@@ -4655,7 +4774,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetFloatingParameter" id="simxSetFloatingParameter"></a><a name="simx.setFloatingParameter" id="simx.setFloatingParameter"></a>simx.setFloatingParameter
-(regular API equivalent: <a href="regularApi/simSetFloatParameter.htm">sim.setFloatParameter</a>)
+(regular API equivalent: <a href="regularApi/simSetFloatParam.htm">sim.setFloatParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -4775,7 +4894,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetIntegerParameter" id="simxSetIntegerParameter"></a><a name="simx.setIntegerParameter" id="simx.setIntegerParameter"></a>simx.setIntegerParameter
-(regular API equivalent: <a href="regularApi/simSetInt32Parameter.htm">sim.setInt32Parameter</a>)
+(regular API equivalent: <a href="regularApi/simSetInt32Param.htm">sim.setInt32Param</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -5207,7 +5326,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetObjectFloatParameter" id="simxSetObjectFloatParameter"></a><a name="simx.setObjectFloatParameter" id="simx.setObjectFloatParameter"></a>simx.setObjectFloatParameter
-(regular API equivalent: <a href="regularApi/simSetObjectFloatParameter.htm">sim.setObjectFloatParameter</a>)
+(regular API equivalent: <a href="regularApi/simSetObjectFloatParam.htm">sim.setObjectFloatParam</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -5268,7 +5387,7 @@ Other languages
 
 <h3 class=subsectionBar>
 <a name="simxSetObjectIntParameter" id="simxSetObjectIntParameter"></a><a name="simx.setObjectIntParameter" id="simx.setObjectIntParameter"></a>simx.setObjectIntParameter
-(regular API equivalent: <a href="regularApi/simSetObjectInt32Parameter.htm">sim.setObjectInt32Parameter</a>)
+(regular API equivalent: <a href="regularApi/simSetObjectInt32Param.htm">sim.setObjectInt32Param</a>)
 </h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -5344,7 +5463,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode=simx.setObjectOrientation(number clientID,number objectHandle,number relativeToObjectHandle,table_3 eulerAngles,number operationMode)</div>
+<div>number returnCode=simx.setObjectOrientation(number clientID,number objectHandle,number relativeToObjectHandle,table[3] eulerAngles,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -5466,7 +5585,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode=simx.setObjectPosition(number clientID,number objectHandle,number relativeToObjectHandle,table_3 position,number operationMode)</div>
+<div>number returnCode=simx.setObjectPosition(number clientID,number objectHandle,number relativeToObjectHandle,table[3] position,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -5527,7 +5646,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode=simx.setObjectQuaternion(number clientID,number objectHandle,number relativeToObjectHandle,table_4 quat,number operationMode)</div>
+<div>number returnCode=simx.setObjectQuaternion(number clientID,number objectHandle,number relativeToObjectHandle,table[4] quat,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -5585,7 +5704,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode=simx.setObjectSelection(number clientID,table objectHandles,number operationMode)</div>
+<div>number returnCode=simx.setObjectSelection(number clientID,table[] objectHandles,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -5644,7 +5763,7 @@ Lua synopsis
 </td> 
 <td class=remApiTableRightCSyn>
 
-<div>number returnCode=simx.setSphericalJointMatrix(number clientID,number jointHandle,table_12 matrix,number operationMode)</div>
+<div>number returnCode=simx.setSphericalJointMatrix(number clientID,number jointHandle,table[12] matrix,number operationMode)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -6227,7 +6346,7 @@ Description
 <td class=remApiTableLeftCSyn>
 Lua synopsis
 </td> 
-<td class=remApiTableRightCSyn>table floatValues=simx.unpackFloats(string packedData)</td> 
+<td class=remApiTableRightCSyn>table[] floatValues=simx.unpackFloats(string packedData)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCParam>Lua parameters</td> 
@@ -6285,7 +6404,7 @@ Description
 <td class=remApiTableLeftCSyn>
 Lua synopsis
 </td> 
-<td class=remApiTableRightCSyn>table intValues=simx.unpackInts(string packedData)</td> 
+<td class=remApiTableRightCSyn>table[] intValues=simx.unpackInts(string packedData)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=remApiTableLeftCParam>Lua parameters</td> 

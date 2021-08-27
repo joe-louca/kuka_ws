@@ -38,7 +38,7 @@ function model.getDistributionValue(distribution)
                 for i=1,#distribution,1 do
                    cnt=cnt+distribution[i][1] 
                 end
-                local p=sim.getFloatParameter(sim.floatparam_rand)*cnt
+                local p=sim.getFloatParam(sim.floatparam_rand)*cnt
                 cnt=0
                 for i=1,#distribution,1 do
                     if cnt+distribution[i][1]>=p then
@@ -48,7 +48,7 @@ function model.getDistributionValue(distribution)
                 end
             else
                 local cnt=#distribution
-                local p=1+math.floor(sim.getFloatParameter(sim.floatparam_rand)*cnt-0.0001)
+                local p=1+math.floor(sim.getFloatParam(sim.floatparam_rand)*cnt-0.0001)
                 return distribution[p]
             end
         end
@@ -165,7 +165,7 @@ function sysCall_init()
     if model.online then
 
     else
-        model.prepareStatisticsDialog(sim.boolAnd32(data['bitCoded'],128)>0)
+        model.prepareStatisticsDialog((data['bitCoded']&128)>0)
         model.productionCount=0
         model.stopTriggerSensor=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.STOPSIGNAL)
         model.startTriggerSensor=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.STARTSIGNAL)
@@ -173,7 +173,7 @@ function sysCall_init()
         model.conveyorHandle=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.CONVEYOR)
         model.conveyorTriggerDist=data['conveyorDist']
         model.mode=0 -- 0=frequency, 1=sensor, 2=user, 3=conveyor, 4=multi-feeder
-        local tmp=sim.boolAnd32(data['bitCoded'],4+8+16)
+        local tmp=(data['bitCoded']&4+8+16)
         if tmp==4 then model.mode=1 end
         if tmp==8 then model.mode=2 end
         if tmp==12 then model.mode=3 end
@@ -220,7 +220,7 @@ function sysCall_actuation()
         local distributionExtent=data['size']
         local dropFrequency=data['frequency']
         local feederAlgo=data['algorithm']
-        local enabled=sim.boolAnd32(data['bitCoded'],2)>0
+        local enabled=(data['bitCoded']&2)>0
         local nothing
         if model.maxProductionCnt~=0 then
             if enabled then

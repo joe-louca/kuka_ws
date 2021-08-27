@@ -7,18 +7,18 @@ end
 
 function model.setShapeActive(h,active)
     if active then
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,1+256) -- make it visible
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,1+256) -- make it visible
         sim.setObjectSpecialProperty(h,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable) -- make it collidable, measurable, detectable, etc.
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_static,0) -- make it non-static
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_respondable,1) -- make it respondable
-        local p=sim.boolOr32(sim.getObjectProperty(h),sim.objectproperty_dontshowasinsidemodel)
+        sim.setObjectInt32Param(h,sim.shapeintparam_static,0) -- make it non-static
+        sim.setObjectInt32Param(h,sim.shapeintparam_respondable,1) -- make it respondable
+        local p=(sim.getObjectProperty(h)|sim.objectproperty_dontshowasinsidemodel)
         sim.setObjectProperty(h,p-sim.objectproperty_dontshowasinsidemodel)
     else
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,0) -- make it invisible
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,0) -- make it invisible
         sim.setObjectSpecialProperty(h,0) -- make it not collidable, measurable, detectable, etc.
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_static,1) -- make it static
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_respondable,0) -- make it non-respondable
-        local p=sim.boolOr32(sim.getObjectProperty(h),sim.objectproperty_dontshowasinsidemodel)
+        sim.setObjectInt32Param(h,sim.shapeintparam_static,1) -- make it static
+        sim.setObjectInt32Param(h,sim.shapeintparam_respondable,0) -- make it non-respondable
+        local p=(sim.getObjectProperty(h)|sim.objectproperty_dontshowasinsidemodel)
         sim.setObjectProperty(h,p)
     end
 end
@@ -40,7 +40,7 @@ function model.setMass(m)
             end
         end
         if sim.getObjectType(handle)==sim.object_shape_type then
-            local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+            local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
             if p==0 then
                 local m0,i0,com0=sim.getShapeMassAndInertia(handle)
                 currentMass=currentMass+m0
@@ -65,7 +65,7 @@ function model.setMass(m)
             end
         end
         if sim.getObjectType(handle)==sim.object_shape_type then
-            local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+            local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
             if p==0 then
                 local transf=sim.getObjectMatrix(handle,-1)
                 local m0,i0,com0=sim.getShapeMassAndInertia(handle,transf)
@@ -129,7 +129,7 @@ function model.updateModel()
 
     local textureId=sim.getShapeTextureId(model.specHandles.bb)
     for i=1,4,1 do
-        if sim.boolAnd32(bitC,4)>0 then
+        if (bitC&4)>0 then
             sim.setShapeTexture(p[i],textureId,sim.texturemap_cube,4+8,{0.3,0.3})
         else
             sim.setShapeTexture(p[i],-1,sim.texturemap_cube,4+8,{0.3,0.3})
@@ -139,7 +139,7 @@ function model.updateModel()
 
     model.specHandles.sides=sim.groupShapes(p)
     model.setShapeActive(model.specHandles.sides,true)
-    sim.setObjectInt32Parameter(model.specHandles.sides,sim.shapeintparam_respondable_mask,65535-1)
+    sim.setObjectInt32Param(model.specHandles.sides,sim.shapeintparam_respondable_mask,65535-1)
     sim.setObjectParent(model.specHandles.sides,model.specHandles.sideConnection,true)
     sim.setObjectPosition(model.specHandles.joints[1],model.handle,{w/2,0,h+th/2})
     sim.setObjectPosition(model.specHandles.joints[2],model.handle,{-w/2,0,h+th/2})
@@ -148,8 +148,8 @@ function model.updateModel()
     
     for i=1,4,1 do
         sim.setJointForce(model.specHandles.joints[i],maxTorque)
-        sim.setObjectFloatParameter(model.specHandles.joints[i],sim.jointfloatparam_kc_k,springK)
-        sim.setObjectFloatParameter(model.specHandles.joints[i],sim.jointfloatparam_kc_c,springC)
+        sim.setObjectFloatParam(model.specHandles.joints[i],sim.jointfloatparam_kc_k,springK)
+        sim.setObjectFloatParam(model.specHandles.joints[i],sim.jointfloatparam_kc_c,springC)
     end
 
     local lidL=c.partSpecific['closePartALength']*w
@@ -170,16 +170,16 @@ function model.updateModel()
     model.setCuboidMassAndInertia(model.specHandles.lids[4],lidW,th,lidL,defMassPerVolume,inertiaFactor)
     sim.setObjectPosition(model.specHandles.lids[4],model.specHandles.joints[4],{0,lidL*0.5,0})
 
-    model.setShapeActive(model.specHandles.lids[1],sim.boolAnd32(bitC,1)>0)
-    model.setShapeActive(model.specHandles.lids[2],sim.boolAnd32(bitC,1)>0)
-    model.setShapeActive(model.specHandles.lids[3],sim.boolAnd32(bitC,2)>0)
-    model.setShapeActive(model.specHandles.lids[4],sim.boolAnd32(bitC,2)>0)
-    sim.setObjectInt32Parameter(model.specHandles.lids[1],sim.shapeintparam_respondable_mask,65535-254)
-    sim.setObjectInt32Parameter(model.specHandles.lids[2],sim.shapeintparam_respondable_mask,65535-254)
-    sim.setObjectInt32Parameter(model.specHandles.lids[3],sim.shapeintparam_respondable_mask,65535-254)
-    sim.setObjectInt32Parameter(model.specHandles.lids[4],sim.shapeintparam_respondable_mask,65535-254)
+    model.setShapeActive(model.specHandles.lids[1],(bitC&1)>0)
+    model.setShapeActive(model.specHandles.lids[2],(bitC&1)>0)
+    model.setShapeActive(model.specHandles.lids[3],(bitC&2)>0)
+    model.setShapeActive(model.specHandles.lids[4],(bitC&2)>0)
+    sim.setObjectInt32Param(model.specHandles.lids[1],sim.shapeintparam_respondable_mask,65535-254)
+    sim.setObjectInt32Param(model.specHandles.lids[2],sim.shapeintparam_respondable_mask,65535-254)
+    sim.setObjectInt32Param(model.specHandles.lids[3],sim.shapeintparam_respondable_mask,65535-254)
+    sim.setObjectInt32Param(model.specHandles.lids[4],sim.shapeintparam_respondable_mask,65535-254)
 
-    if sim.boolAnd32(bitC,4)>0 then
+    if (bitC&4)>0 then
         -- textured
         sim.setShapeTexture(model.handle,textureId,sim.texturemap_cube,4+8,{0.3,0.3})
         sim.setShapeTexture(model.specHandles.lids[1],textureId,sim.texturemap_cube,4+8,{0.3,0.3})
@@ -201,13 +201,13 @@ end
 
 function sysCall_cleanup_specific()
     local c=model.readInfo()
-    if sim.boolAnd32(c.partSpecific['bitCoded'],1)==0 then
+    if (c.partSpecific['bitCoded']&1)==0 then
         sim.removeObject(model.specHandles.lids[1]) 
         sim.removeObject(model.specHandles.lids[2]) 
         sim.removeObject(model.specHandles.joints[1]) 
         sim.removeObject(model.specHandles.joints[2]) 
     end
-    if sim.boolAnd32(c.partSpecific['bitCoded'],2)==0 then
+    if (c.partSpecific['bitCoded']&2)==0 then
         sim.removeObject(model.specHandles.lids[3]) 
         sim.removeObject(model.specHandles.lids[4]) 
         sim.removeObject(model.specHandles.joints[3]) 

@@ -1,12 +1,12 @@
 function model.setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -32,10 +32,10 @@ function model.adjustFrame(frameState,width,height,doorState)
         for i=1,#model.handles.doorShapes,1 do
             if doorState<2 then
                 sim.setObjectSpecialProperty(model.handles.doorShapes[i],sim.objectspecialproperty_collidable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_measurable+sim.objectspecialproperty_renderable)
-                sim.setObjectInt32Parameter(model.handles.doorShapes[i],sim.objintparam_visibility_layer,1)
+                sim.setObjectInt32Param(model.handles.doorShapes[i],sim.objintparam_visibility_layer,1)
             else
                 sim.setObjectSpecialProperty(model.handles.doorShapes[i],0)
-                sim.setObjectInt32Parameter(model.handles.doorShapes[i],sim.objintparam_visibility_layer,0)
+                sim.setObjectInt32Param(model.handles.doorShapes[i],sim.objintparam_visibility_layer,0)
             end
         end
         

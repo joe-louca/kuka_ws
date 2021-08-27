@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function readInfo()
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.OLDLOCATION)
     if data then

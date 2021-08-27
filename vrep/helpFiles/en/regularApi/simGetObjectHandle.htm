@@ -15,14 +15,14 @@
   <td >
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
-<h1><a href="../apiOverview.htm">Regular API</a> function</h1>
+<h1>Regular API function</h1>
 <h3 class=subsectionBar><a name="simGetObjectHandle" id="simGetObjectHandle"></a>simGetObjectHandle / sim.getObjectHandle</h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves an object handle based on its name. See also the section on <a href="../accessingGeneralObjects.htm">accessing general-type objects</a>, <a href="simIsHandleValid.htm">sim.isHandleValid</a> and <a href="simGetObjectUniqueIdentifier.htm">sim.getObjectUniqueIdentifier</a>.<br></td>
+<td class=apiTableRightDescr>Retrieves an object handle based on its name. See also the section on <a href="../accessingGeneralObjects.htm">accessing general-type objects</a>, <a href="simIsHandle.htm">sim.isHandle</a> and <a href="simGetObjectUniqueIdentifier.htm">sim.getObjectUniqueIdentifier</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
@@ -49,7 +49,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>number objectHandle=sim.getObjectHandle(string/number objectName)<br></td> 
+<td class=apiTableRightLSyn>int objectHandle=sim.getObjectHandle(string/int objectName)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -80,9 +80,7 @@ Remote API equiv.
 
 </table> 
 
-<br>
-<p><a href="../apiFunctions.htm">All regular API functions on one page</a></p>
-<br>
+
 <br>
 </td>
 </tr>

@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -77,14 +78,14 @@ function setSizes()
     local l=c['length']
     local h=c['height']
     setObjectSize(model,w,l,h)
-    local r,mmin=sim.getObjectFloatParameter(sensor,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(sensor,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(sensor,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(sensor,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
-    r,mmin=sim.getObjectFloatParameter(sensor,sim.objfloatparam_objbbox_min_x)
-    r,mmax=sim.getObjectFloatParameter(sensor,sim.objfloatparam_objbbox_max_x)
+    mmin=sim.getObjectFloatParam(sensor,sim.objfloatparam_objbbox_min_x)
+    mmax=sim.getObjectFloatParam(sensor,sim.objfloatparam_objbbox_max_x)
     sx=mmax-mmin
-    r,mmin=sim.getObjectFloatParameter(sensor,sim.objfloatparam_objbbox_min_y)
-    r,mmax=sim.getObjectFloatParameter(sensor,sim.objfloatparam_objbbox_max_y)
+    mmin=sim.getObjectFloatParam(sensor,sim.objfloatparam_objbbox_min_y)
+    mmax=sim.getObjectFloatParam(sensor,sim.objfloatparam_objbbox_max_y)
     sy=mmax-mmin
     sim.scaleObject(sensor,w/sx,l/sy,h/sz)
     sim.setObjectPosition(sensor,model,{0,0,-h*0.5})
@@ -99,16 +100,16 @@ function setDlgItemContent()
         simUI.setEditValue(ui,3,simBWF.format("%.0f",config['height']/0.001),true)
 
 
-        simUI.setCheckboxValue(ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)==0),true)
-        simUI.setCheckboxValue(ui,6,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],32)~=0),true)
+        simUI.setCheckboxValue(ui,4,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool((config['bitCoded']&4)==0),true)
+        simUI.setCheckboxValue(ui,6,simBWF.getCheckboxValFromBool((config['bitCoded']&32)~=0),true)
         simUI.setEditValue(ui,7,config['statText'],true)
 
-        simUI.setRadiobuttonValue(ui,10,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],2)==0),true)
-        simUI.setRadiobuttonValue(ui,11,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setRadiobuttonValue(ui,100,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],8+16)==8),true)
-        simUI.setRadiobuttonValue(ui,101,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],8+16)==16),true)
-        simUI.setRadiobuttonValue(ui,102,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],8+16)==8+16),true)
+        simUI.setRadiobuttonValue(ui,10,simBWF.getRadiobuttonValFromBool((config['bitCoded']&2)==0),true)
+        simUI.setRadiobuttonValue(ui,11,simBWF.getRadiobuttonValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setRadiobuttonValue(ui,100,simBWF.getRadiobuttonValFromBool((config['bitCoded']&8+16)==8),true)
+        simUI.setRadiobuttonValue(ui,101,simBWF.getRadiobuttonValFromBool((config['bitCoded']&8+16)==16),true)
+        simUI.setRadiobuttonValue(ui,102,simBWF.getRadiobuttonValFromBool((config['bitCoded']&8+16)==8+16),true)
         simUI.setEditValue(ui,103,simBWF.format("%.0f",config['countForTrigger']),true)
         simUI.setEditValue(ui,104,simBWF.format("%.2f",config['delayForTrigger']),true)
         simBWF.setSelectedEditWidget(ui,sel)
@@ -124,7 +125,7 @@ function updateEnabledDisabledItemsDlg()
         simUI.setEnabled(ui,3,enabled,true)
         simUI.setEnabled(ui,5,enabled,true)
         simUI.setEnabled(ui,6,enabled,true)
-        simUI.setEnabled(ui,7,enabled and sim.boolAnd32(config['bitCoded'],32)~=0,true)
+        simUI.setEnabled(ui,7,enabled and (config['bitCoded']&32)~=0,true)
         simUI.setEnabled(ui,10,enabled,true)
         simUI.setEnabled(ui,11,enabled,true)
         simUI.setEnabled(ui,100,enabled,true)
@@ -137,7 +138,7 @@ end
 
 function enabled_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -148,7 +149,7 @@ end
 
 function visible_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal~=0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -159,7 +160,7 @@ end
 
 function showStats_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],32)
+    c['bitCoded']=(c['bitCoded']|32)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-32
     end
@@ -171,7 +172,7 @@ end
 
 function anythingDetectClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     c['bitCoded']=c['bitCoded']-2
     simBWF.markUndoPoint()
     writeInfo(c)
@@ -180,7 +181,7 @@ end
 
 function partsDetectClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     simBWF.markUndoPoint()
     writeInfo(c)
     setDlgItemContent()
@@ -188,7 +189,7 @@ end
 
 function riseClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8+16)
+    c['bitCoded']=(c['bitCoded']|8+16)
     c['bitCoded']=c['bitCoded']-16
     simBWF.markUndoPoint()
     writeInfo(c)
@@ -197,7 +198,7 @@ end
 
 function fallClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8+16)
+    c['bitCoded']=(c['bitCoded']|8+16)
     c['bitCoded']=c['bitCoded']-8
     simBWF.markUndoPoint()
     writeInfo(c)
@@ -206,7 +207,7 @@ end
 
 function riseAndFallClick_callback(ui,id)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8+16)
+    c['bitCoded']=(c['bitCoded']|8+16)
     simBWF.markUndoPoint()
     writeInfo(c)
     setDlgItemContent()
@@ -436,7 +437,7 @@ end
 
 function sysCall_beforeSimulation()
     local c=readInfo()
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],4)>0)
+    local show=simBWF.modifyAuxVisualizationItems((c['bitCoded']&4)>0)
     if not show then
         sim.setModelProperty(model,sim.modelproperty_not_visible)
     end

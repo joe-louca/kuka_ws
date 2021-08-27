@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     if x<0.05 then x=0.05 end
     if y<0.05 then y=0.05 end
@@ -79,11 +80,11 @@ function setDlgItemContent()
         simUI.setEditValue(ui,3,simBWF.format("%.0f",config['height']/0.001),true)
 
 
-        simUI.setCheckboxValue(ui,4,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)==0),true)
+        simUI.setCheckboxValue(ui,4,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool((config['bitCoded']&4)==0),true)
 
-        simUI.setRadiobuttonValue(ui,10,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setRadiobuttonValue(ui,11,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],2)==0),true)
+        simUI.setRadiobuttonValue(ui,10,simBWF.getRadiobuttonValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setRadiobuttonValue(ui,11,simBWF.getRadiobuttonValFromBool((config['bitCoded']&2)==0),true)
         local red,green,blue=getColor()
         simUI.setSliderValue(ui,7,red*100,true)
         simUI.setSliderValue(ui,8,green*100,true)
@@ -102,7 +103,7 @@ function updateEnabledDisabledItemsDlg()
         simUI.setEnabled(ui,5,enabled,true)
         simUI.setEnabled(ui,10,enabled,true)
         simUI.setEnabled(ui,11,enabled,true)
-        simUI.setEnabled(ui,12,enabled and sim.boolAnd32(c['bitCoded'],2)>0,true)
+        simUI.setEnabled(ui,12,enabled and (c['bitCoded']&2)>0,true)
         simUI.setEnabled(ui,7,enabled,true)
         simUI.setEnabled(ui,8,enabled,true)
         simUI.setEnabled(ui,9,enabled,true)
@@ -116,7 +117,7 @@ function getAvailableDestinations()
         local data=sim.readCustomDataBlock(l[i],'XYZ_PARTTELEPORTER_INFO')
         if data then
             data=sim.unpackTable(data)
-            if sim.boolAnd32(data['bitCoded'],2)==0 then
+            if (data['bitCoded']&2)==0 then
                 retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
             end
         end
@@ -127,7 +128,7 @@ end
 function enabled_callback(ui,id,newVal)
     simBWF.markUndoPoint()
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -138,7 +139,7 @@ end
 function visible_callback(ui,id,newVal)
     simBWF.markUndoPoint()
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal~=0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -158,7 +159,7 @@ end
 function originPodClick_callback(ui,id)
     simBWF.markUndoPoint()
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     writeInfo(c)
     updateEnabledDisabledItemsDlg()
     setDlgItemContent()
@@ -167,7 +168,7 @@ end
 function destinationPodClick_callback(ui,id)
     simBWF.markUndoPoint()
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     c['bitCoded']=c['bitCoded']-2
     writeInfo(c)
     updateEnabledDisabledItemsDlg()
@@ -372,7 +373,7 @@ end
 
 function sysCall_beforeSimulation()
     local c=readInfo()
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],4)~=0)
+    local show=simBWF.modifyAuxVisualizationItems((c['bitCoded']&4)~=0)
     if not show then
         sim.setModelProperty(model,sim.modelproperty_not_visible)
     end

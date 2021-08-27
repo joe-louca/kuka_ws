@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -7,14 +8,14 @@ function updatePluginRepresentation()
 end
 
 function setObjectSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -114,8 +115,8 @@ function setDlgItemContent()
         simUI.setEditValue(ui,21,simBWF.format("%.0f",config['length']/0.001),true)
         simUI.setEditValue(ui,22,simBWF.format("%.0f",config['height']/0.001),true)
         simUI.setEditValue(ui,24,simBWF.format("%.0f , %.0f , %.0f",config.liftOffset[1]*1000,config.liftOffset[2]*1000,config.liftOffset[3]*1000),true)
-        simUI.setCheckboxValue(ui,3,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],4)~=0),true)
+        simUI.setCheckboxValue(ui,3,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(ui,5,simBWF.getCheckboxValFromBool((config['bitCoded']&4)~=0),true)
         updateEnabledDisabledItemsDlg()
         simBWF.setSelectedEditWidget(ui,sel)
     end
@@ -123,7 +124,7 @@ end
 
 function hidden_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -134,7 +135,7 @@ end
 
 function showPoints_callback(ui,id,newVal)
     local c=readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4)
+    c['bitCoded']=(c['bitCoded']|4)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-4
     end
@@ -301,7 +302,7 @@ function sysCall_nonSimulation()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(box,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(box,sim.objintparam_visibility_layer,1)
     local c=readInfo()
     c['itemsToRemoveFromTracking']={}
     c['trackedItemsInWindow']={}
@@ -321,9 +322,9 @@ function sysCall_beforeSimulation()
     local c=readInfo()
     c.detectionState=0
     writeInfo(c)
-    local show=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(c['bitCoded'],1)==0)
+    local show=simBWF.modifyAuxVisualizationItems((c['bitCoded']&1)==0)
     if not show then
-        sim.setObjectInt32Parameter(box,sim.objintparam_visibility_layer,256)
+        sim.setObjectInt32Param(box,sim.objintparam_visibility_layer,256)
     end
 end
 

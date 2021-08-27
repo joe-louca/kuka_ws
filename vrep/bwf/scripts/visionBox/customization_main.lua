@@ -80,8 +80,8 @@ end
 
 function sysCall_beforeSimulation()
     local c=model.readInfo()
-    if sim.boolAnd32(c.bitCoded,1)>0 then
-        sim.setObjectInt32Parameter(model.handles.body,sim.objintparam_visibility_layer,0)
+    if (c.bitCoded&1)>0 then
+        sim.setObjectInt32Param(model.handles.body,sim.objintparam_visibility_layer,0)
         model.dlg.removeDlg()
     end
     model.simJustStarted=true
@@ -99,7 +99,7 @@ function sysCall_sensing()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(model.handles.body,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model.handles.body,sim.objintparam_visibility_layer,1)
     model.dlg.showOrHideDlgIfNeeded()
     model.dlg.updateEnabledDisabledItems()
     model.updatePluginRepresentation()

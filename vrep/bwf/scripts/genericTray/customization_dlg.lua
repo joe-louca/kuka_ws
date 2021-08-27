@@ -7,11 +7,11 @@ function model.dlg.refresh_specific()
     simUI.setEditValue(model.dlg.ui,4,simBWF.format("%.0f",config.partSpecific['borderHeight']/0.001),true)
     simUI.setEditValue(model.dlg.ui,5,simBWF.format("%.0f",config.partSpecific['borderThickness']/0.001),true)
     simUI.setEditValue(model.dlg.ui,6,simBWF.format("%.2f",config.partSpecific['mass']),true)
-    simUI.setCheckboxValue(model.dlg.ui,19,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.partSpecific['bitCoded'],1)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,19,simBWF.getCheckboxValFromBool((config.partSpecific['bitCoded']&1)~=0),true)
     local off=config.partSpecific['placeOffset']
     simUI.setEditValue(model.dlg.ui,40,simBWF.format("%.0f , %.0f , %.0f",off[1]*1000,off[2]*1000,off[3]*1000),true)
 
-    simUI.setEnabled(model.dlg.ui,29,sim.boolAnd32(config.partSpecific['bitCoded'],1)==0,true)
+    simUI.setEnabled(model.dlg.ui,29,(config.partSpecific['bitCoded']&1)==0,true)
     local pocketT=config.partSpecific['pocketType']
     simUI.setEnabled(model.dlg.ui,204,pocketT==1,true)
     simUI.setEnabled(model.dlg.ui,205,pocketT==2,true)
@@ -154,7 +154,7 @@ end
 
 function model.dlg.sameColors_callback(ui,id,newVal)
     local c=model.readInfo()
-    c.partSpecific['bitCoded']=sim.boolOr32(c.partSpecific['bitCoded'],1)
+    c.partSpecific['bitCoded']=(c.partSpecific['bitCoded']|1)
     if newVal==0 then
         c.partSpecific['bitCoded']=c.partSpecific['bitCoded']-1
     end

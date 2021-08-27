@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 putCartridgeDown=function()
     sim.wait(dwellTimeUp)
     sim.rmlMoveToJointPositions({j},-1,{0},{0},{maxVel},{maxAccel},{9999},{0},{0})
@@ -7,14 +8,14 @@ end
 
 enableStopper=function(enable)
     if enable then
-        sim.setObjectInt32Parameter(stopper,sim.objintparam_visibility_layer,1) -- make it visible
+        sim.setObjectInt32Param(stopper,sim.objintparam_visibility_layer,1) -- make it visible
         sim.setObjectSpecialProperty(stopper,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable) -- make it collidable, measurable, detectable, etc.
-        sim.setObjectInt32Parameter(stopper,sim.shapeintparam_respondable,1) -- make it respondable
+        sim.setObjectInt32Param(stopper,sim.shapeintparam_respondable,1) -- make it respondable
         sim.resetDynamicObject(stopper)
     else
-        sim.setObjectInt32Parameter(stopper,sim.objintparam_visibility_layer,0)
+        sim.setObjectInt32Param(stopper,sim.objintparam_visibility_layer,0)
         sim.setObjectSpecialProperty(stopper,0)
-        sim.setObjectInt32Parameter(stopper,sim.shapeintparam_respondable,0)
+        sim.setObjectInt32Param(stopper,sim.shapeintparam_respondable,0)
         sim.resetDynamicObject(stopper)
     end
 end

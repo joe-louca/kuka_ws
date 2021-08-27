@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -113,11 +114,11 @@ function sysCall_nonSimulation()
 end
 
 function sysCall_afterSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,1)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,1)
 end
 
 function sysCall_beforeSimulation()
-    sim.setObjectInt32Parameter(model,sim.objintparam_visibility_layer,0)
+    sim.setObjectInt32Param(model,sim.objintparam_visibility_layer,0)
     removeDlg()
 end
 
@@ -133,7 +134,7 @@ end
 function sysCall_cleanup()
     removeDlg()
     removeFromPluginRepresentation()
-    if sim.isHandleValid(model)==1 then
+    if sim.isHandle(model) then
         -- the associated object might already have been destroyed
         simBWF.writeSessionPersistentObjectData(model,"dlgPosAndSize",previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos)
     end

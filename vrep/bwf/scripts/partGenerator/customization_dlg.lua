@@ -20,7 +20,7 @@ function model.dlg.generate_callback()
     if model.selectedObj>=0 then
         -- Mark it as model if needed:
         local p=sim.getModelProperty(model.selectedObj)
-        if sim.boolAnd32(p,sim.modelproperty_not_model)~=0 then
+        if (p&sim.modelproperty_not_model)~=0 then
             sim.setModelProperty(model.selectedObj,p-sim.modelproperty_not_model)
         end
         -- Attach the generic part info struct:
@@ -109,7 +109,7 @@ function model.dlg.init()
 end
 
 function model.dlg.cleanup()
-    if sim.isHandleValid(model.handle)>0 then
+    if sim.isHandle(model.handle) then
         simBWF.writeSessionPersistentObjectData(model.handle,"dlgPosAndSize",model.dlg.previousDlgPos)
     end
 end

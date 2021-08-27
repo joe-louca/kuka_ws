@@ -1,27 +1,28 @@
+simBWF=require('simBWF')
 getAxesWithOrderingAccordingToSize=function(partHandle)
     local modProp=sim.getModelProperty(partHandle)
     local sx=0
     local sy=0
     local sz=0
-    if sim.boolAnd32(modProp,sim.modelproperty_not_model)==0 then
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_min_x )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_max_x )
+    if (modProp&sim.modelproperty_not_model)==0 then
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_min_x )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_max_x )
         sx=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_min_y )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_max_y )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_min_y )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_max_y )
         sy=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_min_z )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_modelbbox_max_z )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_min_z )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_modelbbox_max_z )
         sz=mmax-mmin
     else
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_min_x )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_max_x )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_min_x )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_max_x )
         sx=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_min_y )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_max_y )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_min_y )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_max_y )
         sy=mmax-mmin
-        local r,mmin=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_min_z )
-        local r,mmax=sim.getObjectFloatParameter(partHandle,sim.objfloatparam_objbbox_max_z )
+        local mmin=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_min_z )
+        local mmax=sim.getObjectFloatParam(partHandle,sim.objfloatparam_objbbox_max_z )
         sz=mmax-mmin
     end
     local m=sim.getObjectMatrix(partHandle,-1)
@@ -48,7 +49,7 @@ getPartMass=function(partHandle)
     local m=0
     if partHandle>=0 then
         local modProp=sim.getModelProperty(partHandle)
-        if sim.boolAnd32(modProp,sim.modelproperty_not_model)==0 then
+        if (modProp&sim.modelproperty_not_model)==0 then
             local objects={partHandle}
             while #objects>0 do
                 handle=objects[#objects]
@@ -64,7 +65,7 @@ getPartMass=function(partHandle)
                     end
                 end
                 if sim.getObjectType(handle)==sim.object_shape_type then
-                    local r,p=sim.getObjectInt32Parameter(handle,sim.shapeintparam_static)
+                    local p=sim.getObjectInt32Param(handle,sim.shapeintparam_static)
                     if p==0 then
                         m=m+sim.getShapeMassAndInertia(handle)
                     end
@@ -84,7 +85,7 @@ function checkIfLabelIsVisible(labelShape,hs)
     local orient={{-math.pi,0,0},{0,-math.pi/2,-math.pi/2},{0,math.pi/2,math.pi/2}}
     local modelM=sim.getObjectMatrix(model,-1)
     for sensL=1,3,1 do
-        if sim.boolAnd32(detectorLocations,bits[sensL])>0 then
+        if (detectorLocations&bits[sensL])>0 then
             -- that detector is enabled
             local labelM=sim.getObjectMatrix(labelShape,model)
             sim.setObjectOrientation(sensor2,model,orient[sensL])
@@ -138,11 +139,11 @@ function checkIfLabelIsVisible(labelShape,hs)
     end
     if successIndex>0 and showLabels then
         if successIndex==1 then
-            sim.setObjectFloatParameter(sensor3,sim.visionfloatparam_far_clipping,height)
+            sim.setObjectFloatParam(sensor3,sim.visionfloatparam_far_clipping,height)
         else
-            sim.setObjectFloatParameter(sensor3,sim.visionfloatparam_far_clipping,width)
+            sim.setObjectFloatParam(sensor3,sim.visionfloatparam_far_clipping,width)
         end
-        sim.setObjectFloatParameter(sensor3,sim.visionfloatparam_ortho_size,math.max(hs[1],hs[2])*2.5)
+        sim.setObjectFloatParam(sensor3,sim.visionfloatparam_ortho_size,math.max(hs[1],hs[2])*2.5)
         sim.handleVisionSensor(sensor3)
     end
     sim.setObjectOrientation(sensor2,model,orient[1])
@@ -156,11 +157,11 @@ function checkIfPartHasVisibleLabels(obj)
         if data then
             -- This is a label
             local label=objs[i]
-            local r,mmin=sim.getObjectFloatParameter(label,sim.objfloatparam_objbbox_min_x )
-            local r,mmax=sim.getObjectFloatParameter(label,sim.objfloatparam_objbbox_max_x )
+            local mmin=sim.getObjectFloatParam(label,sim.objfloatparam_objbbox_min_x )
+            local mmax=sim.getObjectFloatParam(label,sim.objfloatparam_objbbox_max_x )
             local sx=mmax-mmin
-            local r,mmin=sim.getObjectFloatParameter(label,sim.objfloatparam_objbbox_min_y )
-            local r,mmax=sim.getObjectFloatParameter(label,sim.objfloatparam_objbbox_max_y )
+            local mmin=sim.getObjectFloatParam(label,sim.objfloatparam_objbbox_min_y )
+            local mmax=sim.getObjectFloatParam(label,sim.objfloatparam_objbbox_max_y )
             local sy=mmax-mmin
             if checkIfLabelIsVisible(label,{sx*0.45,sy*0.45}) then
                 return true
@@ -297,18 +298,18 @@ function sysCall_init()
     length=data['length']
     height=data['height']
     maxLabelAngle=data['maxLabelAngle']
-    if sim.boolAnd32(data['bitCoded'],2)>0 then
+    if (data['bitCoded']&2)>0 then
         console=sim.auxiliaryConsoleOpen('Parts in detection window',1000,4,nil,{600,300},nil,{1,0.9,0.9})
     end
     
-    showPoints=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(data['bitCoded'],4)>0)
-    showLabels=simBWF.modifyAuxVisualizationItems(sim.boolAnd32(data['bitCoded'],8)>0)
+    showPoints=simBWF.modifyAuxVisualizationItems((data['bitCoded']&4)>0)
+    showLabels=simBWF.modifyAuxVisualizationItems((data['bitCoded']&8)>0)
     detectorLocations=0
-    if (sim.boolAnd32(data['bitCoded'],16)>0) then detectorLocations=detectorLocations+1 end
-    if (sim.boolAnd32(data['bitCoded'],32)>0) then detectorLocations=detectorLocations+2 end
-    if (sim.boolAnd32(data['bitCoded'],64)>0) then detectorLocations=detectorLocations+4 end
+    if ((data['bitCoded']&16)>0) then detectorLocations=detectorLocations+1 end
+    if ((data['bitCoded']&32)>0) then detectorLocations=detectorLocations+2 end
+    if ((data['bitCoded']&64)>0) then detectorLocations=detectorLocations+4 end
     if detectorLocations==0 then showLabels=false end
-    colorLabels=(sim.boolAnd32(data['bitCoded'],128)>0)
+    colorLabels=((data['bitCoded']&128)>0)
     labelSpheres=sim.addDrawingObject(sim.drawing_spherepoints,0.005,0,-1,9999,{0,0,0})
     sphereContainer=sim.addDrawingObject(sim.drawing_spherepoints,0.015,0,-1,9999,{1,0,0})
     lineContainer=sim.addDrawingObject(sim.drawing_lines,3,0,-1,9999,{1,0.25,0})
@@ -317,7 +318,7 @@ function sysCall_init()
         floatingView=sim.floatingViewAdd(0.1,0.9,0.2,0.2,0)
         sim.adjustView(floatingView,sensor3,64,'Label Detection')
     end
-    prepareStatisticsDialog(sim.boolAnd32(data['bitCoded'],256)>0)
+    prepareStatisticsDialog((data['bitCoded']&256)>0)
     previousParts={}
     previousTime=0
     allPartsInWindowForAWhile={}

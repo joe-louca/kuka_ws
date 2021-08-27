@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function getTriggerType()
     if stopTriggerSensor~=-1 then
         local data=sim.readCustomDataBlock(stopTriggerSensor,'XYZ_BINARYSENSOR_INFO')
@@ -37,13 +38,13 @@ function sysCall_init()
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,1)
     startTriggerSensor=simBWF.getReferencedObjectHandle(model,2)
     getTriggerType()
-    local err=sim.getInt32Parameter(sim.intparam_error_report_mode)
-    sim.setInt32Parameter(sim.intparam_error_report_mode,0) -- do not report errors
+    local err=sim.getInt32Param(sim.intparam_error_report_mode)
+    sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
     textureB=sim.getObjectHandle('genericPingPongPacker_textureB')
     textureC=sim.getObjectHandle('genericPingPongPacker_textureC')
     jointB=sim.getObjectHandle('genericPingPongPacker_jointB')
     jointC=sim.getObjectHandle('genericPingPongPacker_jointC')
-    sim.setInt32Parameter(sim.intparam_error_report_mode,err) -- report errors again
+    sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
     textureA=sim.getObjectHandle('genericPingPongPacker_textureA')
     forwarderA=sim.getObjectHandle('genericPingPongPacker_forwarderA')
     sensors={}
@@ -63,7 +64,7 @@ function sysCall_actuation()
     accel=data['acceleration']
     length=data['length']
     height=data['height']
-    enabled=sim.boolAnd32(data['bitCoded'],64)>0
+    enabled=(data['bitCoded']&64)>0
     if not enabled then
         maxVel=0
     end
@@ -91,11 +92,11 @@ function sysCall_actuation()
     end
     totShift=totShift+dt*beltVelocity
     
-    sim.setObjectFloatParameter(textureA,sim.shapefloatparam_texture_y,totShift)
+    sim.setObjectFloatParam(textureA,sim.shapefloatparam_texture_y,totShift)
 
     if textureB~=-1 then
-        sim.setObjectFloatParameter(textureB,sim.shapefloatparam_texture_y,length*0.5+0.041574*height/0.2+totShift)
-        sim.setObjectFloatParameter(textureC,sim.shapefloatparam_texture_y,-length*0.5-0.041574*height/0.2+totShift)
+        sim.setObjectFloatParam(textureB,sim.shapefloatparam_texture_y,length*0.5+0.041574*height/0.2+totShift)
+        sim.setObjectFloatParam(textureC,sim.shapefloatparam_texture_y,-length*0.5-0.041574*height/0.2+totShift)
         local a=sim.getJointPosition(jointB)
         sim.setJointPosition(jointB,a-beltVelocity*dt*2/height)
         sim.setJointPosition(jointC,a-beltVelocity*dt*2/height)
@@ -109,9 +110,9 @@ function sysCall_actuation()
     m[8]=0
     m[12]=0
     absoluteLinearVelocity=sim.multiplyVector(m,relativeLinearVelocity)
-    sim.setObjectFloatParameter(forwarderA,sim.shapefloatparam_init_velocity_x,absoluteLinearVelocity[1])
-    sim.setObjectFloatParameter(forwarderA,sim.shapefloatparam_init_velocity_y,absoluteLinearVelocity[2])
-    sim.setObjectFloatParameter(forwarderA,sim.shapefloatparam_init_velocity_z,absoluteLinearVelocity[3])
+    sim.setObjectFloatParam(forwarderA,sim.shapefloatparam_init_velocity_x,absoluteLinearVelocity[1])
+    sim.setObjectFloatParam(forwarderA,sim.shapefloatparam_init_velocity_y,absoluteLinearVelocity[2])
+    sim.setObjectFloatParam(forwarderA,sim.shapefloatparam_init_velocity_z,absoluteLinearVelocity[3])
     data['encoderDistance']=totShift
     sim.writeCustomDataBlock(model,simBWF.modelTags.CONVEYOR,sim.packTable(data))
 end 

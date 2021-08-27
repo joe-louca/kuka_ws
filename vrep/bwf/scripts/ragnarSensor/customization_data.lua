@@ -26,7 +26,7 @@ function model.updatePluginRepresentation()
         data.deviceId=c.deviceId
     end
     --]]
-    if sim.getBoolParameter(sim.boolparam_online_mode) then
+    if false then --sim.getBoolParam(sim.boolparam_online_mode) then
         data.detectionOffset=c.detectionOffset[2]
     else
         data.detectionOffset=c.detectionOffset[1]

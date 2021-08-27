@@ -15,7 +15,7 @@
   <td >
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
-<h1><a href="../apiOverview.htm">Regular API</a> function</h1>
+<h1>Regular API function</h1>
 <h3 class=subsectionBar><a name="simRegisterScriptCallbackFunction" id="simRegisterScriptCallbackFunction"></a>simRegisterScriptCallbackFunction</h3>
 <table class=apiTable>
 <tr class=apiTableTr> 
@@ -24,7 +24,7 @@ Description
 </td> 
 <td class=apiTableRightDescr>Registers a custom script function, that calls back a c/c++ function. This function is useful for plugins that wish to provide their own or customized script functions. See also <a href="simRegisterScriptVariable.htm">simRegisterScriptVariable</a>.
 <br><br>
-<div>Data exchange between a script and the plugin happens via a <a href="../apiFunctionListCategory.htm#stacks">stack</a>. Reading and writing arguments from/to the stack gives you a maximum of flexibility, and you wil be able to exchange also complex data structures. But it can also be tedious, if your data structures are anyway relatively simple. In that case you can use the helper classes <em>CScriptFunctionData</em> and <em>CScriptFunctionDataItem</em> located in <em>programming/common</em> and <em>programming/include</em>: they will greatly simplify the task.</div>
+<div>Data exchange between a script and the plugin happens via a <a href="../apiFunctions.htm#stacks">stack</a>. Reading and writing arguments from/to the stack gives you a maximum of flexibility, and you wil be able to exchange also complex data structures. But it can also be tedious, if your data structures are anyway relatively simple. In that case you can use the helper classes <em>CScriptFunctionData</em> and <em>CScriptFunctionDataItem</em> located in <em>programming/common</em> and <em>programming/include</em>: they will greatly simplify the task.</div>
 <br>
 <div>Use following 4 functions in the helper class: <em>readDataFromStack</em>, <em>getInDataPtr</em>, <em>pushOutData</em> and <em>writeDataToStack</em>.</div>
 </td>
@@ -49,11 +49,7 @@ C synopsis
 </div>
 <div><strong>simInt scriptID</strong>: handle of the calling script<br>
 </div>
-<div><strong>simInt stackID</strong>: a <a href="simCreateStack.htm">stack handle</a>. The stack is used to read arguments from the script, and to return data to the script.  See also the <a href="../apiFunctionListCategory.htm#stacks">available stack functions</a>.<br>
-</div>
-<div><strong>simChar waitUntilZero</strong>: this value can be used when threaded scripts call a custom Lua function in a plugin that shouldn't return until a condition is met (e.g. until the robot movement finished). For that purpose, the plugin should write a value different from zero to indicate a &quot;wait&quot; state. When the callback returns, the control is not given back to the script until some other thread calling the plugin writes zero to that location. Once zero was written, the memory location should not be used anymore (because it might be released anytime by the simulator). Also, when the user stops a simulation before zero was written to that location, the wait state is aborted. In that case however the memory location stays valid (i.e. writing zero will not result in a crash) until the simulation ended.<br>
-</div>
-<div><strong>simChar* raiseErrorWithMessage</strong>: max. 256 bytes are available here for an error message. This buffer is allocated by CoppeliaSim and initially contains a zero length string. If the length of the string is not zero, a script error will be raised and the message displayed in the status bar.
+<div><strong>simInt stackID</strong>: a <a href="simCreateStack.htm">stack handle</a>. The stack is used to read arguments from the script, and to return data to the script.  See also the <a href="../apiFunctions.htm#stacks">available stack functions</a>.<br>
 </div>
 <br>
 
@@ -90,9 +86,7 @@ Lua return values
 </tr> 
 </table> 
 
-<br>
-<p><a href="../apiFunctions.htm">All regular API functions on one page</a></p>
-<br>
+
 <br>
 </td>
 </tr>

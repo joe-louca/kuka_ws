@@ -17,47 +17,105 @@
 
 
 
-<h1>Paths <img src="images/paths1.jpg"></h1>
+<h1>Paths</h1>
 
 
-<p>A path is an <a href="objects.htm">object</a> that defines a path or trajectory in space. It can be used for various tasks as illustrated in following figures: <br>
-</p>
-
-<p align=center><img src="images/paths2.jpg"></p>
-<p class=imageLabel>[Path object examples for (a) end-effector guidance, (b) path planning, (c) caterpillar simulation, (d) track simulation, (e) escalator simulation]</p>
+<p>A path is a pseudo <a href="objects.htm">object</a>, representing a succession of points with orientation in space. <em>pseudo </em>object, since it is built using merely <a href="dummies.htm">dummies</a> and a <a href="customizationScripts.htm">customization script</a> that describes its functionality and behaviour.</p>
+<p align=center><img src="images/nakedPath.jpg"></p>
+<p class=imageLabel>[Simple path containing 4 control points]</p>
 <br>
 
-<p>Path objects can be added to the <a href="scenes.htm">scene</a> with [Menu bar --&gt; Add --&gt; Path]. Two basic paths are available by default: a simple segment-type path, or a circle-type path. They can be oriented or scaled, but oftentimes this is not enough. The user has several alternatives to generate customized path objects:</p>
 
-<li><a href="pathImportExport.htm">Import a path</a> from a file. </li>
+<p>Path objects can be added to the <a href="scenes.htm">scene</a> with [Menu bar --&gt; Add --&gt; Path]. A path is composed by control points that define its curve in space. Control points can be shifted, copy/pasted or deleted. A path's basic properties are accessed and adjusted via its user parameters (implemented via a <a href="userConfigCallbackFunctions.htm">user config callback function</a>), in the scene hierarchy:</p>
+<p align=center><img src="images/scriptSimParams1.jpg"></p>
+<p class=imageLabel>[User parameter icon]</p>
+<br>
 
-<li><a href="pathEditMode.htm">Edit a path</a>. </li>
+<p>A path can also automatically generate extruded <a href="shapes.htm">shapes</a>; this functionality is enabled via its user parameters, and the shape profile, color and other details can be adjusted in its <a href="customizationScripts.htm">customization script</a>, which uses the API function <a href="regularApi/simGenerateShapeFromPath.htm">sim.generateShapefromPath</a>: </p>
+<pre class=lightRedBox>function path.shaping(path,pathIsClosed,upVector)
+    -- following section generates a square extrusion shape:
+    local section={0.02,-0.02,0.02,0.02,-0.02,0.02,-0.02,-0.02,0.02,-0.02}
+    local color={0.7,0.9,0.9}
+    local options=0
+    if pathIsClosed then
+        options=options|4
+    end
+    local shape=sim.generateShapeFromPath(path,section,options,upVector)
+    sim.setShapeColor(shape,nil,sim.colorcomponent_ambient_diffuse,color)
+    return shape
+end</pre>
+<p align=center><img src="images/squarePath.jpg"></p>
+<p class=imageLabel>[Simple path generating an extruded square shape]</p>
+<br>
 
-<li>Generate a path from the edge of a <a href="shapes.htm">shape</a>. See the <a href="edgeEditMode.htm">edge edit mode</a> for details. </li>
 
+<p>To generate an extruded circular shape, use following code to create the section data:</p>
+<pre class=lightRedBox>local section={}
+local radius=0.02
+local sides=32
+local da=math.pi*2/sides
+for i=0,sides-1,1 do
+    section[2*i+1]=radius*math.cos(da*i)
+    section[2*i+2]=radius*math.sin(da*i)
+end
+-- the section shoujld be closed (first and last points perfect overlap):
+section[#section+1]=section[1]
+section[#section+1]=section[2]</pre>
+<p align=center><img src="images/circularPath.jpg"></p>
+<p class=imageLabel>[Simple path generating an extruded circular shape]</p>
+<br>
 
+<p>Path data is stored inside of the path object, as <a href="apiFunctions.htm#customDataBlocks">custom object data</a>. It can be accessed with:</p>
 
-<p>Paths by themselves don't do much. They are usually used in conjunction with <a href="dummies.htm">dummies</a> and other objects to obtain the desired effect. To move an object along a path, a dummy first needs to be assigned to the path, then the object can be attached to the dummy which will follow the path's intrinsic movement. Refer to the section on <a href="dummies.htm">dummies</a> for more details.<br>
-</p>
+<pre class=lightRedBox>-- control point data (each one has x,y,z,qx,qy,qz,qw (position and quaternion)):
+local ctrlPts=sim.unpackDoubleTable(sim.readCustomDataBlock(pathHandle,'PATHCTRLPTS'))
 
-<p>Paths are <a href="renderableObjects.htm">renderable objects</a>, this means that paths can be <em>seen</em> by <a href="visionSensors.htm">vision sensors</a>. The <a href="pathShaping.htm">path shaping functionality</a> however needs to be enabled. The renderable property of a path can be altered in the <a href="commonPropertiesDialog.htm">object common properties</a>.<br>
-</p>
-
-<p>Some path data can be recorded by graph objects. Refer to <a href="graphs.htm">graphs</a> and <a href="dataStreamTypes.htm">graph data stream types</a> for more information about how to record path data.<br>
-</p>
+-- path data (each one has x,y,z,qx,qy,qz,qw (position and quaternion)):
+local pathData=sim.unpackDoubleTable(sim.readCustomDataBlock(pathHandle,'PATH'))</pre>
 
 <br>
-<h3 class=recommendedTopics>Recommended topics</h3>
 
-<li><a href="apiFunctionListCategory.htm#PathObject">Related API functions</a></li>
-<li><a href="pathsControlPointsAndBezierPoints.htm">Path control points and Bezier points</a></li>
-<li><a href="pathPositionCalculationMethod.htm">Path position and length calculation method</a></li>
-<li><a href="pathMovementAlongAPath.htm">Movement along a path</a></li>
-<li><a href="pathShaping.htm">Path shaping</a></li>
-<li><a href="pathPropertiesDialog.htm">Path properties</a></li>
-<li><a href="pathImportExport.htm">Path import/export operations</a></li>
-<li><a href="pathEditMode.htm">Path edit mode</a></li>
-<li><a href="dummies.htm">Dummies</a></li>
+<p>Various <a href="apiFunctions.htm#paths">API functions related to paths</a> are available, e.g. in order to have an object follow a path in position and orientation, one could use following script:</p>
+
+<pre class=lightRedBox>function sysCall_init()
+    objectToFollowPath=sim.getObjectHandle(sim.handle_self)
+    path=sim.getObjectHandle('Path')
+    pathData=sim.unpackDoubleTable(sim.readCustomDataBlock(path,'PATH'))
+    local m=Matrix(#pathData//7,7,pathData)
+    pathPositions=m:slice(1,1,m:rows(),3):data()
+    pathQuaternions=m:slice(1,4,m:rows(),7):data()
+    pathLengths,totalLength=sim.getPathLengths(pathPositions,3)
+    velocity=0.04 -- m/s
+    posAlongPath=0
+    previousSimulationTime=0
+    corout=coroutine.create(coroutineMain)
+end
+
+function sysCall_actuation()
+    if coroutine.status(corout)~='dead' then
+        local ok,errorMsg=coroutine.resume(corout)
+        if errorMsg then
+            error(debug.traceback(corout,errorMsg),2)
+        end
+    end
+end
+
+function coroutineMain()
+    sim.setThreadAutomaticSwitch(false)
+    while true do
+        local t=sim.getSimulationTime()
+        posAlongPath=posAlongPath+velocity*(t-previousSimulationTime)
+        posAlongPath=posAlongPath % totalLength
+        local pos=sim.getPathInterpolatedConfig(pathPositions,pathLengths,posAlongPath)
+        local quat=sim.getPathInterpolatedConfig(pathQuaternions,pathLengths,
+                                                 posAlongPath,nil,{2,2,2,2})
+        sim.setObjectPosition(objectToFollowPath,path,pos)
+        sim.setObjectQuaternion(objectToFollowPath,path,quat)
+        previousSimulationTime=t
+        sim.switchThread()
+    end
+end</pre>
+
 
 <br>
 <br>

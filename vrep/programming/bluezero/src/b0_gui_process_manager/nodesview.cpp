@@ -11,6 +11,13 @@
 #define horizontalAdvance width
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#include <iostream>
+using std::endl;
+#else
+using Qt::endl;
+#endif
+
 AbstractItem::AbstractItem(NodesView *nodeView)
     : nodesView_(nodeView)
 {
@@ -337,10 +344,22 @@ void NodesView::arrangeItems()
     }
     process.waitForFinished();
     QString out(process.readAllStandardOutput());
-    QStringList lines = out.split(QRegExp("[\r\n]"), QString::SkipEmptyParts);
+    QStringList lines = out.split(QRegExp("[\r\n]"),
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        Qt::SkipEmptyParts
+#else
+        QString::SkipEmptyParts
+#endif
+    );
     for(auto line : lines)
     {
-        QStringList tokens = line.split(QRegExp("\\s"), QString::SkipEmptyParts);
+        QStringList tokens = line.split(QRegExp("\\s"),
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            Qt::SkipEmptyParts
+#else
+            QString::SkipEmptyParts
+#endif
+        );
         if(tokens[0] == "node")
         {
             QString id = tokens[1];

@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function removeFromPluginRepresentation()
 
 end
@@ -98,14 +99,14 @@ function getColor()
 end
 
 function setShapeSize(h,x,y,z)
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_x)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_x)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_x)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_x)
     local sx=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_y)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_y)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_y)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_y)
     local sy=mmax-mmin
-    local r,mmin=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_min_z)
-    local r,mmax=sim.getObjectFloatParameter(h,sim.objfloatparam_objbbox_max_z)
+    local mmin=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_min_z)
+    local mmax=sim.getObjectFloatParam(h,sim.objfloatparam_objbbox_max_z)
     local sz=mmax-mmin
     sim.scaleObject(h,x/sx,y/sy,z/sz)
 end
@@ -243,12 +244,12 @@ function updateConveyor()
         local p=sim.copyPasteObjects({pad},0)[1]
         sim.setObjectParent(p,pb,true)
         sim.setObjectParent(pb,path,true)
-        sim.setObjectInt32Parameter(p,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(p,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(p,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(p,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(p,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
-        sim.setObjectFloatParameter(pb,sim.dummyfloatparam_follow_path_offset,i*dx)
+        sim.setObjectFloatParam(pb,sim.dummyfloatparam_follow_path_offset,i*dx)
 
-        if sim.boolAnd32(bitCoded,32)>0 then
+        if (bitCoded&32)>0 then
             sim.setShapeTexture(p,-1,sim.texturemap_plane,12,{0.04,0.04})
         end
 
@@ -257,7 +258,7 @@ function updateConveyor()
     setShapeSize(endPad2,width,padThickness,padHeight)
     sim.setObjectPosition(endPad1,model,{padThickness*0.5+pr,padThickness*0.5,-padHeight*0.5})
     sim.setObjectPosition(endPad2,model,{padThickness*0.5,padThickness*0.5+pr,-padHeight*0.5})
-    if sim.boolAnd32(bitCoded,32)==0 then
+    if (bitCoded&32)==0 then
         local textureID=sim.getShapeTextureId(pad)
         sim.setShapeTexture(endPad1,textureID,sim.texturemap_plane,12,{0.04,0.04})
         sim.setShapeTexture(endPad2,textureID,sim.texturemap_plane,12,{0.04,0.04})
@@ -267,16 +268,16 @@ function updateConveyor()
     end
 
 
-    local err=sim.getInt32Parameter(sim.intparam_error_report_mode)
-    sim.setInt32Parameter(sim.intparam_error_report_mode,0) -- do not report errors
+    local err=sim.getInt32Param(sim.intparam_error_report_mode)
+    sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
     local obj=sim.getObjectHandle('genericCurvedConveyorTypeB_sides')
-    sim.setInt32Parameter(sim.intparam_error_report_mode,err) -- report errors again
+    sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
     if obj>=0 then
         sim.removeObject(obj)
     end
 
     local sideParts={}
-    if sim.boolAnd32(bitCoded,4)==0 then
+    if (bitCoded&4)==0 then
         local div=2+math.floor(math.pi*outerRadius*0.5/padThickness)
         for i=0,div-1,1 do
             local p1=sim.copyPasteObjects({sidePad},0)[1]
@@ -287,7 +288,7 @@ function updateConveyor()
         end
     end
 
-    if sim.boolAnd32(bitCoded,8)==0 then
+    if (bitCoded&8)==0 then
         local div=2+math.floor(math.pi*innerRadius*0.5/padThickness)
         for i=0,div-1,1 do
             local p1=sim.copyPasteObjects({sidePad},0)[1]
@@ -299,8 +300,8 @@ function updateConveyor()
     end
     if #sideParts>0 then
         local h=sim.groupShapes(sideParts)
-        sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,1+256)
-        sim.setObjectInt32Parameter(h,sim.shapeintparam_respondable,1)
+        sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,1+256)
+        sim.setObjectInt32Param(h,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(h,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
         local suff=sim.getNameSuffix(sim.getObjectName(model))
         local name='genericCurvedConveyorTypeB_sides'
@@ -401,7 +402,7 @@ end
 
 function frontSideOpenClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],4)
+    conf['bitCoded']=(conf['bitCoded']|4)
     if newVal==0 then
         conf['bitCoded']=conf['bitCoded']-4
     end
@@ -412,7 +413,7 @@ end
 
 function backSideOpenClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],8)
+    conf['bitCoded']=(conf['bitCoded']|8)
     if newVal==0 then
         conf['bitCoded']=conf['bitCoded']-8
     end
@@ -423,7 +424,7 @@ end
 
 function texturedClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],32)
+    conf['bitCoded']=(conf['bitCoded']|32)
     if newVal~=0 then
         conf['bitCoded']=conf['bitCoded']-32
     end
@@ -490,7 +491,7 @@ function accelerationChange(ui,id,newVal)
 end
 function enabledClicked(ui,id,newVal)
     local conf=readInfo()
-    conf['bitCoded']=sim.boolOr32(conf['bitCoded'],64)
+    conf['bitCoded']=(conf['bitCoded']|64)
     if newVal==0 then
         conf['bitCoded']=conf['bitCoded']-64
     end
@@ -653,10 +654,10 @@ function createDlg()
         simUI.setEditValue(ui,20,simBWF.format("%.0f",config['padHeight']/0.001),true)
         simUI.setEditValue(ui,28,simBWF.format("%.0f",config['height']/0.001),true)
         simUI.setEditValue(ui,29,simBWF.format("%.0f",config['wallThickness']/0.001),true)
-        simUI.setCheckboxValue(ui,24,(sim.boolAnd32(config['bitCoded'],4)~=0) and 2 or 0,true)
-        simUI.setCheckboxValue(ui,25,(sim.boolAnd32(config['bitCoded'],8)~=0) and 2 or 0,true)
-        simUI.setCheckboxValue(ui,30,(sim.boolAnd32(config['bitCoded'],32)==0) and 2 or 0,true)
-        simUI.setCheckboxValue(ui,1000,(sim.boolAnd32(config['bitCoded'],64)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,24,((config['bitCoded']&4)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,25,((config['bitCoded']&8)~=0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,30,((config['bitCoded']&32)==0) and 2 or 0,true)
+        simUI.setCheckboxValue(ui,1000,((config['bitCoded']&64)~=0) and 2 or 0,true)
 
         simUI.setSliderValue(ui,5,red*100,true)
         simUI.setSliderValue(ui,6,green*100,true)

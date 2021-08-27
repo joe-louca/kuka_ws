@@ -5,7 +5,7 @@ function model.dlg.refresh()
         local c=model.readInfo()
         local sel=simBWF.getSelectedEditWidget(model.dlg.ui)
         simUI.setEditValue(model.dlg.ui,1365,simBWF.getObjectAltName(model.handle),true)
-        simUI.setCheckboxValue(model.dlg.ui,1,simBWF.getCheckboxValFromBool(sim.boolAnd32(c['bitCoded'],1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,1,simBWF.getCheckboxValFromBool((c['bitCoded']&1)~=0),true)
 
         model.dlg.updateEnabledDisabledItems()
         
@@ -33,7 +33,7 @@ end
 
 function model.dlg.gripperActionColorChangeClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c.bitCoded=sim.boolXor32(c.bitCoded,1)
+    c.bitCoded=(c.bitCoded~1)
     model.writeInfo(c)
     simBWF.markUndoPoint()
     model.dlg.refresh()

@@ -4,14 +4,14 @@ function model.dlg.refresh_specific()
     simUI.setEditValue(model.dlg.ui,1,simBWF.format("%.0f , %.0f , %.0f",config.partSpecific.width*1000,config.partSpecific.length*1000,config.partSpecific.height*1000),true)
     simUI.setEditValue(model.dlg.ui,4,simBWF.format("%.0f",config.partSpecific['thickness']/0.001),true)
 
-    simUI.setCheckboxValue(model.dlg.ui,10,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.partSpecific['bitCoded'],1)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,10,simBWF.getCheckboxValFromBool((config.partSpecific['bitCoded']&1)~=0),true)
     simUI.setEditValue(model.dlg.ui,11,simBWF.format("%.0f",config.partSpecific['closePartALength']*100),true)
     simUI.setEditValue(model.dlg.ui,12,simBWF.format("%.0f",config.partSpecific['closePartAWidth']*100),true)
-    simUI.setCheckboxValue(model.dlg.ui,13,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.partSpecific['bitCoded'],2)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,13,simBWF.getCheckboxValFromBool((config.partSpecific['bitCoded']&2)~=0),true)
     simUI.setEditValue(model.dlg.ui,14,simBWF.format("%.0f",config.partSpecific['closePartBLength']*100),true)
     simUI.setEditValue(model.dlg.ui,15,simBWF.format("%.0f",config.partSpecific['closePartBWidth']*100),true)
 
-    simUI.setCheckboxValue(model.dlg.ui,888,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.partSpecific['bitCoded'],4)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,888,simBWF.getCheckboxValFromBool((config.partSpecific['bitCoded']&4)~=0),true)
 
     simUI.setEditValue(model.dlg.ui,20,simBWF.format("%.2f",config.partSpecific['mass']),true)
     simUI.setEditValue(model.dlg.ui,21,simBWF.format("%.2f",config.partSpecific['inertiaFactor']),true)
@@ -25,10 +25,10 @@ function model.dlg.refresh_specific()
     simUI.setSliderValue(model.dlg.ui,32,blue*100,true)
     simUI.setSliderValue(model.dlg.ui,33,spec*100,true)
 
-    simUI.setEnabled(model.dlg.ui,11,sim.boolAnd32(config.partSpecific['bitCoded'],1)~=0,true)
-    simUI.setEnabled(model.dlg.ui,12,sim.boolAnd32(config.partSpecific['bitCoded'],1)~=0,true)
-    simUI.setEnabled(model.dlg.ui,14,sim.boolAnd32(config.partSpecific['bitCoded'],2)~=0,true)
-    simUI.setEnabled(model.dlg.ui,15,sim.boolAnd32(config.partSpecific['bitCoded'],2)~=0,true)
+    simUI.setEnabled(model.dlg.ui,11,(config.partSpecific['bitCoded']&1)~=0,true)
+    simUI.setEnabled(model.dlg.ui,12,(config.partSpecific['bitCoded']&1)~=0,true)
+    simUI.setEnabled(model.dlg.ui,14,(config.partSpecific['bitCoded']&2)~=0,true)
+    simUI.setEnabled(model.dlg.ui,15,(config.partSpecific['bitCoded']&2)~=0,true)
 end
 
 function model.dlg.sizeChange_callback(ui,id,newValue)
@@ -71,7 +71,7 @@ end
 
 function model.dlg.lidA_callback(ui,id,newVal)
     local c=model.readInfo()
-    c.partSpecific['bitCoded']=sim.boolOr32(c.partSpecific['bitCoded'],1)
+    c.partSpecific['bitCoded']=(c.partSpecific['bitCoded']|1)
     if newVal==0 then
         c.partSpecific['bitCoded']=c.partSpecific['bitCoded']-1
     end
@@ -83,7 +83,7 @@ end
 
 function model.dlg.lidB_callback(ui,id,newVal)
     local c=model.readInfo()
-    c.partSpecific['bitCoded']=sim.boolOr32(c.partSpecific['bitCoded'],2)
+    c.partSpecific['bitCoded']=(c.partSpecific['bitCoded']|2)
     if newVal==0 then
         c.partSpecific['bitCoded']=c.partSpecific['bitCoded']-2
     end
@@ -267,7 +267,7 @@ end
 
 function model.dlg.texture_callback(ui,id,newVal)
     local c=model.readInfo()
-    c.partSpecific['bitCoded']=sim.boolOr32(c.partSpecific['bitCoded'],4)
+    c.partSpecific['bitCoded']=(c.partSpecific['bitCoded']|4)
     if newVal==0 then
         c.partSpecific['bitCoded']=c.partSpecific['bitCoded']-4
     end

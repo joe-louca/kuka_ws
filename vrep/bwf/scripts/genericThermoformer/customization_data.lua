@@ -50,7 +50,7 @@ function model.updatePluginRepresentation()
     data.inputObjectId=-1 -- simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.INPUT)
     data.palletId=simBWF.getReferencedObjectHandle(model.handle,model.objRefIdx.PALLET)
     data.calibrationBallDistance=0 -- c.calibrationBallDistance
-    if sim.getBoolParameter(sim.boolparam_online_mode) then
+    if false then --sim.getBoolParam(sim.boolparam_online_mode) then
         data.detectionOffset=c.detectionOffset[2]
     else
         data.detectionOffset=c.detectionOffset[1]

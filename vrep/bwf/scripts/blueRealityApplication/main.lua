@@ -1,6 +1,7 @@
+simBWF=require('simBWF')
 local isCustomizationScript=sim.getScriptAttribute(sim.getScriptHandle(sim.handle_self),sim.scriptattribute_scripttype)==sim.scripttype_customizationscript
 
-if not sim.isPluginLoaded('Bwf') then
+if false then -- if not sim.isPluginLoaded('Bwf') then
     function sysCall_init()
         if isCustomizationScript then
             sim.msgBox(sim.msgbox_type_warning,sim.msgbox_buttons_ok,"BWF Plugin","BWF plugin was not found.\n\nThe scene will not operate as expected")
@@ -20,7 +21,7 @@ else
                 local instanciatedPartHolder=sim.getObjectHandle('instanciatedParts@silentError')
                 if instanciatedPartHolder==-1 then
                     local h=sim.createDummy(0.001)
-                    sim.setObjectInt32Parameter(h,sim.objintparam_visibility_layer,0)
+                    sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,0)
                     local p=sim.getModelProperty(h)
                     sim.setModelProperty(h,p-sim.modelproperty_not_model)
                     sim.setObjectName(h,'instanciatedParts')

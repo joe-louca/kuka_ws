@@ -5,6 +5,7 @@
     #error simPlusPlus needs at least a C++11 compliant compiler
 #endif
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,6 +13,10 @@
 #include <boost/format.hpp>
 
 #include "simLib.h"
+
+#if SIM_PROGRAM_FULL_VERSION_NB < 4010005
+    #error CoppeliaSim headers are not up to date
+#endif
 
 #ifdef _WIN32
 	#define SIM_DLLEXPORT extern "C" __declspec(dllexport)
@@ -35,6 +40,10 @@
 
 namespace sim
 {
+    extern std::string pluginName;
+    extern int pluginVersion;
+    extern std::string pluginNameAndVersion;
+
     struct InstancePassFlags
     {
         bool objectsErased;
@@ -117,6 +126,7 @@ namespace sim
         virtual void onProxSensorSelectDown(int objectID, simFloat *clickedPoint, simFloat *normalVector);
         virtual void onProxSensorSelectUp(int objectID, simFloat *clickedPoint, simFloat *normalVector);
         virtual void onPickSelectDown(int objectID);
+        virtual void onScriptStateDestroyed(int scriptID);
 
     private:
         bool firstInstancePass = true;
@@ -124,22 +134,35 @@ namespace sim
     };
 }
 
-#define SIM_PLUGIN(pluginName, pluginVersion, className) \
-LIBRARY simLib; \
-className *simPlugin; \
+#define SIM_PLUGIN(pluginName_, pluginVersion_, className_) \
+namespace sim { \
+LIBRARY lib; \
+::className_ *plugin; \
+std::string pluginName; \
+std::string pluginNameAndVersion; \
+int pluginVersion; \
+} \
 SIM_DLLEXPORT unsigned char simStart(void *reservedPointer, int reservedInt) \
 { \
     try \
     { \
-        simPlugin = new className; \
-        simPlugin->setName(pluginName); \
-        simLib = simPlugin->loadSimLibrary(); \
-        simPlugin->onStart(); \
-        return pluginVersion; \
+        sim::pluginName = pluginName_; \
+        sim::pluginVersion = pluginVersion_; \
+        sim::pluginNameAndVersion = pluginName_; \
+        if(pluginVersion_ > 0) \
+        { \
+            sim::pluginNameAndVersion += "-"; \
+            sim::pluginNameAndVersion += std::to_string(pluginVersion_); \
+        } \
+        sim::plugin = new className_; \
+        sim::plugin->setName(pluginName_); \
+        sim::lib = sim::plugin->loadSimLibrary(); \
+        sim::plugin->onStart(); \
+        return std::max(1, sim::pluginVersion); \
     } \
     catch(std::exception &ex) \
     { \
-        simAddLog(pluginName, sim_verbosity_errors, ex.what()); \
+        simAddLog(sim::pluginName.c_str(), sim_verbosity_errors, ex.what()); \
         return 0; \
     } \
 } \
@@ -147,31 +170,31 @@ SIM_DLLEXPORT void simEnd() \
 { \
     try \
     { \
-        if(simPlugin) \
+        if(sim::plugin) \
         { \
-            simPlugin->onEnd(); \
-            delete simPlugin; \
-            simPlugin = nullptr; \
+            sim::plugin->onEnd(); \
+            delete sim::plugin; \
+            sim::plugin = nullptr; \
         } \
     } \
     catch(std::exception &ex) \
     { \
-        simAddLog(pluginName, sim_verbosity_errors, ex.what()); \
+        simAddLog(sim::pluginName.c_str(), sim_verbosity_errors, ex.what()); \
     } \
-    unloadSimLibrary(simLib); \
+    unloadSimLibrary(sim::lib); \
 } \
 SIM_DLLEXPORT void * simMessage(int message, int *auxiliaryData, void *customData, int *replyData) \
 { \
     try \
     { \
-        if(simPlugin) \
+        if(sim::plugin) \
         { \
-            return simPlugin->onMessage(message, auxiliaryData, customData, replyData); \
+            return sim::plugin->onMessage(message, auxiliaryData, customData, replyData); \
         } \
     } \
     catch(std::exception &ex) \
     { \
-        simAddLog(pluginName, sim_verbosity_errors, ex.what()); \
+        simAddLog(sim::pluginName.c_str(), sim_verbosity_errors, ex.what()); \
     } \
     return 0L; \
 }

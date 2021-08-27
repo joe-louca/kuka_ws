@@ -290,11 +290,6 @@ model.handles.panAdjustmentAngles[2]=sim.getJointPosition(sim.getObjectHandle('R
 model.handles.panAdjustmentAngles[3]=-sim.getJointPosition(sim.getObjectHandle('Ragnar_zRotRightRear'))
 model.handles.panAdjustmentAngles[4]=sim.getJointPosition(sim.getObjectHandle('Ragnar_zRotLeftRear'))
 
-model.handles.ikGroups={}
-for i=1,4,1 do
-    model.handles.ikGroups[i]=sim.getIkGroupHandle('ragnarIk_arm'..i)
-end
-
 model.handles.primaryArms={}
 model.handles.secondaryArms={}
 
@@ -340,8 +335,5 @@ model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('R
 model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_upstreamCover')
 model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_upstreamConnector')
 
-model.handles.robotArmCollection=sim.getCollectionHandle('RagnarArms')
-model.handles.robotArmAndPlatformCollection=sim.getCollectionHandle('RagnarArmsAndPlatform')
-model.handles.robotObstaclesCollection=sim.getCollectionHandle('RagnarObstacles')
 
 model.handles.frameModel=sim.getObjectHandle('RagnarFrame')

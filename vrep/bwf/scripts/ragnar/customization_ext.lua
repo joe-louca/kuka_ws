@@ -2,7 +2,7 @@ model.ext={}
 
 function model.ext.isPickWithoutTargetOverridden()
     local c=model.readInfo()
-    return sim.boolAnd32(c['bitCoded'],2048)>0
+    return (c['bitCoded']&2048)>0
 end
 
 function model.ext.getItemData_pricing()

@@ -101,7 +101,7 @@ end
 function model.ext.getCalibrationDataForCurrentMode()
     local data={}
     local c=model.readInfo()
-    local onlSw=sim.getBoolParameter(sim.boolparam_online_mode)
+    local onlSw=false --sim.getBoolParam(sim.boolparam_online_mode)
     if c.calibration and onlSw then
         data.realCalibration=true
         data.ball1=c.calibration[1]

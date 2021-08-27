@@ -4,7 +4,7 @@ function model.getDistributionValue(distribution)
         for i=1,#distribution,1 do
            cnt=cnt+distribution[i][1] 
         end
-        local p=sim.getFloatParameter(sim.floatparam_rand)*cnt
+        local p=sim.getFloatParam(sim.floatparam_rand)*cnt
         cnt=0
         for i=1,#distribution,1 do
             if cnt+distribution[i][1]>=p then
@@ -14,7 +14,7 @@ function model.getDistributionValue(distribution)
         end
     else
         local cnt=#distribution
-        local p=1+math.floor(sim.getFloatParameter(sim.floatparam_rand)*cnt-0.0001)
+        local p=1+math.floor(sim.getFloatParam(sim.floatparam_rand)*cnt-0.0001)
         return distribution[p]
     end
 end
@@ -28,10 +28,10 @@ function sysCall_init()
     model.codeVersion=1
     
     local data=model.readInfo()
-    if sim.boolAnd32(data['bitCoded'],8)>0 then
+    if (data['bitCoded']&8)>0 then
         model.console=sim.auxiliaryConsoleOpen('Tagged Parts',1000,4,nil,{600,300},nil,{0.9,0.9,1})
     end
-    model.changeColor=(sim.boolAnd32(data['bitCoded'],16)>0)
+    model.changeColor=((data['bitCoded']&16)>0)
     model.width=data['size'][1]
     model.length=data['size'][2]
     model.height=data['size'][3]

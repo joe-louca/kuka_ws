@@ -1,3 +1,4 @@
+simBWF=require('simBWF')
 function getTriggerType()
     if stopTriggerSensor~=-1 then
         local data=sim.readCustomDataBlock(stopTriggerSensor,'XYZ_BINARYSENSOR_INFO')
@@ -82,7 +83,7 @@ function sysCall_actuation()
     data=sim.unpackTable(data)
     maxVel=data['velocity']
     accel=data['acceleration']
-    enabled=sim.boolAnd32(data['bitCoded'],64)>0
+    enabled=(data['bitCoded']&64)>0
     if not enabled then
         maxVel=0
     end

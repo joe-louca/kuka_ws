@@ -10,19 +10,19 @@ function model.dlg.refresh_specific()
     local size=partConf['largeLabelSize']
     simUI.setEditValue(model.dlg.ui,51,simBWF.format("%.0f , %.0f",size[1]*1000,size[2]*1000),true)
 
-    simUI.setCheckboxValue(model.dlg.ui,40,simBWF.getCheckboxValFromBool(sim.boolAnd32(partConf['bitCoded'],8)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,40,simBWF.getCheckboxValFromBool((partConf['bitCoded']&8)~=0),true)
 
-    simUI.setCheckboxValue(model.dlg.ui,41,simBWF.getCheckboxValFromBool(sim.boolAnd32(partConf['bitCoded'],64)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,41,simBWF.getCheckboxValFromBool((partConf['bitCoded']&64)~=0),true)
 
-    simUI.setCheckboxValue(model.dlg.ui,888,simBWF.getCheckboxValFromBool(sim.boolAnd32(config.partSpecific['bitCoded'],4)~=0),true)
+    simUI.setCheckboxValue(model.dlg.ui,888,simBWF.getCheckboxValFromBool((config.partSpecific['bitCoded']&4)~=0),true)
     simUI.setEditValue(model.dlg.ui,20,simBWF.format("%.2f",config.partSpecific['mass']),true)
     local red,green,blue=model.getColor()
     simUI.setSliderValue(model.dlg.ui,30,red*100,true)
     simUI.setSliderValue(model.dlg.ui,31,green*100,true)
     simUI.setSliderValue(model.dlg.ui,32,blue*100,true)
 
-    simUI.setEnabled(model.dlg.ui,41,sim.boolAnd32(partConf['bitCoded'],8)~=0,true)
-    simUI.setEnabled(model.dlg.ui,42,sim.boolAnd32(partConf['bitCoded'],8)~=0,true)
+    simUI.setEnabled(model.dlg.ui,41,(partConf['bitCoded']&8)~=0,true)
+    simUI.setEnabled(model.dlg.ui,42,(partConf['bitCoded']&8)~=0,true)
 end
 
 function model.dlg.sizeChange_callback(ui,id,newValue)
@@ -82,7 +82,7 @@ end
 
 function model.dlg.texture_callback(ui,id,newVal)
     local c=model.readInfo()
-    c.partSpecific['bitCoded']=sim.boolOr32(c.partSpecific['bitCoded'],4)
+    c.partSpecific['bitCoded']=(c.partSpecific['bitCoded']|4)
     if newVal==0 then
         c.partSpecific['bitCoded']=c.partSpecific['bitCoded']-4
     end
@@ -95,7 +95,7 @@ end
 function model.dlg.label1_callback(ui,id,newVal)
     local inf=model.readPartInfo()
     local c=inf['labelData']
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],8)
+    c['bitCoded']=(c['bitCoded']|8)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-8
     end
@@ -109,7 +109,7 @@ end
 function model.dlg.largeLabel1_callback(ui,id,newVal)
     local inf=model.readPartInfo()
     local c=inf['labelData']
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],64)
+    c['bitCoded']=(c['bitCoded']|64)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-64
     end

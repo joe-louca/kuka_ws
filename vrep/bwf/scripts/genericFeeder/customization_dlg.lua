@@ -353,10 +353,10 @@ function model.dlg.updateEnabledDisabledItems()
     if model.dlg.ui then
         local enabled=sim.getSimulationState()==sim.simulation_stopped
         local config=model.readInfo()
-        local freq=sim.boolAnd32(config['bitCoded'],4+8+16)==0
-        local sens=sim.boolAnd32(config['bitCoded'],4+8+16)==4
-        local user=sim.boolAnd32(config['bitCoded'],4+8+16)==8
-        local conv=sim.boolAnd32(config['bitCoded'],4+8+16)==12
+        local freq=(config['bitCoded']&4+8+16)==0
+        local sens=(config['bitCoded']&4+8+16)==4
+        local user=(config['bitCoded']&4+8+16)==8
+        local conv=(config['bitCoded']&4+8+16)==12
         simUI.setEnabled(model.dlg.ui,1365,enabled,true)
         simUI.setEnabled(model.dlg.ui,60,enabled,true)
 --        simUI.setEnabled(model.dlg.ui,49,enabled,true)
@@ -411,15 +411,15 @@ function model.dlg.refresh()
         else
             simUI.setEditValue(model.dlg.ui,63,simBWF.format("%.0f",config['maxProductionCnt']),true)
         end
-        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],1)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,40,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],2)~=0),true)
-        simUI.setCheckboxValue(model.dlg.ui,50,simBWF.getCheckboxValFromBool(sim.boolAnd32(config['bitCoded'],128)~=0),true)
-        simUI.setRadiobuttonValue(model.dlg.ui,1000,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==0),true)
-        simUI.setRadiobuttonValue(model.dlg.ui,1001,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==4),true)
-        simUI.setRadiobuttonValue(model.dlg.ui,1002,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==8),true)
-        simUI.setRadiobuttonValue(model.dlg.ui,1003,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==12),true)
-        simUI.setRadiobuttonValue(model.dlg.ui,1004,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==16),true)
-        simUI.setRadiobuttonValue(model.dlg.ui,1005,simBWF.getRadiobuttonValFromBool(sim.boolAnd32(config['bitCoded'],4+8+16)==20),true)
+        simUI.setCheckboxValue(model.dlg.ui,30,simBWF.getCheckboxValFromBool((config['bitCoded']&1)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,40,simBWF.getCheckboxValFromBool((config['bitCoded']&2)~=0),true)
+        simUI.setCheckboxValue(model.dlg.ui,50,simBWF.getCheckboxValFromBool((config['bitCoded']&128)~=0),true)
+        simUI.setRadiobuttonValue(model.dlg.ui,1000,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==0),true)
+        simUI.setRadiobuttonValue(model.dlg.ui,1001,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==4),true)
+        simUI.setRadiobuttonValue(model.dlg.ui,1002,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==8),true)
+        simUI.setRadiobuttonValue(model.dlg.ui,1003,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==12),true)
+        simUI.setRadiobuttonValue(model.dlg.ui,1004,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==16),true)
+        simUI.setRadiobuttonValue(model.dlg.ui,1005,simBWF.getRadiobuttonValFromBool((config['bitCoded']&4+8+16)==20),true)
         
         simUI.setRadiobuttonValue(model.dlg.ui,70,simBWF.getRadiobuttonValFromBool(config['sizeScaling']==0),true)
         simUI.setRadiobuttonValue(model.dlg.ui,71,simBWF.getRadiobuttonValFromBool(config['sizeScaling']==1),true)
@@ -434,7 +434,7 @@ end
 
 function model.dlg.hidden_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],1)
+    c['bitCoded']=(c['bitCoded']|1)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-1
     end
@@ -444,7 +444,7 @@ end
 
 function model.dlg.enabled_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],2)
+    c['bitCoded']=(c['bitCoded']|2)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-2
     end
@@ -454,7 +454,7 @@ end
 
 function model.dlg.showStatisticsClick_callback(ui,id,newVal)
     local c=model.readInfo()
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],128)
+    c['bitCoded']=(c['bitCoded']|128)
     if newVal==0 then
         c['bitCoded']=c['bitCoded']-128
     end
@@ -466,7 +466,7 @@ function model.dlg.triggerTypeClick_callback(ui,id)
     local c=model.readInfo()
     local w={4+8+16,8+16,4+16,16,4+8,8}
     local v=w[id-1000+1]
-    c['bitCoded']=sim.boolOr32(c['bitCoded'],4+8+16)-v
+    c['bitCoded']=(c['bitCoded']|4+8+16)-v
     simBWF.markUndoPoint()
     model.writeInfo(c)
     model.dlg.refresh()
