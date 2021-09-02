@@ -27,7 +27,7 @@ def Eu2Rot(eulers) :
                     [0, np.cos(eulers[2]), -np.sin(eulers[2])],
                     [0, np.sin(eulers[2]),  np.cos(eulers[2])]])
  
-    R_y = np,array([[ np.cos(eulers[1]), 0, np.sin(eulers[1])],
+    R_y = np.array([[ np.cos(eulers[1]), 0, np.sin(eulers[1])],
                     [ 0,                 1, 0                ],
                     [-np.sin(eulers[1]), 0, np.cos(eulers[1])]])
 
@@ -46,9 +46,9 @@ def ft_callback(msg):
     F_sensor = np.array([[msg.wrench.force.x],
                          [msg.wrench.force.y],
                          [msg.wrench.force.z]])
-    T_sensor = np.array([msg.wrench.torque.x],
-                        [msg.wrench.torque.y],
-                        [msg.wrench.torque.z]])
+    T_sensor = np.array([[msg.wrench.torque.x],
+                         [msg.wrench.torque.y],
+                         [msg.wrench.torque.z]])
     
     # Get reference frame and conver to rot matrix
     tf_W_ee = rospy.get_param('kuka_pos')   # x, y, z, Rz, Ry, Rx
@@ -61,18 +61,24 @@ def ft_callback(msg):
 
     # Timestamp
     t = rospy.get_time()
-    ft = [F_world[0][0], F_world[1][0], F_world[2][0], T_world[0][0], T_world[1][0], T_world[2][0], t]
+    timestamped_ft = [F_world[0][0], F_world[1][0], F_world[2][0], T_world[0][0], T_world[1][0], T_world[2][0], t]
     
     # Store and retrieve delayed ft readings
     ft, retrieved, delayed_ft_tbl = add_delay(timestamped_ft, delayed_ft_tbl)
 
     if retrieved:
-        rospy.set_param('ft_delay/fx', ft[0])
-        rospy.set_param('ft_delay/fy', ft[1])
-        rospy.set_param('ft_delay/fz', ft[2])
-        rospy.set_param('ft_delay/tx', ft[3])
-        rospy.set_param('ft_delay/ty', ft[4])
-        rospy.set_param('ft_delay/tz', ft[5])    
+        fx = ft[0].item()
+        fy = ft[1].item()
+        fz = ft[2].item()
+        tx = ft[3].item()
+        ty = ft[4].item()
+        tz = ft[5].item()
+        rospy.set_param('ft_delay/fx', fx)
+        rospy.set_param('ft_delay/fy', fy)
+        rospy.set_param('ft_delay/fz', fz)
+        rospy.set_param('ft_delay/tx', tx)
+        rospy.set_param('ft_delay/ty', ty)
+        rospy.set_param('ft_delay/tz', tz)    
 
                 
        

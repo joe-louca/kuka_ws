@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
     kuka_home_pos_ypr = new float[6];
     move_pos_ypr = new float[6];
     
-    double hap_factor = 1.0;
+    double hap_factor = 100.0; // range = hap_factor * ~0.2 mm... so ~ 20cm
     
     hap_home_pos_q[0] = 0.3; 	//x  --- in/out 	--- LIMITS:  0.2  / 0.4
     hap_home_pos_q[1] = 0.0; 	//y  --- left/right	--- LIMITS: -0.25 / 0.25	
@@ -239,7 +239,7 @@ int main(int argc, char* argv[])
 	    	Publish_Move_Cmd(move_pos_ypr, gripper_control, move_pub);
 	    	   	 
 	    	//f. Get delayed_ft_sensor reading
-	    	
+	    	// get param ft_delay/fx,fy,fz, tx,ty,tz
 	    	
 	    	//g. Apply forces to haption
 	    	//hap_force[0] = 0.0; hap_force[1] = 5.0; hap_force[2] = -5.0; hap_force[3] = 0.0; hap_force[4] = 0.0; hap_force[5] = 0.0;

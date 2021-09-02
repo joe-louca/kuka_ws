@@ -22,6 +22,7 @@ def add_delay(added_row, delayed_tbl):
     return retrieved_row, retrieved, delayed_tbl
 
 def haption_callback(msg):
+    global delayed_hap_cmd_tbl
     x = msg.twist.linear.x
     y = msg.twist.linear.y
     z = msg.twist.linear.z
@@ -33,7 +34,7 @@ def haption_callback(msg):
     if gripper_control == 'y':
         gripper_control = 1
     else:
-        gripper_control = 1
+        gripper_control = 0
             
     # Timestamp
     t = rospy.get_time()
@@ -43,13 +44,10 @@ def haption_callback(msg):
     hap_cmd, retrieved, delayed_hap_cmd_tbl = add_delay(timestamped_cmd, delayed_hap_cmd_tbl)
 
     if retrieved:
-        rospy.set_param('hap_cmd_delay/x', hap_cmd[0])
-        rospy.set_param('hap_cmd_delay/y', hap_cmd[1])
-        rospy.set_param('hap_cmd_delay/z', hap_cmd[2])
-        rospy.set_param('hap_cmd_delay/roll', hap_cmd[3])
-        rospy.set_param('hap_cmd_delay/pitch', hap_cmd[4])
-        rospy.set_param('hap_cmd_delay/yaw', hap_cmd[5])
-        rospy.set_param('hap_cmd_delay/gripper', hap_cmd[6])   
+        hap_param = [hap_cmd[0], hap_cmd[1], hap_cmd[2], hap_cmd[3], hap_cmd[4], hap_cmd[5]]
+        rospy.set_param('delayed_pos_cmd', hap_param)
+        rospy.set_param('delayed_sim_pos_cmd', hap_param)
+        rospy.set_param('delayed_gripper_cmd', hap_cmd[6])   
                         
             
 def main():
