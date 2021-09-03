@@ -87,50 +87,27 @@
         }
     }
 
-
-    void Q_2_YPR(float* q, float* ypr)
+    void Q_2_ABG(float* q, float* abg)
     {
-    // Converts {x,y,z,qx,qy,qz,qw} to {x,y,z,y,p,r}
+    // Converts {x,y,z,qw,qx,qy,qz} to {x,y,z,alpha,beta, gamma} --> ZYX rotation angles, or yaw-pitch-roll
     //https://newbedev.com/is-there-an-algorithm-for-converting-quaternion-rotations-to-euler-angle-rotations
-    	const double w2 = q[6]*q[6];
-	const double x2 = q[3]*q[3];
-	const double y2 = q[4]*q[4];
-	const double z2 = q[5]*q[5];
-	const double unitLength = w2 + x2 + y2 + z2;
-	const double abcd = q[6]*q[4] + q[4]*q[5];
-	const double eps = 1e-7;
-	const double pi = 3.14159265358979323846;
-	    
-	if (abcd > (0.5-eps)*unitLength)
-	{
-		ypr[0] = q[0];
-	    	ypr[1] = q[1];
-	    	ypr[2] = q[2];
-		ypr[3] = 2 * atan2(q[4], q[6]);		// yaw
-		ypr[4] = pi;					// pitch
-		ypr[5] = 0;					// roll
-	}
-	else if (abcd < (-0.5+eps)*unitLength)
-	{
-	    	ypr[0] = q[0];
-	    	ypr[1] = q[1];
-	    	ypr[2] = q[2];
-		ypr[3] = -2 * ::atan2(q[4], q[6]);		// yaw
-		ypr[4] = -pi;					// pitch
-		ypr[5] = 0;					// roll
-	}
-	else
-	{
-		const double adbc = q[6]*q[5] - q[3]*q[4];
-		const double acbd = q[6]*q[4] - q[3]*q[5];
-		
-		ypr[0] = q[0];
-	    	ypr[1] = q[1];
-	    	ypr[2] = q[2];
-		ypr[3] = ::atan2(2*adbc, 1 - 2*(z2+x2)); 	// yaw
-		ypr[4] = ::asin(2*abcd/unitLength);		// pitch
-		ypr[5] = ::atan2(2*acbd, 1 - 2*(y2+x2));	// roll
-	}
+    	float qw = q[3];
+    	float qx = q[4];
+     	float qy = q[5];
+     	float qz = q[6];   
+    
+    	float r11 = 2*(qx*qy + qw*qz);
+    	float r12 = qw*qw + qx*qx - qy*qy - qz*qz;
+    	float r21 =-2*(qx*qz - qw*qy);
+    	float r31 = 2*(qy*qz + qw*qx);
+    	float r32 = qw*qw - qx*qx - qy*qy + qz*qz;
+    	
+    	abg[0] = q[0];
+    	abg[1] = q[1];
+	abg[2] = q[2];
+    	abg[3] = ::atan2(r31, r32);
+    	abg[4] = ::asin(r21);
+    	abg[5] = ::atan2(r11, r12);
     }
 
     void Publish_Move_Cmd(float* cmd, std::string gripper_control, ros::Publisher move_pub)
@@ -140,12 +117,12 @@
   	twist.header.stamp = ros::Time::now();
   	twist.header.frame_id = gripper_control;
   
-    	twist.twist.linear.x = cmd[0];
-    	twist.twist.linear.y = cmd[1];
-    	twist.twist.linear.z = cmd[2];
-    	twist.twist.angular.x = cmd[5];
-    	twist.twist.angular.y = cmd[4];
-    	twist.twist.angular.z = cmd[3];
+    	twist.twist.linear.x = cmd[0];	//x
+    	twist.twist.linear.y = cmd[1];	//y
+    	twist.twist.linear.z = cmd[2];	//z
+    	twist.twist.angular.x = cmd[5];	//alpha (Rz) yaw
+    	twist.twist.angular.y = cmd[4];	//beta (Ry) pitch
+    	twist.twist.angular.z = cmd[3];	//gamma (Rx) roll
       	move_pub.publish(twist);
     }
 
@@ -157,8 +134,9 @@ int main(int argc, char* argv[])
     ros::NodeHandle n;
     ros::Publisher move_pub = n.advertise<geometry_msgs::TwistStamped>("hap_move_pub", 1);
     
-    //n.getParam("/rate", rate); **** TO DO ****
-    ros::Rate loop_rate(10);
+    int rate_hz;
+    n.getParam("rate_hz",rate_hz);
+    ros::Rate loop_rate(rate_hz);
     
     VirtContext VC;
     bool func_result;
@@ -166,47 +144,40 @@ int main(int argc, char* argv[])
     //bool btn;
 
     float * hap_pos_q;
-    float * hap_pos_ypr;
+    float * hap_pos_abg;
     float * hap_home_pos_q;
-    float * hap_home_pos_ypr;
-    float * hap_force_ypr;
-    float * kuka_home_pos_ypr;
-    float * move_pos_ypr;
+    float * hap_home_pos_abg;
+    float * hap_force_abg;
+    float * kuka_home_pos_abg;
+    float * move_pos_abg;
     
     hap_pos_q = new float[7];
-    hap_pos_ypr = new float[6];
+    hap_pos_abg = new float[6];
     hap_home_pos_q = new float[7];
-    hap_home_pos_ypr = new float[6];
-    hap_force_ypr = new float[6];
-    kuka_home_pos_ypr = new float[6];
-    move_pos_ypr = new float[6];
+    hap_home_pos_abg = new float[6];
+    hap_force_abg = new float[6];
+    kuka_home_pos_abg = new float[6];
+    move_pos_abg = new float[6];
     
-    double hap_factor = 100.0; // range = hap_factor * ~0.2 mm... so ~ 20cm
+    double hap_factor = 500.0; // range = hap_factor * ~0.2 mm... so ~ 100cm
     
     hap_home_pos_q[0] = 0.3; 	//x  --- in/out 	--- LIMITS:  0.2  / 0.4
     hap_home_pos_q[1] = 0.0; 	//y  --- left/right	--- LIMITS: -0.25 / 0.25	
     hap_home_pos_q[2] = 0.07;	//z  --- down/up	--- LIMITS: -0.16 / 0.31
-    hap_home_pos_q[3] = 0.0914383;	//qx
-    hap_home_pos_q[4] = 0.0335527;	//qy
-    hap_home_pos_q[5] = 0.0530528;	//qz
-    hap_home_pos_q[6] = 0.99383;	//qw
+    hap_home_pos_q[3] = 0.0914383;	//qw
+    hap_home_pos_q[4] = 0.0335527;	//qx
+    hap_home_pos_q[5] = 0.0530528;	//qy
+    hap_home_pos_q[6] = 0.99383;	//qz
     
-    Q_2_YPR(hap_home_pos_q, hap_home_pos_ypr);
-    
-    //hap_home_pos_ypr[0] = 0.3;  	//x
-    //hap_home_pos_ypr[1] = 0.0;  	//y
-    //hap_home_pos_ypr[2] = 0.07;  	//z
-    //hap_home_pos_ypr[3] = 0.101238;  	//yaw
-    //hap_home_pos_ypr[4] = 0.0703094;  //pitch
-    //hap_home_pos_ypr[5] = 0.0580262;  //roll    
+    Q_2_ABG(hap_home_pos_q, hap_home_pos_abg);  
 
     //n.getParam("/kuka_start_pos", kuka_home_pos_ypr); **** TO DO ****
-    kuka_home_pos_ypr[0] = 505.0;  //x
-    kuka_home_pos_ypr[1] = 455.0;  //y
-    kuka_home_pos_ypr[2] =-896.0;  //z
-    kuka_home_pos_ypr[3] = 1.249;  //yaw
-    kuka_home_pos_ypr[4] =-1.007;  //pitch
-    kuka_home_pos_ypr[5] = 2.868;  //roll
+    kuka_home_pos_abg[0] = 505.0;  //x
+    kuka_home_pos_abg[1] = 455.0;  //y
+    kuka_home_pos_abg[2] =-896.0;  //z
+    kuka_home_pos_abg[3] = 1.249;  //alpha (Rz) yaw
+    kuka_home_pos_abg[4] =-1.007;  //beta (Ry) pitch
+    kuka_home_pos_abg[5] = 2.868;  //gamma (Rx) roll  
     
     std::string gripper_control = "n";
     
@@ -227,16 +198,17 @@ int main(int argc, char* argv[])
 	    	//b. Get haption button input **** TO DO ****
 	    	   	
 	    	//c. Convert pose from quarternions to rpy
-	    	Q_2_YPR(hap_pos_q, hap_pos_ypr);
+	    	Q_2_ABG(hap_pos_q, hap_pos_abg);
 	    	    	
 	    	//d. Convert to Kuka workspace position (in rpy, not quaternions) to generate move command	
 	    	for(int i = 0; i < 3; ++i) // kuka position scaled as a factor of haption
-	    		{move_pos_ypr[i] = kuka_home_pos_ypr[i] + hap_factor * (hap_pos_ypr[i] - hap_home_pos_ypr[i]);}
+	    		{move_pos_abg[i] = kuka_home_pos_abg[i] + hap_factor * (hap_pos_abg[i] - hap_home_pos_abg[i]);}
+	    	
 	    	for(int i = 3; i < 6; ++i) // kuka orientation matched to haption
-	    		{move_pos_ypr[i] = kuka_home_pos_ypr[i] + hap_pos_ypr[i] - hap_home_pos_ypr[i];}
+	    		{move_pos_abg[i] = kuka_home_pos_abg[i] + hap_pos_abg[i] - hap_home_pos_abg[i];}
 	    	   	
 	    	//e. Publish move command ros(THEN ADD DELAY WITH PYTHON)	
-	    	Publish_Move_Cmd(move_pos_ypr, gripper_control, move_pub);
+	    	Publish_Move_Cmd(move_pos_abg, gripper_control, move_pub);
 	    	   	 
 	    	//f. Get delayed_ft_sensor reading
 	    	// get param ft_delay/fx,fy,fz, tx,ty,tz
