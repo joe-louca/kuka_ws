@@ -70,7 +70,7 @@
 	<!-- Haption -->
 	<group if="$(arg haption)">
 		<!--node pkg="launch" type="run_haption.sh" name="run_haption" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->
-		<node pkg="scripts" type="haption_delay_sub.py" name="haption_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		<!--node pkg="scripts" type="haption_delay_sub.py" name="haption_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->	
 	</group>
 	
 
