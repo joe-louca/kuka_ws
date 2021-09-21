@@ -311,9 +311,6 @@ int main(int argc, char* argv[])
     float ft_delay[6] = {};
     float ft_input[6] = {};
     float ft_user[6] = {};
-    
-    double ws_factor = 1000.0; // range = ws_factor * ~0.2 mm... so ~ 100cm
-    double ft_factor = 1.0; // scaling factor for forces to apply to haption
 
     // Initialise button and gripper control variables    
     int button_states[4] = {0,0,0,0};
@@ -345,7 +342,9 @@ int main(int argc, char* argv[])
     kuka_home_pos_q[5] =  0.0;
     kuka_home_pos_q[6] =  1.0;
         
-
+    
+    double ws_factor = 1000.0; // range = ws_factor * ~0.2 mm... so ~ 200cm?
+    double ft_factor = 1.0; // scaling factor for forces to apply to haption
     
     //1. Open connection to haption
     func_result = openConnectionToHaption(VC);
