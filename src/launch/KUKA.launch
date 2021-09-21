@@ -46,7 +46,7 @@
 		<node pkg="netft_utils" type="netft_node" name="axia_connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
 		<node pkg="scripts" type="ft_delay.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
 	</group>
-
+	
 	<!-- User input -->
 	<!-- PS4 -->
 	<group if="$(arg ps4)">
@@ -70,7 +70,7 @@
 	<!-- Haption -->
 	<group if="$(arg haption)">
 		<!--node pkg="launch" type="run_haption.sh" name="run_haption" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->
-		<!--node pkg="scripts" type="haption_delay_sub.py" name="haption_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->	
+		<node pkg="scripts" type="haption_delay_sub.py" name="haption_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
 	</group>
 	
 

@@ -5,6 +5,8 @@ CMakeFiles/haption.dir/haption.cpp.o: haption.cpp
 CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/geometry_msgs/Twist.h
 CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/geometry_msgs/TwistStamped.h
 CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/geometry_msgs/Vector3.h
+CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/geometry_msgs/Wrench.h
+CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/geometry_msgs/WrenchStamped.h
 CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/ros/advertise_options.h
 CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/ros/advertise_service_options.h
 CMakeFiles/haption.dir/haption.cpp.o: /opt/ros/noetic/include/ros/assert.h

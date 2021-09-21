@@ -15,7 +15,6 @@ link_directories(${PROJECT_SOURCE_DIR}/linux/lib) #virtuoseAPI.so
 link_directories(${PROJECT_SOURCE_DIR}/linux/bin) #virtuoseAPI.a
 
 add_executable (haption haption.cpp)
-
 target_link_libraries(
         haption
         virtuose

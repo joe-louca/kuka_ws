@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<launch>
+	<arg name="kuka" default="false"/>	
+	<arg name="ghost" default="false"/>
+	<arg name="vis" default="false"/>
+	<arg name="robotiq" default="false"/>	
+	<arg name="axia" default="false"/>
+	<arg name="haption" default="true"/>	
+
+	<arg name="axia_rate" default="1000"/>
+	<arg name="node_start_delay" default="5.0" />
+
+	<!-- Input streams -->
+	<!-- Load config parameters -->
+	<node pkg="scripts" type="config_kuka.py" name="config"/>
+
+	<!-- Kuka -->
+	<group if="$(arg kuka)">
+		<node pkg="launch" type="run_iiwaPy3_hap.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>		
+
+		<!-- Ghost Mode -->
+		<group if="$(arg ghost)">
+			<node pkg="launch" type="run_cop_KUKA_GHOST.sh" name="Coppelia_KUKA_Ghost" output="screen"/>
+			<node pkg="scripts" type="kuka_jpos_delay.py" name="Kuka_Jpos_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		</group>	
+			
+		<!-- Visualisation Only Mode -->
+		<group if="$(arg vis)">
+			<node pkg="launch" type="run_cop_KUKA_SIM_VIS.sh" name="Coppelia_KUKA_Ghost" output="screen"/>
+			<node pkg="scripts" type="kuka_jpos_delay.py" name="Kuka_Jpos_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		</group>
+	</group>
+	<group unless="$(arg kuka)">
+		<node pkg="launch" type="run_cop_KUKA_SIM.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+		<node pkg="scripts" type="sim_ft_delay.py" name="Sim_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>		
+	</group>	
+			
+	<!-- Robotiq -->	
+	<group if="$(arg robotiq)">
+		<node pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" name="Robotiq_Connection" args="/dev/ttyUSB0"/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_cmd_pub.py" name="Robotiq_Commander" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_pos_delay.py" name="Robotiq_Pos_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+	</group>
+	
+	<!-- Axia -->		
+	<group if="$(arg axia)">
+		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
+		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+	</group>
+	
+	<!-- Haption -->
+	<group if="$(arg haption)">
+		<!--node pkg="launch" type="run_haption.sh" name="Haption_Connection" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->
+		<node pkg="scripts" type="haption_delay_sub.py" name="Haption_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+	</group>
+	
+
+
+</launch>

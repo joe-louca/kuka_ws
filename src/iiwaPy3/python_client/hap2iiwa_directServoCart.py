@@ -32,7 +32,7 @@ class CopControl:
                 self.iiwa.realTime_startDirectServoCartesian()      # Start servo
                 self.t_0 = self.getSecs()                           # Refreshable start time
 
-                while True:                                         # Until Ctrl-C
+                while True:                                         # Until Ctrl-C       
                     pos_cmd = rospy.get_param('delayed_pos_cmd')
                     self.commandsList.append(pos_cmd)
                     if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
