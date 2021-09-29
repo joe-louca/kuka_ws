@@ -49,7 +49,8 @@ VirtContext VC;
 	    r = virtSetObservationFrame(VC, identity);		// set the position of the observation reference frame with respect to the environment reference frame           
             	if (r != 0) {fprintf(stderr, "Error occured in SetObservationFrame: %s\n", virtGetErrorMessage(virtGetErrorCode(VC)));}
 		
-	    r = virtSetCommandType(VC, COMMAND_TYPE_IMPEDANCE);	// set the command type
+	    r = virtSetCommandType(VC, COMMAND_TYPE_VIRTMECH);	// set the command type
+	    //r = virtSetCommandType(VC, COMMAND_TYPE_IMPEDANCE);	// set the command type
             	if (r != 0) {fprintf(stderr, "Error occured in SetCommandType: %s\n", virtGetErrorMessage(virtGetErrorCode(VC)));}
 		            	
             std::cout << "Configuration complete" << std::endl;
@@ -292,7 +293,7 @@ int main(int argc, char* argv[])
         
     int rate_hz;
     n.getParam("rate_hz",rate_hz);
-    rate_hz = 1000;
+    rate_hz = 10;
     ros::Rate loop_rate(rate_hz);
         
     bool func_result;
@@ -353,28 +354,11 @@ uint64_t set_force_date = 0;
         
     
     double ws_factor = 1000.0; // range = ws_factor * ~0.2 mm... so ~ 200cm?
-    double ft_factor = 0.01; // scaling factor for forces to apply to haption
+    double ft_factor = 1.0; // scaling factor for forces to apply to haption
     
     //1. Open connection to haption
     func_result = openConnectionToHaption(VC);
    
-   
-    //2. Make sure force feedback button is not pressed to start
-    for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &button_states[i]);}
-    force_fb_btn = button_states[2];
-    bool force_fb_checker = false;
-    std::cout<<"Force feedback button must be un-pressed to start"<<std::endl;
-    while(!force_fb_checker)
-    {
-    	if(force_fb_btn==0) {force_fb_checker = true;}
-    	else
-    	{
-    	    for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &button_states[i]);}
-    	    force_fb_btn = button_states[2];
-	}
-    }
-    std::cout<<"Starting control"<<std::endl;
-    
     if (func_result == true)
     {
 	    //2. Move to home position **** TO DO ****
@@ -428,9 +412,22 @@ uint64_t set_force_date = 0;
 		    	n.getParam("ft_delay/tx",ft_delay[3]);
 		    	n.getParam("ft_delay/ty",ft_delay[4]);
 		    	n.getParam("ft_delay/tz",ft_delay[5]);
+
+	    		for (int i = 0; i < 6; ++i) {ft_delay[i] = ft_delay[i]*ft_factor;} // scale force readings to haption range
+			// get forces within range
+			//FX,FY,FZ must be in range -15.0-15.0f, TX,TY,TZ must be in range -1.0-1.0f	
+			for(int i=0; i<3; i++)
+			{
+				if(ft_delay[i]>5.0f) {ft_delay[i]=5.0f;}
+				if(ft_delay[i]<-5.0f) {ft_delay[i]=-5.0f;}
+				if(ft_delay[i+3]>0.1f) {ft_delay[i+3]=0.1f;}
+				if(ft_delay[i+3]<-0.1f){ft_delay[i+3]=-0.1f;}
+			}
+			
+			
 						
 			// Scale and Reverse force direction for x and z (copsim only)
-			ft_delay[0] = -ft_delay[0]*ft_factor;
+/*			ft_delay[0] = -ft_delay[0]*ft_factor;
 			ft_delay[1] = ft_delay[1]*ft_factor;
 			ft_delay[2] = -ft_delay[2]*ft_factor;
 			ft_delay[3] = 0.0f;
@@ -441,12 +438,12 @@ uint64_t set_force_date = 0;
 			//FX,FY,FZ must be in range -15.0-15.0f, TX,TY,TZ must be in range -1.0-1.0f	
 			for(int i=0; i<3; i++)
 			{
-				if(ft_delay[i]>3.0f) {ft_delay[i]=3.0f;}
-				if(ft_delay[i]<-3.0f) {ft_delay[i]=-3.0f;}
-				if(ft_delay[i+3]>0.3f) {ft_delay[i+3]=0.3f;}
-				if(ft_delay[i+3]<-0.3f){ft_delay[i+3]=-0.3f;}
+				if(ft_delay[i]>5.0f) {ft_delay[i]=5.0f;}
+				if(ft_delay[i]<-5.0f) {ft_delay[i]=-5.0f;}
+				if(ft_delay[i+3]>0.1f) {ft_delay[i+3]=0.1f;}
+				if(ft_delay[i+3]<-0.1f){ft_delay[i+3]=-0.1f;}
 			}
-			
+*/			
 			
 		    	//g. Apply forces to haption
 			virt_result = virtSetForce(VC, ft_delay);		// Only works in COMMAND_TYPE_IMPEDANCE - doesnt work in COMMAND_TYPE_VIRTMECH
@@ -455,9 +452,9 @@ uint64_t set_force_date = 0;
 
 			
 		    	//h. Get force input from the user and publish
-		    	//virt_result = virtGetForce(VC, ft_user); // Only works in COMMAND_TYPE_VIRTMECH - doesnt work in COMMAND_TYPE_IMPEDANCE
-		    	//if (virt_result == -1) {fprintf(stderr, "Error in GetForce: %s\n",virtGetErrorMessage(virtGetErrorCode(VC)));}
-			//else {std::cout<<"GET: x: "<<ft_user[0]<<", y: "<<ft_user[1]<<", z: "<<ft_user[2]<<", tx: "<<ft_user[3]<<", ty: "<<ft_user[4]<<", tz: "<<ft_user[5]<<std::endl;}
+		    	virt_result = virtGetForce(VC, ft_user); // Only works in COMMAND_TYPE_VIRTMECH - doesnt work in COMMAND_TYPE_IMPEDANCE
+		    	if (virt_result == -1) {fprintf(stderr, "Error in GetForce: %s\n",virtGetErrorMessage(virtGetErrorCode(VC)));}
+			else {std::cout<<"GET: x: "<<ft_user[0]<<", y: "<<ft_user[1]<<", z: "<<ft_user[2]<<", tx: "<<ft_user[3]<<", ty: "<<ft_user[4]<<", tz: "<<ft_user[5]<<std::endl;}
 		
 
 	    		//Publish_FT_User(ft_user, ft_user_pub);
@@ -469,13 +466,6 @@ uint64_t set_force_date = 0;
 	    }
 	    
 	    //5. Move back to home position **** TO DO ****
-	    
-	    // Other virts to try
-	    // virtGetSpeed(VC, speed)
-	    // virtGetDeadMan(VC, &deadman)
-	    // virtSetPosition(VC, pos);
-	    // virtSetSpeed(VC, speed);
-	    
 	    
 	    //6. Close connection to haption
 	    func_result = closeConnectionToHaption(VC);
