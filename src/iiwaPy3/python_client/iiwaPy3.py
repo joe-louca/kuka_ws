@@ -89,8 +89,8 @@ class iiwaPy3:
         self.rtl.realTime_startImpedanceJoints(weightOfTool,cOMx,cOMy,cOMz,cStiness,rStifness,nStifness)
 
     # Joint space servo command
-    def sendEEfPosition(self,x):
-        self.sender.sendEEfPosition(x)
+    #def sendEEfPosition(self,x):
+    #    self.sender.sendEEfPosition(x)
 
     def sendJointsPositionsGetMTorque(self,x): 
         return self.sender.sendJointsPositionsGetMTorque(x)

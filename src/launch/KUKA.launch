@@ -1,81 +1,70 @@
 <?xml version="1.0"?>
 
 <launch>
-	<arg name="kuka" default="false"/>	
-	<arg name="robotiq" default="false"/>	
+	<arg name="kuka" default="true"/>
+	<arg name="haption" default="true"/>
 	<arg name="axia" default="false"/>
-	<arg name="ps4" default="false"/>
-	<arg name="falcon" default="false"/>
-	<arg name="haption" default="true"/>	
-	<arg name="sim" default="false"/>
+	<arg name="robotiq" default="false"/>	
+		
+	<!-- Features -->
+	<arg name="ghost" default="false"/>
+	<arg name="vis" default="false"/>
 	
+	<!-- Parameters -->
 	<arg name="axia_rate" default="1000"/>
 	<arg name="node_start_delay" default="5.0" />
 
-	<!-- Input streams -->
 	<!-- Load config parameters -->
 	<node pkg="scripts" type="config_kuka.py" name="config"/>
 
 	<!-- Kuka -->
 	<group if="$(arg kuka)">
-		<group unless="$(arg haption)">
-			<node pkg="launch" type="run_iiwaPy3.sh" name="kuka_connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-		</group>
 		<group if="$(arg haption)">
-			<node pkg="launch" type="run_iiwaPy3_hap.sh" name="kuka_connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
-		</group>	
-		<node pkg="scripts" type="kuka_pos_delay.py" name="kuka_pos_delay" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+			<node pkg="launch" type="run_haption.sh" name="Haption_Connection" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+			<node pkg="scripts" type="haption_delay_sub_ypr.py" name="Haption_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		</group>
+		
+		<node pkg="launch" type="run_iiwaPy3_hap.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>		
+
+		<!-- Ghost Mode - NOT WORKING YET-->
+		<!--group if="$(arg ghost)">
+			<node pkg="launch" type="run_cop_KUKA_GHOST.sh" name="Coppelia_KUKA_Ghost" output="screen"/>
+			<node pkg="scripts" type="kuka_jpos_delay.py" name="Kuka_Jpos_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		</group-->	
+			
+		<!-- Visualisation Only Mode - NOT WORKING YET-->
+		<!--group if="$(arg vis)">
+			<node pkg="launch" type="run_cop_KUKA_SIM_VIS.sh" name="Coppelia_KUKA_Ghost" output="screen"/>
+			<node pkg="scripts" type="kuka_jpos_delay.py" name="Kuka_Jpos_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		</group-->
 	</group>
+	
+	<!-- Sim Only -->
 	<group unless="$(arg kuka)">
-		<node pkg="launch" type="run_cop_sim_only_KUKA.sh" name="run_cop_sim_KUKA" output="screen"/>
-		<node pkg="scripts" type="sim_kuka_pos_sub.py" name="sim_kuka_pos_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>		
-		<!--node pkg="scripts" type="sim_kuka_jpos_sub.py" name="sim_kuka_jpos_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->
-		<node pkg="scripts" type="kuka_pos_delay.py" name="kuka_pos_delay" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-		<node pkg="scripts" type="sim_ft_delay.py" name="sim_ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		<node pkg="launch" type="run_cop_KUKA_SIM.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+		<node pkg="scripts" type="sim_ft_delay.py" name="Sim_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		
+		<group if="$(arg haption)">
+			<node pkg="launch" type="run_haption.sh" name="Haption_Connection" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+			<node pkg="scripts" type="haption_delay_sub.py" name="Haption_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		</group>
+		
 	</group>	
 			
 	<!-- Robotiq -->	
 	<group if="$(arg robotiq)">
-		<node pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" name="robotiq_connection" args="/dev/ttyUSB0"/>
-		<node pkg="robotiq_2f_gripper_control" type="gripper_cmd_pub.py" name="robotiq_commander" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-		<node pkg="robotiq_2f_gripper_control" type="gripper_pos_delay.py" name="robotiq_pos_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		<node pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" name="Robotiq_Connection" args="/dev/ttyUSB0"/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_cmd_pub.py" name="Robotiq_Commander" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_pos_delay.py" name="Robotiq_Pos_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
 	</group>
 	
 	<!-- Axia -->		
 	<group if="$(arg axia)">
-		<node pkg="netft_utils" type="netft_node" name="axia_connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
-		<node pkg="scripts" type="ft_delay.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
-	</group>
-	
-	<!-- User input -->
-	<!-- PS4 -->
-	<group if="$(arg ps4)">
-		<node pkg="joy" type="joy_node" name="joy" output="screen">
-	    		<param name="dev" value="/dev/input/js0" />
-	    		<param name="deadzone" value="0.2" />
-	    		<param name="autorepeat_rate" value="40" />
-	    		<param name="coalesce_interval" value="0.025" />
-	  	</node>
-		<node pkg="scripts" type="joy_sub.py" name="joy_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
-		<node pkg="scripts" type="input_control.py" name="input_controller" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>  	
-  	</group>
-  	
-	<!-- Falcon -->
-	<group if="$(arg falcon)">
-		<node pkg="launch" type="run_falcon.sh" name="run_falcon" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
-		<node pkg="scripts" type="falcon_sub.py" name="falcon_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-		<node pkg="scripts" type="input_control.py" name="input_controller" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>
-	</group>
-		
-	<!-- Haption -->
-	<group if="$(arg haption)">
-		<!--node pkg="launch" type="run_haption.sh" name="run_haption" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/-->
-		<node pkg="scripts" type="haption_delay_sub.py" name="haption_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
+		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
+		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "/>	
 	</group>
 	
 
-	<!-- CopelliaSim -->
-	<group if="$(arg sim)">
-		<node pkg="launch" type="run_cop_KUKA.sh" name="run_cop_KUKA" output="screen"/>
-	</group>
+
+
 </launch>

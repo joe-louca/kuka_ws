@@ -58,7 +58,8 @@ catkin_install_python(PROGRAMS
    src/input/falcon_sub.py
    src/input/input_control.py
    src/input/haption_delay_sub.py
-   
+   src/input/haption_delay_sub_ypr.py
+      
    src/feedback/ft_delay.py   
    src/feedback/sim_ft_delay.py
    src/feedback/vrep_cam1_sub.py

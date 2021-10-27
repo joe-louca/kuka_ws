@@ -22,10 +22,13 @@ class CopControl:
         self.commandsList=[]
         
         # Move to an initial position
+        print('Moving to initial position')
         initPos = rospy.get_param('initial_jpos')
         self.iiwa.movePTPJointSpace(initPos, self.velocity)
-
+        time.sleep(2)
+        
         # Start direct servo control
+        print('Starting direct servo control')
         print('Press Ctrl-C to exit...')
         if self.connection_state:                                   # If connected to iiwa
             try:
@@ -33,14 +36,16 @@ class CopControl:
                 self.t_0 = self.getSecs()                           # Refreshable start time
 
                 while True:                                         # Until Ctrl-C       
-                    pos_cmd = rospy.get_param('delayed_pos_cmd')
+                    pos_cmd = rospy.get_param('delayed_pos_cmd_ypr')
                     self.commandsList.append(pos_cmd)
+                    pos_cmd = [-120, 0.0, 900, 1.6922900676727295, -1.1912753582000732, 1.6110109090805054]
+
                     if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
                         self.move_cmd()                             # Send command to iiwa
 
             except KeyboardInterrupt:                           # Ctrl-C to exit
                 pass
-            
+                 
         self.iiwa.realTime_stopDirectServoCartesian()              # Stop direct servo
         self.disconnect_from_iiwa()                             # Disconnect
 
@@ -83,10 +88,11 @@ class CopControl:
     def move_cmd(self):
         if len(self.commandsList) > 0:                  # If there are commands to act on
             pos_cmd = self.commandsList[0]              # Get most recent joint command
+            print(pos_cmd)
             self.kuka_pos = self.iiwa.sendEEfPositionGetActualEEFpos(pos_cmd)         # Send command  & get pos
-            self.kuka_jpos = self.iiwa.getJointsPos()   # Get joint positions
-            rospy.set_param('kuka_jpos', self.kuka_jpos)# Save kuka_jpos as param
-            rospy.set_param('kuka_pos', self.kuka_pos)  # save kuka_pos as param
+            #self.kuka_jpos = self.iiwa.getJointsPos()   # Get joint positions
+            #rospy.set_param('kuka_jpos', self.kuka_jpos)# Save kuka_jpos as param
+            #rospy.set_param('kuka_pos', self.kuka_pos)  # save kuka_pos as param
 
             self.t_0 = self.getSecs()                   # Refresh start time after move
             self.commandsList = []                      # Clear commands list

@@ -24,7 +24,9 @@ class CopControl:
         # Move to an initial position
         initPos = rospy.get_param('initial_jpos')
         self.iiwa.movePTPJointSpace(initPos, self.velocity)
-
+        time.sleep(3)
+        
+        
         # Start direct servo control
         print('Press Ctrl-C to exit...')
         if self.connection_state:                                   # If connected to iiwa
@@ -33,8 +35,13 @@ class CopControl:
                 self.t_0 = self.getSecs()                           # Refreshable start time
 
                 while True:                                         # Until Ctrl-C
-                    pos_cmd = rospy.get_param('delayed_pos_cmd')
-                    self.commandsList.append(pos_cmd)
+                    #pos_cmd = rospy.get_param('delayed_pos_cmd')   ## CHECK THIS BIT FROM HAPTION
+                    for i in range(0,3):                            # Truncate the pos_cmd before sending to kuka
+                        pos_cmd[i] = round(pos_cmd[i], 1)
+                    for i in range(3,6):
+                        pos_cmd[i] = round(pos_cmd[i], 3)
+                        
+                    self.commandsList.append(pos_cmd)               # Store command in list
                     if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
                         self.move_cmd()                             # Send command to iiwa
 

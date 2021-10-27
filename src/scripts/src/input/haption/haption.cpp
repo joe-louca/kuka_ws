@@ -165,7 +165,7 @@ VirtContext VC;
     }
 
 
-/*    void Q_2_ABG(float* q, float* ypr)
+    void Q_2_ABG(float* q, float* ypr)
     {
     // Converts {x,y,z,qw,qx,qy,qz} to {x,y,z,alpha,beta, gamma} --> yaw(Rz)-pitch(Ry)-roll(Rx)
     //https://newbedev.com/is-there-an-algorithm-for-converting-quaternion-rotations-to-euler-angle-rotations
@@ -187,7 +187,7 @@ VirtContext VC;
     	ypr[4] = ::asin(r21);
     	ypr[5] = ::atan2(r11, r12);
     }
-*/
+
 
     void Q_2_Rot(float* q, float* rot)
     {
@@ -211,33 +211,26 @@ VirtContext VC;
     	rot[11] = 1-2*qx*qx-2*qy*qy;
     }
 
-    void Publish_Move_Cmd(float* cmd, std::string gripper_control, ros::Publisher move_pub)
+    void Publish_Move_Cmd_ypr(float* cmd_ypr, ros::Publisher move_pub_ypr)
     {
-    // Publish cmd as twist with gripper control as the frame id
-  	geometry_msgs::TwistStamped twist;
-  	twist.header.stamp = ros::Time::now();
-  	twist.header.frame_id = gripper_control;
-  
-    	twist.twist.linear.x = cmd[0];	//x
-    	twist.twist.linear.y = cmd[1];	//y
-    	twist.twist.linear.z = cmd[2];	//z
-    	twist.twist.angular.x = cmd[5];	//alpha (Rx) yaw
-    	twist.twist.angular.y = cmd[4];	//beta (Ry) pitch
-    	twist.twist.angular.z = cmd[3];	//gamma (Ry) roll
-    	
-      	move_pub.publish(twist);
+    // Publish cmd as Float32MultiArray
+  	std_msgs::Float32MultiArray cmd_msg_ypr;
+  	cmd_msg_ypr.data.clear(); 
+    	for (int i = 0; i < 6; ++i) {cmd_msg_ypr.data.push_back(cmd_ypr[i]);}   
+    	std::cout<<"publishing ypr"<<std::endl;
+      	move_pub_ypr.publish(cmd_msg_ypr);
     }
     
-    void Publish_Move_Cmd_q(float* cmd, ros::Publisher move_pub)
+    void Publish_Move_Cmd_q(float* cmd, ros::Publisher move_pub_q)
     {
-    // Publish cmd as twist with gripper control as the frame id
+    // Publish cmd as Float32MultiArray
   	std_msgs::Float32MultiArray cmd_msg;
   	cmd_msg.data.clear(); 
     	for (int i = 0; i < 7; ++i) {cmd_msg.data.push_back(cmd[i]);}   
-      	move_pub.publish(cmd_msg);
+      	move_pub_q.publish(cmd_msg);
     }    
     
-    void Publish_Move_Cmd_rot(float* cmd, ros::Publisher move_pub)
+    /*void Publish_Move_Cmd_rot(float* cmd, ros::Publisher move_pub)
     {
     // Publish cmd as twist with gripper control as the frame id
   	std_msgs::Float32MultiArray cmd_msg;
@@ -245,6 +238,7 @@ VirtContext VC;
     	for (int i = 0; i < 12; ++i) {cmd_msg.data.push_back(cmd[i]);}   
       	move_pub.publish(cmd_msg);
     }
+    */
 
     void Publish_FT_User(float* ft, ros::Publisher ft_user_pub)
     {
@@ -285,8 +279,8 @@ int main(int argc, char* argv[])
 {
     ros::init(argc, argv, "haption_stream");
     ros::NodeHandle n;
-    //ros::Publisher move_pub = n.advertise<geometry_msgs::TwistStamped>("hap_move_pub", 1);
-    ros::Publisher move_pub = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub", 1);
+    ros::Publisher move_pub_q = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub_q", 1);
+    //ros::Publisher move_pub_ypr = n.advertise<geometry_msgs::TwistStamped>("hap_move_pub_ypr", 1);
     ros::Publisher ft_user_pub = n.advertise<geometry_msgs::TwistStamped>("ft_user_pub", 1);
     ros::Subscriber ft_sub;
         
@@ -297,16 +291,6 @@ int main(int argc, char* argv[])
         
     bool func_result;
     int virt_result;
-
-/* Setpoints */
-float set_pose[7] = { 0, 0, 0, 0, 0, 0, 1 };
-uint64_t set_pose_date = 0;
-float set_speed[6];
-uint64_t set_speed_date = 0;
-float set_force[6];
-uint64_t set_force_date = 0;
-
-
 
     float hap_pos_q[7] = {};
     float hap_home_pos_q[7] = {};   
@@ -414,10 +398,17 @@ uint64_t set_force_date = 0;
 	    	for(int i = 3; i < 7; ++i) {move_pos_q[i] = hap_pos_q[i];}
 	    		    	
 	    	//e. Publish move command ros(THEN ADD DELAY WITH PYTHON)
-		Publish_Move_Cmd_q(move_pos_q, move_pub);
+		Publish_Move_Cmd_q(move_pos_q, move_pub_q);
 		
-//TO DO.. 	Q_2_YPR(move_pos_q, move_pos_ypr); // convert to YPR for real KUKA
-//TO DO.. 	Publish_Move_Cmd_ypr(move_pos_ypr, move_pub); // also fix delay.py to send to iiwaPy
+	 	Q_2_ABG(move_pos_q, move_pos_ypr); // convert to YPR for real KUKA
+	 	//std::cout<<"A: "<<move_pos_ypr[3]<<", B: "<<move_pos_ypr[4]<<", C: "<<move_pos_ypr[5]<<std::endl;
+	 	//Publish_Move_Cmd_ypr(move_pos_ypr, move_pub_ypr);
+	 	n.setParam("hap_move_pub_ypr/x", move_pos_ypr[0]);	 	
+	 	n.setParam("hap_move_pub_ypr/y", move_pos_ypr[1]);
+	 	n.setParam("hap_move_pub_ypr/z", move_pos_ypr[2]);
+	 	n.setParam("hap_move_pub_ypr/a", move_pos_ypr[3]);
+	 	n.setParam("hap_move_pub_ypr/b", move_pos_ypr[4]);
+	 	n.setParam("hap_move_pub_ypr/c", move_pos_ypr[5]);
 		    		
 		if (force_fb_btn==1)
 		{	
@@ -450,7 +441,6 @@ uint64_t set_force_date = 0;
 			
 		    	//g. Apply forces to haption
 			virt_result = virtSetForce(VC, ft_delay);		// Only works in COMMAND_TYPE_IMPEDANCE - doesnt work in COMMAND_TYPE_VIRTMECH
-			{std::cout<<"SET: x: "<<ft_delay[0]<<", y: "<<ft_delay[1]<<", z: "<<ft_delay[2]<<", tx: "<<ft_delay[3]<<", ty: "<<ft_delay[4]<<", tz: "<<ft_delay[5]<<std::endl;}
 			if (virt_result != 0) {fprintf(stderr, "Error in SetForce: %s\n",virtGetErrorMessage(virtGetErrorCode(VC)));}
 
 			

@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import rospy
-from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 
 
@@ -25,30 +24,29 @@ def add_delay(added_row, delayed_tbl):
     return retrieved_row, retrieved, delayed_tbl
 
 
-def haption_callback(msg):
+def haption_callback():
     global delayed_hap_cmd_tbl
     global delayed_pos_msg
     
-    x = msg.data[0]
-    y = msg.data[1]
-    z = msg.data[2]
-    qx = msg.data[3]
-    qy = msg.data[4]
-    qz = msg.data[5]
-    qw = msg.data[6]
+    x = rospy.get_param('hap_move_pub_ypr/x')
+    y = rospy.get_param('hap_move_pub_ypr/y')
+    z = rospy.get_param('hap_move_pub_ypr/z')
+    a = rospy.get_param('hap_move_pub_ypr/a')
+    b = rospy.get_param('hap_move_pub_ypr/b')
+    c = rospy.get_param('hap_move_pub_ypr/c')
             
     # Timestamp
     t = rospy.get_time()
-    timestamped_cmd = [x, y, z, qx, qy, qz, qw, t]
+    timestamped_cmd = [x, y, z, a, b, c, t]
+    
 
     # Store and retrieve delayed ft readings
     hap_cmd, retrieved, delayed_hap_cmd_tbl = add_delay(timestamped_cmd, delayed_hap_cmd_tbl)
 
     if retrieved:
-        delayed_pos_msg.data = [hap_cmd[0], hap_cmd[1], hap_cmd[2], hap_cmd[3], hap_cmd[4], hap_cmd[5], hap_cmd[6]]
-        hap_param = [hap_cmd[0], hap_cmd[1], hap_cmd[2], hap_cmd[3], hap_cmd[4], hap_cmd[5], hap_cmd[6]]
-
-        rospy.set_param('delayed_pos_cmd', hap_param)
+        delayed_pos_msg.data = [hap_cmd[0], hap_cmd[1], hap_cmd[2], hap_cmd[3], hap_cmd[4], hap_cmd[5]]
+        hap_param = [hap_cmd[0], hap_cmd[1], hap_cmd[2], hap_cmd[3], hap_cmd[4], hap_cmd[5]]
+        rospy.set_param('delayed_pos_cmd_ypr', hap_param)
 
 
 def main():
@@ -62,17 +60,17 @@ def main():
     rate_hz = rospy.get_param('rate_hz')
     
     rospy.init_node('hap_delay_sub_node', anonymous=True)
-    sim_pos_pub = rospy.Publisher('/delayed_sim_pos_cmd', Float32MultiArray, queue_size=1)
-    #kuka_pos_pub = rospy.Publisher('/delayed_pos_cmd', Float32MultiArray, queue_size=1)
+    kuka_pos_pub = rospy.Publisher('/delayed_kuka_pos_cmd', Float32MultiArray, queue_size=1)
     
-    sub = rospy.Subscriber("hap_move_pub", Float32MultiArray, haption_callback, queue_size=1)    
+    #sub = rospy.Subscriber("hap_move_pub_ypr", Float32MultiArray, haption_callback, queue_size=1)    
 
+    
     r = rospy.Rate(rate_hz)
-
+    
     while not rospy.is_shutdown():
+        haption_callback()
         if delayed_pos_msg.data:
-            sim_pos_pub.publish(delayed_pos_msg)
-        #kuka_pos_pub.publish(delayed_pos_msg)
+            kuka_pos_pub.publish(delayed_pos_msg)
         r.sleep()
 
 if __name__ == '__main__':
