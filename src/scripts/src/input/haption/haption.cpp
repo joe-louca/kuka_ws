@@ -99,117 +99,75 @@ VirtContext VC;
         }
     }
 
-    void YPR_2_Q(float* ypr, float* q) // yaw: alpha (RZ), pitch: beta (RY), roll: gamma (RX)
-    {
-    	double yaw = ypr[3]; 	// alpha
-    	double pitch = ypr[4];	// beta
-    	double roll = ypr[5];	// gamma
-    	
+    void YPR_2_Q(float* ypr, float* q)  // WORKING
+    { // yaw: alpha (RZ), pitch: beta (RY), roll: gamma (RX) to qx,qy,qz,qw
+      // https://danceswithcode.net/engineeringnotes/quaternions/quaternions.html
+       
+    	float yaw = ypr[3]; 	// alpha
+    	float pitch = ypr[4];	// beta
+    	float roll = ypr[5];	// gamma
+
 	// Set X, Y, Z
     	q[0] = ypr[0];
     	q[1] = ypr[1];
 	q[2] = ypr[2];
 	    	
 	// Abbreviations for the various angular functions
-	double cy = std::cos(yaw * 0.5);
-	double sy = std::sin(yaw * 0.5);
-	double cp = std::cos(pitch * 0.5);
-	double sp = std::sin(pitch * 0.5);
-	double cr = std::cos(roll * 0.5);
-	double sr = std::sin(roll * 0.5);
+	float cy = std::cos(yaw * 0.5);
+	float sy = std::sin(yaw * 0.5);
+	float cp = std::cos(pitch * 0.5);
+	float sp = std::sin(pitch * 0.5);
+	float cr = std::cos(roll * 0.5);
+	float sr = std::sin(roll * 0.5);
 	
-	q[3] = sr * cp * cy - cr * sp * sy; // qx
-	q[4] = cr * sp * cy + sr * cp * sy; // qy
-	q[5] = cr * cp * sy - sr * sp * cy; // qz
-	q[6] = cr * cp * cy + sr * sp * sy; // qw
+	q[3] = sr*cp*cy - cr*sp*sy; // qx
+	q[4] = cr*sp*cy + sr*cp*sy; // qy
+	q[5] = cr*cp*sy - sr*sp*cy; // qz
+	q[6] = cr*cp*cy + sr*sp*sy; // qw
     }
 
     void Q_2_YPR(float* q, float* ypr) 
-    {
-    	 	
-    	double qx = q[3];	
-    	double qy = q[4];	
-    	double qz = q[5];
-	double qw = q[6];
-    	
-    	double test = qx*qy + qz*qw;
-    	double unit = qx*qx+qy*qy+qz*qz+qw*qw;
-
-	// Set X, Y, Z
-    	ypr[0] = q[0];
-    	ypr[1] = q[1];
-	ypr[2] = q[2];
-	
-    	// check for singularities
-    	if (test>0.499*unit) // north pole
-    	{
-	    	ypr[3] = 2*std::atan2(qx,qw);
-	    	ypr[4] = M_PI/2;
-	    	ypr[5] = 0;
-	    	return;
-    	}
-    	else if (test<-0.499*unit) // south pole
-    	{
-	    	ypr[3] = -2*std::atan2(qx,qw);
-	    	ypr[4] = -M_PI/2;
-	    	ypr[5] = 0;
-	    	return;
-    	}
-    	else
-    	{
-    		ypr[3] = std::atan2(2*qy*qw-2*qx*qz, qx*qx-qy*qy-qz*qz+qw*qw);
-    		ypr[4] = std::asin(2*test/unit);
-		ypr[5] = std::atan2(2*qx*qw-2*qy*qz, -qx*qx+qy*qy-qz*qz+qw*qw);
-		return;
-    	}
-    }
-
-
-    void Q_2_ABG(float* q, float* ypr)
-    {
-    // Converts {x,y,z,qw,qx,qy,qz} to {x,y,z,alpha,beta, gamma} --> yaw(Rz)-pitch(Ry)-roll(Rx)
-    //https://newbedev.com/is-there-an-algorithm-for-converting-quaternion-rotations-to-euler-angle-rotations
-    	float qw = q[3];
-    	float qx = q[4];
-     	float qy = q[5];
-     	float qz = q[6];   
-    
-    	float r11 = 2*(qx*qy + qw*qz);
-    	float r12 = qw*qw + qx*qx - qy*qy - qz*qz;
-    	float r21 =-2*(qx*qz - qw*qy);
-    	float r31 = 2*(qy*qz + qw*qx);
-    	float r32 = qw*qw - qx*qx - qy*qy + qz*qz;
-    	
-    	ypr[0] = q[0];
-    	ypr[1] = q[1];
-	ypr[2] = q[2];
-    	ypr[3] = ::atan2(r31, r32);
-    	ypr[4] = ::asin(r21);
-    	ypr[5] = ::atan2(r11, r12);
-    }
-
-
-    void Q_2_Rot(float* q, float* rot)
-    {
-    	// works on normalised quaternions
+    { // https://danceswithcode.net/engineeringnotes/quaternions/quaternions.html
     	float qx = q[3];
     	float qy = q[4];
-    	float qz = q[5];
-    	float qw = q[6];
-    	
-    	rot[0] = q[0];
-    	rot[1] = q[1];
-    	rot[2] = q[2];
-    	rot[3] = 1-2*qy*qy-2*qz*qz;
-    	rot[4] = 2*qx*qy-2*qz*qw;
-    	rot[5] = 2*qx*qz+2*qy*qw;
-    	rot[6] = 2*qx*qy+2*qz*qw;
-    	rot[7] = 1-2*qx*qx-2*qz*qz;
-    	rot[8] = 2*qy*qz-2*qx*qw;
-    	rot[9] = 2*qx*qz-2*qy*qw;
-    	rot[10] = 2*qy*qz+2*qx*qw;
-    	rot[11] = 1-2*qx*qx-2*qy*qy;
+     	float qz = q[5];
+     	float qw = q[6];   
+	float r1, r2, p1, y1, y2, yaw, pitch, roll;
+
+	r1 = 2*(qw*qx+qy*qz);
+	r2 = qw*qw - qx*qx - qy*qy + qz*qz;
+	p1 = 2*(qw*qy - qx*qz);
+	y1 = 2*(qw*qz+qx*qy);
+	y2 = qw*qw + qx*qx - qy*qy - qz*qz;
+	
+	pitch = std::asin(p1);
+	
+  	// Gimbal lock
+  	float err = 0.00001;
+  	if ( (pitch > (M_PI/2)-err) && (pitch < (M_PI/2)+err) ) 
+  	{
+  	  	yaw = -2*atan2(qx, qw);
+  		roll = 0.0;
+  	}
+	else if ( (pitch > (-M_PI/2)-err) && (pitch < (-M_PI/2)+err) ) 
+	{
+		yaw = 2*atan2(qx, qw);
+		roll = 0.0;
+	}
+	else
+	{  	
+		roll = std::atan2(r1, r2);
+		yaw = std::atan2(y1, y2);
+	}
+	
+    	ypr[0] = q[0];				// X
+    	ypr[1] = q[1];				// Y
+	ypr[2] = q[2];				// Z
+    	ypr[3] = yaw;				//rz
+	ypr[4] = pitch;			//ry
+    	ypr[5] = roll; 			//rx 	
     }
+
 
     void Publish_Move_Cmd_ypr(float* cmd_ypr, ros::Publisher move_pub_ypr)
     {
@@ -321,21 +279,13 @@ int main(int argc, char* argv[])
     hap_home_pos_q[5] = 0.0;//0.0530528;	//qz
     hap_home_pos_q[6] = 1.0;//0.99383;	//qw
     
-    // Get Kuka Home position values
+    // Get Kuka Home position values in YPR and Quats
     std::vector<double> tmp;
     n.getParam("initial_kuka_pos", tmp);
     for (int i = 0; i < 6; ++i) {kuka_home_pos_ypr[i] = tmp[i];} // convert to array
-    
-    //YPR_2_Q(kuka_home_pos_ypr, kuka_home_pos_q);
-    kuka_home_pos_q[0] = -91.5;
-    kuka_home_pos_q[1] =  0.0;
-    kuka_home_pos_q[2] =  940.5;
-    kuka_home_pos_q[3] =  0.0;
-    kuka_home_pos_q[4] =  0.0;
-    kuka_home_pos_q[5] =  0.0;
-    kuka_home_pos_q[6] =  1.0;
-        
-    
+    YPR_2_Q(kuka_home_pos_ypr, kuka_home_pos_q);
+
+     
     double ws_factor = 1000.0; // range = ws_factor * ~0.2 mm... so ~ 200cm?
     double ft_factor = 0.01; // scaling factor for forces to apply to haption
     
@@ -361,16 +311,12 @@ int main(int argc, char* argv[])
     
     if (func_result == true)
     {
-	    //2. Move to home position **** TO DO ****
-	    //3. Start control, enable force feedback **** TO DO ****
 	    
 	    //4. Loop until stop:
 	    while(ros::ok())
 	    {
 	    	//a. Get Haption ee position - stores as hap_pos. Access elements with hap_pos[i]
-	    	/* Positions are expressed as displacement vectors with seven components, i.e. one
-		   translation term (x, y, z) followed by one rotation term in the form of a normalized
-		   quaternion (qx, qy, qz, qw)*/
+	    	//(x, y, z, qx, qy, qz, qw)
 	 	virt_result = virtGetPosition(VC, hap_pos_q); 		   
 
 	    	 	    	
@@ -400,7 +346,7 @@ int main(int argc, char* argv[])
 	    	//e. Publish move command ros(THEN ADD DELAY WITH PYTHON)
 		Publish_Move_Cmd_q(move_pos_q, move_pub_q);
 		
-	 	Q_2_ABG(move_pos_q, move_pos_ypr); // convert to YPR for real KUKA
+	 	Q_2_YPR(move_pos_q, move_pos_ypr); // convert to YPR for real KUKA
 	 	//std::cout<<"A: "<<move_pos_ypr[3]<<", B: "<<move_pos_ypr[4]<<", C: "<<move_pos_ypr[5]<<std::endl;
 	 	//Publish_Move_Cmd_ypr(move_pos_ypr, move_pub_ypr);
 	 	n.setParam("hap_move_pub_ypr/x", move_pos_ypr[0]);	 	
@@ -469,6 +415,7 @@ int main(int argc, char* argv[])
 	    
 	    //6. Close connection to haption
 	    func_result = closeConnectionToHaption(VC);
-    }  
+    } 
+     
     return 0;
 }

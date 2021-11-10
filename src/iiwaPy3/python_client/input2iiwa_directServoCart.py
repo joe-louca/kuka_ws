@@ -19,13 +19,16 @@ class CopControl:
         # Get some parameters
         self.velocity = rospy.get_param('velocity')
         self.time_step = rospy.get_param('RT_timestep')
+        self.time_step = 0.01    ############################################ REMOVE THIS
         self.commandsList=[]
         
         # Move to an initial position
         initPos = rospy.get_param('initial_jpos')
         self.iiwa.movePTPJointSpace(initPos, self.velocity)
+        print('sleeping')
         time.sleep(3)
-        
+        print('slept')
+
         
         # Start direct servo control
         print('Press Ctrl-C to exit...')
@@ -35,12 +38,9 @@ class CopControl:
                 self.t_0 = self.getSecs()                           # Refreshable start time
 
                 while True:                                         # Until Ctrl-C
+                    ## Make sure the steps arent too big, that they are calculated from the actual start position for kuka, and that the rate is slow enough for kuka to move in time
                     #pos_cmd = rospy.get_param('delayed_pos_cmd')   ## CHECK THIS BIT FROM HAPTION
-                    for i in range(0,3):                            # Truncate the pos_cmd before sending to kuka
-                        pos_cmd[i] = round(pos_cmd[i], 1)
-                    for i in range(3,6):
-                        pos_cmd[i] = round(pos_cmd[i], 3)
-                        
+                    pos_cmd[0] += 0.00001                      
                     self.commandsList.append(pos_cmd)               # Store command in list
                     if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step
                         self.move_cmd()                             # Send command to iiwa
@@ -90,6 +90,12 @@ class CopControl:
     def move_cmd(self):
         if len(self.commandsList) > 0:                  # If there are commands to act on
             pos_cmd = self.commandsList[0]              # Get most recent joint command
+            for i in range(0,3):                        # Truncate the pos_cmd before sending to kuka
+                pos_cmd[i] = round(pos_cmd[i], 1)
+            for i in range(3,6):
+                pos_cmd[i] = round(pos_cmd[i], 3)
+            print(pos_cmd)
+            
             self.kuka_pos = self.iiwa.sendEEfPositionGetActualEEFpos(pos_cmd)         # Send command  & get pos
             self.kuka_jpos = self.iiwa.getJointsPos()   # Get joint positions
             rospy.set_param('kuka_jpos', self.kuka_jpos)# Save kuka_jpos as param
