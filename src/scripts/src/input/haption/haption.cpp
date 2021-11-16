@@ -168,92 +168,142 @@ VirtContext VC;
     	ypr[5] = roll; 			//rx 	
     }
 
+    void Q_Add(float* QA, float* QB, float* QC)
+    { // Adds XYZ translation B to A, and adds Q rotation B to A to give QC (multiply quaternions)
+    	float QAx = QA[0];
+    	float QAy = QA[1];
+    	float QAz = QA[2];
+    	float QAqx = QA[3];
+    	float QAqy = QA[4];
+    	float QAqz = QA[5];
+    	float QAqw = QA[6];
+    	
+      	float QBx = QB[0];
+    	float QBy = QB[1];
+    	float QBz = QB[2];
+    	float QBqx = QB[3];
+    	float QBqy = QB[4];
+    	float QBqz = QB[5];
+    	float QBqw = QB[6];
+    	
+    	/*Q_2_Rot(QA, RotA);
+    	Q_2_Rot(QB, RotB);
+    	RotC = Rot_Multiply(RotB, RotA) // Rot A first, then Rot B around A 
+    	Rot_2_Q(RotC, QC)
+    	QC[0] = QAx + QBx;	// X
+    	QC[1] = QAy + QBy;	// Y
+    	QC[2] = QAz + QBz;	// Z      	
+    	*/
+    	
+    	QC[0] = QAx + QBx;	// X
+    	QC[1] = QAy + QBy;	// Y
+    	QC[2] = QAz + QBz;	// Z    		
+    	QC[3] = QAqw * QBqw - QAqx * QBqx - QAqy * QBqy - QAqz * QBqz; // qw
+    	QC[4] = QAqw * QBqx + QAqx * QBqw + QAqy * QBqz - QAqz * QBqy; // qx
+    	QC[5] = QAqw * QBqy - QAqx * QBqz + QAqy * QBqw + QAqz * QBqx; // qy
+    	QC[6] = QAqw * QBqz + QAqx * QBqy - QAqy * QBqx + QAqz * QBqw; // qz  	
+    } 
 
-    void Publish_Move_Cmd_ypr(float* cmd_ypr, ros::Publisher move_pub_ypr)
-    {
-    // Publish cmd as Float32MultiArray
-  	std_msgs::Float32MultiArray cmd_msg_ypr;
-  	cmd_msg_ypr.data.clear(); 
-    	for (int i = 0; i < 6; ++i) {cmd_msg_ypr.data.push_back(cmd_ypr[i]);}   
-    	std::cout<<"publishing ypr"<<std::endl;
-      	move_pub_ypr.publish(cmd_msg_ypr);
+    void Q_A2B(float* QA, float* QB, float* QC)
+    { // QC is the rotation from QA -> QB
+    	float QAx = QA[0];
+    	float QAy = QA[1];
+    	float QAz = QA[2];
+    	// Inverse Q = conjugate Q = -qx -qy -qz +qw / Norm
+    	float QAqx = -1*QA[3];
+    	float QAqy = -1*QA[4];
+    	float QAqz = -1*QA[5];
+    	float QAqw =  1*QA[6];
+    	
+      	float QBx = QB[0];
+    	float QBy = QB[1];
+    	float QBz = QB[2];
+    	float QBqx = QB[3];
+    	float QBqy = QB[4];
+    	float QBqz = QB[5];
+    	float QBqw = QB[6];
+    	
+    	// Find X Y Z difference
+    	QC[0] = QAx - QBx;	// X
+    	QC[1] = QAy - QBy;	// Y
+    	QC[2] = QAz - QBz;	// Z
+    	
+    	//Find rotation: QC = QA_inverse * QB
+    	QC[3] = QAqw * QBqw - QAqx * QBqx - QAqy * QBqy - QAqz * QBqz; // qw
+    	QC[4] = QAqw * QBqx + QAqx * QBqw + QAqy * QBqz - QAqz * QBqy; // qx
+    	QC[5] = QAqw * QBqy - QAqx * QBqz + QAqy * QBqw + QAqz * QBqx; // qy
+    	QC[6] = QAqw * QBqz + QAqx * QBqy - QAqy * QBqx + QAqz * QBqw; // qz     	
+
     }
+
+
     
     void Publish_Move_Cmd_q(float* cmd, ros::Publisher move_pub_q)
-    {
-    // Publish cmd as Float32MultiArray
+    {  // Publish cmd as Float32MultiArray
   	std_msgs::Float32MultiArray cmd_msg;
   	cmd_msg.data.clear(); 
     	for (int i = 0; i < 7; ++i) {cmd_msg.data.push_back(cmd[i]);}   
       	move_pub_q.publish(cmd_msg);
     }    
+
+/*
+
+    void Publish_Move_Cmd_ypr(float* cmd_ypr, ros::Publisher move_pub_ypr)
+    {  // Publish cmd as Float32MultiArray
+  	std_msgs::Float32MultiArray cmd_msg_ypr;
+  	cmd_msg_ypr.data.clear(); 
+    	for (int i = 0; i < 6; ++i) {cmd_msg_ypr.data.push_back(cmd_ypr[i]);}   
+      	move_pub_ypr.publish(cmd_msg_ypr);
+    }
     
-    /*void Publish_Move_Cmd_rot(float* cmd, ros::Publisher move_pub)
-    {
-    // Publish cmd as twist with gripper control as the frame id
-  	std_msgs::Float32MultiArray cmd_msg;
-  	cmd_msg.data.clear(); 
-    	for (int i = 0; i < 12; ++i) {cmd_msg.data.push_back(cmd[i]);}   
-      	move_pub.publish(cmd_msg);
-    }
-    */
-
-    void Publish_FT_User(float* ft, ros::Publisher ft_user_pub)
-    {
-    // Publish cmd as twist with gripper control as the frame id
-  	geometry_msgs::TwistStamped twist_ft;
-  	twist_ft.header.stamp = ros::Time::now();
-  
-    	twist_ft.twist.linear.x = ft[0];	//x
-    	twist_ft.twist.linear.y = ft[1];	//y
-    	twist_ft.twist.linear.z = ft[2];	//z
-    	twist_ft.twist.angular.x = ft[5];	//alpha (Rz) yaw
-    	twist_ft.twist.angular.y = ft[4];	//beta (Ry) pitch
-    	twist_ft.twist.angular.z = ft[3];	//gamma (Rx) roll
-      	ft_user_pub.publish(twist_ft);
-    }
-
     void FTCallback(const geometry_msgs::WrenchStamped& wrench_msg)
     {  
     	std::cout<<"in callback"<<std::endl;
     	float ft_factor = 0.1;
-    	float * ft_delay;	
-    	ft_delay = new float[6];
+    	float* ft_delay[6] = {};
     	ft_delay[0] = wrench_msg.wrench.force.x;
     	ft_delay[1] = wrench_msg.wrench.force.y;
     	ft_delay[2] = wrench_msg.wrench.force.z;    	
     	ft_delay[3] = wrench_msg.wrench.torque.x;   	
     	ft_delay[4] = wrench_msg.wrench.torque.y;   	
-    	ft_delay[5] = wrench_msg.wrench.torque.z;
-    	    	
-    	for (int i = 0; i < 6; ++i) {ft_delay[i] = ft_delay[i]*ft_factor; // scale force readings to haption range
-    	std::cout<< ft_delay[i]<<", ";}
+    	ft_delay[5] = wrench_msg.wrench.torque.z;    	    	
+    	std::cout<< ft_delay[i]<<", ";
     	std::cout<<std::endl;
     	
     	//virtSetForce(VC, ft_delay);
     }
-
+*/
+    
 int main(int argc, char* argv[])
 {
+
     ros::init(argc, argv, "haption_stream");
     ros::NodeHandle n;
     ros::Publisher move_pub_q = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub_q", 1);
-    //ros::Publisher move_pub_ypr = n.advertise<geometry_msgs::TwistStamped>("hap_move_pub_ypr", 1);
-    ros::Publisher ft_user_pub = n.advertise<geometry_msgs::TwistStamped>("ft_user_pub", 1);
-    ros::Subscriber ft_sub;
-        
+    //ros::Subscriber delayed_ft_sub = n.subscribe("delayed_ft", 1, FTCallback);					// FIX THIS 
+      
     int rate_hz;
     n.getParam("rate_hz",rate_hz);
-    rate_hz = 1000;
+    //rate_hz = 1000;
     ros::Rate loop_rate(rate_hz);
-        
+    
+    // Set some scale factors
+    double ws_factor = 500.0; // kuka_range = ws_factor * haption_range?
+    double ft_factor = 0.01; // scaling factor for forces to apply to haption
+     
     bool func_result;
     int virt_result;
 
+    // Declare some position arrays
     float hap_pos_q[7] = {};
-    float hap_home_pos_q[7] = {};   
-    float kuka_home_pos_ypr[6] = {};
-    float kuka_home_pos_q[7] = {};
+    float hap_pos_ypr[6] = {};
+    float hap_start_pos_q[7] = {};   
+    float hap_start_pos_ypr[6] = {};   
+    float hap_move_q[7] = {};
+    float hap_move_ypr[6] = {};
+    
+    float kuka_start_pos_ypr[6] = {};
+    float kuka_start_pos_q[7] = {};
 
     float move_pos_ypr[6] = {};
     float move_pos_q[7] = {};
@@ -263,39 +313,40 @@ int main(int argc, char* argv[])
     float ft_input[6] = {};
     float ft_user[6] = {};
 
-    // Initialise button and gripper control variables    
-    int button_states[4] = {0,0,0,0};
-    int btn_state = 0;
-    int last_btn_state = 0;
-    int force_fb_btn;
-    std::string gripper_control = "n";
+    // Declare button and gripper control variables    
+    int buttons[4] = {0,0,0,0};
+    int left_btn = 0;
+    int mid_btn = 0;
+    int force_fb_btn = 0;
+    int last_left_btn = 0;
+    int last_mid_btn = 0;
+    int last_force_fb_btn = 0;
+    int deadman = 0;
+    int last_deadman = 0;
     
-    // Set Haption home position values
-    hap_home_pos_q[0] = 0.3; 	//x  --- in/out 	--- LIMITS:  0.2  / 0.4
-    hap_home_pos_q[1] = 0.0; 	//y  --- left/right	--- LIMITS: -0.25 / 0.25	
-    hap_home_pos_q[2] = 0.07;	//z  --- down/up	--- LIMITS: -0.16 / 0.31
-    hap_home_pos_q[3] = 0.0;//0.0914383;	//qx
-    hap_home_pos_q[4] = 0.0;//0.0335527;	//qy
-    hap_home_pos_q[5] = 0.0;//0.0530528;	//qz
-    hap_home_pos_q[6] = 1.0;//0.99383;	//qw
+    int gripper_cmd = 0;
     
-    // Get Kuka Home position values in YPR and Quats
+    // Set Haption start position values
+    hap_start_pos_q[0] = 0.3; 	//x  --- in/out 	--- LIMITS:  0.2  / 0.4
+    hap_start_pos_q[1] = 0.0; 	//y  --- left/right	--- LIMITS: -0.25 / 0.25	
+    hap_start_pos_q[2] = 0.07;	//z  --- down/up	--- LIMITS: -0.16 / 0.31
+    hap_start_pos_q[3] = 0.0;		//qx
+    hap_start_pos_q[4] = 0.0;		//qy
+    hap_start_pos_q[5] = 0.0;		//qz
+    hap_start_pos_q[6] = 1.0;		//qw
+    
+    // Get Kuka start position in YPR and Quats
     std::vector<double> tmp;
-    n.getParam("initial_kuka_pos", tmp);
-    for (int i = 0; i < 6; ++i) {kuka_home_pos_ypr[i] = tmp[i];} // convert to array
-    YPR_2_Q(kuka_home_pos_ypr, kuka_home_pos_q);
-
-     
-    double ws_factor = 1000.0; // range = ws_factor * ~0.2 mm... so ~ 200cm?
-    double ft_factor = 0.01; // scaling factor for forces to apply to haption
-    
-    //1. Open connection to haption
+    n.getParam("initial_kuka_pos", tmp);				// Get from kuka
+    for (int i = 0; i < 6; ++i) {kuka_start_pos_ypr[i] = tmp[i];} 	// Convert to array
+    YPR_2_Q(kuka_start_pos_ypr, kuka_start_pos_q);			// Convert to quaternions
+ 
+    // Open connection to haption
     func_result = openConnectionToHaption(VC);
    
-   
-    //2. Make sure force feedback button is not pressed to start
-    for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &button_states[i]);}
-    force_fb_btn = button_states[2];
+    // Make sure force feedback button is not pressed to start
+    for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
+    force_fb_btn = buttons[2];
     bool force_fb_checker = false;
     std::cout<<"Force feedback button must be un-pressed to start"<<std::endl;
     while(!force_fb_checker)
@@ -303,62 +354,72 @@ int main(int argc, char* argv[])
     	if(force_fb_btn==0) {force_fb_checker = true;}
     	else
     	{
-    	    for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &button_states[i]);}
-    	    force_fb_btn = button_states[2];
+    	    for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
+    	    force_fb_btn = buttons[2];
 	}
     }
     std::cout<<"Starting control"<<std::endl;
     
     if (func_result == true)
     {
-	    
-	    //4. Loop until stop:
 	    while(ros::ok())
 	    {
-	    	//a. Get Haption ee position - stores as hap_pos. Access elements with hap_pos[i]
-	    	//(x, y, z, qx, qy, qz, qw)
-	 	virt_result = virtGetPosition(VC, hap_pos_q); 		   
-
-	    	 	    	
-	    	//b. Get haption buttons input
-	    	for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &button_states[i]);}
-		// button_states[i]==0 or 1, where 0 = left, 1 = mid, 2 = force fb, right = ?
-		
-		force_fb_btn = button_states[2];
-		btn_state = button_states[1];
-	    	if ((btn_state==1) && (last_btn_state==0)) // if middle button pressed then toggle gripper control
-	    	{
-	    		if (gripper_control == "n") {gripper_control = "y";}
-	    		else if (gripper_control == "y") {gripper_control = "n";}
-	    	}
-	    	last_btn_state = btn_state;
 	    	
-	    				
-	    	//d. Convert to Kuka workspace position (quaternions) to generate move command	
-	    	// kuka position scaled as a factor of haption
-	    	move_pos_q[0] = kuka_home_pos_q[0] + ws_factor * (hap_pos_q[0] - hap_home_pos_q[0]); // x 
-	    	move_pos_q[1] = kuka_home_pos_q[1] + ws_factor * (hap_pos_q[1] - hap_home_pos_q[1]); // y 
-	    	move_pos_q[2] = kuka_home_pos_q[2] + ws_factor * (hap_pos_q[2] - hap_home_pos_q[2]); // z    
-	    	 	
-		// kuka orientation matched to haption
-	    	for(int i = 3; i < 7; ++i) {move_pos_q[i] = hap_pos_q[i];}
-	    		    	
-	    	//e. Publish move command ros(THEN ADD DELAY WITH PYTHON)
-		Publish_Move_Cmd_q(move_pos_q, move_pub_q);
+	    	/*
+	    	// Clutch control: If deadman pressed, update start positions
+	    	virtGetDeadMan(VC, &deadman);
+	    	if((deadman == 1) && (last_deadman == 0))
+	    	{
+	    		// Update haption start position
+	    		virt_result = virtGetPosition(VC, hap_start_pos_q);
+	    		
+	    		// Update kuka start position
+	    		n.getParam("kuka_pos", tmp);						// Get kuka pos
+	    		for (int i = 0; i < 6; ++i) {kuka_start_pos_ypr[i] = tmp[i];}	// Build array
+	    		YPR_2_Q(kuka_start_pos_ypr, kuka_start_pos_q);			// Convert to quaternions
+	    	}	
+	    	
+	    	// Update deadman toggle
+	    	last_deadman = deadman;	
+	    	*/
+	    		
+	    	// Get Haption ee position [x, y, z, qx, qy, qz, qw]
+	 	virt_result = virtGetPosition(VC, hap_pos_q);
+						
+		// Convert to Haption to Kuka workspace position (Quats) to generate move command
+		// Translation: XYZ scaled movement [Move Start->P = (Base->P - Base->Start)]
+		for(int i = 0; i < 3; ++i) {move_pos_q[i] = kuka_start_pos_q[i] + ws_factor * (hap_pos_q[i] - hap_start_pos_q[i]);}
 		
-	 	Q_2_YPR(move_pos_q, move_pos_ypr); // convert to YPR for real KUKA
-	 	//std::cout<<"A: "<<move_pos_ypr[3]<<", B: "<<move_pos_ypr[4]<<", C: "<<move_pos_ypr[5]<<std::endl;
-	 	//Publish_Move_Cmd_ypr(move_pos_ypr, move_pub_ypr);
-	 	n.setParam("hap_move_pub_ypr/x", move_pos_ypr[0]);	 	
-	 	n.setParam("hap_move_pub_ypr/y", move_pos_ypr[1]);
-	 	n.setParam("hap_move_pub_ypr/z", move_pos_ypr[2]);
-	 	n.setParam("hap_move_pub_ypr/a", move_pos_ypr[3]);
-	 	n.setParam("hap_move_pub_ypr/b", move_pos_ypr[4]);
-	 	n.setParam("hap_move_pub_ypr/c", move_pos_ypr[5]);
+	 	// Rotation: Match Haption Quaternion
+		for(int i = 3; i < 7; ++i) {move_pos_q[i] = hap_pos_q[i];}  
+		
+	 	// Rotation: Clutch Control [ Rot(Start->P) = Rot(Start->Base) * Rot(Base->P) = inv(Rot(Base->Start))*Rot(Base->P) ]
+	 	//for(int i = 3; i < 7; ++i) {move_pos_q[i] = kuka_start_pos_q[i] + hap_pos_q[i];}
+	 	    	 
+	    	// Publish move command to ros
+		Publish_Move_Cmd_q(move_pos_q, move_pub_q);		
+	 	    	
+	    	// Get haption buttons input : 0/1 [left, mid, force_fb, right(?)]
+	    	for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
+		
+		left_btn = buttons[0];
+		mid_btn = buttons[1];
+		force_fb_btn = buttons[2];
+		
+	    	if ((mid_btn==1) && (last_mid_btn==0)) // if middle button pressed then toggle gripper control
+	    	{
+	    		// Toggle gripper control (0 = open, 1 = closed)
+	    		if (gripper_cmd == 0) {gripper_cmd = 1;}
+	    		else if (gripper_cmd == 1) {gripper_cmd = 0;}
+	    		
+	    		// Send command
+	    		//n.setParam("gripper_cmd", gripper_cmd);
+	    	}
+	    	last_mid_btn = mid_btn;
 		    		
 		if (force_fb_btn==1)
 		{	
-		    	//f. Get delayed_ft_sensor reading & apply forces to haption
+		    	// Get delayed_ft_sensor reading & apply forces to haption
 		    	n.getParam("ft_delay/fx",ft_delay[0]);
 		    	n.getParam("ft_delay/fy",ft_delay[1]);
 		    	n.getParam("ft_delay/fz",ft_delay[2]);	    	
@@ -368,14 +429,14 @@ int main(int argc, char* argv[])
 						
 			// Scale and Reverse force direction for x and z (copsim only)
 			ft_delay[0] = -ft_delay[0]*ft_factor;
-			ft_delay[1] = ft_delay[1]*ft_factor;
+			ft_delay[1] =  ft_delay[1]*ft_factor;
 			ft_delay[2] = -ft_delay[2]*ft_factor;
 			ft_delay[3] = 0.0f;
 			ft_delay[4] = 0.0f;
 			ft_delay[5] = 0.0f;
 			
-			// get forces within range
-			//FX,FY,FZ must be in range -15.0-15.0f, TX,TY,TZ must be in range -1.0-1.0f	
+			// Get forces within range
+			// FX,FY,FZ must be in range -15.0-15.0f, TX,TY,TZ must be in range -1.0-1.0f	
 			for(int i=0; i<3; i++)
 			{
 				if(ft_delay[i]>3.0f) {ft_delay[i]=3.0f;}
@@ -383,28 +444,19 @@ int main(int argc, char* argv[])
 				if(ft_delay[i+3]>0.3f) {ft_delay[i+3]=0.3f;}
 				if(ft_delay[i+3]<-0.3f){ft_delay[i+3]=-0.3f;}
 			}
-			
-			
-		    	//g. Apply forces to haption
+				
+		    	// Apply forces to haption
 			virt_result = virtSetForce(VC, ft_delay);		// Only works in COMMAND_TYPE_IMPEDANCE - doesnt work in COMMAND_TYPE_VIRTMECH
-			if (virt_result != 0) {fprintf(stderr, "Error in SetForce: %s\n",virtGetErrorMessage(virtGetErrorCode(VC)));}
-
 			
-		    	//h. Get force input from the user and publish
+		    	// Get force input from the user and publish (virtGetForce only works in COMMAND_TYPE_VIRTMECH, not COMMAND_TYPE_IMPEDANCE
 		    	//virt_result = virtGetForce(VC, ft_user); // Only works in COMMAND_TYPE_VIRTMECH - doesnt work in COMMAND_TYPE_IMPEDANCE
-		    	//if (virt_result == -1) {fprintf(stderr, "Error in GetForce: %s\n",virtGetErrorMessage(virtGetErrorCode(VC)));}
-			//else {std::cout<<"GET: x: "<<ft_user[0]<<", y: "<<ft_user[1]<<", z: "<<ft_user[2]<<", tx: "<<ft_user[3]<<", ty: "<<ft_user[4]<<", tz: "<<ft_user[5]<<std::endl;}
-		
-
-	    		//Publish_FT_User(ft_user, ft_user_pub);
 	    	}
-	    	//h. Spin ROS
+	    	
+	    	// Spin ROS
 	    	ros::spinOnce();
 		loop_rate.sleep();
 	    	
 	    }
-	    
-	    //5. Move back to home position **** TO DO ****
 	    
 	    // Other virts to try
 	    // virtGetSpeed(VC, speed)
@@ -413,9 +465,9 @@ int main(int argc, char* argv[])
 	    // virtSetSpeed(VC, speed);
 	    
 	    
-	    //6. Close connection to haption
+	    // Close connection to haption
 	    func_result = closeConnectionToHaption(VC);
     } 
-     
+    
     return 0;
 }

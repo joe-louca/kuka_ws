@@ -65,7 +65,7 @@ def main():
     sim_pos_pub = rospy.Publisher('/delayed_sim_pos_cmd', Float32MultiArray, queue_size=1)
     #kuka_pos_pub = rospy.Publisher('/delayed_pos_cmd', Float32MultiArray, queue_size=1)
     
-    sub = rospy.Subscriber("hap_move_pub", Float32MultiArray, haption_callback, queue_size=1)    
+    sub = rospy.Subscriber("hap_move_pub_q", Float32MultiArray, haption_callback, queue_size=1)    
 
     r = rospy.Rate(rate_hz)
 

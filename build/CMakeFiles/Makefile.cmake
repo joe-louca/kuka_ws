@@ -91,6 +91,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/kuka_ws/src/scripts/src/feedback/sim_ft_delay.py"
   "/home/joe/kuka_ws/src/scripts/src/feedback/vrep_cam1_sub.py"
   "/home/joe/kuka_ws/src/scripts/src/input/falcon_sub.py"
+  "/home/joe/kuka_ws/src/scripts/src/input/haption/jpos_delay.py"
   "/home/joe/kuka_ws/src/scripts/src/input/haption_delay_sub.py"
   "/home/joe/kuka_ws/src/scripts/src/input/haption_delay_sub_ypr.py"
   "/home/joe/kuka_ws/src/scripts/src/input/input_control.py"

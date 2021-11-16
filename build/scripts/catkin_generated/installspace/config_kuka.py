@@ -13,7 +13,7 @@ t_threshold = 5.0               # Torque sensor threshold (Nm)
 friction_f_threshold = 30.0     # Force sensor threshold for frictional forces (N)
 friction_t_threshold = 1.0      # Torque sensor threshold for frictional torque (Nm)
 velocity = [0.5]                # Kuka velocity - Range 0-1
-RT_timestep = 0.002             # Timestep between kuka commands (s)
+RT_timestep = 1.0/20            # Timestep between kuka commands (s)
 
 j1 =   0*pi/180
 j2 =  45*pi/180
@@ -23,9 +23,7 @@ j5 =   0*pi/180
 j6 = -45*pi/180
 j7 =   0*pi/180
 initial_jpos = [j1,j2,j3,j4,j5,j6,j7]
-
-# UPRIGHT
-initial_pos = [-91.5, 0, 940.5, 1.5708, 0, 0] #degs: 90, 0, 0
+initial_pos = [-111.88, 0.0, 939.86, 0.0*pi/180, -90.0*pi/180, 0.0*pi/180] #degs: 0, -90, 0
 
 set_param('latency', latency)
 set_param('rate_hz', rate_hz)

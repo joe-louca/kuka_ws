@@ -41,6 +41,7 @@ def Eu2Rot(eulers) :
 
 def ft_callback(msg):
     global delayed_ft_tbl
+    global delayed_ft_msg
 
     # Get force-torque reading
     F_sensor = np.array([[msg.wrench.force.x],
@@ -67,6 +68,16 @@ def ft_callback(msg):
     ft, retrieved, delayed_ft_tbl = add_delay(timestamped_ft, delayed_ft_tbl)
 
     if retrieved:
+        delayed_ft_msg.wrench.force.x = ft[0]
+        delayed_ft_msg.wrench.force.y = ft[1]
+        delayed_ft_msg.wrench.force.z = ft[2]
+        delayed_ft_msg.wrench.torque.x = ft[3]
+        delayed_ft_msg.wrench.torque.y = ft[4]
+        delayed_ft_msg.wrench.torque.z = ft[5]
+        #delayed_ft_msg.header.seq = #uint32
+        #delayed_ft_msg.header.stamp = #time
+        #delayed_ft_msg.header.stamp = '' #string
+      
         rospy.set_param('ft_delay/fx', ft[0])
         rospy.set_param('ft_delay/fy', ft[1])
         rospy.set_param('ft_delay/fz', ft[2])
@@ -76,15 +87,28 @@ def ft_callback(msg):
 
                 
        
-def AXIA():   
-    rospy.init_node('ft_sub_node', anonymous=True)
+def AXIA():
+    global delayed_ft_tbl
+    global latency
+    global delayed_ft_msg
+    delayed_ft_tbl = []
+    latency = rospy.get_param('latency')
+    delayed_ft_msg = WrenchStamped()
+
+    rate_hz = rospy.get_param('rate_hz')
+    
+    rospy.init_node('ft_delay_node', anonymous=True)
+    ft_pub = rospy.Publisher('/delayed_ft', WrenchStamped, queue_size=1)    
     rospy.Subscriber('netft_data', WrenchStamped, ft_callback, queue_size=1)
-    rospy.spin()
+    
+
+    r = rospy.Rate(rate_hz)
+    
+    while not rospy.is_shutdown():
+        if delayed_ft_msg.wrench.force.x:
+            ft_pub.publish(delayed_ft_msg)
+        r.sleep()
 
   
 if __name__ == '__main__':
-    global delayed_ft_tbl
-    global latency
-    delayed_ft_tbl = []
-    latency = rospy.get_param('latency')
     AXIA()

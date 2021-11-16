@@ -43,17 +43,25 @@ This serves as an example for publishing messages on the 'Robotiq2FGripperRobotO
 
 import roslib; roslib.load_manifest('robotiq_2f_gripper_control')
 import rospy
+from std_msgs.msg import Int16
 from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_output  as outputMsg
 from time import sleep
 
+def gripper_cmd_callback(msg):
+    global gripper_cmd
+    gripper_cmd = msg.data
+
 def publisher():
+    global gripper_cmd
+
     """Main loop which requests new commands and publish them on the Robotiq2FGripperRobotOutput topic."""
     rospy.init_node('Robotiq2FGripperSimpleController')    
     pub = rospy.Publisher('Robotiq2FGripperRobotOutput', outputMsg.Robotiq2FGripper_robot_output, queue_size=1)
+    sub = rospy.Subscriber('/delayed_gripper_cmd', Int16, gripper_cmd_callback)
     rate_hz = rospy.get_param('rate_hz')
     
     command = outputMsg.Robotiq2FGripper_robot_output();
-    rate = rospy.Rate(rate_hz)
+    r = rospy.Rate(rate_hz)
     
     while not rospy.is_shutdown():
         try:
@@ -81,7 +89,7 @@ def publisher():
         except:
             pass
         
-        rate.sleep()
+        r.sleep()
                         
 
 if __name__ == '__main__':
