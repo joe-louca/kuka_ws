@@ -19,12 +19,13 @@ class CopControl:
         # Get some parameters
         self.velocity = rospy.get_param('velocity')
         self.time_step = rospy.get_param('RT_timestep')
-        self.time_step = 0.001 
+        self.time_step = 0.005           ## Good at 0.01
         self.commandsList=[]
         
         # Move to an initial position
         print('Moving to initial position')
         initPos = rospy.get_param('initial_jpos')
+
         self.iiwa.movePTPJointSpace(initPos, self.velocity)
         time.sleep(3)
 
@@ -35,9 +36,9 @@ class CopControl:
         print('Press Ctrl-C to exit...')
         if self.connection_state:                                   # If connected to iiwa
             try:
-                self.iiwa.realTime_startDirectServoJoints()      # Start servo
-                self.t_0 = self.getSecs()                           # Refreshable start time
-                while True:                                         # Until Ctrl-C       
+                self.iiwa.realTime_startDirectServoJoints()             # Start servo
+                self.t_0 = self.getSecs()                               # Refreshable start time
+                while True:                                             # Until Ctrl-C       
                     cmd = rospy.get_param('delayed_jpos_cmd')
                     self.commandsList.append(cmd)
 
