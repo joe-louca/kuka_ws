@@ -6,11 +6,15 @@
 #include <geometry_msgs/WrenchStamped.h>
 #include <std_msgs/Float32MultiArray.h>
 
+#include <sys/time.h>
+#include <ctime>
+
 #define _USE_MATH_DEFINES
  
 #include <cmath>
 
 #define HAPTION_CONTROLLER_IP "localhost" //"192.168.100.53"
+
 
 VirtContext VC;
 
@@ -238,11 +242,17 @@ VirtContext VC;
 
 
     
-    void Publish_Move_Cmd_q(float* cmd, ros::Publisher move_pub_q)
-    {  // Publish cmd as Float32MultiArray
+    void Publish_Move_Cmd_q(float* cmd, ros::Publisher move_pub_q, float gripper_data, float clutch_counter, float frame_id, float timestamp)
+    {  // Publish cmd as Float32MultiArray - followed by gripper_cmd, clutch_counter, frame_id, timestamp
   	std_msgs::Float32MultiArray cmd_msg;
   	cmd_msg.data.clear(); 
     	for (int i = 0; i < 7; ++i) {cmd_msg.data.push_back(cmd[i]);}   
+    	
+    	cmd_msg.data.push_back(gripper_data);
+    	cmd_msg.data.push_back(clutch_counter);
+    	cmd_msg.data.push_back(frame_id);
+    	cmd_msg.data.push_back(timestamp);
+    	
       	move_pub_q.publish(cmd_msg);
     }
 
@@ -280,17 +290,24 @@ int main(int argc, char* argv[])
     ros::init(argc, argv, "haption_stream");
     ros::NodeHandle n;
     ros::Publisher move_pub_q = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub_q", 1);
-    //ros::Subscriber delayed_ft_sub = n.subscribe("delayed_ft", 1, FTCallback);					// FIX THIS 
       
     int rate_hz;
     n.getParam("rate_hz",rate_hz);
-    //rate_hz = 1000;
     ros::Rate loop_rate(rate_hz);
     
     // Set some scale factors
     double ws_factor = 500.0; // kuka_range = ws_factor * haption_range?
-    double ft_factor = 0.01; // scaling factor for forces to apply to haption
-     
+    double ft_factor = 0.05; // scaling factor for forces to apply to haption
+    double ft_user_scale; 	// ft scale factor from gui
+    double ws_user_scale; 	// ft scale factor from gui
+    
+    // Declare some frame markers for data recording.
+    float frame_id = 0;
+    double start_time = ros::Time::now().toSec();
+    double timestamp = ros::Time::now().toSec();
+    float clutch_counter = 0;
+    float gripper_data = 0;
+    
     bool func_result;
     int virt_result;
 
@@ -370,6 +387,8 @@ int main(int argc, char* argv[])
 	    	virtGetDeadMan(VC, &deadman);
 	    	if((deadman == 1) && (last_deadman == 0))
 	    	{
+	    		clutch_counter += 1;
+	    		
 	    		// Update haption start position
 	    		virt_result = virtGetPosition(VC, hap_start_pos_q);
 	    		
@@ -394,17 +413,15 @@ int main(int argc, char* argv[])
 							
 			// Convert to Haption to Kuka workspace position (Quats) to generate move command
 			// Translation: XYZ scaled movement [Move Start->P = (Base->P - Base->Start)]
-			for(int i = 0; i < 3; ++i) {move_pos_q[i] = kuka_start_pos_q[i] + ws_factor * (hap_pos_q[i] - hap_start_pos_q[i]);}
+			n.getParam("ws_user_scale",ws_user_scale);
+			for(int i = 0; i < 3; ++i) {move_pos_q[i] = kuka_start_pos_q[i] + ws_factor * (hap_pos_q[i] - hap_start_pos_q[i])*(ws_user_scale/100.0);}
 			
 		 	// Rotation: Match Haption Quaternion
 			for(int i = 3; i < 7; ++i) {move_pos_q[i] = hap_pos_q[i];}  
 			
 		 	// Rotation: Clutch Control [ Rot(Start->P) = Rot(Start->Base) * Rot(Base->P) = inv(Rot(Base->Start))*Rot(Base->P) ]
 		 	//for(int i = 3; i < 7; ++i) {move_pos_q[i] = kuka_start_pos_q[i] + hap_pos_q[i];}
-		 	    	 
-		    	// Publish move command to ros
-			Publish_Move_Cmd_q(move_pos_q, move_pub_q);		
-		 	    	
+		 	
 		    	// Get haption buttons input : 0/1 [left, mid, force_fb, right(?)]
 		    	for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
 			
@@ -419,9 +436,20 @@ int main(int argc, char* argv[])
 		    		else if (gripper_cmd == 1) {gripper_cmd = 0;}
 		    		
 		    		// Send command
-		    		//n.setParam("gripper_cmd", gripper_cmd);
+		    		n.setParam("gripper_cmd", gripper_cmd);
 		    	}
 		    	last_mid_btn = mid_btn;
+		    	
+		    			 	
+		 	// Update data markers
+		 	gripper_data = static_cast<float>(gripper_cmd);
+		 	frame_id += 1;
+    			timestamp = ros::Time::now().toSec() - start_time;    			
+		 	    	 
+		    	// Publish move command to ros
+			Publish_Move_Cmd_q(move_pos_q, move_pub_q, gripper_data, clutch_counter, frame_id, timestamp);		
+		 	    	
+
 			    		
 			if (force_fb_btn==1)
 			{	
@@ -436,8 +464,6 @@ int main(int argc, char* argv[])
 				
 				// Scale and Reverse force direction for x and z (copsim only)
 				/*
-				ft_factor = 0.01;
-				
 				ft_delay[0] = -ft_delay[0]*ft_factor;
 				ft_delay[1] =  ft_delay[1]*ft_factor;
 				ft_delay[2] = -ft_delay[2]*ft_factor;
@@ -447,20 +473,19 @@ int main(int argc, char* argv[])
 				*/
 				
 				// Scale and Reverse force direction for y (axia)
-				ft_factor = 0.05;
-				ft_delay[0] = ft_delay[0]*ft_factor;
-				ft_delay[1] = -ft_delay[1]*ft_factor;
-				ft_delay[2] = ft_delay[2]*ft_factor;
-				ft_delay[3] = 0.0f;
-				ft_delay[4] = 0.0f;
-				ft_delay[5] = 0.0f;
+				n.getParam("ft_user_scale",ft_user_scale);
+				ft_delay[0] = ft_delay[0]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[1] = -ft_delay[1]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[2] = ft_delay[2]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[3] = 0.0f*(ft_user_scale/100.0);
+				ft_delay[4] = 0.0f*(ft_user_scale/100.0);
+				ft_delay[5] = 0.0f*(ft_user_scale/100.0);
 				
-				// Get forces within range
-				// FX,FY,FZ must be in range -15.0-15.0f, TX,TY,TZ must be in range -1.0-1.0f	
+				// Get forces within safe range
 				for(int i=0; i<3; i++)
 				{
-					if(ft_delay[i]>3.0f) {ft_delay[i]=3.0f;}
-					if(ft_delay[i]<-3.0f) {ft_delay[i]=-3.0f;}
+					if(ft_delay[i]>5.0f) {ft_delay[i]=5.0f;}
+					if(ft_delay[i]<-5.0f) {ft_delay[i]=-5.0f;}
 					if(ft_delay[i+3]>0.3f) {ft_delay[i+3]=0.3f;}
 					if(ft_delay[i+3]<-0.3f){ft_delay[i+3]=-0.3f;}
 				}

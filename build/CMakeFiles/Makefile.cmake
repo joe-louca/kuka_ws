@@ -90,6 +90,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/kuka_ws/src/scripts/src/feedback/joy_vibrate.py"
   "/home/joe/kuka_ws/src/scripts/src/feedback/sim_ft_delay.py"
   "/home/joe/kuka_ws/src/scripts/src/feedback/vrep_cam1_sub.py"
+  "/home/joe/kuka_ws/src/scripts/src/gui/kuka_gui.py"
   "/home/joe/kuka_ws/src/scripts/src/input/falcon_sub.py"
   "/home/joe/kuka_ws/src/scripts/src/input/haption/jpos_delay.py"
   "/home/joe/kuka_ws/src/scripts/src/input/haption_delay_sub.py"

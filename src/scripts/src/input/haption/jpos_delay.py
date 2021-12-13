@@ -4,6 +4,7 @@ import rospy
 from std_msgs.msg import Float32MultiArray
 
 def add_delay(added_row, delayed_tbl):
+    latency = rospy.get_param('latency')
     delayed_tbl.insert(0, added_row)                                # Add new row to table
     row_len = len(added_row)-1
     tbl_len = len(delayed_tbl)                              

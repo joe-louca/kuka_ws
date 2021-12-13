@@ -10,7 +10,8 @@ import numpy as np
 class CopControl:
     def __init__(self):   
         self.start_time = datetime.now()                            # Start time for getSecs()
-
+        self.frame_id = 0
+        
         # Setup connection to iiwa
         self.IP_of_robot = '172.31.1.148'        
         self.connection_state = False
@@ -93,6 +94,12 @@ class CopControl:
             self.kuka_pos = self.iiwa.sendJointsPositionsGetActualEEFpos(cmd)
             #rospy.set_param('kuka_jpos', self.kuka_jpos)# Save kuka_jpos as param
             rospy.set_param('kuka_pos', self.kuka_pos)  # save kuka_pos as param
+
+            timestamp = self.getSecs() 
+            self.frame_id += 1
+            
+            kuka_pos_record = [self.kuka_pos[0],self.kuka_pos[1],self.kuka_pos[2],self.kuka_pos[3],self.kuka_pos[4],self.kuka_pos[5], self.frame_id, timestamp]
+            rospy.set_param('kuka_pos_record', kuka_pos_record)
 
             self.t_0 = self.getSecs()                   # Refresh start time after move
             self.commandsList = []                      # Clear commands list

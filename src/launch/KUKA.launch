@@ -3,7 +3,7 @@
 <launch>
 	<arg name="kuka" default="true"/>
 	<arg name="haption" default="true"/>
-	<arg name="axia" default="true"/>
+	<arg name="axia" default="false"/>
 	<arg name="robotiq" default="false"/>	
 		
 	<!-- Features -->
@@ -17,7 +17,8 @@
 
 	<!-- Load config parameters -->
 	<node pkg="scripts" type="config_kuka.py" name="config"/>
-	
+	<node pkg="scripts" type="kuka_gui.py" name="gui"/>
+			
 	<node pkg="launch" type="run_cop_KUKA.sh" name="Coppelia_KUKA_Sim" output="screen"/>
 	
 	<group if="$(arg haption)">
@@ -42,7 +43,9 @@
 	<!-- Axia -->		
 	<group if="$(arg axia)">
 		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
-		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
+		<!-- SOMETHING TO ALIGN Delayed FT with synced tool force from copsim... add latency to sim_tool_ft, then add to /-->
+		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+
 	</group>
 	<group unless="$(arg axia)">
 		<node pkg="scripts" type="sim_ft_delay.py" name="Sim_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>

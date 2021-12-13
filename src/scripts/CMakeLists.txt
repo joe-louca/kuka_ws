@@ -73,6 +73,8 @@ catkin_install_python(PROGRAMS
    src/sim/sim_delayed_pos_cmd_pub.py
    src/sim/sim_kuka_jpos_sub.py
    src/sim/sim_kuka_pos_sub.py
+   
+   src/gui/kuka_gui.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
