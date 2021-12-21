@@ -3,7 +3,7 @@
 <launch>
 	<arg name="kuka" default="true"/>
 	<arg name="haption" default="true"/>
-	<arg name="axia" default="false"/>
+	<arg name="axia" default="true"/>
 	<arg name="robotiq" default="false"/>	
 		
 	<!-- Features -->
@@ -43,7 +43,7 @@
 	<!-- Axia -->		
 	<group if="$(arg axia)">
 		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
-		<!-- SOMETHING TO ALIGN Delayed FT with synced tool force from copsim... add latency to sim_tool_ft, then add to /-->
+		<!-- SOMETHING TO ALIGN Delayed FT with synced tool force from copsim... add latency to sim_tool_ft, then add to ?/-->
 		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 
 	</group>

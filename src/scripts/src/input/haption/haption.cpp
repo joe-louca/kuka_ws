@@ -297,7 +297,7 @@ int main(int argc, char* argv[])
     
     // Set some scale factors
     double ws_factor = 500.0; // kuka_range = ws_factor * haption_range?
-    double ft_factor = 0.05; // scaling factor for forces to apply to haption
+    double ft_factor = 0.1; // scaling factor for forces to apply to haption
     double ft_user_scale; 	// ft scale factor from gui
     double ws_user_scale; 	// ft scale factor from gui
     
@@ -472,14 +472,14 @@ int main(int argc, char* argv[])
 				ft_delay[5] = 0.0f;
 				*/
 				
-				// Scale and Reverse force direction for y (axia)
+				// Scale force direction
 				n.getParam("ft_user_scale",ft_user_scale);
 				ft_delay[0] = ft_delay[0]*ft_factor*(ft_user_scale/100.0);
-				ft_delay[1] = -ft_delay[1]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[1] = ft_delay[1]*ft_factor*(ft_user_scale/100.0);
 				ft_delay[2] = ft_delay[2]*ft_factor*(ft_user_scale/100.0);
-				ft_delay[3] = 0.0f*(ft_user_scale/100.0);
-				ft_delay[4] = 0.0f*(ft_user_scale/100.0);
-				ft_delay[5] = 0.0f*(ft_user_scale/100.0);
+				ft_delay[3] = ft_delay[3]*0.1*(ft_user_scale/100.0);
+				ft_delay[4] = ft_delay[4]*0.1*(ft_user_scale/100.0);
+				ft_delay[5] = ft_delay[5]*0.1*(ft_user_scale/100.0);
 				
 				// Get forces within safe range
 				for(int i=0; i<3; i++)
