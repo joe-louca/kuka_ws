@@ -30,7 +30,15 @@ class CopControl:
         self.iiwa.movePTPJointSpace(initPos, self.velocity)
         time.sleep(3)
 
-        cmd = initPos
+        # Get initial position from copellia
+        print('Click deadman switch to move to start position')
+        while(True):
+            if rospy.has_param('delayed_jpos_cmd'):
+                cmd = rospy.get_param('delayed_jpos_cmd')
+                cmd = cmd[:7]
+                self.iiwa.movePTPJointSpace(cmd, self.velocity)
+                time.sleep(3)
+                break
         
         # Start direct servo control
         print('Starting direct servo control')
@@ -41,6 +49,7 @@ class CopControl:
                 self.t_0 = self.getSecs()                               # Refreshable start time
                 while True:                                             # Until Ctrl-C       
                     cmd = rospy.get_param('delayed_jpos_cmd')
+                    cmd = cmd[:7]
                     self.commandsList.append(cmd)
 
                     if (self.getSecs()-self.t_0)>self.time_step:    # If elapsed time for this step > desired time_step

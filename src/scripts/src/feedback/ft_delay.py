@@ -129,9 +129,9 @@ def ft_callback(msg):
             rospy.set_param('ft_delay/fx', ft_x)
             rospy.set_param('ft_delay/fy', ft_y) #### MOVE THIS TO HAPTION
             rospy.set_param('ft_delay/fz', ft_z)
-            rospy.set_param('ft_delay/tx', 0)#ft_tx)
-            rospy.set_param('ft_delay/ty', 0)#ft_ty)
-            rospy.set_param('ft_delay/tz', 0)#ft_tz)    
+            rospy.set_param('ft_delay/tx', ft_tx)
+            rospy.set_param('ft_delay/ty', ft_ty)
+            rospy.set_param('ft_delay/tz', ft_tz)    
 
                 
        

@@ -375,7 +375,47 @@ int main(int argc, char* argv[])
     	    force_fb_btn = buttons[2];
 	}
     }
-    std::cout<<"Starting control, hold the end effector and press the deadman switch to move"<<std::endl;
+    
+    
+    // Click deadman to send start position to move slowly to
+    std::cout<<"Click the deadman switch to move to start position. Keep haption still"<<std::endl; 
+
+    while (true)
+    {
+    	virtGetDeadMan(VC, &deadman);
+    	if(deadman == 1)
+    	{
+    		//Send one kuka pos then wait
+    		
+    		virt_result = virtGetPosition(VC, hap_start_pos_q);
+    		
+    		// Update kuka start position from copelliasim
+	    	n.getParam("sim_kuka_pos/x", kuka_start_pos_q[0]);
+	    	n.getParam("sim_kuka_pos/y", kuka_start_pos_q[1]);
+	    	n.getParam("sim_kuka_pos/z", kuka_start_pos_q[2]);
+	    	n.getParam("sim_kuka_pos/qx", kuka_start_pos_q[3]);
+	    	n.getParam("sim_kuka_pos/qy", kuka_start_pos_q[4]);
+	    	n.getParam("sim_kuka_pos/qz", kuka_start_pos_q[5]);
+	    	n.getParam("sim_kuka_pos/qw", kuka_start_pos_q[6]);
+	    	
+	    	// Make first move commandRotation: No translation, Match Haption Quaternion
+	    	for(int i = 0; i < 3; ++i) {move_pos_q[i] = kuka_start_pos_q[i];}
+		for(int i = 3; i < 7; ++i) {move_pos_q[i] = hap_start_pos_q[i];} 
+
+    		break;
+    	}
+    }
+    std::cout<<"Release the deadman switch"<<std::endl;
+    while(true)
+    {
+        virtGetDeadMan(VC, &deadman);
+    	if(deadman == 0) {break;}
+    }
+    
+    
+    Publish_Move_Cmd_q(move_pos_q, move_pub_q, gripper_data, clutch_counter, frame_id, timestamp);
+    sleep(3); // wait 3 secs
+    std::cout<<"Press the deadman switch to move continously"<<std::endl;
     
     if (func_result == true)
     {
@@ -477,9 +517,9 @@ int main(int argc, char* argv[])
 				ft_delay[0] = ft_delay[0]*ft_factor*(ft_user_scale/100.0);
 				ft_delay[1] = ft_delay[1]*ft_factor*(ft_user_scale/100.0);
 				ft_delay[2] = ft_delay[2]*ft_factor*(ft_user_scale/100.0);
-				ft_delay[3] = ft_delay[3]*0.1*(ft_user_scale/100.0);
-				ft_delay[4] = ft_delay[4]*0.1*(ft_user_scale/100.0);
-				ft_delay[5] = ft_delay[5]*0.1*(ft_user_scale/100.0);
+				ft_delay[3] = ft_delay[3]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[4] = ft_delay[4]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[5] = ft_delay[5]*ft_factor*(ft_user_scale/100.0);
 				
 				// Get forces within safe range
 				for(int i=0; i<3; i++)

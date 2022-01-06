@@ -11,9 +11,6 @@ class iiwaPy3:
     gnerealPorpuse=0
     
     def __init__(self,ip,trans=(0,0,0,0,0,0)):
-        print('This is a python3 wrapper for the KUKA Sunrise Toolbox')
-        print('For more info visit:')
-        print('https://github.com/Modi1987/KST-Kuka-Sunrise-Toolbox')
         port=30001
         self.soc=mySock((ip,port),trans)
         self.set=Setters(self.soc)
