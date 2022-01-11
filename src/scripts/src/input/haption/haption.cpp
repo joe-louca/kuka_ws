@@ -102,7 +102,7 @@ VirtContext VC;
             }
         }
     }
-
+/*
     void YPR_2_Q(float* ypr, float* q)  // WORKING
     { // yaw: alpha (RZ), pitch: beta (RY), roll: gamma (RX) to qx,qy,qz,qw
       // https://danceswithcode.net/engineeringnotes/quaternions/quaternions.html
@@ -171,7 +171,8 @@ VirtContext VC;
 	ypr[4] = pitch;			//ry
     	ypr[5] = roll; 			//rx 	
     }
-
+*/
+/*
     void Q_Add(float* QA, float* QB, float* QC)
     { // Adds XYZ translation B to A, and adds Q rotation B to A to give QC (multiply quaternions)
     	float QAx = QA[0];
@@ -190,14 +191,14 @@ VirtContext VC;
     	float QBqz = QB[5];
     	float QBqw = QB[6];
     	
-    	/*Q_2_Rot(QA, RotA);
+    	Q_2_Rot(QA, RotA);
     	Q_2_Rot(QB, RotB);
     	RotC = Rot_Multiply(RotB, RotA) // Rot A first, then Rot B around A 
     	Rot_2_Q(RotC, QC)
     	QC[0] = QAx + QBx;	// X
     	QC[1] = QAy + QBy;	// Y
     	QC[2] = QAz + QBz;	// Z      	
-    	*/
+    	
     	
     	QC[0] = QAx + QBx;	// X
     	QC[1] = QAy + QBy;	// Y
@@ -239,7 +240,203 @@ VirtContext VC;
     	QC[6] = QAqw * QBqz + QAqx * QBqy - QAqy * QBqx + QAqz * QBqw; // qz     	
 
     }
+*/
 
+    bool Quat2ZYX(float* q, float* ZYX)
+    {
+	float qx, qy, qz, qw, tmp1, tmp2, tmp3, tmp4, tmp5, rz, ry, rx;
+	
+	// Get individual quaternions
+	qx = q[3];
+	qy = q[4];
+	qz = q[5];
+	qw = q[6];	
+	
+   	// Ensure asin stays within -1 to 1 since asin of values larger than 1 produces complex number
+	
+	
+	// Compute temp values
+	tmp1 = 2*(qx*qy+qw*qz);
+	tmp2 = qw*qw + qx*qx - qy*qy - qz*qz;
+	//tmp3 = -2*(qx*qz-qw*qy);
+	tmp4 = 2*(qy*qz+qw*qx);
+	tmp5 = qw*qw - qx*qx - qy*qy + qz*qz;
+
+   	// Ensure asin stays within -1 to 1 since asin of values larger than 1 produces complex number
+    	tmp3 = -2*(qx*qz-qw*qy);
+    	if (tmp3 >  1) {tmp3 = 1;}
+    	if (tmp3 < -1) {tmp3 = -1;}
+	
+	rz = std::atan2(tmp1, tmp2);
+	ry = std::asin (tmp3);
+	rx = std::atan2(tmp4, tmp5);
+	
+
+	// Assemble ZYX
+	ZYX[0] = q[0];
+	ZYX[1] = q[1];
+	ZYX[2] = q[2];
+	ZYX[3] = rz;
+	ZYX[4] = ry;
+	ZYX[5] = rx;
+	
+	return true;
+
+    }
+    
+    bool ZYX2Quat(float* ZYX, float* q)
+    {
+	float cz, cy, cx, sz, sy, sx, qx, qy, qz, qw, norm;
+	
+	// Get cos/sins of individual angles
+	cz = cos(ZYX[3]/2);
+	cy = cos(ZYX[4]/2);
+	cx = cos(ZYX[5]/2);
+	
+	sz = sin(ZYX[3]/2);
+	sy = sin(ZYX[4]/2);
+	sx = sin(ZYX[5]/2);
+
+	// Compute quaternion elements
+	qx = cz*cy*sx-sz*sy*cx;
+	qy = cz*sy*cx+sz*cy*sx;
+	qz = sz*cy*cx-cz*sy*sx;
+	qw = cz*cy*cx+sz*sy*sx;
+	
+	// Normalise quaternion
+	norm = std::sqrt(qx*qx + qy*qy + qz*qz + qw*qw);
+	qx /= norm;
+	qy /= norm;
+	qz /= norm;
+	qw /= norm;	
+	
+	// Assemble quaternion
+	q[0] = ZYX[0];
+	q[1] = ZYX[1];
+	q[2] = ZYX[2];
+	q[3] = qx;
+	q[4] = qy;
+	q[5] = qz;
+	q[6] = qw;
+	
+	return true;
+    }
+/*
+    bool Quat2YPR(float* q, float* YPR)
+    {// from wikipedia - 3-2-1 body sequence, Z then Y, then X (yaw, pitch then roll)
+	float qx, qy, qz, qw, sinr_cosp, cosr_cosp, sinp, siny_cosp, cosy_cosp, yaw, pitch, roll;
+	
+	// Get individual quaternions
+	qx = q[3];
+	qy = q[4];
+	qz = q[5];
+	qw = q[6];
+	
+	// Roll (X)
+	sinr_cosp = 2 * (qw * qx + qy * qz);
+    	cosr_cosp = 1 - 2 * (qx * qx + qy * qy);
+    	roll = std::atan2(sinr_cosp, cosr_cosp);
+	
+	// Pitch (Y)
+	sinp = 2 * (qw * qy - qz * qx);
+    	if (std::abs(sinp) >= 1)
+        	pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+    	else
+        	pitch = std::asin(sinp);
+	
+	// Yaw (Z)
+	siny_cosp = 2 * (qw * qz + qx * qy);
+    	cosy_cosp = 1 - 2 * (qy * qy + qz * qz);
+	yaw = std::atan2(siny_cosp, cosy_cosp);	
+	
+	// Assemble YPR
+	YPR[0] = q[0];
+	YPR[1] = q[1];
+	YPR[2] = q[2];
+	YPR[3] = yaw;
+	YPR[4] = pitch;
+	YPR[5] = roll;
+		
+	return true;
+    }
+    
+    bool YPR2Quat(float* YPR, float* q)
+    {
+    	float yaw, pitch, roll, cy, sy, cp, sp, cr, sr, qw, qx, qy, qz;
+    	
+	yaw = YPR[3];
+	pitch = YPR[4];
+	roll = YPR[5];
+	
+    	// Abbreviations for the various angular functions
+    	cy = cos(yaw * 0.5);
+    	sy = sin(yaw * 0.5);
+	cp = cos(pitch * 0.5);
+	sp = sin(pitch * 0.5);
+	cr = cos(roll * 0.5);
+	sr = sin(roll * 0.5);
+
+	qw = cr * cp * cy + sr * sp * sy;
+	qx = sr * cp * cy - cr * sp * sy;
+	qy = cr * sp * cy + sr * cp * sy;
+	qz = cr * cp * sy - sr * sp * cy;
+	
+	// Assemble quaternion
+	q[0] = YPR[0];
+	q[1] = YPR[1];
+	q[2] = YPR[2];
+	q[3] = qx;
+	q[4] = qy;
+	q[5] = qz;
+	q[6] = qw;
+	
+	return true;
+    }    
+
+
+
+    void ReverseRoll(float* q)
+    {
+    	float tmp_ZYX[6] = {};
+    	int signs[4];
+    	bool res;
+    	
+    	for(int i = 0; i < 4; ++i) 
+	{
+		if (q[i+3]>0) 
+			{signs[i] = 1;}
+	    	else 
+	    		{signs[i] = -1;}
+    	}
+    	
+    	//std::cout<<"Q in... qx:"<<q[3]<<", qy: "<<q[4]<<", qz: "<<q[5]<<", qw: "<<q[6]<<std::endl;
+	
+	//Quat2ZYX(q, tmp_ZYX);				// Convert to XYZ
+	Quat2YPR(q, tmp_ZYX);
+    	std::cout<<"zyx in ... z:"<<tmp_ZYX[3]<<", y: "<<tmp_ZYX[4]<<", x: "<<tmp_ZYX[5]<<std::endl;
+    	
+	//tmp_ZYX[5] *= -1; 				// Reverse the roll
+	std::cout<<"zyx rev... z:"<<tmp_ZYX[3]<<", y: "<<tmp_ZYX[4]<<", x: "<<tmp_ZYX[5]<<std::endl;
+
+	//ZYX2Quat(tmp_ZYX, q);				// Convert back to Quaternion
+	YPR2Quat(tmp_ZYX, q);				// Convert back to Quaternion
+	
+	
+	for(int i = 0; i < 4; ++i) 			// Get quat signs the same as before
+	{
+		if (q[i+3]>0) 
+			{if (signs[i]==-1){q[i+3] *=-1;}}
+	    	else 
+	    		{if (signs[i]==1) {q[i+3] *=-1;}}
+    	}
+	
+    	//std::cout<<"Q out... qx:"<<q[3]<<", qy: "<<q[4]<<", qz: "<<q[5]<<", qw: "<<q[6]<<std::endl;
+    	
+	//Quat2ZYX(q, tmp_ZYX);				// Convert to XYZ
+	Quat2YPR(q, tmp_ZYX);				// Convert to XYZ    	    	
+    	std::cout<<"zyx out... z:"<<tmp_ZYX[3]<<", y: "<<tmp_ZYX[4]<<", x: "<<tmp_ZYX[5]<<std::endl;
+    }
+*/    
 
     
     void Publish_Move_Cmd_q(float* cmd, ros::Publisher move_pub_q, float gripper_data, float clutch_counter, float frame_id, float timestamp)
@@ -292,6 +489,7 @@ int main(int argc, char* argv[])
     ros::Publisher move_pub_q = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub_q", 1);
       
     int rate_hz;
+    //rate_hz = 20;
     n.getParam("rate_hz",rate_hz);
     ros::Rate loop_rate(rate_hz);
     
@@ -356,7 +554,7 @@ int main(int argc, char* argv[])
     std::vector<double> tmp;
     n.getParam("initial_kuka_pos", tmp);				// Get from kuka
     for (int i = 0; i < 6; ++i) {kuka_start_pos_ypr[i] = tmp[i];} 	// Convert to array
-    YPR_2_Q(kuka_start_pos_ypr, kuka_start_pos_q);			// Convert to quaternions
+    ZYX2Quat(kuka_start_pos_ypr, kuka_start_pos_q);			// Convert to quaternions
  
     // Open connection to haption
     func_result = openConnectionToHaption(VC);
@@ -517,9 +715,9 @@ int main(int argc, char* argv[])
 				ft_delay[0] = ft_delay[0]*ft_factor*(ft_user_scale/100.0);
 				ft_delay[1] = ft_delay[1]*ft_factor*(ft_user_scale/100.0);
 				ft_delay[2] = ft_delay[2]*ft_factor*(ft_user_scale/100.0);
-				ft_delay[3] = ft_delay[3]*ft_factor*(ft_user_scale/100.0);
-				ft_delay[4] = ft_delay[4]*ft_factor*(ft_user_scale/100.0);
-				ft_delay[5] = ft_delay[5]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[3] = ft_delay[3]*ft_factor*0.5*(ft_user_scale/100.0);
+				ft_delay[4] = ft_delay[4]*ft_factor*0.5*(ft_user_scale/100.0);
+				ft_delay[5] = ft_delay[5]*ft_factor*0.5*(ft_user_scale/100.0);
 				
 				// Get forces within safe range
 				for(int i=0; i<3; i++)
