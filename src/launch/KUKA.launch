@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <launch>
-	<arg name="kuka" default="true"/>
+	<arg name="kuka" default="false"/>
 	<arg name="haption" default="true"/>
-	<arg name="axia" default="true"/>
+	<arg name="axia" default="false"/>
 	<arg name="robotiq" default="false"/>
 	<arg name="data_recording" default="false"/>	
 		

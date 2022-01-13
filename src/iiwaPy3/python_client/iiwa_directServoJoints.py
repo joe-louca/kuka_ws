@@ -34,7 +34,7 @@ class CopControl:
         print('Click deadman switch to move to start position')
         while(True):
             if rospy.has_param('delayed_jpos_cmd'):
-                cmd = rospy.get_param('delayed_jpos_cmd')
+                cmd = rospy.get_param('delayed_jpos_cmd')                
                 cmd = cmd[:7]
                 self.iiwa.movePTPJointSpace(cmd, self.velocity)
                 time.sleep(3)
@@ -49,6 +49,13 @@ class CopControl:
                 self.t_0 = self.getSecs()                               # Refreshable start time
                 while True:                                             # Until Ctrl-C       
                     cmd = rospy.get_param('delayed_jpos_cmd')
+
+                    frame = cmd[7]
+                    frame_t = cmd[8]
+                    now_t = time.time()
+                    sim_start_t = rospy.get_param('start_time')
+                    latency = now_t - sim_start_t - frame_t
+                    
                     cmd = cmd[:7]
                     self.commandsList.append(cmd)
 

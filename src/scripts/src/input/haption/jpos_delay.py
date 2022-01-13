@@ -35,20 +35,21 @@ def jpos_callback(msg):
     j6 = msg.data[5]
     j7 = msg.data[6]
     frame = msg.data[7]
+    frame_t = msg.data[8]
 
             
     # Timestamp
     t = rospy.get_time()
-    timestamped_cmd = [j1, j2, j3, j4, j5, j6, j7, frame, t]
+    timestamped_cmd = [j1, j2, j3, j4, j5, j6, j7, frame, frame_t, t]
     
     # Store and retrieve delayed ft readings
     jpos_cmd, retrieved, delayed_cmd_tbl = add_delay(timestamped_cmd, delayed_cmd_tbl)
 
     if retrieved:
-        delayed_jpos_msg.data = [jpos_cmd[0], jpos_cmd[1], jpos_cmd[2], jpos_cmd[3], jpos_cmd[4], jpos_cmd[5], jpos_cmd[6], jpos_cmd[7]]
+        delayed_jpos_msg.data = [jpos_cmd[0], jpos_cmd[1], jpos_cmd[2], jpos_cmd[3], jpos_cmd[4], jpos_cmd[5], jpos_cmd[6], jpos_cmd[7], jpos_cmd[8]]
 
         # Set as ROS param
-        jpos_cmd_param = [jpos_cmd[0], jpos_cmd[1], jpos_cmd[2], jpos_cmd[3], jpos_cmd[4], jpos_cmd[5], jpos_cmd[6], jpos_cmd[7]]
+        jpos_cmd_param = [jpos_cmd[0], jpos_cmd[1], jpos_cmd[2], jpos_cmd[3], jpos_cmd[4], jpos_cmd[5], jpos_cmd[6], jpos_cmd[7], jpos_cmd[8]]
         rospy.set_param('delayed_jpos_cmd', jpos_cmd_param)
 
 

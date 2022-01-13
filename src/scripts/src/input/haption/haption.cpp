@@ -502,6 +502,7 @@ int main(int argc, char* argv[])
     // Declare some frame markers for data recording.
     float frame_id = 0;
     double start_time = ros::Time::now().toSec();
+    n.setParam("start_time", start_time);
     double timestamp = ros::Time::now().toSec();
     float clutch_counter = 0;
     float gripper_data = 0;
@@ -682,8 +683,9 @@ int main(int argc, char* argv[])
 		 	// Update data markers
 		 	gripper_data = static_cast<float>(gripper_cmd);
 		 	frame_id += 1;
-    			timestamp = ros::Time::now().toSec() - start_time;    			
-		 	    	 
+    			timestamp = ros::Time::now().toSec() - start_time;
+    			
+
 		    	// Publish move command to ros
 			Publish_Move_Cmd_q(move_pos_q, move_pub_q, gripper_data, clutch_counter, frame_id, timestamp);		
 		 	    	
