@@ -57,26 +57,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/joy_sub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/falcon_sub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/input_control.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/haption_delay_sub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/haption_delay_sub_ypr.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/jpos_delay.py")
 endif()
 
@@ -89,34 +69,18 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/vrep_cam1_sub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/HUD.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/joy_vibrate.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/kuka_pos_delay.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/sim_delayed_pos_cmd_pub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/sim_kuka_jpos_sub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/sim_kuka_pos_sub.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/kuka_gui.py")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/cam_show.py")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/cam1.py")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/scripts" TYPE PROGRAM FILES "/home/joe/kuka_ws/build/scripts/catkin_generated/installspace/cam2.py")
 endif()
 

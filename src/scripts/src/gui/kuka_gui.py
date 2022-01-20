@@ -93,6 +93,9 @@ tk.Label(text="Latency (ms)",foreground="black",background="coral1",width=7,heig
 scl_lat = tk.Scale(master=root, from_=0, to=2600, orient=tk.HORIZONTAL, resolution=50)
 scl_lat.grid(row=10,column=1,sticky="nsew")
 
+
+
+
 while not rospy.is_shutdown():
     ft_user_scale = scl_ft.get()
     rospy.set_param('ft_user_scale', ft_user_scale)

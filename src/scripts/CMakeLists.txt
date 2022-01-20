@@ -54,27 +54,33 @@ include_directories(
 catkin_install_python(PROGRAMS
    src/config/config_kuka.py
 
-   src/input/joy_sub.py
-   src/input/falcon_sub.py
-   src/input/input_control.py
-   src/input/haption_delay_sub.py
-   src/input/haption_delay_sub_ypr.py
+   #src/input/joy_sub.py
+   #src/input/falcon_sub.py
+   #src/input/input_control.py
+   #src/input/haption_delay_sub.py
+   #src/input/haption_delay_sub_ypr.py
    
    src/input/haption/jpos_delay.py
       
    src/feedback/ft_delay.py   
    src/feedback/sim_ft_delay.py
-   src/feedback/vrep_cam1_sub.py
-   src/feedback/HUD.py
-   src/feedback/joy_vibrate.py
+   
+   #src/feedback/vrep_cam1_sub.py
+   #src/feedback/HUD.py
+   #src/feedback/joy_vibrate.py
 
-   src/kuka/kuka_pos_delay.py
+   #src/kuka/kuka_pos_delay.py
 
-   src/sim/sim_delayed_pos_cmd_pub.py
-   src/sim/sim_kuka_jpos_sub.py
-   src/sim/sim_kuka_pos_sub.py
+   #src/sim/sim_delayed_pos_cmd_pub.py
+   #src/sim/sim_kuka_jpos_sub.py
+   #src/sim/sim_kuka_pos_sub.py
    
    src/gui/kuka_gui.py
+   src/gui/cam_show.py
+   src/gui/cam1.py
+   src/gui/cam2.py
+   
+   
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -5,6 +5,7 @@ from geometry_msgs.msg import WrenchStamped
 import numpy as np
 
 def add_delay(added_row, delayed_tbl):
+    latency = rospy.get_param('latency')
     delayed_tbl.insert(0, added_row)                                # Add new row to table
     row_len = len(added_row)-1
     tbl_len = len(delayed_tbl)                              

@@ -49,37 +49,31 @@ root.columnconfigure(1, weight=3)
 tk.Label(text="Joint 1",foreground="gray",background="peach puff",width=7,height=3).grid(row=0,column=0,sticky="nsew",pady = 1)
 scl_1 = CustomScale(root, from_=-175, to=175)
 scl_1.grid(row=0,column=1,sticky='ew',pady = 1,padx = 10)
-scl_1.set(kuka_jpos[0])
 
 tk.Label(text="Joint 2",foreground="gray",background="PaleTurquoise1",width=7,height=3).grid(row=1,column=0,sticky="nsew",pady = 1)
 scl_2 = CustomScale(root, from_=-120, to=120)
 scl_2.grid(row=1,column=1,sticky='ew',pady = 1,padx = 125)
-scl_2.set(kuka_jpos[1])
 
 tk.Label(text="Joint 3",foreground="gray",background="peach puff",width=7,height=3).grid(row=2,column=0,sticky="nsew",pady = 1)
 scl_3 = CustomScale(root, from_=-175, to=175)
 scl_3.grid(row=2,column=1,sticky='ew',pady = 1,padx = 10)
-scl_3.set(kuka_jpos[2])
 
 tk.Label(text="Joint 4",foreground="gray",background="PaleTurquoise1",width=7,height=3).grid(row=3,column=0,sticky="nsew",pady = 1)
 scl_4 = CustomScale(root, from_=-120, to=120)
 scl_4.grid(row=3,column=1,sticky='ew',pady = 1,padx = 125)
-scl_4.set(kuka_jpos[3])
 
 tk.Label(text="Joint 5",foreground="gray",background="peach puff",width=7,height=3).grid(row=4,column=0,sticky="nsew",pady = 1)
 scl_5 = CustomScale(root, from_=-175, to=175)
 scl_5.grid(row=4,column=1,sticky='ew',pady = 1,padx = 10)
-scl_5.set(kuka_jpos[4])
 
 tk.Label(text="Joint 6",foreground="gray",background="PaleTurquoise1",width=7,height=3).grid(row=5,column=0,sticky="nsew",pady = 1)
 scl_6 = CustomScale(root, from_=-120, to=120)
 scl_6.grid(row=5,column=1,sticky='ew',pady = 1,padx = 125)
-scl_6.set(kuka_jpos[5])
 
 tk.Label(text="Joint 7",foreground="gray",background="peach puff",width=7,height=3).grid(row=6,column=0,sticky="nsew",pady = 1)
 scl_7 = CustomScale(root, from_=-175, to=175)
 scl_7.grid(row=6,column=1,sticky='ew',pady = 1,padx = 10)
-scl_7.set(kuka_jpos[6])
+
 
 tk.Label(text=" ",foreground="black",background="snow",width=7,height=3).grid(row=7,column=0,sticky="nsew")
 tk.Label(text=" ",foreground="black",background="snow",width=7,height=3).grid(row=7,column=1,sticky="nsew")
@@ -88,33 +82,45 @@ tk.Label(text=" ",foreground="black",background="snow",width=7,height=3).grid(ro
 tk.Label(text="Scale Force Feedback (%)",foreground="black",background="coral1",width=7,height=3).grid(row=8,column=0,sticky="nsew",pady = 1)
 scl_ft = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
 scl_ft.grid(row=8,column=1,sticky="nsew")
+scl_ft.set(50)
 
 tk.Label(text="Scale Speed (%)",foreground="black",background="burlywood1",width=7,height=3).grid(row=9,column=0,sticky="nsew",pady= 1)
 scl_spd = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
 scl_spd.grid(row=9,column=1,sticky="nsew")
-         
+scl_spd.set(50)
+
 tk.Label(text="Latency (ms)",foreground="black",background="coral1",width=7,height=3).grid(row=10,column=0,sticky="nsew",pady = 1)
 scl_lat = tk.Scale(master=root, from_=0, to=2600, orient=tk.HORIZONTAL, resolution=50)
 scl_lat.grid(row=10,column=1,sticky="nsew")
 
-while not rospy.is_shutdown():
-    ft_factor = scl_ft.get()
-    rospy.set_param('ft_factor', ft_factor)
 
-    workspace_factor = scl_spd.get()
-    rospy.set_param('workspace_factor', workspace_factor)
+
+
+while not rospy.is_shutdown():
+    ft_user_scale = scl_ft.get()
+    rospy.set_param('ft_user_scale', ft_user_scale)
+
+    ws_user_scale = scl_spd.get()
+    rospy.set_param('ws_user_scale', ws_user_scale)
 
     latency = scl_lat.get()
+    latency = latency/1000.0
     rospy.set_param('latency', latency)
 
-    
-    #kuka_jpos = rospy.get_param('kuka_jpos')
-    scl_1.set(kuka_jpos[0])
-    scl_2.set(kuka_jpos[1])
-    scl_3.set(kuka_jpos[2])
-    scl_4.set(kuka_jpos[3])
-    scl_5.set(kuka_jpos[4])
-    scl_6.set(kuka_jpos[5])
-    scl_7.set(kuka_jpos[6])
+    if rospy.has_param('jpos_cmd'):
+        j1 = rospy.get_param('jpos_cmd/j1')
+        j2 = rospy.get_param('jpos_cmd/j2')
+        j3 = rospy.get_param('jpos_cmd/j3')
+        j4 = rospy.get_param('jpos_cmd/j4')
+        j5 = rospy.get_param('jpos_cmd/j5')
+        j6 = rospy.get_param('jpos_cmd/j6')
+        j7 = rospy.get_param('jpos_cmd/j7')
+        scl_1.set(j1)
+        scl_2.set(j2)
+        scl_3.set(j3)
+        scl_4.set(j4)
+        scl_5.set(j5)
+        scl_6.set(j6)
+        scl_7.set(j7)
     root.update()
         

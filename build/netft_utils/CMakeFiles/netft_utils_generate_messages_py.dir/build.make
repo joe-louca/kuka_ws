@@ -88,9 +88,9 @@ netft_utils/CMakeFiles/netft_utils_generate_messages_py: /home/joe/kuka_ws/devel
 
 /home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /opt/ros/noetic/lib/genpy/gensrv_py.py
 /home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /home/joe/kuka_ws/src/netft_utils/srv/SetThreshold.srv
+/home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /opt/ros/noetic/share/geometry_msgs/msg/WrenchStamped.msg
 /home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
 /home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /opt/ros/noetic/share/geometry_msgs/msg/Vector3.msg
-/home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /opt/ros/noetic/share/geometry_msgs/msg/WrenchStamped.msg
 /home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv/_SetThreshold.py: /opt/ros/noetic/share/geometry_msgs/msg/Wrench.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/joe/kuka_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating Python code from SRV netft_utils/SetThreshold"
 	cd /home/joe/kuka_ws/build/netft_utils && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/gensrv_py.py /home/joe/kuka_ws/src/netft_utils/srv/SetThreshold.srv -Inetft_utils:/home/joe/kuka_ws/src/netft_utils/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p netft_utils -o /home/joe/kuka_ws/devel/lib/python3/dist-packages/netft_utils/srv

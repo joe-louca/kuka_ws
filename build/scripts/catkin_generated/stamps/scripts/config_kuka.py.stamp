@@ -5,7 +5,7 @@ from math import pi
 from rospy import set_param
 
 latency = 00.0 / 1000.0        # One way latency (ms to s)
-rate_hz = 20                   # Loop rate (Hz) 10 (was 500)
+rate_hz = 100                   # Loop rate (Hz) 10 (was 500)
 pos_step_size = 1.0             # Position step size (mm)
 rot_step_size = 1.0 * pi/180    # Rotation step size (deg to rads)
 f_threshold = 100.0             # Force sensor threshold for rigid collisions (N)
@@ -14,6 +14,9 @@ friction_f_threshold = 30.0     # Force sensor threshold for frictional forces (
 friction_t_threshold = 1.0      # Torque sensor threshold for frictional torque (Nm)
 velocity = [0.5]                # Kuka velocity - Range 0-1
 RT_timestep = 1.0/20            # Timestep between kuka commands (s)
+ft_factor = 50.0               # scale factor for haption forces (%)
+workspace_factor = 50.0        # scale factor for haption workspace (%)
+
 
 j1 =   0*pi/180
 j2 =  45*pi/180

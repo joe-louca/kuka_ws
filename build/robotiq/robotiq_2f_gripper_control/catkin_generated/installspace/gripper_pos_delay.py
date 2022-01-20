@@ -7,6 +7,7 @@ from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_input as inpu
 
 class GRIPPER_LISTENER:
     def add_delay(self, added_row, delayed_tbl):
+        self.latency = rospy.get_param('latency')
         delayed_tbl.insert(0, added_row)                                # Add new row to table
         row_len = len(added_row)-1
         tbl_len = len(delayed_tbl)                              
