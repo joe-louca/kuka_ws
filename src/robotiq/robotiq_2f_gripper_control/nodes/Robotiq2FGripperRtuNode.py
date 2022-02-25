@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Software License Agreement (BSD License)
 #
@@ -58,7 +58,7 @@ def mainLoop(device):
 
     #We connect to the address received as an argument
     gripper.client.connectToDevice(device)
-    
+
     rospy.init_node('robotiq2FGripper')
 
     #The Gripper status is published on the topic named 'Robotiq2FGripperRobotInput'
@@ -67,6 +67,7 @@ def mainLoop(device):
     #The Gripper command is received from the topic named 'Robotiq2FGripperRobotOutput'
     rospy.Subscriber('Robotiq2FGripperRobotOutput', outputMsg.Robotiq2FGripper_robot_output, gripper.refreshCommand)
     
+
     #We loop
     while not rospy.is_shutdown():
 
@@ -75,7 +76,7 @@ def mainLoop(device):
       pub.publish(status)     
 
       #Wait a little
-      #	 rospy.sleep(0.05)
+      #rospy.sleep(0.05)
 
       #Send the most recent command
       gripper.sendCommand()

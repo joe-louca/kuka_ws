@@ -143,7 +143,8 @@ def AXIA():
 
     rospy.init_node('ft_delay_node', anonymous=True)
 
-    start_time = rospy.get_rostime()#.to_sec()
+    #start_time = rospy.get_rostime()#.to_sec()
+    start_time = rospy.get_param('start_time')
     
     delayed_ft_tbl = []
     latency = rospy.get_param('latency')

@@ -53,6 +53,9 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 catkin_install_python(PROGRAMS
    src/config/config_kuka.py
+   src/config/config_kuka_BL.py
+   src/config/config_kuka_C.py
+   src/config/config_kuka_TR.py   
 
    #src/input/joy_sub.py
    #src/input/falcon_sub.py
@@ -76,10 +79,12 @@ catkin_install_python(PROGRAMS
    #src/sim/sim_kuka_pos_sub.py
    
    src/gui/kuka_gui.py
-   src/gui/cam_show.py
    src/gui/cam1.py
    src/gui/cam2.py
    
+   src/user/blink_detector.py
+   src/user/user_phys.py
+   src/user/user_cam.py
    
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )

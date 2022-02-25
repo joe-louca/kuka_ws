@@ -62,29 +62,38 @@ def publisher():
     
     command = outputMsg.Robotiq2FGripper_robot_output();
     r = rospy.Rate(rate_hz)
-    
+    while True:
+        if rospy.has_param('delayed_gripper_cmd'):
+            gripper_cmd = rospy.get_param('delayed_gripper_cmd')
+            prev_gripper_cmd = gripper_cmd
+            break
+        else:
+            pass
+
     while not rospy.is_shutdown():
         try:
             gripper_cmd = rospy.get_param('delayed_gripper_cmd')
+            if (gripper_cmd != prev_gripper_cmd):
+                
+                # build command msg
+                if gripper_cmd == 1:
+                    command.rACT = 1  # activate
+                    command.rGTO = 1  # go to action
+                    command.rATR = 0  # Reset??
+                    command.rPR = 255 # closed
+                    command.rSP = 255 # speed
+                    command.rFR = 150 #force
+                else:
+                    command.rACT = 1  # activate
+                    command.rGTO = 1  # go to action
+                    command.rATR = 0  # Reset??
+                    command.rPR = 0   # position open
+                    command.rSP = 255 # speed
+                    command.rFR = 150 #force
 
-            # build command msg
-            if gripper_cmd == 1:
-                command.rACT = 1  # activate
-                command.rGTO = 1  # go to action
-                command.rATR = 0  # Reset??
-                command.rPR = 255 # closed
-                command.rSP = 255 # speed
-                command.rFR = 150 #force
-            else:
-                command.rACT = 1  # activate
-                command.rGTO = 1  # go to action
-                command.rATR = 0  # Reset??
-                command.rPR = 0   # position open
-                command.rSP = 255 # speed
-                command.rFR = 150 #force
-
-            # publish to gripper        
-            pub.publish(command)
+                # publish to gripper        
+                pub.publish(command)
+            prev_gripper_cmd = gripper_cmd
 
         except:
             pass

@@ -2,9 +2,21 @@
 
 # Variables as ros parameters
 from math import pi
+from rospy import get_param
 from rospy import set_param
+from rospy import get_time
+from rospy import init_node
 
-latency = 00.0 / 1000.0        # One way latency (ms to s)
+
+init_node('config', anonymous=True)
+
+try:
+    latency = get_param('latency')
+except:
+    latency = 0.0
+latency /= 1000.0               # One way latency (ms to s)
+
+start_time = get_time()         # time in float seconds
 rate_hz = 100                   # Loop rate (Hz) 10 (was 500)
 pos_step_size = 1.0             # Position step size (mm)
 rot_step_size = 1.0 * pi/180    # Rotation step size (deg to rads)
@@ -28,6 +40,7 @@ j7 =   0*pi/180
 initial_jpos = [j1,j2,j3,j4,j5,j6,j7]
 initial_pos = [-111.88, 0.0, 939.86, 0.0*pi/180, -90.0*pi/180, 0.0*pi/180] #degs: 0, -90, 0
 
+set_param('start_time', start_time)
 set_param('latency', latency)
 set_param('rate_hz', rate_hz)
 set_param('pos_step_size', pos_step_size)

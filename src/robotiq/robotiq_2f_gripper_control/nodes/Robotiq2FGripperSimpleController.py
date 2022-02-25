@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Software License Agreement (BSD License)
 #
@@ -113,7 +113,7 @@ def askForCommand(command):
     currentCommand += ', rFR = '   + str(command.rFR )
 
 
-    print currentCommand
+    print(currentCommand)
 
     strAskForCommand  = '-----\nAvailable commands\n\n'
     strAskForCommand += 'r: Reset\n'
@@ -128,13 +128,13 @@ def askForCommand(command):
     
     strAskForCommand += '-->'
 
-    return raw_input(strAskForCommand)
+    return input(strAskForCommand)
 
 def publisher():
     """Main loop which requests new commands and publish them on the Robotiq2FGripperRobotOutput topic."""
     rospy.init_node('Robotiq2FGripperSimpleController')
     
-    pub = rospy.Publisher('Robotiq2FGripperRobotOutput', outputMsg.Robotiq2FGripper_robot_output, queue_size=1)
+    pub = rospy.Publisher('Robotiq2FGripperRobotOutput', outputMsg.Robotiq2FGripper_robot_output)
 
     command = outputMsg.Robotiq2FGripper_robot_output();
 

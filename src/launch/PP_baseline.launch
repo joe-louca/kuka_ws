@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--roslaunch launch PP_baseline.launch pp:=1 -->
+<launch>
+	<arg name="record_data" default="false"/>	
+	
+	<!-- Get participant ID from args -->
+	<arg name="pp" default="0"/>
+		
+	<!-- Parameters -->
+	<arg name="node_start_delay_short" default="2.0" />
+
+	<!-- Load config parameters -->
+	<param name="latency" type="double" value="0" />
+	<param name="trial_id" type="str" value="BL" />
+	<param name="particpant_id" type="int" value="$(arg pp)" />
+	<node pkg="scripts" type="config_kuka.py" name="config"/>
+
+	<!-- Record data -->
+	<node pkg="scripts" type="user_cam.py" name="user_cam" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+	<node pkg="scripts" type="user_phys.py" name="user_phys" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+	<node pkg="scripts" type="bag.sh" name="bag_data" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+
+
+</launch>

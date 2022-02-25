@@ -36,11 +36,11 @@ def jpos_callback(msg):
     j7 = msg.data[6]
     frame = msg.data[7]
     frame_t = msg.data[8]
-
+    gripper = rospy.get_param("gripper_cmd")
             
     # Timestamp
     t = rospy.get_time()
-    timestamped_cmd = [j1, j2, j3, j4, j5, j6, j7, frame, frame_t, t]
+    timestamped_cmd = [j1, j2, j3, j4, j5, j6, j7, frame, frame_t, gripper, t]
     
     # Store and retrieve delayed ft readings
     jpos_cmd, retrieved, delayed_cmd_tbl = add_delay(timestamped_cmd, delayed_cmd_tbl)
@@ -50,7 +50,10 @@ def jpos_callback(msg):
 
         # Set as ROS param
         jpos_cmd_param = [jpos_cmd[0], jpos_cmd[1], jpos_cmd[2], jpos_cmd[3], jpos_cmd[4], jpos_cmd[5], jpos_cmd[6], jpos_cmd[7], jpos_cmd[8]]
+        gripper_param = jpos_cmd[9]
         rospy.set_param('delayed_jpos_cmd', jpos_cmd_param)
+        rospy.set_param('delayed_gripper_cmd', gripper_param)
+
 
 
 def main():

@@ -1,11 +1,18 @@
 <?xml version="1.0"?>
-
+<!--roslaunch launch KUKA.launch lat:=100 hap:=Y/N pp:=1 task:=0 -->
 <launch>
 	<arg name="kuka" default="false"/>
 	<arg name="haption" default="true"/>
 	<arg name="axia" default="false"/>
 	<arg name="robotiq" default="false"/>
-	<arg name="data_recording" default="false"/>	
+	<arg name="cameras" default="false"/>
+	<arg name="record_data" default="false"/>	
+	
+	<!-- Trial parameters -->
+	<arg name="lat" default="0.0"/><!-- Latency in ms -->
+	<arg name="hap" default="NA"/> <!-- Y = haptic feedback on, N = off --> 
+	<arg name="pp" default="-1"/>	<!-- Participant ID number -->
+	<arg name="task" default="0"/>	<!-- 0 = none, 1 = Peel, 2 = unscrew, 3 = screw, 4 = fix-->
 		
 	<!-- Features -->
 
@@ -16,12 +23,46 @@
 	<arg name="node_start_delay_long" default="10.0" />
 
 	<!-- Load config parameters and gui -->
-	<node pkg="scripts" type="config_kuka.py" name="config"/>
+	<param name="latency" type="double" value="$(arg lat)" />
+	<param name="trial_id" type="str" value="$(arg hap)" />
+	<param name="participant_id" type="int" value="$(arg pp)" />
+	
+	<!-- Load config file and start position -->
+	<group if="$(eval arg('task') ==0)">
+		<node pkg="scripts" type="config_kuka.py" name="config"/>
+	</group>
+	<group if="$(eval arg('task') ==1)">
+		<node pkg="scripts" type="config_kuka_TR.py" name="config"/>
+	</group>
+	<group if="$(eval arg('task') ==2)">
+		<node pkg="scripts" type="config_kuka_C.py" name="config"/>
+	</group>
+	<group if="$(eval arg('task') ==3)">
+		<node pkg="scripts" type="config_kuka_BL.py" name="config"/>
+	</group>
+	<group if="$(eval arg('task') ==4)">
+		<node pkg="scripts" type="config_kuka_BL.py" name="config"/>
+	</group>
+	
 	<node pkg="scripts" type="kuka_gui.py" name="gui"/>
 	
-	<!-- Launch coppelia -->		
-	<node pkg="launch" type="run_cop_KUKA.sh" name="Coppelia_KUKA_Sim" output="screen"/>
-	
+	<!-- Launch coppelia -->
+	<group if="$(eval arg('task') ==0)">
+		<node pkg="launch" type="run_cop_KUKA.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+	</group>
+	<group if="$(eval arg('task') ==1)">
+		<node pkg="launch" type="run_cop_KUKA_TR.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+	</group>
+	<group if="$(eval arg('task') ==2)">
+		<node pkg="launch" type="run_cop_KUKA_C.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+	</group>	
+	<group if="$(eval arg('task') ==3)">
+		<node pkg="launch" type="run_cop_KUKA_BL.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+	</group>
+	<group if="$(eval arg('task') ==4)">
+		<node pkg="launch" type="run_cop_KUKA_BL.sh" name="Coppelia_KUKA_Sim" output="screen"/>
+	</group>	
+		
 	<!-- Run haption -->
 	<group if="$(arg haption)">
 		<node pkg="launch" type="run_haption.sh" name="Haption_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
@@ -38,9 +79,7 @@
 	<!-- Axia -->		
 	<group if="$(arg axia)">
 		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
-		<!-- SOMETHING TO ALIGN Delayed FT with synced tool force from copsim... add latency to sim_tool_ft, then add in to ft_delay before adding second delay-->
 		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
-
 	</group>
 	<group unless="$(arg axia)">
 		<node pkg="scripts" type="sim_ft_delay.py" name="Sim_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
@@ -50,6 +89,20 @@
 	<group if="$(arg kuka)">
 		<node pkg="launch" type="run_iiwaPy3.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>		
 	</group>
+
+	<!-- Camera views -->
+	<group if="$(arg cameras)">
+		<node pkg="scripts" type="cam1.py" name="camera_1" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+		<node pkg="scripts" type="cam2.py" name="camera_2" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+		<node pkg="launch" type="show_cams.sh" name="Display Cameras" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+	</group>	
+	
+	<!-- Record data -->
+	<group if="$(arg record_data)">
+		<node pkg="scripts" type="user_cam.py" name="user_cam" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+		<node pkg="scripts" type="user_phys.py" name="user_phys" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+		<node pkg="scripts" type="bag.sh" name="bag_data" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+	</group>	
 
 
 </launch>

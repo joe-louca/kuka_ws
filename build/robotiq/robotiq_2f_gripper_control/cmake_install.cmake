@@ -113,6 +113,8 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/joe/kuka_ws/src/robotiq/robotiq_2f_gripper_control/nodes/Robotiq2FGripperStatusListener.py"
     "/home/joe/kuka_ws/src/robotiq/robotiq_2f_gripper_control/nodes/Robotiq2FGripperTcpNode.py"
     "/home/joe/kuka_ws/src/robotiq/robotiq_2f_gripper_control/nodes/Robotiq2FGripperRtuNode.py"
+    "/home/joe/kuka_ws/src/robotiq/robotiq_2f_gripper_control/nodes/gripper_cmd_pub.py"
+    "/home/joe/kuka_ws/src/robotiq/robotiq_2f_gripper_control/nodes/gripper_pos_delay.py"
     )
 endif()
 

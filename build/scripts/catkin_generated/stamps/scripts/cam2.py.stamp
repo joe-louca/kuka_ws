@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rospy
 import numpy as np
 import cv2
@@ -26,7 +28,8 @@ class CAMERA:
 
     def __init__(self):
         # Get rate and latency parameters
-        rate_hz = rospy.get_param('rate_hz')
+        #rate_hz = rospy.get_param('rate_hz')
+        rate_hz = 35 # fps
         self.latency = rospy.get_param('latency')
 
         # Set up frame storage lists
@@ -40,36 +43,34 @@ class CAMERA:
         bridge = CvBridge()
 
         # Initialise publisher
-        rospy.init_node('cam2_node', anonymous=True)
-        #pub1 = rospy.Publisher("cam1", Image,queue_size=1)
-        pub = rospy.Publisher("cam2", Image,queue_size=1)
+        rospy.init_node('cam1_node', anonymous=True)
+        pub = rospy.Publisher("cameras/cam2", Image,queue_size=1)
         
         rate = rospy.Rate(rate_hz)
 
         while not rospy.is_shutdown():
             # Get image
-            ret, frame = cap.read()
-            #cv2.imshow('frame',frame)
+            ret, frame = cap.read() # 640x480 size
+            height, width, layers = frame.shape
+            new_h = int(height / 2)
+            new_w = int(width / 2)
+            resize = cv2.resize(frame, (new_w, new_h))
             # Store with timestamp
             t = rospy.get_time()
-            timestamped_frame = [frame, t]
+            timestamped_frame = [resize, t]
             
             frame, retrieved, delayed_frame_tbl = self.add_delay(timestamped_frame, delayed_frame_tbl)
             
             if retrieved:
                 # Convert to image and publish delayed frame
                 f = frame[0]
-                #cv2.imshow('Cam2',f)
-                #pub1.publish(bridge.cv2_to_imgmsg(f, "bgr8"))
                 pub.publish(bridge.cv2_to_imgmsg(f, "bgr8"))
-
                 
             rate.sleep()
 
-        #close images
-        cap.release()
-        cv2.destroyAllWindows()
-   
+        cap.release() 
+
+
         
 if __name__ == '__main__':
     CAMERA()

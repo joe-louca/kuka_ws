@@ -501,9 +501,11 @@ int main(int argc, char* argv[])
     
     // Declare some frame markers for data recording.
     float frame_id = 0;
-    double start_time = ros::Time::now().toSec();
-    n.setParam("start_time", start_time);
-    double timestamp = ros::Time::now().toSec();
+    //double start_time = ros::Time::now().toSec();
+    //n.setParam("start_time", start_time);
+    double start_time;
+    n.getParam("start_time", start_time); // float in secs
+    double timestamp = ros::Time::now().toSec() - start_time;
     float clutch_counter = 0;
     float gripper_data = 0;
     
@@ -541,6 +543,7 @@ int main(int argc, char* argv[])
     int last_deadman = 0;
     
     int gripper_cmd = 0;
+    n.setParam("gripper_cmd", gripper_cmd);
     
     // Set Haption start position values
     hap_start_pos_q[0] = 0.3; 	//x  --- in/out 	--- LIMITS:  0.2  / 0.4
@@ -643,6 +646,25 @@ int main(int argc, char* argv[])
 	    	
 	    	// Update deadman toggle
 	    	last_deadman = deadman;	
+
+	    	// Get haption buttons input : 0/1 [left, mid, force_fb, right(?)]
+	    	for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
+		
+		left_btn = buttons[0];
+		mid_btn = buttons[1];
+		force_fb_btn = buttons[2];
+		
+	    	if ((mid_btn==1) && (last_mid_btn==0)) // if middle button pressed then toggle gripper control
+	    	{
+	    		// Toggle gripper control (0 = open, 1 = closed)
+	    		if (gripper_cmd == 0) {gripper_cmd = 1;}
+	    		else if (gripper_cmd == 1) {gripper_cmd = 0;}
+	    		
+	    		// Send command
+	    		n.setParam("gripper_cmd", gripper_cmd);
+	    	}
+	    	last_mid_btn = mid_btn;
+
 	    	
 	    	// Only send move commands if deadman is pressed
 	    	if(deadman ==1)
@@ -661,6 +683,7 @@ int main(int argc, char* argv[])
 		 	// Rotation: Clutch Control [ Rot(Start->P) = Rot(Start->Base) * Rot(Base->P) = inv(Rot(Base->Start))*Rot(Base->P) ]
 		 	//for(int i = 3; i < 7; ++i) {move_pos_q[i] = kuka_start_pos_q[i] + hap_pos_q[i];}
 		 	
+		    	/*
 		    	// Get haption buttons input : 0/1 [left, mid, force_fb, right(?)]
 		    	for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
 			
@@ -678,7 +701,7 @@ int main(int argc, char* argv[])
 		    		n.setParam("gripper_cmd", gripper_cmd);
 		    	}
 		    	last_mid_btn = mid_btn;
-		    	
+		    	*/
 		    			 	
 		 	// Update data markers
 		 	gripper_data = static_cast<float>(gripper_cmd);

@@ -72,7 +72,7 @@ install(PROGRAMS
     nodes/Robotiq2FGripperStatusListener.py
     nodes/Robotiq2FGripperTcpNode.py 
     nodes/Robotiq2FGripperRtuNode.py 
-    #nodes/gripper_cmd_pub.py 
-    #nodes/gripper_pos_delay.py
+    nodes/gripper_cmd_pub.py 
+    nodes/gripper_pos_delay.py
 DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 

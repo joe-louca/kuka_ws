@@ -89,9 +89,9 @@ scl_spd = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
 scl_spd.grid(row=9,column=1,sticky="nsew")
 scl_spd.set(50)
 
-tk.Label(text="Latency (ms)",foreground="black",background="coral1",width=7,height=3).grid(row=10,column=0,sticky="nsew",pady = 1)
-scl_lat = tk.Scale(master=root, from_=0, to=2600, orient=tk.HORIZONTAL, resolution=50)
-scl_lat.grid(row=10,column=1,sticky="nsew")
+#tk.Label(text="Latency (ms)",foreground="black",background="coral1",width=7,height=3).grid(row=10,column=0,sticky="nsew",pady = 1)
+#scl_lat = tk.Scale(master=root, from_=0, to=2600, orient=tk.HORIZONTAL, resolution=50)
+#scl_lat.grid(row=10,column=1,sticky="nsew")
 
 
 
@@ -103,9 +103,9 @@ while not rospy.is_shutdown():
     ws_user_scale = scl_spd.get()
     rospy.set_param('ws_user_scale', ws_user_scale)
 
-    latency = scl_lat.get()
-    latency = latency/1000.0
-    rospy.set_param('latency', latency)
+    #latency = scl_lat.get()
+    #latency = latency/1000.0
+    #rospy.set_param('latency', latency)
 
     if rospy.has_param('jpos_cmd'):
         j1 = rospy.get_param('jpos_cmd/j1')

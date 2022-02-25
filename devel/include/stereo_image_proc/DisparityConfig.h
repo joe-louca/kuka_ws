@@ -452,9 +452,9 @@ DisparityConfig::GroupDescription<DisparityConfig::DEFAULT, DisparityConfig> Def
 //#line 291 "/opt/ros/noetic/lib/python3/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __default__.stereo_algorithm = 0;
 //#line 291 "/opt/ros/noetic/lib/python3/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
-      Default.abstract_parameters.push_back(DisparityConfig::AbstractParamDescriptionConstPtr(new DisparityConfig::ParamDescription<int>("stereo_algorithm", "int", 0, "stereo algorithm", "{'enum': [{'name': 'StereoBM', 'type': 'int', 'value': 0, 'srcline': 11, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}, {'name': 'StereoSGBM', 'type': 'int', 'value': 1, 'srcline': 12, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'SemiGlobal Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}], 'enum_description': 'stereo algorithm'}", &DisparityConfig::stereo_algorithm)));
+      Default.abstract_parameters.push_back(DisparityConfig::AbstractParamDescriptionConstPtr(new DisparityConfig::ParamDescription<int>("stereo_algorithm", "int", 0, "stereo algorithm", "{'enum': [{'name': 'StereoBM', 'type': 'int', 'value': 0, 'srcline': 11, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}, {'name': 'StereoSGBM', 'type': 'int', 'value': 1, 'srcline': 12, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'SemiGlobal Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}], 'enum_description': 'stereo algorithm'}", &DisparityConfig::stereo_algorithm)));
 //#line 291 "/opt/ros/noetic/lib/python3/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
-      __param_descriptions__.push_back(DisparityConfig::AbstractParamDescriptionConstPtr(new DisparityConfig::ParamDescription<int>("stereo_algorithm", "int", 0, "stereo algorithm", "{'enum': [{'name': 'StereoBM', 'type': 'int', 'value': 0, 'srcline': 11, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}, {'name': 'StereoSGBM', 'type': 'int', 'value': 1, 'srcline': 12, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'SemiGlobal Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}], 'enum_description': 'stereo algorithm'}", &DisparityConfig::stereo_algorithm)));
+      __param_descriptions__.push_back(DisparityConfig::AbstractParamDescriptionConstPtr(new DisparityConfig::ParamDescription<int>("stereo_algorithm", "int", 0, "stereo algorithm", "{'enum': [{'name': 'StereoBM', 'type': 'int', 'value': 0, 'srcline': 11, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}, {'name': 'StereoSGBM', 'type': 'int', 'value': 1, 'srcline': 12, 'srcfile': '/home/joe/kuka_ws/src/image_pipeline/image_pipeline/stereo_image_proc/cfg/Disparity.cfg', 'description': 'SemiGlobal Block Matching', 'ctype': 'int', 'cconsttype': 'const int'}], 'enum_description': 'stereo algorithm'}", &DisparityConfig::stereo_algorithm)));
 //#line 291 "/opt/ros/noetic/lib/python3/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
       __min__.prefilter_size = 5;
 //#line 291 "/opt/ros/noetic/lib/python3/dist-packages/dynamic_reconfigure/parameter_generator_catkin.py"
@@ -664,9 +664,9 @@ DisparityConfig::GroupDescription<DisparityConfig::DEFAULT, DisparityConfig> Def
     return statics;
   }
 
-//#line 11 "/home/joe/kuka_ws/src/image_pipeline/stereo_image_proc/cfg/Disparity.cfg"
+//#line 11 "/home/joe/kuka_ws/src/image_pipeline/image_pipeline/stereo_image_proc/cfg/Disparity.cfg"
       const int Disparity_StereoBM = 0;
-//#line 12 "/home/joe/kuka_ws/src/image_pipeline/stereo_image_proc/cfg/Disparity.cfg"
+//#line 12 "/home/joe/kuka_ws/src/image_pipeline/image_pipeline/stereo_image_proc/cfg/Disparity.cfg"
       const int Disparity_StereoSGBM = 1;
 }
 
