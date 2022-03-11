@@ -70,6 +70,26 @@ def publisher():
         else:
             pass
 
+    # Send reset command
+    command.rACT = 0  # activate
+    command.rGTO = 0  # go to action
+    command.rATR = 0  # Reset??
+    command.rPR = 0 # closed
+    command.rSP = 0 # speed
+    command.rFR = 0 #force
+    pub.publish(command)
+    sleep(0.1)
+    
+    # Send activate command - activate
+    command.rACT = 1  # activate
+    command.rGTO = 1  # go to action
+    command.rATR = 0  # Reset??
+    command.rPR = 130 # open
+    command.rSP = 100 # speed
+    command.rFR = 100 # force
+    pub.publish(command)
+    sleep(0.1)
+    
     while not rospy.is_shutdown():
         try:
             gripper_cmd = rospy.get_param('delayed_gripper_cmd')
@@ -80,14 +100,14 @@ def publisher():
                     command.rACT = 1  # activate
                     command.rGTO = 1  # go to action
                     command.rATR = 0  # Reset??
-                    command.rPR = 255 # closed
-                    command.rSP = 255 # speed
+                    command.rPR = 240 # closed
+                    command.rSP = 50 # speed
                     command.rFR = 150 #force
                 else:
                     command.rACT = 1  # activate
                     command.rGTO = 1  # go to action
                     command.rATR = 0  # Reset??
-                    command.rPR = 0   # position open
+                    command.rPR = 130   # position open
                     command.rSP = 255 # speed
                     command.rFR = 150 #force
 

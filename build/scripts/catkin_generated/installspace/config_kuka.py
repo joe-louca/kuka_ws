@@ -14,10 +14,10 @@ try:
     latency = get_param('latency')
 except:
     latency = 0.0
-latency /= 1000.0               # One way latency (ms to s)
+latency /= 2000.0               # One way(/2) latency from ms to s (/1000)
 
 start_time = get_time()         # time in float seconds
-rate_hz = 100                   # Loop rate (Hz) 10 (was 500)
+rate_hz = 100                  # Loop rate (Hz) 10 (was 500)
 pos_step_size = 1.0             # Position step size (mm)
 rot_step_size = 1.0 * pi/180    # Rotation step size (deg to rads)
 f_threshold = 100.0             # Force sensor threshold for rigid collisions (N)

@@ -23,12 +23,27 @@ class CopControl:
         self.time_step = 0.005           ## Good at 0.01
         self.commandsList=[]
         
-        # Move to an initial position
-        print('Moving to initial position')
-        initPos = rospy.get_param('initial_jpos')
+        #time.sleep(1)
+        # Get start joint positions and set coppelia to these
+        iiwa_initJPos = self.iiwa.getJointsPos()
+        rospy.set_param('iiwa_initJPos/j1', iiwa_initJPos[0])
+        rospy.set_param('iiwa_initJPos/j2', iiwa_initJPos[1])
+        rospy.set_param('iiwa_initJPos/j3', iiwa_initJPos[2])
+        rospy.set_param('iiwa_initJPos/j4', iiwa_initJPos[3])
+        rospy.set_param('iiwa_initJPos/j5', iiwa_initJPos[4])
+        rospy.set_param('iiwa_initJPos/j6', iiwa_initJPos[5])
+        rospy.set_param('iiwa_initJPos/j7', iiwa_initJPos[6])
+        time.sleep(1)
 
-        self.iiwa.movePTPJointSpace(initPos, self.velocity)
-        time.sleep(3)
+        #while(True):
+        #    if rospy.has_param('first_move_done')
+        #        break
+        
+        # Move to an initial position
+        #print('Moving to initial position')
+        #initPos = rospy.get_param('initial_jpos')
+        #self.iiwa.movePTPJointSpace(initPos, self.velocity)
+        #time.sleep(3)
 
         # Get initial position from copellia
         print('Click deadman switch to move to start position')
@@ -37,7 +52,7 @@ class CopControl:
                 cmd = rospy.get_param('delayed_jpos_cmd')                
                 cmd = cmd[:7]
                 self.iiwa.movePTPJointSpace(cmd, self.velocity)
-                time.sleep(3)
+                time.sleep(0.5)
                 break
         
         # Start direct servo control

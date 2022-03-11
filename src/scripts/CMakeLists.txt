@@ -53,10 +53,7 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 catkin_install_python(PROGRAMS
    src/config/config_kuka.py
-   src/config/config_kuka_BL.py
-   src/config/config_kuka_C.py
-   src/config/config_kuka_TR.py   
-
+   
    #src/input/joy_sub.py
    #src/input/falcon_sub.py
    #src/input/input_control.py
@@ -65,7 +62,9 @@ catkin_install_python(PROGRAMS
    
    src/input/haption/jpos_delay.py
       
-   src/feedback/ft_delay.py   
+   src/feedback/ft_delay.py 
+   src/feedback/ft_tool_delay.py
+   src/feedback/rot_delay.py  
    src/feedback/sim_ft_delay.py
    
    #src/feedback/vrep_cam1_sub.py
@@ -81,6 +80,7 @@ catkin_install_python(PROGRAMS
    src/gui/kuka_gui.py
    src/gui/cam1.py
    src/gui/cam2.py
+   src/gui/cam3.py
    
    src/user/blink_detector.py
    src/user/user_phys.py
