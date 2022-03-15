@@ -43,29 +43,49 @@ class FT:
         Ax_F_sensor = np.array([[ax_fx],
                                 [ax_fy],
                                 [ax_fz]])
-        Ax_T_sensor = np.array([[ax_fx],
-                                [ax_fy],
-                                [ax_fz]])
+        Ax_T_sensor = np.array([[ax_tx],
+                                [ax_ty],
+                                [ax_tz]])
         frame_id = ft_msg.header.seq
         frame_t = float(str(ft_msg.header.stamp))/1000000000 - self.start_time
 
+        
         ## Remove bias (baseline axia reading without any tool attached)
-        #Ax_F_sensor = Ax_F_sensor - Ax_F_bias
-        #Ax_T_sensor = Ax_T_sensor - Ax_T_bias
-
+        #Ax_F_bias = np.array([[-11.6],
+        #                      [- 7.4],
+        #                      [-31.7]])
+        #Ax_T_bias = np.array([[-0.52],
+        #                      [ 1.07],
+        #                      [ 0.13]])
+        ## Remove bias (baseline axia reading with tool attached) - THIS IS GOOD
+        Ax_F_bias = np.array([[-14.2], # -25.5 X Up, -14.04 X Left, -2.5 X down, -14.3 X right
+                              [-15.3], # -15.2 Y left, -4 Y down, -15.4 Y right, -26.7 Y up
+                              [-45.5]])# -45.5 Z back, -33.7 Z down, -57 Z Up, -45.5 Z front
+        Ax_T_bias = np.array([[-1.14], # -1.13 X Up, -1.15 X Down
+                              [ 1.27], # 1.28 Y Up, 1.26 Y Down
+                              [ 0.09]])        
+        
+        Ax_F_sensor = Ax_F_sensor - Ax_F_bias
+        Ax_T_sensor = Ax_T_sensor - Ax_T_bias
+        
+        
         ## Convert to world frame
         if self.Rot_ready_:
             W_F_sensor = np.dot(self.W_R_Ax, Ax_F_sensor)
             W_T_sensor = np.dot(self.W_R_Ax, Ax_T_sensor)
             self.Rot_ready_ = False
+
+            hap_F = W_F_sensor
+            hap_T = W_T_sensor
             
             ## Remove Tool force
             if self.Tool_ready_:
-                hap_F = W_F_sensor - self.W_F_tool
-                hap_T = W_T_sensor - self.W_T_tool
+                #hap_F = W_F_sensor - self.W_F_tool
+                #hap_T = W_T_sensor - self.W_T_tool
                 self.Tool_ready_ = False
-
-                
+            
+                hap_F = W_F_sensor
+                hap_T = W_T_sensor
                 # Timestamp 
                 t = rospy.get_time()
                 timestamped_ft = [hap_F[0][0], hap_F[1][0], hap_F[2][0], hap_T[0][0], hap_T[1][0], hap_T[2][0], frame_id, frame_t, t]
@@ -84,22 +104,22 @@ class FT:
                     ft_tz = ft[5].item()
 
                     # Build publish message
-                    self.pub_msg.wrench.force.x = ft_x
-                    self.pub_msg.wrench.force.y = ft_y
-                    self.pub_msg.wrench.force.z = ft_z
-                    self.pub_msg.wrench.torque.x = ft_tx
-                    self.pub_msg.wrench.torque.y = ft_ty
-                    self.pub_msg.wrench.torque.z = ft_tz
+                    self.pub_msg.wrench.force.x = ft_x*0.1
+                    self.pub_msg.wrench.force.y = ft_y*0.1
+                    self.pub_msg.wrench.force.z = ft_z*0.1
+                    self.pub_msg.wrench.torque.x = ft_tx*0.1
+                    self.pub_msg.wrench.torque.y = ft_ty*0.1
+                    self.pub_msg.wrench.torque.z = ft_tz*0.1
                     self.pub_msg.header.seq = ft[6]
                     self.pub_msg.header.stamp = rospy.get_rostime()#ft[7]#to_sec()
 
                     # Send to haption.cpp
-                    rospy.set_param('ft_delay/fx', ft_x)
-                    rospy.set_param('ft_delay/fy', ft_y)
-                    rospy.set_param('ft_delay/fz', ft_z)
-                    rospy.set_param('ft_delay/tx', ft_tx)
-                    rospy.set_param('ft_delay/ty', ft_ty)
-                    rospy.set_param('ft_delay/tz', ft_tz) 
+                    rospy.set_param('ft_delay/fx', ft_x*0.1)
+                    rospy.set_param('ft_delay/fy', ft_y*0.1)
+                    rospy.set_param('ft_delay/fz', ft_z*0.1)
+                    rospy.set_param('ft_delay/tx', ft_tx*0.1)
+                    rospy.set_param('ft_delay/ty', ft_ty*0.1)
+                    rospy.set_param('ft_delay/tz', ft_tz*0.1) 
                     
                     ## Mark message as ready to send
                     self.send_msg_ = True

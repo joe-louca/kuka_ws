@@ -2,8 +2,8 @@
 <!--roslaunch launch KUKA.launch lat:=100 hap:=Y/N pp:=1 task:=0 -->
 <launch>
 	<arg name="kuka" default="true"/>
-	<arg name="haption" default="false"/>
-	<arg name="axia" default="false"/>
+	<arg name="haption" default="true"/>
+	<arg name="axia" default="true"/>
 	<arg name="robotiq" default="false"/>
 	<arg name="cameras" default="false"/>
 	<arg name="record_data" default="false"/>	
@@ -53,7 +53,7 @@
 	<group if="$(arg axia)">
 		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
 		<node pkg="scripts" type="ft_tool_delay.py" name="Tool_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
-		<node pkg="scripts" type="rot_delay.py" name="Tool_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+		<node pkg="scripts" type="rot_delay.py" name="Rot_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 		<node pkg="scripts" type="ft_delay.py" name="Axia_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 	</group>
 	<group unless="$(arg axia)">

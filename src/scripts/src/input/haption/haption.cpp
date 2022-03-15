@@ -222,10 +222,10 @@ int main(int argc, char* argv[])
     ros::init(argc, argv, "haption_stream");
     ros::NodeHandle n;
     ros::Publisher move_pub_q = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub_q", 1);
-      
+    
+    // Rate
     int rate_hz;
     n.getParam("rate_hz",rate_hz);
-    //rate_hz = rate_hz*1.5;
     ros::Rate loop_rate(rate_hz);
     
     // Set some scale factors
@@ -236,8 +236,6 @@ int main(int argc, char* argv[])
     
     // Declare some frame markers for data recording.
     float frame_id = 0;
-    //double start_time = ros::Time::now().toSec();
-    //n.setParam("start_time", start_time);
     double start_time;
     n.getParam("start_time", start_time); // float in secs
     double timestamp = ros::Time::now().toSec() - start_time;
@@ -353,22 +351,7 @@ int main(int argc, char* argv[])
     if (func_result == true)
     {
 	    while(ros::ok())
-	    {
-	    	// FOR TESTING
-	    	// Update kuka start position from copelliasim
-	    	n.getParam("sim_kuka_pos/x", move_pos_q[0]);
-	    	n.getParam("sim_kuka_pos/y", move_pos_q[1]);
-	    	n.getParam("sim_kuka_pos/z", move_pos_q[2]);
-	    	n.getParam("sim_kuka_pos/qx", move_pos_q[3]);
-	    	n.getParam("sim_kuka_pos/qy", move_pos_q[4]);
-	    	n.getParam("sim_kuka_pos/qz", move_pos_q[5]);
-	    	n.getParam("sim_kuka_pos/qw", move_pos_q[6]);
-	    	move_pos_q[2] -= 0.01;
-	    	Publish_Move_Cmd_q(move_pos_q, move_pub_q, gripper_data, clutch_counter, frame_id, timestamp);
-	    	
-	    	//
-	    	
-	    	
+	    {    	
 	    	// Clutch control: If deadman pressed, update start positions
 	    	virtGetDeadMan(VC, &deadman);
 	    	if((deadman == 1) && (last_deadman == 0))
@@ -451,7 +434,8 @@ int main(int argc, char* argv[])
     			for (int i = 0; i < 5; i++) {virtGetButton(VC, i+1, &buttons[i]);}
 			force_fb_btn = buttons[2];
 			if (force_fb_btn==1)
-			{		    	
+			{	
+					    	
 			    	// Get delayed_ft_sensor reading & apply forces to haption
 			    	n.getParam("ft_delay/fx",ft_delay[0]);
 			    	n.getParam("ft_delay/fy",ft_delay[1]);
@@ -492,6 +476,8 @@ int main(int argc, char* argv[])
 				// W_R_start * ft_delay(0-2)
 				// W_R_start * ft_delay(3-5)
 				
+				std::cout<<"Fx: "<<ft_delay[0]<<", Fy: "<<ft_delay[1]<<", Fz: "<<ft_delay[2]<<", Tx: "<<ft_delay[3]<<", Ty: "<<ft_delay[4]<<", Tz: "<<ft_delay[5]<<std::endl;
+				
 				// Get forces within safe range
 				for(int i=0; i<3; i++)
 				{
@@ -503,7 +489,7 @@ int main(int argc, char* argv[])
 					
 			    	// Apply forces to haption
 				//virt_result = virtSetForce(VC, ft_delay);		// Only works in COMMAND_TYPE_IMPEDANCE - doesnt work in COMMAND_TYPE_VIRTMECH
-				virt_result = virtAddForce(VC, ft_delay);
+				//virt_result = virtAddForce(VC, ft_delay);
 				
 			    	// Get force input from the user and publish (virtGetForce only works in COMMAND_TYPE_VIRTMECH, not COMMAND_TYPE_IMPEDANCE
 		    		//virt_result = virtGetForce(VC, ft_user); // Only works in COMMAND_TYPE_VIRTMECH - doesnt work in COMMAND_TYPE_IMPEDANCE
@@ -521,7 +507,14 @@ int main(int argc, char* argv[])
 			sleep(0.01);
 			std::cout<<"Force feedback off"<<std::endl;
 			
-		}	
+		}
+		
+		
+		//
+		// ADD A CHECK TO MAKE SURE DEADMAN IS RELEASED
+		//
+		
+		
 		last_force_fb_btn = force_fb_btn;
 		//last_deadman = deadman;
 	    	
