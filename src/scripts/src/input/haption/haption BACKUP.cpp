@@ -18,29 +18,6 @@
 
 VirtContext VC;
 
-class listener
-  {
-     public:
-     	float ft_delay[7];
-     	void FT_Callback(const geometry_msgs::WrenchStamped::ConstPtr& msg);
-
-   };
-
-    void listener::FT_Callback(const geometry_msgs::WrenchStamped::ConstPtr& msg)
-    {
-	const geometry_msgs::WrenchStamped* data = msg.get();
-
-
-	listener::ft_delay[1] = data->wrench.force.x;
-	listener::ft_delay[2] = data->wrench.force.y;
-	listener::ft_delay[3] = data->wrench.force.z;
-
-	listener::ft_delay[4] = data->wrench.torque.x;
-	listener::ft_delay[5] = data->wrench.torque.y;
-	listener::ft_delay[6] = data->wrench.torque.z;
-    }
-
-
     bool openConnectionToHaption(VirtContext & VC)
     {
     	int r;
@@ -238,7 +215,6 @@ class listener
       	move_pub_q.publish(cmd_msg);
     }
 
-
     
 int main(int argc, char* argv[])
 {
@@ -246,9 +222,6 @@ int main(int argc, char* argv[])
     ros::init(argc, argv, "haption_stream");
     ros::NodeHandle n;
     ros::Publisher move_pub_q = n.advertise<std_msgs::Float32MultiArray>("hap_move_pub_q", 1);
-    
-    listener list;
-    ros::Subscriber ft_sub = n.subscribe<geometry_msgs::WrenchStamped>("/delayed_ft", 1, &listener::FT_Callback, &list);
     
     // Rate
     int rate_hz;
@@ -274,13 +247,22 @@ int main(int argc, char* argv[])
 
     // Declare some position arrays
     float hap_pos_q[7] = {};
+    float hap_pos_ypr[6] = {};
     float hap_start_pos_q[7] = {};   
+    float hap_start_pos_ypr[6] = {};   
+    float hap_move_q[7] = {};
+    float hap_move_ypr[6] = {};
+    
     float kuka_start_pos_q[7] = {};
+
+    float move_pos_ypr[6] = {};
     float move_pos_q[7] = {};
 
-    float ft_set[6] = {};
+    float hap_force_ypr[6] = {};
+    float ft_delay[6] = {};
+    float ft_input[6] = {};
+    float ft_user[6] = {};
     
-    // For hap Q clutch
     float Q_delta[4] = {};
     float Q_hap_current[4] = {};
     float Q_hap_start[4] = {};
@@ -365,11 +347,11 @@ int main(int argc, char* argv[])
     Publish_Move_Cmd_q(move_pos_q, move_pub_q, gripper_data, clutch_counter, frame_id, timestamp);
     sleep(0.5); // wait 0.5 secs
     std::cout<<"Press the deadman switch to move continously"<<std::endl;
-
+    
     if (func_result == true)
     {
 	    while(ros::ok())
-	    {
+	    {    	
 	    	// Clutch control: If deadman pressed, update start positions
 	    	virtGetDeadMan(VC, &deadman);
 	    	if((deadman == 1) && (last_deadman == 0))
@@ -413,7 +395,6 @@ int main(int argc, char* argv[])
 	    	// Only send move commands if deadman is pressed
 	    	if(deadman ==1)
 	    	{
-	    	
 		    	// Get Haption ee position [x, y, z, qx, qy, qz, qw]
 		 	virt_result = virtGetPosition(VC, hap_pos_q);
 							
@@ -454,32 +435,67 @@ int main(int argc, char* argv[])
 			force_fb_btn = buttons[2];
 			if (force_fb_btn==1)
 			{	
+			
 				// Subscribe to /delayed_ft (wrenchstamped)
 				// In callback - extract ft values, mulitply by ft_factor, limit to threshold, virtAddForce 
-
+					    	
+			    	// Get delayed_ft_sensor reading & apply forces to haption
+			    	n.getParam("ft_delay/fx",ft_delay[0]);
+			    	n.getParam("ft_delay/fy",ft_delay[1]);
+			    	n.getParam("ft_delay/fz",ft_delay[2]);	    	
+			    	n.getParam("ft_delay/tx",ft_delay[3]);
+			    	n.getParam("ft_delay/ty",ft_delay[4]);
+			    	n.getParam("ft_delay/tz",ft_delay[5]);
+						
+				//ft_delay[0] = 0.1;
+				//ft_delay[1] = 0.1;
+				//ft_delay[2] = 0.1;
+				//ft_delay[3] = 0.1;
+				//ft_delay[4] = 0.1;
+				//ft_delay[5] = 0.1;
+								
+				// Scale and Reverse force direction for x and z (copsim only)
+				/*
+				ft_delay[0] = -ft_delay[0]*ft_factor;
+				ft_delay[1] =  ft_delay[1]*ft_factor;
+				ft_delay[2] = -ft_delay[2]*ft_factor;
+				ft_delay[3] = 0.0f;
+				ft_delay[4] = 0.0f;
+				ft_delay[5] = 0.0f;
+				*/
+				
+				// Scale force direction
+				n.getParam("ft_user_scale",ft_user_scale);
+				//ft_user_scale = 100;
+				ft_delay[0] = ft_delay[0]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[1] = ft_delay[1]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[2] = ft_delay[2]*ft_factor*(ft_user_scale/100.0);
+				ft_delay[3] = ft_delay[3]*ft_factor;//*0.5*(ft_user_scale/100.0);
+				ft_delay[4] = ft_delay[4]*ft_factor;//*0.5*(ft_user_scale/100.0);
+				ft_delay[5] = ft_delay[5]*ft_factor;//*0.5*(ft_user_scale/100.0);
+				
 				// If using orientation clutch control - convert FTs relative to hap start q
 				// W_R_start = Q2Rot(hap_start_q)
 				// W_R_start * ft_delay(0-2)
 				// W_R_start * ft_delay(3-5)
-
-				// Scale force direction based on user setting
-				n.getParam("ft_user_scale",ft_user_scale);				
-				// Convert subscriber array to a new array because ft_delay[0] is dodgy for some reason.
-				for(int i=0;i<6;i++) {ft_set[i] = list.ft_delay[i+1]*ft_factor*(ft_user_scale/100.0);;}
-								
+				
+				std::cout<<"Fx: "<<ft_delay[0]<<", Fy: "<<ft_delay[1]<<", Fz: "<<ft_delay[2]<<", Tx: "<<ft_delay[3]<<", Ty: "<<ft_delay[4]<<", Tz: "<<ft_delay[5]<<std::endl;
+				
 				// Get forces within safe range
 				for(int i=0; i<3; i++)
 				{
-					if(ft_set[i]>5.0f) {ft_set[i]=5.0f;}
-					if(ft_set[i]<-5.0f) {ft_set[i]=-5.0f;}
-					if(ft_set[i+3]>0.3f) {ft_set[i+3]=0.3f;}
-					if(ft_set[i+3]<-0.3f){ft_set[i+3]=-0.3f;}
+					if(ft_delay[i]>5.0f) {ft_delay[i]=5.0f;}
+					if(ft_delay[i]<-5.0f) {ft_delay[i]=-5.0f;}
+					if(ft_delay[i+3]>0.3f) {ft_delay[i+3]=0.3f;}
+					if(ft_delay[i+3]<-0.3f){ft_delay[i+3]=-0.3f;}
 				}
 					
 			    	// Apply forces to haption
-				//virt_result = virtSetForce(VC, ft_set);		// Only works in COMMAND_TYPE_IMPEDANCE - doesnt work in COMMAND_TYPE_VIRTMECH
-				virt_result = virtAddForce(VC, ft_set);
+				//virt_result = virtSetForce(VC, ft_delay);		// Only works in COMMAND_TYPE_IMPEDANCE - doesnt work in COMMAND_TYPE_VIRTMECH
+				//virt_result = virtAddForce(VC, ft_delay);
 				
+			    	// Get force input from the user and publish (virtGetForce only works in COMMAND_TYPE_VIRTMECH, not COMMAND_TYPE_IMPEDANCE
+		    		//virt_result = virtGetForce(VC, ft_user); // Only works in COMMAND_TYPE_VIRTMECH - doesnt work in COMMAND_TYPE_IMPEDANCE
 		    		
 		    		last_force_fb_btn = 1;
 		    	}
