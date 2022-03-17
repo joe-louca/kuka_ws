@@ -4,7 +4,7 @@
 	<arg name="kuka" default="true"/>
 	<arg name="haption" default="true"/>
 	<arg name="axia" default="true"/>
-	<arg name="robotiq" default="false"/>
+	<arg name="robotiq" default="true"/>
 	<arg name="cameras" default="false"/>
 	<arg name="record_data" default="false"/>	
 	
