@@ -37,9 +37,9 @@ class mySock:
                 flag=True
                 break
         if flag==False:
-            print('No TCP transofrm in Flange Frame is defined,')
-            print('The following (default) TCP transform is utilized')
-            print(trans)
+            #print('No TCP transofrm in Flange Frame is defined,')
+            #print('The following (default) TCP transform is utilized')
+            #print(trans)
             return
         else:
             # Rrint info about the current operation

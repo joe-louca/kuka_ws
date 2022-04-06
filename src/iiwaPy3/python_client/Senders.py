@@ -37,9 +37,7 @@ class Senders:
             buff = buff + '_'            
             counter=counter+1
         buff = buff + '\n'
-        print(buff)
         self.send(buff)
-        print('eefposition sent successfully')
 
     def sendEEfPositions(self,x):
         if(len(x)!=6):

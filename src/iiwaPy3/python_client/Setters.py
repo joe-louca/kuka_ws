@@ -16,7 +16,7 @@ class Setters:
         data=data+'\n'
         self.mysoc.send(data)
         message=self.mysoc.receive()
-        print(message)
+        #print(message)
         sys.stdout.flush()
         
     def setBlueOff(self):

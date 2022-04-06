@@ -3,6 +3,7 @@ project(scripts)
 
 set(CMAKE_CXX_FLAGS "-std=c++14 -lnifalcon")#Falcon lib is build agains c++14
 
+
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -25,6 +26,15 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
+
+include_directories(/opt/ros/noetic/include /opt/ros/noetic/lib)
+
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY                
+	${PROJECT_SOURCE_DIR}/bin)
+	
+link_directories(${PROJECT_SOURCE_DIR}/linux/lib) #virtuoseAPI.so
+link_directories(${PROJECT_SOURCE_DIR}/linux/bin) #virtuoseAPI.a
+
 catkin_package(
   CATKIN_DEPENDS
   roscpp
@@ -53,35 +63,33 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 catkin_install_python(PROGRAMS
    src/config/config_kuka.py
-   
-   #src/input/joy_sub.py
-   #src/input/falcon_sub.py
-   #src/input/input_control.py
-   #src/input/haption_delay_sub.py
-   #src/input/haption_delay_sub_ypr.py
-   
-   src/input/haption/jpos_delay.py
+   src/config/timestep.py
       
-   src/feedback/ft_delay.py 
-   src/feedback/ft_tool_delay.py
-   src/feedback/rot_delay.py  
-   src/feedback/sim_ft_delay.py
+   # Inputs
+   src/input/joy/joy_sub.py
+   # Falcon (C++)
+   # Haption (C++)
    
-   #src/feedback/vrep_cam1_sub.py
-   #src/feedback/HUD.py
-   #src/feedback/joy_vibrate.py
-
-   #src/kuka/kuka_pos_delay.py
-
-   #src/sim/sim_delayed_pos_cmd_pub.py
-   #src/sim/sim_kuka_jpos_sub.py
-   #src/sim/sim_kuka_pos_sub.py
+   # Topic Delays
+   src/delay/F_kuka_out_delay.py
+   src/delay/delayed_F_kuka_out_delay.py
+   src/delay/v_hap_out_delay.py
+   src/delay/delayed_v_hap_out_delay.py
+   src/delay/gripper_cmd_delay.py
+   src/delay/timestep_delay.py
    
+   # Feedback
+   src/feedback/ft_compensation.py
+   src/feedback/sim_ft.py
+   src/feedback/joy_vibrate.py
+
+   # GUI & Cameras
    src/gui/kuka_gui.py
    src/gui/cam1.py
    src/gui/cam2.py
    src/gui/cam3.py
    
+   # User Monitoring
    src/user/blink_detector.py
    src/user/user_phys.py
    src/user/user_cam.py
@@ -89,16 +97,31 @@ catkin_install_python(PROGRAMS
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
-add_executable(falcon_node src/input/falcon_pub.cpp)
-
+# Add falcon executable
+add_executable(falcon_node src/input/falcon/falcon.cpp)
 add_dependencies(falcon_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(falcon_node 
+  nifalcon 
+  nifalcon_cli_base 
+  usb-1.0 
+  ${catkin_LIBRARIES}
+)
+
+# Add TDPA executable
+add_executable(TDPA_node src/controller/TDPA.cpp)
+add_dependencies(TDPA_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(TDPA_node 
+  ${catkin_LIBRARIES}
+)
+# Add NoControl executable
+add_executable(NoControl_node src/controller/NoControl.cpp)
+add_dependencies(NoControl_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(NoControl_node 
+  ${catkin_LIBRARIES}
+)
+
+
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(
-   falcon_node
-   nifalcon
-   nifalcon_cli_base
-   usb-1.0
-   ${catkin_LIBRARIES}
-)
+
 

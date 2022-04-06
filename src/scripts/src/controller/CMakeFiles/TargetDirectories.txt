@@ -1,0 +1,3 @@
+/home/joe/tdpa_ws/src/scripts/src/controller/CMakeFiles/rebuild_cache.dir
+/home/joe/tdpa_ws/src/scripts/src/controller/CMakeFiles/edit_cache.dir
+/home/joe/tdpa_ws/src/scripts/src/controller/CMakeFiles/tdpa.dir

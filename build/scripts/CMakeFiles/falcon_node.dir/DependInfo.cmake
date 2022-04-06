@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/joe/kuka_ws/src/scripts/src/input/falcon_pub.cpp" "/home/joe/kuka_ws/build/scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o"
+  "/home/joe/kuka_ws/src/scripts/src/input/falcon/falcon.cpp" "/home/joe/kuka_ws/build/scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -18,6 +18,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/opt/ros/noetic/include"
+  "/opt/ros/noetic/lib"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   "/usr/include/eigen3"
   )

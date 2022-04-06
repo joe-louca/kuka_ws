@@ -2677,6 +2677,19 @@ octomap_msgs_generate_messages_cpp/fast:
 .PHONY : octomap_msgs_generate_messages_cpp/fast
 
 #=============================================================================
+# Target rules for targets named TDPA_node
+
+# Build rule for target.
+TDPA_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 TDPA_node
+.PHONY : TDPA_node
+
+# fast build rule for target.
+TDPA_node/fast:
+	$(MAKE) -f scripts/CMakeFiles/TDPA_node.dir/build.make scripts/CMakeFiles/TDPA_node.dir/build
+.PHONY : TDPA_node/fast
+
+#=============================================================================
 # Target rules for targets named octomap_msgs_generate_messages_py
 
 # Build rule for target.
@@ -2688,6 +2701,19 @@ octomap_msgs_generate_messages_py: cmake_check_build_system
 octomap_msgs_generate_messages_py/fast:
 	$(MAKE) -f scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/build.make scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/build
 .PHONY : octomap_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named NoControl_node
+
+# Build rule for target.
+NoControl_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 NoControl_node
+.PHONY : NoControl_node
+
+# fast build rule for target.
+NoControl_node/fast:
+	$(MAKE) -f scripts/CMakeFiles/NoControl_node.dir/build.make scripts/CMakeFiles/NoControl_node.dir/build
+.PHONY : NoControl_node/fast
 
 #=============================================================================
 # Target rules for targets named octomap_msgs_generate_messages_lisp
@@ -2908,7 +2934,9 @@ help:
 	@echo "... object_recognition_msgs_generate_messages_eus"
 	@echo "... object_recognition_msgs_generate_messages_nodejs"
 	@echo "... octomap_msgs_generate_messages_cpp"
+	@echo "... TDPA_node"
 	@echo "... octomap_msgs_generate_messages_py"
+	@echo "... NoControl_node"
 	@echo "... octomap_msgs_generate_messages_lisp"
 .PHONY : help
 

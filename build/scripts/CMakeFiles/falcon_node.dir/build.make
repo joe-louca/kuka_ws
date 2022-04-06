@@ -57,27 +57,27 @@ include scripts/CMakeFiles/falcon_node.dir/progress.make
 # Include the compile flags for this target's objects.
 include scripts/CMakeFiles/falcon_node.dir/flags.make
 
-scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o: scripts/CMakeFiles/falcon_node.dir/flags.make
-scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o: /home/joe/kuka_ws/src/scripts/src/input/falcon_pub.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joe/kuka_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o"
-	cd /home/joe/kuka_ws/build/scripts && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o -c /home/joe/kuka_ws/src/scripts/src/input/falcon_pub.cpp
+scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o: scripts/CMakeFiles/falcon_node.dir/flags.make
+scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o: /home/joe/kuka_ws/src/scripts/src/input/falcon/falcon.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joe/kuka_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o"
+	cd /home/joe/kuka_ws/build/scripts && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o -c /home/joe/kuka_ws/src/scripts/src/input/falcon/falcon.cpp
 
-scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.i"
-	cd /home/joe/kuka_ws/build/scripts && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joe/kuka_ws/src/scripts/src/input/falcon_pub.cpp > CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.i
+scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.i"
+	cd /home/joe/kuka_ws/build/scripts && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joe/kuka_ws/src/scripts/src/input/falcon/falcon.cpp > CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.i
 
-scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.s"
-	cd /home/joe/kuka_ws/build/scripts && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joe/kuka_ws/src/scripts/src/input/falcon_pub.cpp -o CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.s
+scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.s"
+	cd /home/joe/kuka_ws/build/scripts && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joe/kuka_ws/src/scripts/src/input/falcon/falcon.cpp -o CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.s
 
 # Object files for target falcon_node
 falcon_node_OBJECTS = \
-"CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o"
+"CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o"
 
 # External object files for target falcon_node
 falcon_node_EXTERNAL_OBJECTS =
 
-/home/joe/kuka_ws/devel/lib/scripts/falcon_node: scripts/CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o
+/home/joe/kuka_ws/devel/lib/scripts/falcon_node: scripts/CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o
 /home/joe/kuka_ws/devel/lib/scripts/falcon_node: scripts/CMakeFiles/falcon_node.dir/build.make
 /home/joe/kuka_ws/devel/lib/scripts/falcon_node: /usr/lib/liborocos-kdl.so
 /home/joe/kuka_ws/devel/lib/scripts/falcon_node: /usr/lib/liborocos-kdl.so

@@ -1,1 +1,0 @@
-/usr/bin/c++  -std=c++14 -lnifalcon  -rdynamic CMakeFiles/haption_node.dir/src/input/haption/haption.cpp.o  -o /home/joe/kuka_ws/devel/lib/scripts/haption_node 

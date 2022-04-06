@@ -92,7 +92,7 @@ def publisher():
     
     while not rospy.is_shutdown():
         try:
-            gripper_cmd = rospy.get_param('delayed_gripper_cmd')
+            gripper_cmd = rospy.get_param('/delayed_gripper_cmd')
             if (gripper_cmd != prev_gripper_cmd):
                 
                 # build command msg
@@ -100,9 +100,9 @@ def publisher():
                     command.rACT = 1  # activate
                     command.rGTO = 1  # go to action
                     command.rATR = 0  # Reset??
-                    command.rPR = 240 # closed
+                    command.rPR = 255 # closed 
                     command.rSP = 50 # speed
-                    command.rFR = 150 #force
+                    command.rFR = 250 #force
                 else:
                     command.rACT = 1  # activate
                     command.rGTO = 1  # go to action

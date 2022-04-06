@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "/home/joe/kuka_ws/devel/lib/scripts/falcon_node"
   "/home/joe/kuka_ws/devel/lib/scripts/falcon_node.pdb"
-  "CMakeFiles/falcon_node.dir/src/input/falcon_pub.cpp.o"
+  "CMakeFiles/falcon_node.dir/src/input/falcon/falcon.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.
