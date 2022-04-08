@@ -109,7 +109,7 @@ class listener
     	cmd_msg.twist.angular.y = cmd[4];
     	cmd_msg.twist.angular.z = cmd[5];
 	cmd_msg.header.frame_id = clutch;
-    	
+    	cmd_msg.header.stamp = ros::Time::now();
       	ros_pub.publish(cmd_msg);
     }
 
@@ -118,7 +118,7 @@ class listener
 int main(int argc, char* argv[])
 {
     double ft_factor = 1.0; 		// scaling factor for forces to apply to haption
-    double ft_user_scale = 0.5; 	// ft scale factor from gui
+    double ft_user_scale = 50.0; 	// ft scale factor from gui
     
     // Set up a ros node with publisher and subscriber
     ros::init(argc, argv, "Haption");
@@ -135,8 +135,8 @@ int main(int argc, char* argv[])
     float timestep;
     n.getParam("rate_hz",rate_hz);
     ros::Rate loop_rate(rate_hz);
-    //double timestep = 1/rate_hz;
     n.getParam("timestep",timestep);
+
 
     // Declare some function result variables
     bool func_result;
@@ -237,7 +237,7 @@ int main(int argc, char* argv[])
 				n.getParam("ft_user_scale",ft_user_scale);	
 							
 				// Convert subscriber array to a new array because ft_delay[0] is dodgy for some reason.
-				for(int i=0;i<6;i++) {ft_set[i] = list.ft_delay[i+1]*ft_factor*(ft_user_scale/100.0);;}
+				for(int i=0;i<6;i++) {ft_set[i] = list.ft_delay[i+1]*ft_factor*(ft_user_scale/100.0);}
 								
 				// Get forces within safe range
 				for(int i=0; i<3; i++)

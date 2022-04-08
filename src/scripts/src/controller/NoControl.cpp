@@ -10,6 +10,8 @@ class listener
      public:
 	float delayed_v_hap_out[6];
      	float delayed_F_kuka_out[6];
+     	ros::Time v_timestamp;
+     	ros::Time F_timestamp;
      	bool chk_dv, chk_df;
      	
   	void D_V_Callback(const geometry_msgs::TwistStamped::ConstPtr& msg);
@@ -25,6 +27,7 @@ class listener
 	listener::delayed_v_hap_out[3] = data->twist.angular.x;
 	listener::delayed_v_hap_out[4] = data->twist.angular.y;
 	listener::delayed_v_hap_out[5] = data->twist.angular.z;
+	listener::v_timestamp = data->header.stamp;
 	listener::chk_dv = true;
     }
     
@@ -37,6 +40,7 @@ class listener
 	listener::delayed_F_kuka_out[3] = data->twist.angular.x;
 	listener::delayed_F_kuka_out[4] = data->twist.angular.y;
 	listener::delayed_F_kuka_out[5] = data->twist.angular.z;
+	listener::F_timestamp = data->header.stamp;
 	listener::chk_df = true;
     }
 
@@ -91,6 +95,7 @@ int main(int argc, char* argv[])
 		    	v_kuka_in_msg.twist.angular.x = v_kuka_in[3];
 		    	v_kuka_in_msg.twist.angular.y = v_kuka_in[4];
 		    	v_kuka_in_msg.twist.angular.z = v_kuka_in[5];
+		    	v_kuka_in_msg.header.stamp = list.v_timestamp;
 
 		    	F_hap_in_msg.twist.linear.x = F_hap_in[0];
 		    	F_hap_in_msg.twist.linear.y = F_hap_in[1];
@@ -98,6 +103,7 @@ int main(int argc, char* argv[])
 		    	F_hap_in_msg.twist.angular.x = F_hap_in[3];
 		    	F_hap_in_msg.twist.angular.y = F_hap_in[4];
 		    	F_hap_in_msg.twist.angular.z = F_hap_in[5];
+		    	F_hap_in_msg.header.stamp = list.F_timestamp;
 		    	
 		    	v_kuka_pub.publish(v_kuka_in_msg);
 		    	F_hap_pub.publish(F_hap_in_msg);

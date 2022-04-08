@@ -7,7 +7,7 @@ from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 
 class CAMERA:   
-    def add_delay(added_row, delayed_tbl):
+    def add_delay(self, added_row, delayed_tbl):
         latency = rospy.get_param('latency')
         delayed_tbl.append(added_row)                                   # Add new row to end of list (newest at bottom)
         row_len = len(added_row)-1                                      # Length of added row
@@ -36,7 +36,7 @@ class CAMERA:
         delayed_frame_tbl = []
 
         # Connect to camera
-        cam_address = 'http://192.168.132.61:4747/video'
+        cam_address = 'http://192.168.132.60:4747/video'
         cap = cv2.VideoCapture(cam_address)
 
         # Initialise CV to ros image converter

@@ -17,7 +17,7 @@ except:
 latency /= 2000.0               # One way(/2) latency from ms to s (/1000)
 
 start_time = get_time()        # Start time in float (s)
-rate_hz = 200                  # Loop rate (Hz)
+rate_hz = 500#200                  # Loop rate (Hz)
 timestep = 1/rate_hz           # Time per loop (s)
 ft_factor = 50.0               # scale factor for haption forces (%)
 workspace_factor = 50.0        # scale factor for haption workspace (%)

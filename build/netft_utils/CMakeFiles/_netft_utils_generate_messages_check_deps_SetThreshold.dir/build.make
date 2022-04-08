@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/joe/kuka_ws/build
 include netft_utils/CMakeFiles/_netft_utils_generate_messages_check_deps_SetThreshold.dir/progress.make
 
 netft_utils/CMakeFiles/_netft_utils_generate_messages_check_deps_SetThreshold:
-	cd /home/joe/kuka_ws/build/netft_utils && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py netft_utils /home/joe/kuka_ws/src/netft_utils/srv/SetThreshold.srv geometry_msgs/WrenchStamped:geometry_msgs/Wrench:geometry_msgs/Vector3:std_msgs/Header
+	cd /home/joe/kuka_ws/build/netft_utils && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py netft_utils /home/joe/kuka_ws/src/netft_utils/srv/SetThreshold.srv std_msgs/Header:geometry_msgs/WrenchStamped:geometry_msgs/Vector3:geometry_msgs/Wrench
 
 _netft_utils_generate_messages_check_deps_SetThreshold: netft_utils/CMakeFiles/_netft_utils_generate_messages_check_deps_SetThreshold
 _netft_utils_generate_messages_check_deps_SetThreshold: netft_utils/CMakeFiles/_netft_utils_generate_messages_check_deps_SetThreshold.dir/build.make

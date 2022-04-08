@@ -49,11 +49,14 @@ from time import sleep
 
 def gripper_cmd_callback(msg):
     global gripper_cmd
+    global cmd_ready
     gripper_cmd = msg.data
+    cmd_ready = True
 
 def publisher():
     global gripper_cmd
-
+    global cmd_ready
+    
     """Main loop which requests new commands and publish them on the Robotiq2FGripperRobotOutput topic."""
     rospy.init_node('Robotiq2FGripperSimpleController')    
     pub = rospy.Publisher('Robotiq2FGripperRobotOutput', outputMsg.Robotiq2FGripper_robot_output, queue_size=1)
@@ -62,13 +65,6 @@ def publisher():
     
     command = outputMsg.Robotiq2FGripper_robot_output();
     r = rospy.Rate(rate_hz)
-    while True:
-        if rospy.has_param('delayed_gripper_cmd'):
-            gripper_cmd = rospy.get_param('delayed_gripper_cmd')
-            prev_gripper_cmd = gripper_cmd
-            break
-        else:
-            pass
 
     # Send reset command
     command.rACT = 0  # activate
@@ -89,12 +85,11 @@ def publisher():
     command.rFR = 100 # force
     pub.publish(command)
     sleep(0.1)
-    
+
+    cmd_ready = False
     while not rospy.is_shutdown():
         try:
-            gripper_cmd = rospy.get_param('/delayed_gripper_cmd')
-            if (gripper_cmd != prev_gripper_cmd):
-                
+            if cmd_ready:
                 # build command msg
                 if gripper_cmd == 1:
                     command.rACT = 1  # activate
@@ -103,6 +98,7 @@ def publisher():
                     command.rPR = 255 # closed 
                     command.rSP = 50 # speed
                     command.rFR = 250 #force
+
                 else:
                     command.rACT = 1  # activate
                     command.rGTO = 1  # go to action
@@ -110,14 +106,13 @@ def publisher():
                     command.rPR = 130   # position open
                     command.rSP = 255 # speed
                     command.rFR = 150 #force
-
                 # publish to gripper        
                 pub.publish(command)
-            prev_gripper_cmd = gripper_cmd
+                cmd_ready = False
 
+                
         except:
             pass
-        
         r.sleep()
                         
 

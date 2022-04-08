@@ -12,6 +12,7 @@ class KukaControl:
     def __init__(self):          
         self.start_time = datetime.now()                            # Start time for getSecs()
         self.frame_id = 0
+        self.timestamp = rospy.Time.now()
         
         
         # Setup connection to iiwa
@@ -20,8 +21,8 @@ class KukaControl:
         self.connect_to_iiwa()
 
         # Set some parameters
-        timestep = 0.002           # Secs (Good at 0.01) - Docs says >20ms for servo control
-        rate_hz = 100               # Hz
+        timestep = 0.001#0.002           # Secs (Good at 0.01) - Docs says >20ms for servo control
+        rate_hz = 200#100               # Hz
         kuka_joints_msg = Float32MultiArray() # Initialise msg to publish
         cmd = [None, None, None, None, None, None]
         kuka_position = [None, None, None, None, None, None]
@@ -48,7 +49,7 @@ class KukaControl:
             self.send_msg_ = False
             r = rospy.Rate(rate_hz)
             print('Haption: Hold stick vertical and hold grey footswitch to move')
-            print('Haption: Press centre button to toggle the gripper')
+            print('Haption: Press left button to toggle the gripper')
 
             while not rospy.is_shutdown():
                 if self.send_msg_:
@@ -57,7 +58,10 @@ class KukaControl:
                         cmd[i+3] = self.vel[i+3]*timestep*20 + kuka_pos[i+3]  # in rads
                         
                     if (self.getSecs()-t_0)>timestep:
+                        intrinsic_latency = rospy.Time.now() - self.timestamp           # To check system latency
+                        #print(intrinsic_latency.to_sec())
                         kuka_pos = self.iiwa.sendEEfPositionGetActualEEFpos(cmd)        # Send position command
+                        
                         kuka_joints = self.iiwa.getJointsPos()
                         kuka_joints_msg.data = kuka_joints
                         pub.publish(kuka_joints_msg)                           # Publish current joint positions
@@ -117,6 +121,8 @@ class KukaControl:
         wx = msg.twist.angular.x
         wy = msg.twist.angular.y
         wz = msg.twist.angular.z
+        self.timestamp = msg.header.stamp
+        
         self.vel = [vx, vy, vz, wz, -wy, -wx]      # (in mm and rads) (KUKA ABC angles are in Z, Y, X order)
         self.send_msg_ = True
 
