@@ -46,16 +46,16 @@ class KukaControl:
             #-582.4117252266703   0.029790546497991836   545.6431178144777   3.141476197750022   -0.08725588947971301   3.141521033243545
 
             # Start servo for soft realtime control
+            rospy.set_param('bias_ready', True)
             self.iiwa.realTime_startDirectServoCartesian()      
             time.sleep(1)
 
             pub = rospy.Publisher('/kuka_joints', Float32MultiArray, queue_size=1)
             sub = rospy.Subscriber('/v_kuka_in', TwistStamped, self.callback, queue_size=1)
 
-            rospy.set_param('lin_user_scale', 75)
+            rospy.set_param('lin_user_scale', 50)
             rospy.set_param('rot_user_scale', 50)
-            rospy.set_param('ft_user_scale', 50)
-            
+
             t_0 = self.getSecs()
             cycle_counter = 0
             self.send_msg_ = False
@@ -70,7 +70,27 @@ class KukaControl:
 
                     for i in range(3):
                         cmd[i] = self.vel[i]*timestep*5000  *(lin_user_scale/100) + kuka_pos[i]    # in mm
-                        cmd[i+3] = self.vel[i+3]*timestep*10 *(rot_user_scale/100) + kuka_pos[i+3]  # in rads *20
+                        ## Convert Kuka Rz*Ry'*Rz'' to quaternion, Q1
+                        Q1 = self.R2Q(kuka_pos[3], kuka_pos[4], kuka_pos[5]) # [w,  x*i,  y*j,  z*k]
+                        
+
+                        ## apply angular velocity over a timestep, dt (vel is in zyx)
+                        W  = [0, self.vel[5], self.vel[4], self.vel[3]] # [0, wx*i, wy*j, wz*k]
+                        Q2 = [1, 0, 0, 0]				# [0, wx*i, wy*j, wz*k]
+
+                        # Calculate Using Q2 = Q1+0.5*dt*W*Q1 (derived from: dQ(t)/dt = 0.5*W(t)*Q(t) )
+                        WQ1 = self.QMult(W, Q1)
+                        for i in range(4):
+                                Q2[i] = Q1[i] + 0.5 * timestep * WQ1[i] *5
+
+                        # Convert Q2 back to Rz*Ry'*Rz''
+                        angles = self.Q2R(Q2[0], Q2[1], Q2[2], Q2[3])
+
+                        cmd[3] = angles[0]
+                        cmd[4] = angles[1]
+                        cmd[5] = angles[2]
+
+                        #cmd[i+3] = self.vel[i+3]*timestep*10 *(rot_user_scale/100) + kuka_pos[i+3]  # in rads *20
                         
                     if (self.getSecs()-t_0)>timestep:
                         #intrinsic_latency = rospy.Time.now() - self.timestamp           # To check system latency
@@ -146,10 +166,8 @@ class KukaControl:
         wz = msg.twist.angular.z
         self.timestamp = msg.header.stamp
         
-        self.vel = [vx, vy, vz, wz, -wy, -wx]      # (in mm and rads) (KUKA ABC angles are in Z, Y, X order)
+        self.vel = [vx, vy, vz, wz, wy, wx]      # (in mm and rads) (KUKA ABC angles are in Z, Y, X order)
         
-        #self.vel = [vx, vy, vz, -wx, -wy, wz]      # (in mm and rads)
-        #self.vel = self.Ext2Int(self.vel)        # Convert extrinsic to intrinsic angles
 
         self.send_msg_ = True
 
@@ -159,52 +177,60 @@ class KukaControl:
        secs = (dt.days * 24 * 60 * 60 + dt.seconds)  + dt.microseconds / 1000000.0
        return secs
 
-    def Ext2Int(self, vel):
-        #extrinsic (Rx(A), Ry(B), Rz(C)) Z First (from haption)
-        #intrinsic (Rz''(C), Ry'(B), Rx(A)) X First - Reverse order to make intrinsic
 
-        wx = vel[3] # Rx(C) extrinsic - X third
-        wy = vel[4] # Ry(B) extrinsic - Y second
-        wz = vel[5] # Rz(A) extrinsic - Z first
+    def QMult(self, QA, QB):
+        a = QA[0] # wA
+        b = QA[1] # xA
+        c = QA[2] # yA
+        d = QA[3] # zA
+
+        e = QB[0] # wB
+        f = QB[1] # xB
+        g = QB[2] # yB
+        h = QB[3] # zB
+
+        w = a*e - b*f - c*g - d*h
+        x = b*e + a*f + c*h - d*g
+        y = a*g - b*h + c*e + d*f
+        z = a*h + b*g - c*f + d*e
+
+        return [w, x, y, z]
+
+    def R2Q(self, yaw, pitch, roll):
+        cy = cos(yaw * 0.5)
+        sy = sin(yaw * 0.5)
+        cp = cos(pitch * 0.5)
+        sp = sin(pitch * 0.5)
+        cr = cos(roll * 0.5)
+        sr = sin(roll * 0.5)
+    
+        qw = cr * cp * cy + sr * sp * sy
+        qx = sr * cp * cy - cr * sp * sy
+        qy = cr * sp * cy + sr * cp * sy
+        qz = cr * cp * sy - sr * sp * cy
+    
+        return [qw, qx, qy, qz]
         
-        # Get intrinsic rotations about each axis (reverse order of input)       
-        a = wx  # Rx(A)     intrinsic - X first
-        b = wy  # Ry'(B)    intrinsic - Y second
-        c = wz  # Rz''(C)   intrinsic - Z third
-       
-        # Build X-Y'-Z'' rotation matrix (Rz''(c)*Ry'(b)*Rx(a))
-        R = np.array([[ cos(b)*cos(c), sin(a)*sin(b)*cos(c)-cos(a)*sin(c),  cos(a)*sin(b)*cos(c)+sin(a)*sin(c)],
-                      [ cos(b)*sin(c), sin(a)*sin(b)*sin(c)+cos(a)*cos(c),  cos(a)*sin(b)*sin(c)-sin(a)*cos(c)],
-                      [       -sin(b),                      sin(a)*cos(b),                       cos(a)*cos(b)]])
+    def Q2R(self, qw, qx, qy, qz):
+        # Rx''
+        sinr_cosp = 2 * (qw * qx + qy * qz)
+        cosr_cosp = 1 - 2 * (qx * qx + qy * qy)
+        roll = atan2(sinr_cosp, cosr_cosp)
 
-        # Z-Y'-X''
-        #R = np.array([[cos(z)*cos(y), cos(z)*sin(y)*sin(x)-sin(z)*cos(x), cos(z)*sin(y)*cos(x)+sin(z)*sin(x)],
-        #              [sin(z)*cos(y), sin(z)*sin(y)*sin(x)+cos(z)*cos(x), sin(z)*sin(y)*cos(x)-cos(z)*sin(x)],
-        #              [      -sin(y),                      cos(y)*sin(x),                      cos(y)*cos(x)]])
+        # Ry'
+        sinp = 2 * (qw * qy - qz * qx)
+        if (abs(sinp) >= 1):
+            pitch = pi/2 * sinp/abs(sinp) # use 90 degrees if out of range
+        else:
+            pitch = asin(sinp)
 
-        # Convert back to intrinsic eulers for kuka (Z-Y'-X'')
-        sy = sqrt(1-R[2,0] * R[2,0])
-        #if not R[2,0] = 1:
+        # Rz
+        siny_cosp = 2 * (qw * qz + qx * qy)
+        cosy_cosp = 1 - 2 * (qy * qy + qz * qz)
+        yaw = atan2(siny_cosp, cosy_cosp)
 
-        A = atan2(R[1,0], R[0,0])   # Z
-        B = atan2(-R[2,0], sy)      # Y
-        C = atan2(R[2,1], R[2,2])   # X
-
-        #else:
-        #    alpha_z = 0
-        #    beta_y = 0
-        #    gamma_x = 0
-
-        # Build variable for return
-        vel[0] = vel[0]
-        vel[1] = vel[1]
-        vel[2] = vel[2]
-        vel[3] = A
-        vel[4] = B
-        vel[5] = C
-
-        return vel        
-
+        return [yaw, pitch, roll]
+    
 if __name__ == '__main__':
     rospy.init_node('KUKA', anonymous=True)
     try:

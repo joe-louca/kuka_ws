@@ -26,20 +26,17 @@ class FT:
                                 [ax_tz]])
         frame_id = ft_msg.header.seq
         
-        ## Remove bias (baseline axia reading with tool attached) - THIS IS GOOD
-        #Ax_F_bias = np.array([[-14.2], 
-        #                      [-15.3], 
-        #                      [-45.5]])
-        #Ax_T_bias = np.array([[-1.14], 
-        #                      [ 1.27], 
-        #                      [ 0.09]])        
-        ## REDONE
-        Ax_F_bias = np.array([[0], 
-                              [0], 
-                              [0]])
-        Ax_T_bias = np.array([[0], 
-                              [0], 
-                              [0]])
+        if not self.biased:
+            bias_ready = rospy.get_param('bias_ready')
+            if bias_ready:
+                self.Ax_F_bias = np.array([[ax_fx],
+                                           [ax_fy],
+                                           [ax_fz]])
+                self.Ax_T_bias = np.array([[ax_tx],
+                                           [ax_ty],
+                                           [ax_tz]])
+                self.biased = True
+
         
         Ax_F_sensor = Ax_F_sensor - Ax_F_bias
         Ax_T_sensor = Ax_T_sensor - Ax_T_bias
@@ -124,6 +121,14 @@ class FT:
         self.send_msg_ = False
         self.Rot_ready_ = False
         self.Tool_ready_ = False
+        self.biased = False
+        
+        self.Ax_F_bias = np.array([[0], 
+                                   [0], 
+                                   [0]])
+        self.Ax_T_bias = np.array([[0], 
+                                   [0], 
+                                   [0]])
         
         rospy.Subscriber("/netft_data", WrenchStamped, self.call_Ax_ft, queue_size=1)
         rospy.Subscriber("/ft_tool", WrenchStamped, self.call_Tool_ft, queue_size=1)
