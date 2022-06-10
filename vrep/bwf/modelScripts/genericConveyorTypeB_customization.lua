@@ -10,7 +10,7 @@ end
 function ext_getItemData_pricing()
     local c=readInfo()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.type='conveyor'
     obj.conveyorType='default'
     obj.brVersion=0
@@ -124,7 +124,7 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -137,7 +137,7 @@ function getAvailableMasterConveyors()
         if l[i]~=model then
             local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
             if data then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -723,7 +723,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -744,16 +744,16 @@ function sysCall_init()
     ----------------------------------------
     writeInfo(_info)
 
-    backSide=sim.getObjectHandle('genericConveyorTypeB_backSide')
-    frontSide=sim.getObjectHandle('genericConveyorTypeB_frontSide')
-    leftSide=sim.getObjectHandle('genericConveyorTypeB_leftSide')
-    rightSide=sim.getObjectHandle('genericConveyorTypeB_rightSide')
-    base=sim.getObjectHandle('genericConveyorTypeB_base')
-    baseBack=sim.getObjectHandle('genericConveyorTypeB_baseBack')
-    baseFront=sim.getObjectHandle('genericConveyorTypeB_baseFront')
-    padBase=sim.getObjectHandle('genericConveyorTypeB_padBase')
-    pad=sim.getObjectHandle('genericConveyorTypeB_pad')
-    path=sim.getObjectHandle('genericConveyorTypeB_path')
+    backSide=sim.getObject('./genericConveyorTypeB_backSide')
+    frontSide=sim.getObject('./genericConveyorTypeB_frontSide')
+    leftSide=sim.getObject('./genericConveyorTypeB_leftSide')
+    rightSide=sim.getObject('./genericConveyorTypeB_rightSide')
+    base=sim.getObject('./genericConveyorTypeB_base')
+    baseBack=sim.getObject('./genericConveyorTypeB_baseBack')
+    baseFront=sim.getObject('./genericConveyorTypeB_baseFront')
+    padBase=sim.getObject('./genericConveyorTypeB_padBase')
+    pad=sim.getObject('./genericConveyorTypeB_pad')
+    path=sim.getObject('./genericConveyorTypeB_path')
 
 	
     updatePluginRepresentation()

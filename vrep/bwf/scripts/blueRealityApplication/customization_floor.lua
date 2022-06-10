@@ -1,8 +1,8 @@
 model.floor={}
 model.floor.handles={}
-model.floor.handles.e1=sim.getObjectHandle('ResizableFloor_10_50_element')
-model.floor.handles.e2=sim.getObjectHandle('ResizableFloor_10_50_visibleElement')
-model.floor.handles.itemsHolder=sim.getObjectHandle('Floor_floorItems')
+model.floor.handles.e1=sim.getObject('./ResizableFloor_10_50_element')
+model.floor.handles.e2=sim.getObject('./ResizableFloor_10_50_visibleElement')
+model.floor.handles.itemsHolder=sim.getObject('./Floor_floorItems')
 
 function model.floor.update()
     local c=model.readInfo()

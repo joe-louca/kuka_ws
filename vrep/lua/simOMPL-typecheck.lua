@@ -4,8 +4,7 @@ require 'checkargs'
 
 local simOMPL=require('simOMPL')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simOMPL.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simOMPL'][funcName]=wrapperGenerator(_G['simOMPL'][funcName])
     end
@@ -143,6 +142,8 @@ table.insert(__initFunctions, function()
         end
     end)
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simOMPL.__addTypeCheck',true)
 
 return simOMPL

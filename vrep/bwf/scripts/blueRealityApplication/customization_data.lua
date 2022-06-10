@@ -36,7 +36,7 @@ function model.updatePluginRepresentation_generalProperties()
     data.masterIp=c.masterIp
     data.sceneName=sim.getStringParam(sim.stringparam_scene_name)
     data.jobName=model.currentJob
-    data.appObjectName=sim.getObjectName(model.handle)
+    data.appObjectName=sim.getObjectAlias(model.handle,1)
     
     local packedData=sim.packTable(data)
     if packedData~=model._previousPackedPluginData_gp then

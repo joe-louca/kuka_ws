@@ -27,9 +27,9 @@
 
 <br>
 <br>
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="model"></a>Simple simulation model
-</td></tr></table>
+</h2>
 
 <p>For this tutorial, we will build a non-dynamic manipulator, that just uses inverse kinematics without using any physics engine functionality. The CoppeliaSim CAD data related to this tutorial (<em>redundantManipulator.stl</em>) is located in CoppeliaSim's installation folder <em>cadFiles</em>. A CoppeliaSim scene related to this tutorial can be found in <em>scenes/tutorials/InverseKinematics</em>. Click [Menu bar --&gt; File --&gt; Import --&gt; Mesh...] then select the file to import. Also refer to the section on how to <a href="importExport.htm">import/export shapes</a>. A dialog pops open with various import options. Click <em>Import</em>. A single <a href="shapes.htm">simple shape</a> was imported and is located in the middle of the scene. The shape also appears in the <a href="userInterface.htm#SceneHierarchy">scene hierarchy</a> on the left hand side of the main window. Depending on how the original CAD data was exported, the imported CAD data could be at a different scale, different location, or even subdivided into several shapes. Following figure shows the imported shape:<br>
 </p>
@@ -68,7 +68,7 @@
 <p>The next step in this tutorial is to group shapes that belong to the same rigid entity. Select the 5 shapes that are part of link 1 (the base cylinder being link 0), then click [Menu bar --&gt; Edit --&gt; Grouping/Merging --&gt; Group selected shapes]. Once the shapes are grouped in a compound shape, you could re-align its bounding box with the world, but this step is not required (and has only a visual effect). Repeat the same procedure with all shapes that logically belong together. In this tutorial we will not actuate the gripper's fingers, and so simply rigidly group them with the last link. When all shapes that are meant to be grouped share the same visual attributes, try merging them together instead: [Menu bar --&gt; Edit --&gt; Grouping/Merging --&gt; Merge selected shapes].<br>
 </p>
 
-<p>At this point you can rename all objects in the scene in following way, when going from base to tip: <em>redundantRobot</em> -  <em>redundantRob_joint1</em>  - <em>redundantRob_link1</em> - <em>redundantRob_joint2</em>, etc. Just double-click an object's name in the scene hierarchy to edit it.<br>
+<p>At this point you can rename all objects in the scene in following way, when going from base to tip: <em>redundantRobot</em> -  <em>redundantRob_joint1</em>  - <em>redundantRob_link1</em> - <em>redundantRob_joint2</em>, etc. Just double-click an object's alias in the scene hierarchy to edit it.<br>
 </p>
 
 <p>Now we can build the kinematic chain, going from tip to base: select object <em>redundantRob_link7</em>, then ctrl-select object <em>redundantRob_joint7</em> and click [Menu bar --&gt; Edit --&gt; Make last selected object parent]. Alternatively you can drag an object onto another one in the scene hierarchy to achieve a similar operation. Next do the same for object <em>redundantRob_joint7</em> and object <em>redundantRob_link6</em>. Continue in a same way until the whole kinematic chain of the manipulator was built. This is what you should have (notice the scene hierarchy structure):<br>
@@ -95,25 +95,26 @@
 
 <br>
 <br>
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="setup"></a>Setting up the inverse kinematics task
-</td></tr></table>
+</h2>
 
 
 
 
 <p>Inverse kinematics is entirely set up by having a script calling appropriate API commands: the idea is to build an equivalent kinematic model via the  functions provided by the <a href="kinematicsPlugin.htm">kinematics plugin</a>. The approach uses the concept and terminology of <a href="basicsOnIkGroupsAndIkElements.htm">IK groups and IK elements</a>.</p>
-<p>Select object <em>redundantRobot</em>, then [Menu bar --&gt; Add --&gt; Associated child script --&gt; Non-threaded] to attach a <a href="childScripts.htm">child script</a> to that object. Double-click the script icon that appeared next to the object name, and replace the script content with following code:</p>
+<p>Select object <em>redundantRobot</em>, then [Menu bar --&gt; Add --&gt; Associated child script --&gt; Non-threaded] to attach a <a href="childScripts.htm">child script</a> to that object. Double-click the script icon that appeared next to the object alias, and replace the script content with following code:</p>
 
-<pre class=lightRedBox>function sysCall_init()
+<code class="hljs language-lua coppelia-coppeliasim-script">
+function sysCall_init()
     -- Build a kinematic chain and 2 IK groups (undamped and damped) inside of the IK plugin environment,
     -- based on the kinematics of the robot in the scene:
     -- There is a simple way, and a more elaborate way (but which gives you more options/flexibility):
 
     -- Simple way:
-    local simBase=sim.getObjectHandle('redundantRobot')
-    local simTip=sim.getObjectHandle('redundantRob_tip')
-    local simTarget=sim.getObjectHandle('redundantRob_target')
+    local simBase=sim.getObject('.')
+    local simTip=sim.getObject('./redundantRob_tip')
+    local simTarget=sim.getObject('./redundantRob_target')
     -- create an IK environment:
     ikEnv=simIK.createEnvironment()
     -- create an IK group: 
@@ -131,12 +132,12 @@
     
     -- Elaborate way:
     --[[
-    simBase=sim.getObjectHandle('redundantRobot')
-    simTip=sim.getObjectHandle('redundantRob_tip')
-    simTarget=sim.getObjectHandle('redundantRob_target')
+    simBase=sim.getObject('.')
+    simTip=sim.getObject('./redundantRob_tip')
+    simTarget=sim.getObject('./redundantRob_target')
     simJoints={}
     for i=1,7,1 do
-        simJoints[i]=sim.getObjectHandle('redundantRob_joint'..i)
+        simJoints[i]=sim.getObject('./redundantRob_joint'..i)
     end
     ikJoints={}
     -- create an IK environment:
@@ -208,39 +209,21 @@ function sysCall_actuation()
         -- the position/orientation could not be reached.
         -- try to solve with the damped method:
         simIK.applyIkEnvironmentToScene(ikEnv,ikGroup_damped)
-        -- We display a IK failure report message: 
-        if not ikFailedReportHandle then 
-            ikFailedReportHandle=sim.displayDialog("IK failure report","IK solver failed.",
-                sim.dlgstyle_message,false,"",nil,{1,0.7,0,0,0,0})
-        end
-    else
-        if ikFailedReportHandle then
-        	-- We close any report message about IK failure:
-            sim.endDialog(ikFailedReportHandle) 
-            ikFailedReportHandle=nil
-        end
+        -- We display a IK failure report message:
+        sim.addLog(sim.verbosity_scriptwarnings,"IK solver failed.") 
     end
     
     -- Elaborate way:
     --[[
     -- reflect the pose of the target dummy to its counterpart in the IK environment:
     simIK.setObjectMatrix(ikEnv,ikTarget,ikBase,sim.getObjectMatrix(simTarget,simBase)) 
-	-- try to solve with the undamped method:
+    -- try to solve with the undamped method:
     if simIK.handleIkGroup(ikEnv,ikGroup_undamped)==simIK.result_fail then 
         -- the position/orientation could not be reached.
         -- try to solve with the damped method:
         simIK.handleIkGroup(ikEnv,ikGroup_damped)
         -- We display a IK failure report message: 
-        if not ikFailedReportHandle then 
-            ikFailedReportHandle=sim.displayDialog("IK failure report","IK solver failed.",
-                sim.dlgstyle_message,false,"",nil,{1,0.7,0,0,0,0})
-        end
-    else
-        if ikFailedReportHandle then
-        	-- We close any report message about IK failure:
-            sim.endDialog(ikFailedReportHandle) 
-            ikFailedReportHandle=nil
-        end
+        sim.addLog(sim.verbosity_scriptwarnings,"IK solver failed.") 
     end
     -- apply the joint values computed in the IK environment to their CoppeliaSim joint counterparts:
     for i=1,#simJoints,1 do
@@ -250,9 +233,9 @@ function sysCall_actuation()
 end 
 
 function sysCall_cleanup()
-	-- erase the IK environment: 
+    -- erase the IK environment: 
     simIK.eraseEnvironment(ikEnv) 
-end </pre>
+end </code>
 
 
 
@@ -260,10 +243,8 @@ end </pre>
 <p>Above script creates an equivalent kinematic model from the CoppeliaSim model, then in each simulation step, reads the position/orientation of the CoppeliaSim target, applies it to the target of the equivalent kinematic model, runs the IK solver, and finally reads the joint angles of the equivalent kinematic model, and applies them to the joints of the CoppeliaSim model. To handle singular configurations and situations where the target is out of reach, we first try with a non-damped solver, and if it fails, we revert to a damped solver (with a damped solver, when damping is large, resolution becomes more stable but convergence slower).</p>
 
 <br>
-<table class=subsectionTable>
-  <tr class=subsectionTd><td class=subsectionTd>
-<a name="run"></a>Running the simulation
-</td></tr></table>
+<h2><a name="run"></a>Running the simulation
+</h2>
 
 
 <p>Our inverse kinematics task is ready! Let's test it. Run the simulation, then select the green manipulation sphere. Next,  select the <a href="positionDialog.htm">object translation</a> toolbar button:<br>

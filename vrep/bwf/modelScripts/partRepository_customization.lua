@@ -81,7 +81,7 @@ function getPartTable()
         local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.PART)
         if data then
             data=sim.unpackTable(data)
-            retL[#retL+1]={data['name']..'   ('..sim.getObjectName(l[i])..')',l[i]}
+            retL[#retL+1]={data['name']..'   ('..sim.getObjectAlias(l[i],1)..')',l[i]}
         end
     end
     return retL
@@ -121,7 +121,7 @@ function partName_callback(ui,id,newVal)
                 simBWF.markUndoPoint()
                 writePartInfo(h,prop)
                 local partTable=getPartTable()
-                parts,partIndex=simBWF.populateCombobox(ui1,4,partTable,nil,newVal..'   ('..sim.getObjectName(h)..')',true,nil)
+                parts,partIndex=simBWF.populateCombobox(ui1,4,partTable,nil,newVal..'   ('..sim.getObjectAlias(h,1)..')',true,nil)
             end
         end
         displayPartProperties()
@@ -999,7 +999,7 @@ function createDlg1()
 
         local previousItemName=nil
         if parts and #parts>0 and (partIndex>=0) then
-            previousItemName=parts[partIndex+1][1]..'   ('..sim.getObjectName(parts[partIndex+1][2])..')'
+            previousItemName=parts[partIndex+1][1]..'   ('..sim.getObjectAlias(parts[partIndex+1][2],1)..')'
         end
         local partTable=getPartTable()
         
@@ -1056,7 +1056,7 @@ function resolveDuplicateNames()
         local info=readPartInfo(parts[i])
         local nm=info['name']
         if nm=='<partName>' then
-            nm=sim.getObjectName(parts[i])
+            nm=sim.getObjectAlias(parts[i],1)
         end
         while allNames[nm] do
             nm=nm..'_COPY'
@@ -1070,15 +1070,15 @@ end
 function sysCall_init()
     partToEdit=-1
     lastT=sim.getSystemTimeInMs(-1)
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
     simBWF.checkIfCodeAndModelMatch(model,_CODEVERSION_,_info['version'])
     writeInfo(_info)
-    originalPartHolder=sim.getObjectHandle('partRepository_modelParts')
-    functionalPartHolder=sim.getObjectHandle('partRepository_functional')
-    proxSensor=sim.getObjectHandle('partRepository_sensor')
+    originalPartHolder=sim.getObject('./partRepository_modelParts')
+    functionalPartHolder=sim.getObject('./partRepository_functional')
+    proxSensor=sim.getObject('./partRepository_sensor')
 	
 
     
@@ -1127,7 +1127,7 @@ showOrHideUi1IfNeeded=function()
 end
 
 removeAssociatedCustomizationScriptIfAvailable=function(h)
-    local sh=sim.getCustomizationScriptAssociatedWithObject(h)
+    local sh=sim.getScriptHandle(sim.scripttype_customizationscript,h)
     if sh>0 then
         sim.removeScript(sh)
     end
@@ -1143,7 +1143,7 @@ checkPotentialNewParts=function(potentialParts)
             -- This is not yet flagged as part
             simBWF.markUndoPoint()
             if functionType==0 then
-                local msg="Detected new children of object '"..sim.getObjectName(model).."'. Objects attached to that object should be repository parts. Do you wish to turn those new objects into repository parts? If you click 'no', then those new objects will be made orphan. If you click 'yes', then those new objects will be adjusted appropriately. Only shapes or models can be turned into repository parts." 
+                local msg="Detected new children of object '"..sim.getObjectAlias(model,1).."'. Objects attached to that object should be repository parts. Do you wish to turn those new objects into repository parts? If you click 'no', then those new objects will be made orphan. If you click 'yes', then those new objects will be adjusted appropriately. Only shapes or models can be turned into repository parts." 
                 local ret=sim.msgBox(sim.msgbox_type_question,sim.msgbox_buttons_yesno,'Part Definition',msg)
                 if ret==sim.msgbox_return_yes then
                     functionType=1
@@ -1155,7 +1155,7 @@ checkPotentialNewParts=function(potentialParts)
                 -- We want to accept it as a part
                 local allNames=getAllPartNameMap()
                 data=readPartInfo(h)
-                local nm=sim.getObjectName(h)
+                local nm=sim.getObjectAlias(h,1)
                 while true do
                     if not allNames[nm] then
                         data['name']=nm -- ok, that name doesn't exist yet!
@@ -1323,7 +1323,7 @@ function pricing_callback()
         for i=1,#tags,1 do
             local obj=sim.getObjectsWithTag(tags[i],true)
             for j=1,#obj,1 do
-                local ob=sim.callScriptFunction('ext_getItemData_pricing@'..sim.getObjectName(obj[j]),sim.scripttype_customizationscript)
+                local ob=sim.callScriptFunction('ext_getItemData_pricing@'..sim.getObjectAlias(obj[j],1),sim.scripttype_customizationscript)
                 objects[#objects+1]=ob
             end
         end

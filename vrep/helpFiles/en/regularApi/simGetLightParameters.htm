@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetLightParameters" id="simGetLightParameters"></a>simGetLightParameters / sim.getLightParameters </h3>
+<p class=subsectionBar><a name="simGetLightParameters" id="simGetLightParameters"></a>simGetLightParameters / sim.getLightParameters </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -27,12 +27,12 @@ Retrieves various parameters of a light object. See also <a href="simSetLightPar
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetLightParameters(simInt objectHandle,simFloat* setToNULL,simFloat* diffusePart,simFloat* specularPart)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of the light</div>
 <div><strong>setToNULL</strong>: not used, set to nullptr</div>
@@ -42,7 +42,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 in case of an error, otherwise bit-coded: for now, only bit 0 is used: 1=light on<br>
@@ -53,7 +53,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int state,table[3] zero,table[3] diffusePart,table[3] specularPart=sim.getLightParameters(int objectHandle)<br></td> 
+<td class=apiTableRightLSyn>int state,float[3] zero,float[3] diffusePart,float[3] specularPart=sim.getLightParameters(int objectHandle)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -72,8 +72,14 @@ Lua return values
 <div><strong>specularPart</strong>: red, green and blue component of the light's specular part</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int state,list zero,list diffusePart,list specularPart=sim.getLightParameters(int objectHandle)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

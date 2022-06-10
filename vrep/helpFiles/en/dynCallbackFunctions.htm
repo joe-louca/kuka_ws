@@ -23,7 +23,7 @@
 <p>Following represents a simple dynamics  callback function:<br>
 </p>
 
-<pre class=lightRedBox>
+<code class="hljs language-lua coppelia-coppeliasim-script">
 function <strong>sysCall_dynCallback</strong>(inData)
     -- This function gets called often, so it might slow down the simulation
     --     (this is called twice at each dynamic simulation step, by default 20x more often than a child script)
@@ -41,7 +41,15 @@ function <strong>sysCall_dynCallback</strong>(inData)
         txt=&quot;Before&quot;..txt
     end
     print(txt)
-end</pre>
+end</code>
+
+<p>In Python, a dynamics callback function can only be implemented via a non-threaded script, and it should be explicitly activated with a luaExec command:</p>
+<code class="hljs language-python coppelia-coppeliasim-script">
+#python
+#luaExec additionalFuncs={'sysCall_dynCallback'}
+
+def <strong>sysCall_dynCallback</strong>(inData):
+    pass</code>
 
 <br>
 <br>

@@ -201,22 +201,16 @@ function ReadForceSensor(...)
     return sim.readForceSensor(handle)
 end
 
-function BreakForceSensor(...)
-    debugFunc("BreakForceSensor",...)
-    local handle=...
-    return sim.breakForceSensor(handle)
-end
-
 function ClearFloatSignal(...)
     debugFunc("ClearFloatSignal",...)
     local sig=...
     return sim.clearFloatSignal(sig)
 end
 
-function ClearIntegerSignal(...)
-    debugFunc("ClearIntegerSignal",...)
+function ClearInt32Signal(...)
+    debugFunc("ClearInt32Signal",...)
     local sig=...
-    return sim.clearIntegerSignal(sig)
+    return sim.clearInt32Signal(sig)
 end
 
 function ClearStringSignal(...)
@@ -231,10 +225,10 @@ function SetFloatSignal(...)
     return sim.setFloatSignal(sig,v)
 end
 
-function SetIntSignal(...)
-    debugFunc("SetIntSignal",...)
+function SetInt32Signal(...)
+    debugFunc("SetInt32Signal",...)
     local sig,v=...
-    return sim.setIntegerSignal(sig,v)
+    return sim.setInt32Signal(sig,v)
 end
 
 function SetStringSignal(...)
@@ -249,10 +243,10 @@ function GetFloatSignal(...)
     return sim.getFloatSignal(sig)
 end
 
-function GetIntSignal(...)
-    debugFunc("GetIntSignal",...)
+function GetInt32Signal(...)
+    debugFunc("GetInt32Signal",...)
     local sig=...
-    return sim.getIntegerSignal(sig)
+    return sim.getInt32Signal(sig)
 end
 
 function GetStringSignal(...)
@@ -279,8 +273,11 @@ end
 function GetObjectHandle(...)
     debugFunc("GetObjectHandle",...)
     local objName=...
-    if string.find(objName,'#')==nil then
-        objName=objName..'#'
+    if (string.find(objName,'/')==nil) and (string.find(objName,'.')==nil) and (string.find(objName,':')==nil) then
+        -- Old way of accessing objects
+        if string.find(objName,'#')==nil then
+            objName=objName..'#'
+        end
     end
     return sim.getObjectHandle(objName)
 end
@@ -531,6 +528,30 @@ end
 function SetObjectStringParameter(...)
     return SetObjectStringParam(...)
 end
+function ClearIntegerSignal(...)
+    return ClearInt32Signal(...)
+end
+function SetIntSignal(...)
+    return SetInt32Signal(...)
+end
+function GetIntSignal(...)
+    return GetInt32Signal(...)
+end
+function GetObjectName(...)
+    -- For backward compatibility:
+    debugFunc("GetObjectName",...)
+    local handle,altName=...
+    if altName then
+        handle=handle+sim.handleflag_altname
+    end
+    return sim.getObjectName(handle)
+end
+function BreakForceSensor(...)
+    debugFunc("BreakForceSensor",...)
+    local handle=...
+    local c=sim.getObjectChild(handle,0)
+    return sim.setObjectParent(c,-1,true)
+end
 -- DEPRECATED END
 
 function SetStringParam(...)
@@ -686,7 +707,7 @@ function DisplayDialog(...)
     if type(dlgType)=='string' then
         dlgType=evalStr(dlgType)
     end
-    return sim.displayDialog(titleText,mainText,dlgType,initText)
+    return sim.displayDialog(titleText,mainText,dlgType,initText) -- func is actually deprecated
 end
 
 function GetDialogResult(...)
@@ -841,13 +862,10 @@ function GetObjectsInTree(...)
     return sim.getObjectsInTree(treeBase,objType,options)
 end
 
-function GetObjectName(...)
-    debugFunc("GetObjectName",...)
-    local handle,altName=...
-    if altName then
-        handle=handle+sim.handleflag_altname
-    end
-    return sim.getObjectName(handle)
+function GetObjectAlias(...)
+    debugFunc("GetObjectAlias",...)
+    local handle,options=...
+    return sim.getObjectAlias(handle,options)
 end
 
 function GetSimulationTime(...)
@@ -1621,7 +1639,7 @@ function onDlgClose()
 end
 
 function sysCall_info()
-    return {autoStart=false}
+    return {autoStart=false,menu='Connectivity\nB0 remote API server'}
 end
 
 function sysCall_addOnScriptSuspend()
@@ -1629,12 +1647,10 @@ function sysCall_addOnScriptSuspend()
 end
 
 function sysCall_init()
-    local res
-    res,model=PCALL(sim.getObjectAssociatedWithScript,false,sim.handle_self) -- if call made directly, will fail with add-on script
+    model=sim.getObjectHandle('.',{noError=true})
     local abort=false
-    if not res or model==-1 then
+    if model==-1 then
         -- We are running this script via an Add-On script
-        
         model=-1
         modelData={nodeName='b0RemoteApi_CoppeliaSim-addOn',channelName='b0RemoteApiAddOn',debugLevel=1,packStrAsBin=false,duringSimulationOnly=false}
     else

@@ -3,7 +3,7 @@ function model.prepareStatisticsDialog(enabled)
         local xml =[[
                 <label id="1" text="Part destruction count: 0" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
         ]]
-        statUi=simBWF.createCustomUi(xml,sim.getObjectName(model.handle)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
+        statUi=simBWF.createCustomUi(xml,sim.getObjectAlias(model.handle,1)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
     end
 end
 

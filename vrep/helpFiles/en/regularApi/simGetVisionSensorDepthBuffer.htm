@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetVisionSensorDepthBuffer" id="simGetVisionSensorDepthBuffer"></a>simGetVisionSensorDepthBuffer / sim.getVisionSensorDepthBuffer</h3>
+<p class=subsectionBar><a name="simGetVisionSensorDepthBuffer" id="simGetVisionSensorDepthBuffer"></a>simGetVisionSensorDepthBuffer / sim.getVisionSensorDepthBuffer</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,19 +26,19 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simFloat* simGetVisionSensorDepthBuffer(simInt sensorHandle)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>sensorHandle</strong>: handle of the vision sensor. Can be combined with <a href="../apiConstants.htm#specialHandleFlags">sim_handleflag_depthbuffermeters</a> (simply add sim_handleflag_depthbuffermeters to sensorHandle), if you wish to retrieve values in meters.</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>depth buffer (buffer size is resolutionX*resolutionY) or nullptr in case of an error. The user is in charge of releasing the returned buffer with <a href="simReleaseBuffer.htm">simReleaseBuffer</a>. Returned values are in the range of 0-1 (0=closest to sensor (i.e. close clipping plane), 1=farthest from sensor (i.e. far clipping plane)). If the sim_handleflag_depthbuffermeters was specified, then individual values are expressed as distances in terms of meters.<br>
@@ -49,7 +49,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[] depthBuffer=sim.getVisionSensorDepthBuffer(int sensorHandle,int posX=0,int posY=0,int sizeX=0,int sizeY=0)<br></td> 
+<td class=apiTableRightLSyn>float[]/buffer depthBuffer=sim.getVisionSensorDepthBuffer(int sensorHandle,int posX=0,int posY=0,int sizeX=0,int sizeY=0)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -64,25 +64,23 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div><strong>depthBuffer</strong>: table containing depth values (table[] size is sizeX*sizeY), a string containing coded depth values. Returned values are in the range of 0-1 (0=closest to sensor (i.e. close clipping plane), 1=farthest from sensor (i.e. far clipping plane)). If the sim.handleflag_depthbuffermeters was specified, then individual values are expressed as distances in meters.</div></td> 
+<div><strong>depthBuffer</strong>: table containing depth values (sizeX*sizeY), or a string containing coded depth values. Returned values are in the range of 0-1 (0=closest to sensor (i.e. close clipping plane), 1=farthest from sensor (i.e. far clipping plane)). If the sim.handleflag_depthbuffermeters was specified, then individual values are expressed as distances in meters.</div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetVisionSensorDepthBuffer">simxGetVisionSensorDepthBuffer</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxGetVisionSensorDepthBuffer">simxGetVisionSensorDepthBuffer</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list/bytes depthBuffer=sim.getVisionSensorDepthBuffer(int sensorHandle,int posX=0,int posY=0,int sizeX=0,int sizeY=0)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

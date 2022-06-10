@@ -19,8 +19,8 @@ displayGreyTargets=function(targets)
 end
 
 function sysCall_init()
-    model=sim.getObjectHandle('genericPingPongPacker')
-    trackingWindowModel=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('./genericPingPongPacker')
+    trackingWindowModel=sim.getObject('.')
     local modelData=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
     modelData=sim.unpackTable(modelData)
     locationName=modelData['locationName']

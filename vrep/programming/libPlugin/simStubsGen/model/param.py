@@ -89,14 +89,14 @@ class ParamFloat(Param):
         super(ParamFloat, self).__init__(node)
 
     def htype(self):
-        return 'number'
+        return 'float'
 
 class ParamDouble(Param):
     def __init__(self, node):
         super(ParamDouble, self).__init__(node)
 
     def htype(self):
-        return 'number'
+        return 'float'
 
 class ParamString(Param):
     def __init__(self, node):
@@ -138,7 +138,12 @@ class ParamTable(Param):
         return Param.factory(n)
 
     def htype(self):
-        return f'table[{self.size}]'
+        if self.itype:
+            return f'{self.item_dummy().htype()}[{self.size}]'
+        elif self.size:
+            return f'table[{self.size}]'
+        else:
+            return f'table'
 
 class ParamStruct(Param):
     def __init__(self, node, name):

@@ -1,11 +1,11 @@
 #if !defined(SIMCONST_INCLUDED_)
 #define SIMCONST_INCLUDED_
 
-#define SIM_PROGRAM_VERSION_NB 40200
-#define SIM_PROGRAM_VERSION "4.2.0."
+#define SIM_PROGRAM_VERSION_NB 40300
+#define SIM_PROGRAM_VERSION "4.3.0."
 
-#define SIM_PROGRAM_REVISION_NB 6
-#define SIM_PROGRAM_REVISION "(rev. 6)"
+#define SIM_PROGRAM_REVISION_NB 3
+#define SIM_PROGRAM_REVISION "(rev. 3)"
 
 #define SIM_PROGRAM_FULL_VERSION_NB ((SIM_PROGRAM_VERSION_NB) * 100 + (SIM_PROGRAM_REVISION_NB))
 
@@ -33,7 +33,7 @@ enum {
 
 /* General object types. Values are serialized */
 enum {
-    sim_appobj_object_type=sim_object_type_end+1,
+    sim_appobj_object_type=109,
     sim_appobj_collision_type, /* deprecated */
     sim_appobj_distance_type, /* deprecated */
     sim_appobj_simulation_type,
@@ -106,21 +106,22 @@ enum { /* Scene object main properties (serialized): */
         sim_objectspecialproperty_measurable                    =0x0002,
         /*reserved                      =0x0004, */
         /*reserved                      =0x0008, */
-        sim_objectspecialproperty_detectable_ultrasonic         =0x0010,
-        sim_objectspecialproperty_detectable_infrared           =0x0020,
-        sim_objectspecialproperty_detectable_laser              =0x0040,
-        sim_objectspecialproperty_detectable_inductive          =0x0080,
-        sim_objectspecialproperty_detectable_capacitive         =0x0100,
-        sim_objectspecialproperty_renderable                    =0x0200,
-        sim_objectspecialproperty_detectable_all                =sim_objectspecialproperty_detectable_ultrasonic|sim_objectspecialproperty_detectable_infrared|sim_objectspecialproperty_detectable_laser|sim_objectspecialproperty_detectable_inductive|sim_objectspecialproperty_detectable_capacitive,
-        sim_objectspecialproperty_cuttable_old                  =0x0400,
-        sim_objectspecialproperty_pathplanning_ignored          =0x0800
+        sim_objectspecialproperty_detectable_ultrasonic         =0x0010, /* deprecated */
+        sim_objectspecialproperty_detectable_infrared           =0x0020, /* deprecated */
+        sim_objectspecialproperty_detectable_laser              =0x0040, /* deprecated */
+        sim_objectspecialproperty_detectable_inductive          =0x0080, /* deprecated */
+        sim_objectspecialproperty_detectable_capacitive         =0x0100, /* deprecated */
+        sim_objectspecialproperty_renderable                    =0x0200, /* deprecated */
+        sim_objectspecialproperty_detectable_all                =0x01f0, /* deprecated */
+        sim_objectspecialproperty_detectable                    =0x01f0,
+        sim_objectspecialproperty_cuttable_old                  =0x0400, /* deprecated */
+        sim_objectspecialproperty_pathplanning_ignored          =0x0800  /* deprecated */
 };
 
 enum { /* Model properties (serialized): */
         sim_modelproperty_not_collidable                =0x0001,
         sim_modelproperty_not_measurable                =0x0002,
-        sim_modelproperty_not_renderable                =0x0004,
+        sim_modelproperty_not_renderable                =0x0004, /* deprecated */
         sim_modelproperty_not_detectable                =0x0008,
         sim_modelproperty_not_cuttable_old              =0x0010,
         sim_modelproperty_not_dynamic                   =0x0020,
@@ -216,8 +217,8 @@ enum { /* Check the documentation instead of comments below!! */
         sim_message_eventcallback_guipass,
         sim_message_eventcallback_mainscriptabouttobecalled,
 
-        sim_message_eventcallback_rmlposition, /* the command simRMLPosition was called. The appropriate plugin should handle the call */
-        sim_message_eventcallback_rmlvelocity, /* the command simRMLVelocity was called. The appropriate plugin should handle the call */
+        sim_message_eventcallback_rmlposition, /* deprecated */
+        sim_message_eventcallback_rmlvelocity, /* deprecated */
 
         sim_message_eventcallback_reserved18,
         sim_message_eventcallback_reserved19,
@@ -232,11 +233,11 @@ enum { /* Check the documentation instead of comments below!! */
         sim_message_eventcallback_proxsensorselectup, /* a "geometric" click select (mouse up) was registered. Enable with sim_intparam_prox_sensor_select_down. aux[0]=objectID, customData[0-2]=pt coord (floats), customData[3-5]=pt normal vector (floats)*/
         sim_message_eventcallback_pickselectdown, /* a "pick" click select (mouse down) was registered. aux[0]=objectID */
 
-        sim_message_eventcallback_rmlpos, /* the command simRMLPos was called. The appropriate plugin should handle the call */
-        sim_message_eventcallback_rmlvel, /* the command simRMLVel was called. The appropriate plugin should handle the call */
-        sim_message_eventcallback_rmlstep, /* the command simRMLStep was called. The appropriate plugin should handle the call */
-        sim_message_eventcallback_rmlremove, /* the command simRMLRemove was called. The appropriate plugin should handle the call */
-        sim_message_eventcallback_rmlinfo, /* used internally */
+        sim_message_eventcallback_rmlpos, /* deprecated */
+        sim_message_eventcallback_rmlvel, /* deprecated */
+        sim_message_eventcallback_rmlstep, /* deprecated */
+        sim_message_eventcallback_rmlremove, /* deprecated */
+        sim_message_eventcallback_rmlinfo, /* deprecated */
 
         sim_message_eventcallback_beforerendering, /* called just before the scene is rendered. From the main SIM thread! */
 
@@ -266,6 +267,12 @@ enum { /* Check the documentation instead of comments below!! */
         sim_message_eventcallback_uipass,             /* Called from the UI thread, just after sim_message_eventcallback_instancepass was called from the SIM thread */
         sim_message_eventcallback_scriptstatedestroyed,
         sim_message_eventcallback_scriptdestroyed,
+
+        /* Following called before/after the main script's corresponding sections. auxData[0]=0:before, auxData[0]=1:after */
+        sim_message_eventcallback_simulationinit,
+        sim_message_eventcallback_simulationactuation,
+        sim_message_eventcallback_simulationsensing,
+        sim_message_eventcallback_simulationcleanup,
 
         sim_message_simulation_start_resume_request=0x1000,
         sim_message_simulation_pause_request,
@@ -320,12 +327,12 @@ enum { /* Scene object properties. Combine with the | operator */
     sim_objectproperty_selectmodelbaseinstead   =0x0080,
     sim_objectproperty_dontshowasinsidemodel    =0x0100,
     /* reserved                                 =0x0200, */
-    sim_objectproperty_canupdatedna             =0x0400,
+    sim_objectproperty_canupdatedna             =0x0400, /* deprecated */
     sim_objectproperty_selectinvisible          =0x0800,
     sim_objectproperty_depthinvisible           =0x1000,
     sim_objectproperty_cannotdelete             =0x2000,
     sim_objectproperty_cannotdeleteduringsim    =0x4000,
-    sim_objectproperty_hierarchyhiddenmodelchild=0x8000,
+    sim_objectproperty_hierarchyhiddenmodelchild=0x8000, /* deprecated */
 };
 
 enum { /* DEPRECATED, check below */
@@ -469,9 +476,27 @@ enum { /* System callbacks */
     sim_syscb_vision, /* called just after a vision sensor image was acquired, for processing */
     sim_syscb_trigger, /* called by vision, proximity or force/torque sensors when they trigger */
     sim_syscb_userconfig, /* called for the customization script, when the user double-clicks the script simulation parameters icon */
+    sim_syscb_moduleentry, /* called when a module menu entry is selected. Must be first created with sim.moduleEntry */
+    sim_syscb_event, /* called on many different occasions, mainly to synchronize CoppeliaSim with an external application */
+    sim_syscb_ext, /* intercepts user callback calls */
 };
 
-enum { /* Script attributes */
+enum { /* Script int params */
+    sim_scriptintparam_execorder=0,
+    sim_scriptintparam_execcount,
+    sim_scriptintparam_type,
+    sim_scriptintparam_handle,
+    sim_scriptintparam_enabled,
+    sim_scriptintparam_objecthandle
+};
+
+enum { /* Script string params */
+    sim_scriptstringparam_description=0,
+    sim_scriptstringparam_name,
+    sim_scriptstringparam_text
+};
+
+enum { /* deprecated */
     sim_customizationscriptattribute_activeduringsimulation=0, /* deprecated */
     sim_scriptattribute_executionorder, /* integer attribute, see sim_scriptexecorder_normal, etc. */
     sim_scriptattribute_executioncount, /* integer attribute */
@@ -479,8 +504,9 @@ enum { /* Script attributes */
     sim_scriptattribute_enabled, /* boolean attribute */
     sim_childscriptattribute_enabled=sim_scriptattribute_enabled, /* boolean attribute */
     sim_customizationscriptattribute_cleanupbeforesave, /* deprecated */
-    sim_scriptattribute_debuglevel, /* debug */
-    sim_scriptattribute_scripttype
+    sim_scriptattribute_debuglevel, /* deprecated */
+    sim_scriptattribute_scripttype,
+    sim_scriptattribute_scripthandle
 };
 
 enum { /* Script execution order, is serialized */
@@ -495,7 +521,7 @@ enum { /* Script tree traversal direction, is serialized */
     sim_scripttreetraversal_parent
 };
 
-enum { /* Script debug level, is serialized */
+enum { /* Script debug level, deprecated */
     sim_scriptdebug_none=0,
     sim_scriptdebug_syscalls=1,
     sim_scriptdebug_vars_interval=2,
@@ -561,7 +587,7 @@ enum { /* special handle flags: */
     sim_handleflag_depthbuffermeters    =0x00800000,
     sim_handleflag_keeporiginal         =0x00400000,
     sim_handleflag_camera               =0x00400000,
-    sim_handleflag_altname              =0x00400000,
+    sim_handleflag_altname              =0x00400000, /* deprecated */
     sim_handleflag_axis                 =0x00400000,
     sim_handleflag_resetforce           =0x00400000,
     sim_handleflag_resettorque          =0x00800000,
@@ -581,7 +607,7 @@ enum { /* distance calculation methods: (serialized) */
     sim_distcalcmethod_dac_if_nonzero
 };
 
-enum { /* Generic dialog styles: */
+enum { /* Deprecated */
     sim_dlgstyle_message        =0,
     sim_dlgstyle_input,
     sim_dlgstyle_ok,
@@ -590,7 +616,7 @@ enum { /* Generic dialog styles: */
     sim_dlgstyle_dont_center    =32 /* can be combined with one of above values. Only with this flag can the position of the related UI be set just after dialog creation  */
 };
 
-enum { /* Generic dialog return values: */
+enum { /* Deprecated */
     sim_dlgret_still_open=0,
     sim_dlgret_ok,
     sim_dlgret_cancel,
@@ -688,16 +714,16 @@ enum { /* particle objects: */
 enum { /* Boolean parameters: */
     sim_boolparam_hierarchy_visible=0,
     sim_boolparam_console_visible,
-    sim_boolparam_collision_handling_enabled,
-    sim_boolparam_distance_handling_enabled,
+    sim_boolparam_collision_handling_enabled, /* deprecated */
+    sim_boolparam_distance_handling_enabled, /* deprecated */
     sim_boolparam_ik_handling_enabled, /* deprecated */
-    sim_boolparam_gcs_handling_enabled,
+    sim_boolparam_gcs_handling_enabled, /* deprecated */
     sim_boolparam_dynamics_handling_enabled,
-    sim_boolparam_joint_motion_handling_enabled_deprecated,
-    sim_boolparam_path_motion_handling_enabled_deprecated,
-    sim_boolparam_proximity_sensor_handling_enabled,
-    sim_boolparam_vision_sensor_handling_enabled,
-    sim_boolparam_mill_handling_enabled,
+    sim_boolparam_joint_motion_handling_enabled_deprecated, /* deprecated */
+    sim_boolparam_path_motion_handling_enabled_deprecated, /* deprecated */
+    sim_boolparam_proximity_sensor_handling_enabled, /* deprecated */
+    sim_boolparam_vision_sensor_handling_enabled, /* deprecated */
+    sim_boolparam_mill_handling_enabled, /* deprecated */
     sim_boolparam_browser_visible,
     sim_boolparam_scene_and_model_load_messages,
     sim_reserved0,
@@ -713,8 +739,8 @@ enum { /* Boolean parameters: */
     sim_boolparam_reserved3,
     sim_boolparam_realtime_simulation,
     sim_boolparam_use_glfinish_cmd,
-    sim_boolparam_force_show_wireless_emission,
-    sim_boolparam_force_show_wireless_reception,
+    sim_boolparam_force_show_wireless_emission, /* deprecated */
+    sim_boolparam_force_show_wireless_reception, /* deprecated */
     sim_boolparam_video_recording_triggered,
     sim_boolparam_reserved1,
     sim_boolparam_reserved2,
@@ -751,7 +777,7 @@ enum { /* Integer parameters: */
     sim_intparam_custom_cmd_start_id, /* can only be read */
     sim_intparam_compilation_version, /* 0=evaluation version, 1=full version, 2=player version. Can only be read */
     sim_intparam_current_page,
-    sim_intparam_flymode_camera_handle, /* can only be read */
+    sim_intparam_flymode_camera_handle, /* deprecated */
     sim_intparam_dynamic_step_divider, /* can only be read */
     sim_intparam_dynamic_engine, /* 0=Bullet, 1=ODE. 2=Vortex. 3=Newton. Can only be read */
     sim_intparam_server_port_start, /* can only be read */
@@ -841,6 +867,14 @@ enum { /* String parameters: */
     sim_stringparam_tempdir, /* can only be read */
     sim_stringparam_tempscenedir, /* can only be read */
     sim_stringparam_datadir, /* can only be read */
+    sim_stringparam_importexportdir,
+    sim_stringparam_addonpath, /* can only be read */
+    sim_stringparam_scenedefaultdir, /* can only be read */
+    sim_stringparam_modeldefaultdir, /* can only be read */
+    sim_stringparam_defaultpython, /* can only be read. See also pythonWrapper.python named string parameter */
+    sim_stringparam_additionalpythonpath, /* can only be read */
+    sim_stringparam_luadir, /* can only be read */
+    sim_stringparam_pythondir, /* can only be read */
 };
 
 enum { /* Array parameters: */
@@ -935,7 +969,7 @@ enum { /* Navigation and selection modes with the mouse. Lower byte values are m
 };
 
 
-enum { /* Reflexxes Motion Library flags */
+enum { /* Reflexxes Motion Library flags, deprecated. Use Ruckig instead. */
     /* enable one of following: */
     simrml_phase_sync_if_possible                   =0x0000,
     simrml_only_time_sync                           =0x0001,
@@ -951,28 +985,35 @@ enum { /* Reflexxes Motion Library flags */
     simrml_keep_current_vel_if_fallback_strategy    =0x0010
 };
 
-enum { /* file dialog styles */
+enum { /* Ruckig Library flags */
+    /* enable one of following: */
+    sim_ruckig_phasesync                            =0x0000,
+    sim_ruckig_timesync                             =0x0001,
+    sim_ruckig_nosync                               =0x0003,
+};
+
+enum { /* deprecated */
     sim_filedlg_type_load=0,
     sim_filedlg_type_save,
     sim_filedlg_type_load_multiple,
     sim_filedlg_type_folder
 };
 
-enum { /* message box styles */
+enum { /* deprecated */
     sim_msgbox_type_info=0,
     sim_msgbox_type_question,
     sim_msgbox_type_warning,
     sim_msgbox_type_critical
 };
 
-enum { /* message box buttons */
+enum { /* deprecated */
     sim_msgbox_buttons_ok=0,
     sim_msgbox_buttons_yesno,
     sim_msgbox_buttons_yesnocancel,
     sim_msgbox_buttons_okcancel
 };
 
-enum { /* message box return values */
+enum { /* deprecated */
     sim_msgbox_return_cancel=0,
     sim_msgbox_return_no,
     sim_msgbox_return_yes,
@@ -1153,10 +1194,11 @@ enum { /* Object int/float/string parameters */
     sim_objintparam_parent_role= 30, /* DEPRECATED */
     sim_objintparam_manipulation_permissions= 31,
     sim_objintparam_illumination_handle= 32,
-    sim_objstringparam_dna= 33,
+    sim_objstringparam_dna= 33, /* DEPRECATED */
     sim_objfloatparam_size_factor= 34,
     sim_objstringparam_unique_id= 35,
     sim_objintparam_visible= 36,
+    sim_objintparam_unique_id= 37,
 
     sim_objparam_end= 999,
 
@@ -1286,6 +1328,9 @@ enum { /* Object int/float/string parameters */
     sim_cameraintparam_pov_blur_samples= 9007,
     sim_camerafloatparam_near_clipping= 9008,
     sim_camerafloatparam_far_clipping= 9009,
+    sim_cameraintparam_perspective_operation= 9010,
+    sim_cameraintparam_trackedobject= 9011,
+    sim_cameraintparam_remotecameramode= 9012,
 
     /* dummies */
     sim_dummyintparam_link_type= 10000,
@@ -2012,14 +2057,7 @@ enum {  simx_error_noerror                  =0x000000,
 };
 
 
-/******************************************
-*******************************************
-ROS API constants:
-*******************************************
-*******************************************/
-
-
-/* All stream command codes (followed by operation mode codes) */
+/* deprecated */
 enum {  simros_strmcmdnull_start                =0,
 
         /* from here on, commands are only identified by their code */

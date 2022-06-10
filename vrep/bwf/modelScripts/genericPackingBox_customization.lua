@@ -709,7 +709,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -721,13 +721,13 @@ function sysCall_init()
     end
     simBWF.writePartInfo(model,data)
 
-    bb=sim.getObjectHandle('genericPackingBox_bb')
-    sideConnection=sim.getObjectHandle('genericPackingBox_sideConnection')
+    bb=sim.getObject('./genericPackingBox_bb')
+    sideConnection=sim.getObject('./genericPackingBox_sideConnection')
     sides=sim.getObjectChild(sideConnection,0)
     joints={}
     lids={}
     for i=1,4,1 do
-        joints[i]=sim.getObjectHandle('genericPackingBox_j'..i)
+        joints[i]=sim.getObject('./genericPackingBox_j'..i)
         lids[i]=sim.getObjectChild(joints[i],0)
     end
 

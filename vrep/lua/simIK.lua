@@ -119,7 +119,7 @@ function simIK.getAlternateConfigs(...)
     simIK.eraseEnvironment(ikEnv)
     sim.setThreadAutomaticSwitch(lb)
     
-    if configs~={} then
+    if next(configs)~=nil then
         configs=Matrix:fromtable(configs)
         configs=configs:data()
     end
@@ -225,7 +225,7 @@ function simIK.addIkElementFromScene(...)
     if simBase~=-1 then
         ikBase=allObjects[simBase] -- maybe already there
         if not ikBase then
-            ikBase=simIK.createDummy(ikEnv,sim.getObjectName(simBase))
+            ikBase=simIK.createDummy(ikEnv) --name not really needed in this context-- ,sim.getObjectAlias(simBase,3))
             simIK.setObjectMatrix(ikEnv,ikBase,-1,sim.getObjectMatrix(simBase,-1))
             allObjects[simBase]=ikBase
         end
@@ -234,14 +234,14 @@ function simIK.addIkElementFromScene(...)
     
     local ikTip=allObjects[simTip] -- maybe already there
     if not ikTip then
-        ikTip=simIK.createDummy(ikEnv,sim.getObjectName(simTip))
+        ikTip=simIK.createDummy(ikEnv) --name not really needed in this context-- ,sim.getObjectAlias(simTip,3))
         simIK.setObjectMatrix(ikEnv,ikTip,-1,sim.getObjectMatrix(simTip,-1))
         allObjects[simTip]=ikTip
     end
 
     local ikTarget=allObjects[simTarget] -- maybe already there
     if not ikTarget then
-        ikTarget=simIK.createDummy(ikEnv,sim.getObjectName(simTarget))
+        ikTarget=simIK.createDummy(ikEnv) --name not really needed in this context-- ,sim.getObjectAlias(simTarget,3))
         simIK.setObjectMatrix(ikEnv,ikTarget,-1,sim.getObjectMatrix(simTarget,-1))
         allObjects[simTarget]=ikTarget
     end
@@ -260,10 +260,10 @@ function simIK.addIkElementFromScene(...)
             ikIterator=allObjects[simIterator]
         else
             if sim.getObjectType(simIterator)~=sim.object_joint_type then
-                ikIterator=simIK.createDummy(ikEnv,sim.getObjectName(simIterator))
+                ikIterator=simIK.createDummy(ikEnv) --name not really needed in this context-- ,sim.getObjectAlias(simIterator,3))
             else
                 local t=sim.getJointType(simIterator)
-                ikIterator=simIK.createJoint(ikEnv,t,sim.getObjectName(simIterator))
+                ikIterator=simIK.createJoint(ikEnv,t) --name not really needed in this context-- ,sim.getObjectAlias(simIterator,3))
                 local c,interv=sim.getJointInterval(simIterator)
                 simIK.setJointInterval(ikEnv,ikIterator,c,interv)
                 local sp=sim.getObjectFloatParam(simIterator,sim.jointfloatparam_screw_pitch)
@@ -313,7 +313,8 @@ function simIK.eraseEnvironment(...)
 end
 
 function simIK.getConfigForTipPose(...)
-    local ikEnv,ikGroup,joints,thresholdDist,maxTime,metric,callback,auxData,jointOptions,lowLimits,ranges=checkargs({{type='int'},{type='int'},{type='table',size='1..*',item_type='int'},{type='float',default=0.1},{type='float',default=0.5},{type='table',size=4,item_type='float',default={1,1,1,0.1},nullable=true},{type='func',default=NIL,nullable=true},{type='any',default=NIL,nullable=true},{type='table',size='1..*',item_type='int',default=NIL,nullable=true},{type='table',size='1..*',item_type='float',default=NIL,nullable=true},{type='table',size='1..*',item_type='float',default=NIL,nullable=true}},...)
+    -- deprecated
+    local ikEnv,ikGroup,joints,thresholdDist,maxTime,metric,callback,auxData,jointOptions,lowLimits,ranges=checkargs({{type='int'},{type='int'},{type='table',size='1..*',item_type='int'},{type='float',default=0.1},{type='float',default=0.5},{type='table',size=4,item_type='float',default={1,1,1,0.1},nullable=true},{type='any',default=NIL,nullable=true},{type='any',default=NIL,nullable=true},{type='table',size='1..*',item_type='int',default=NIL,nullable=true},{type='table',size='1..*',item_type='float',default=NIL,nullable=true},{type='table',size='1..*',item_type='float',default=NIL,nullable=true}},...)
     local dof=#joints
 
     if (jointOptions and dof~=#jointOptions) or (lowLimits and dof~=#lowLimits) or (ranges and dof~=#ranges) then
@@ -342,11 +343,7 @@ function simIK.getConfigForTipPose(...)
         local funcNm,t
         if callback then
             funcNm='__cb'
-            local nm=sim.getScriptName(sim.handle_self)
-            if nm~='' then
-                funcNm=funcNm..'@'..nm
-            end
-            t=sim.getScriptAttribute(sim.handle_self,sim.scriptattribute_scripttype)
+            t=sim.getScriptAttribute(sim.handle_self,sim.scriptattribute_scripthandle)
         end
         retVal=simIK._getConfigForTipPose(env,ikGroup,joints,thresholdDist,-maxTime*1000,metric,funcNm,t,jointOptions,lowLimits,ranges)
     end
@@ -355,8 +352,34 @@ function simIK.getConfigForTipPose(...)
     return retVal
 end
 
+function simIK.findConfig(...)
+    local ikEnv,ikGroup,joints,thresholdDist,maxTime,metric,callback,auxData=checkargs({{type='int'},{type='int'},{type='table',size='1..*',item_type='int'},{type='float',default=0.1},{type='float',default=0.5},{type='table',size=4,item_type='float',default={1,1,1,0.1},nullable=true},{type='any',default=NIL,nullable=true},{type='any',default=NIL,nullable=true}},...)
+    local dof=#joints
+    local lb=sim.setThreadAutomaticSwitch(false)
+
+    --local env=simIK.duplicateEnvironment(ikEnv)
+    local env=ikEnv
+    if metric==nil then metric={1,1,1,0.1} end
+    function __cb(config)
+        if type(callback)=='string' then
+            return _G[callback](config,auxData)
+        else
+            return callback(config,auxData)
+        end
+    end
+    local funcNm,t
+    if callback then
+        funcNm='__cb'
+        t=sim.getScriptAttribute(sim.handle_self,sim.scriptattribute_scripthandle)
+    end
+    local retVal=simIK._findConfig(env,ikGroup,joints,thresholdDist,maxTime*1000,metric,funcNm,t)
+    --simIK.eraseEnvironment(env)
+    sim.setThreadAutomaticSwitch(lb)
+    return retVal
+end
+
 function simIK.generatePath(...)
-    local ikEnv,ikGroup,ikJoints,tip,ptCnt,callback,auxData=checkargs({{type='int'},{type='int'},{type='table',size='1..*',item_type='int'},{type='int'},{type='int'},{type='func',default=NIL,nullable=true},{type='any',default=NIL}},...)
+    local ikEnv,ikGroup,ikJoints,tip,ptCnt,callback,auxData=checkargs({{type='int'},{type='int'},{type='table',size='1..*',item_type='int'},{type='int'},{type='int'},{type='any',default=NIL,nullable=true},{type='any',default=NIL}},...)
 
     local lb=sim.setThreadAutomaticSwitch(false)
 
@@ -370,7 +393,11 @@ function simIK.generatePath(...)
     end
     local success=true
     if callback then
-        success=callback(retPath[1])
+        if type(callback)=='string' then
+            success=_G[callback](retPath[1])
+        else
+            success=callback(retPath[1])
+        end
     end
     if success then
         for j=1,ptCnt-1,1 do
@@ -386,7 +413,11 @@ function simIK.generatePath(...)
                 retPath[j+1][i]=simIK.getJointPosition(env,ikJoints[i])
             end
             if callback then
-                success=callback(retPath[j+1])
+                if type(callback)=='string' then
+                    success=_G[callback](retPath[j+1])
+                else
+                    success=callback(retPath[j+1])
+                end
             end
             if not success then
                 break
@@ -404,22 +435,31 @@ function simIK.generatePath(...)
     return retPath
 end
 
+function simIK.getObjectPose(...)
+    local ikEnv,obj,relObj=checkargs({{type='int'},{type='int'},{type='int'}},...)
+    local pos,quat=simIK.getObjectTransformation(ikEnv,obj,relObj)
+    return {pos[1],pos[2],pos[3],quat[1],quat[2],quat[3],quat[4]}
+end
+
+function simIK.setObjectPose(...)
+    local ikEnv,obj,relObj,pose=checkargs({{type='int'},{type='int'},{type='int'},{type='table',size=7,item_type='float'}},...)
+    simIK.setObjectTransformation(ikEnv,obj,relObj,{pose[1],pose[2],pose[3]},{pose[4],pose[5],pose[6],pose[7]})
+end
+
 function simIK.init()
     -- can only be executed once sim.* functions were initialized
-    sim.registerScriptFunction('simIK.getAlternateConfigs@simIK','table configs=simIK.getAlternateConfigs(number environmentHandle,table jointHandles,table lowLimits=nil,table ranges=nil)')
-    sim.registerScriptFunction('simIK.addIkElementFromScene@simIK','number ikElement,table simToIkObjectMap=simIK.addIkElementFromScene(number environmentHandle\n,number ikGroup,number baseHandle,number tipHandle,\nnumber targetHandle,number constraints)')
-    sim.registerScriptFunction('simIK.applySceneToIkEnvironment@simIK','simIK.applySceneToIkEnvironment(number environmentHandle,number ikGroup)')
-    sim.registerScriptFunction('simIK.applyIkEnvironmentToScene@simIK','number result=simIK.applyIkEnvironmentToScene(number environmentHandle,number ikGroup,bool applyOnlyWhenSuccessful=false)')
-    sim.registerScriptFunction('simIK.eraseEnvironment@simIK','simIK.eraseEnvironment(number environmentHandle)')
-    sim.registerScriptFunction('simIK.getConfigForTipPose@simIK','table jointPositions=simIK.getConfigForTipPose(number environmentHandle,\nnumber ikGroupHandle,table jointHandles,number thresholdDist=0.1,\nnumber maxTime=0.5,table_4 metric={1,1,1,0.1},function validationCallback=nil,\nauxData=nil,table jointOptions={},table lowLimits={},table ranges={})')
-    sim.registerScriptFunction('simIK.generatePath@simIK','table path=simIK.generatePath(number environmentHandle,\nnumber ikGroupHandle,table jointHandles,number tipHandle,\nnumber pathPointCount,function validationCallback=nil,auxData=nil)')
-    
+    sim.registerScriptFunction('simIK.getAlternateConfigs@simIK','float[] configs=simIK.getAlternateConfigs(int environmentHandle,int[] jointHandles,float[] lowLimits=nil,float[] ranges=nil)')
+    sim.registerScriptFunction('simIK.addIkElementFromScene@simIK','int ikElement,map simToIkObjectMap=simIK.addIkElementFromScene(int environmentHandle,int ikGroup,int baseHandle,int tipHandle,int targetHandle,int constraints)')
+    sim.registerScriptFunction('simIK.applySceneToIkEnvironment@simIK','simIK.applySceneToIkEnvironment(int environmentHandle,int ikGroup)')
+    sim.registerScriptFunction('simIK.applyIkEnvironmentToScene@simIK','int result=simIK.applyIkEnvironmentToScene(int environmentHandle,int ikGroup,bool applyOnlyWhenSuccessful=false)')
+    sim.registerScriptFunction('simIK.eraseEnvironment@simIK','simIK.eraseEnvironment(int environmentHandle)')
+    sim.registerScriptFunction('simIK.findConfig@simIK','float[] jointPositions=simIK.findConfig(int environmentHandle,int ikGroupHandle,int[] jointHandles,float thresholdDist=0.1,float maxTime=0.5,float[4] metric={1,1,1,0.1},func validationCallback=nil,auxData=nil)')
+    sim.registerScriptFunction('simIK.generatePath@simIK','float[] path=simIK.generatePath(int environmentHandle,int ikGroupHandle,int[] jointHandles,int tipHandle,int pathPointCount,function validationCallback=nil,auxData=nil)')
+    sim.registerScriptFunction('simIK.getObjectPose@simIK','float[7] pose=simIK.getObjectPose(int environmentHandle,int objectHandle,int relativeToObjectHandle)')
+    sim.registerScriptFunction('simIK.setObjectPose@simIK','simIK.setObjectPose(int environmentHandle,int objectHandle,int relativeToObjectHandle,float[7] pose)')
     simIK.init=nil
 end
 
-if not __initFunctions then
-    __initFunctions={}
-end
-__initFunctions[#__initFunctions+1]=simIK.init
+sim.registerScriptFuncHook('sysCall_init','simIK.init',true)
 
 return simIK

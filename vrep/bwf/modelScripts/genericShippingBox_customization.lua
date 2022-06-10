@@ -638,7 +638,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -649,9 +649,9 @@ function sysCall_init()
         data['name']='SHIPPINGBOX'
     end
     writePartInfo(data)
-    texture=sim.getObjectHandle('genericShippingBox_texture')
-    smallLabel=sim.getObjectHandle('genericShippingBox_smallLabel')
-    largeLabel=sim.getObjectHandle('genericShippingBox_largeLabel')
+    texture=sim.getObject('./genericShippingBox_texture')
+    smallLabel=sim.getObject('./genericShippingBox_smallLabel')
+    largeLabel=sim.getObject('./genericShippingBox_largeLabel')
     
     updatePluginRepresentation()
     previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos=simBWF.readSessionPersistentObjectData(model,"dlgPosAndSize")

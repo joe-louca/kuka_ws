@@ -52,8 +52,9 @@ class CAMERA:
             # Get image
             ret, frame = cap.read() # 640x480 size
             height, width, layers = frame.shape
-            new_h = int(height / 2)
-            new_w = int(width / 2)
+            resize_factor = 1
+            new_h = int(height / resize_factor)
+            new_w = int(width / resize_factor)
             resize = cv2.resize(frame, (new_w, new_h))
             # Store with timestamp
             t = rospy.get_time()

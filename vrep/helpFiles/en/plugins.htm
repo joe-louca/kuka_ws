@@ -28,16 +28,18 @@
 <p>Each plugin is required to have following 3 entry point procedures:<br>
 </p>
 
-<pre class=lightBlueBox>extern &quot;C&quot; __declspec(dllexport) unsigned char simStart(void* reserved,int reservedInt);<br>extern &quot;C&quot; __declspec(dllexport) void simEnd();<br>extern &quot;C&quot; __declspec(dllexport) void* simMessage(int message,int* auxiliaryData,void* customData,int* replyData);</pre>
+<code class="hljs language-c++ coppelia-coppeliasim-plugin">
+extern &quot;C&quot; __declspec(dllexport) unsigned char simStart(void* reserved,int reservedInt);<br>extern &quot;C&quot; __declspec(dllexport) void simEnd();<br>extern &quot;C&quot; __declspec(dllexport) void* simMessage(int message,int* auxiliaryData,void* customData,int* replyData);
+</code>
 
 <p>If one procedure is missing then the plugin will be unloaded and won't be operational. Refer to the <a href="userInterface.htm#ConsoleWindow">console window</a> at start-up for the loading status of plugins. Following briefly describes above three entry point purpose:<br>
 </p>
 <br>
 
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="simStart"></a>simStart
-</td></tr></table> 
+</h2>
 
 
 <p>This procedure will be called one time just after the main client application loaded the plugin. The procedure should:<br>
@@ -59,18 +61,18 @@ register custom script variables (if required) .
 <br>
 
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="simEnd"></a>simEnd
-</td></tr></table> 
+</h2>
 
 
 <p>This procedure will be called one time just before the simulation loop exits. The procedure should release all resources reserved since <strong>simStart</strong> was called.<br>
 </p>
 <br>
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="simMessage"></a>simMessage
-</td></tr></table> 
+</h2>
 
 
 <p>This procedure will be called very often while the simulator is running. The procedure is in charge of monitoring messages of interest and reacting to them. It is important to react to following events (best by intercepting the <a href="apiConstants.htm#simulatorMessages">sim_message_eventcallback_instancepass</a> message) depending on your plugin's task:</p>
@@ -115,7 +117,7 @@ For more information on plugins, refer to following  repositories:
 <li><a href="https://github.com/CoppeliaRobotics/simExtVision" target="_blank">simExtVision</a>: a plugin that handles specific vision tasks (e.g. simulation of the Velodyne sensor, or simulation of an omnidirectional camera).<br>
 </li>
 
-<li><a href="https://github.com/CoppeliaRobotics/simExtBubbleRob" target="_blank">simExtBubbleRob</a>: illustrates how to add customized Lua functions and how to handle several specific <a href="models.htm">models</a>. Refer also to the <a href="pluginTutorial.htm">related plugin tutorial</a>.<br>
+<li><a href="https://github.com/CoppeliaRobotics/simExtBubbleRob" target="_blank">simExtBubbleRob</a>: illustrates how to add customized script functions and how to handle several specific <a href="models.htm">models</a>. Refer also to the <a href="pluginTutorial.htm">related plugin tutorial</a>.<br>
 </li>
 
 <li><a href="https://github.com/CoppeliaRobotics/simExtK3" target="_blank">simExtK3</a>: the plugin related to the KheperaIII model.<br>
@@ -127,8 +129,6 @@ For more information on plugins, refer to following  repositories:
 <li><a href="https://github.com/CoppeliaRobotics/simExtROS" target="_blank">simExtROS</a>: the ROS package allowing you to build the <a href="rosInterf.htm">ROS Interface</a> for CoppeliaSim. </li>
 
 <li><a href="https://github.com/CoppeliaRobotics/simExtROS2" target="_blank">simExtROS2</a>: the ROS 2 package allowing you to build the <a href="ros2Interface.htm">ROS 2 Interface</a> for CoppeliaSim.</li>
-
-<li><a href="https://github.com/CoppeliaRobotics/simExtB0" target="_blank">simExtB0</a>: the <a href="blueZeroPlugin.htm">BlueZero</a> framework wrapped in a CoppeliaSim plugin. </li>
 
 <li><a href="https://github.com/CoppeliaRobotics/simExtMTB" target="_blank">simExtMTB</a>: illustrates a Qt plugin which  integrates a robot language interpreter (or other emulator) into CoppeliaSim. Refer also to its <a href="robotLanguageIntegrationTutorial.htm">related tutorial</a>.
 </li>

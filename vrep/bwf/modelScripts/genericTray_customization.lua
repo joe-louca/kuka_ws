@@ -779,15 +779,15 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
     simBWF.checkIfCodeAndModelMatch(model,_CODEVERSION_,_info['version'])
     writeInfo(_info)
-    connection=sim.getObjectHandle('genericTray_borderConnection')
+    connection=sim.getObject('./genericTray_borderConnection')
     border=sim.getObjectChild(connection,0)
-    borderElement=sim.getObjectHandle('genericTray_borderElement')
+    borderElement=sim.getObject('./genericTray_borderElement')
 	
     updatePluginRepresentation()
     previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos=simBWF.readSessionPersistentObjectData(model,"dlgPosAndSize")

@@ -29,7 +29,7 @@ displayConsoleIfNeeded=function(info)
         for key,value in pairs(info) do
             local str='<DESTROYED OBJECT>:\n'
             if sim.isHandle(key) then
-                str=sim.getObjectName(key)..':\n'
+                str=sim.getObjectAlias(key,1)..':\n'
             end
             str=str..'    handle: '..key..', partName: '..value['partName']..', destinationName: '..value['destinationName']..'\n'
             str=str..'    pick position: ('
@@ -174,7 +174,7 @@ generateTrackingLocations=function()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     palletizerData=sim.readCustomDataBlock(model,'XYZ_PARTPALLETIZER_INFO')
     palletizerData=sim.unpackTable(palletizerData)
     conveyorHandle=simBWF.getReferencedObjectHandle(model,simBWF.PALLETIZER_CONVEYOR_REF)

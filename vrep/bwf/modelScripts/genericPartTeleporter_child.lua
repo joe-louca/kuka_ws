@@ -44,7 +44,7 @@ getSensorPart=function()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,'XYZ_PARTTELEPORTER_INFO')
     data=sim.unpackTable(data)
     isSource=(data['bitCoded']&2)>0

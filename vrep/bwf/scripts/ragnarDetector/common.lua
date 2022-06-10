@@ -88,9 +88,9 @@ model.objRefJobInfo={6,3} -- information about jobs stored in object references.
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.detectorBox=sim.getObjectHandle('RagnarDetector_detectorBox')
-model.handles.detectorSensor=sim.getObjectHandle('RagnarDetector_detectorSensor')
+model.handles.detectorBox=sim.getObject('./RagnarDetector_detectorBox')
+model.handles.detectorSensor=sim.getObject('./RagnarDetector_detectorSensor')
 model.handles.calibrationBalls={model.handle}
 for i=2,3,1 do
-    model.handles.calibrationBalls[i]=sim.getObjectHandle('RagnarDetector_calibrationBall'..i)
+    model.handles.calibrationBalls[i]=sim.getObject('./RagnarDetector_calibrationBall'..i)
 end

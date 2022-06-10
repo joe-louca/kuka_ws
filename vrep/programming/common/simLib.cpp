@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #include <cstring>
+#include <cstdlib>
 #if defined (__linux) || defined (__APPLE__)
     #include <dlfcn.h>
 #endif
@@ -56,14 +57,17 @@ ptrSimSetStringParam simSetStringParam=nullptr;
 ptrSimGetStringParam simGetStringParam=nullptr;
 ptrSimSetArrayParam simSetArrayParam=nullptr;
 ptrSimGetArrayParam simGetArrayParam=nullptr;
-ptrSimSetStringNamedParam simSetStringNamedParam=nullptr;
-ptrSimGetStringNamedParam simGetStringNamedParam=nullptr;
-ptrSimGetObjectHandle simGetObjectHandle=nullptr;
+ptrSimSetNamedStringParam simSetNamedStringParam=nullptr;
+ptrSimGetNamedStringParam simGetNamedStringParam=nullptr;
+ptrSimGetObject simGetObject=nullptr;
+ptrSimGetObjectUid simGetObjectUid=nullptr;
+ptrSimGetObjectFromUid simGetObjectFromUid=nullptr;
+ptrSimGetScriptHandleEx simGetScriptHandleEx=nullptr;
 ptrSimRemoveObject simRemoveObject=nullptr;
+ptrSimRemoveObjects simRemoveObjects=nullptr;
 ptrSimRemoveModel simRemoveModel=nullptr;
-ptrSimGetObjectName simGetObjectName=nullptr;
-ptrSimGetObjects simGetObjects=nullptr;
-ptrSimSetObjectName simSetObjectName=nullptr;
+ptrSimGetObjectAlias simGetObjectAlias=nullptr;
+ptrSimSetObjectAlias simSetObjectAlias=nullptr;
 ptrSimGetObjectMatrix simGetObjectMatrix=nullptr;
 ptrSimSetObjectMatrix simSetObjectMatrix=nullptr;
 ptrSimGetObjectPose simGetObjectPose=nullptr;
@@ -77,8 +81,8 @@ ptrSimSetJointPosition simSetJointPosition=nullptr;
 ptrSimSetJointTargetPosition simSetJointTargetPosition=nullptr;
 ptrSimGetJointTargetPosition simGetJointTargetPosition=nullptr;
 ptrSimSetJointMaxForce simSetJointMaxForce=nullptr;
-ptrSimGetJointMatrix simGetJointMatrix=nullptr;
-ptrSimSetSphericalJointMatrix simSetSphericalJointMatrix=nullptr;
+ptrSimGetObjectChildPose simGetObjectChildPose=nullptr;
+ptrSimSetObjectChildPose simSetObjectChildPose=nullptr;
 ptrSimGetJointInterval simGetJointInterval=nullptr;
 ptrSimSetJointInterval simSetJointInterval=nullptr;
 ptrSimGetObjectParent simGetObjectParent=nullptr;
@@ -88,6 +92,7 @@ ptrSimGetObjectType simGetObjectType=nullptr;
 ptrSimGetJointType simGetJointType=nullptr;
 ptrSimBuildIdentityMatrix simBuildIdentityMatrix=nullptr;
 ptrSimBuildMatrix simBuildMatrix=nullptr;
+ptrSimBuildPose simBuildPose=nullptr;
 ptrSimGetEulerAnglesFromMatrix simGetEulerAnglesFromMatrix=nullptr;
 ptrSimInvertMatrix simInvertMatrix=nullptr;
 ptrSimMultiplyMatrices simMultiplyMatrices=nullptr;
@@ -96,8 +101,6 @@ ptrSimTransformVector simTransformVector=nullptr;
 ptrSimReservedCommand simReservedCommand=nullptr;
 ptrSimGetSimulationTime simGetSimulationTime=nullptr;
 ptrSimGetSimulationState simGetSimulationState=nullptr;
-ptrSimGetSystemTime simGetSystemTime=nullptr;
-ptrSimGetSystemTimeInMilliseconds simGetSystemTimeInMilliseconds=nullptr;
 ptrSimGetSystemTimeInMs simGetSystemTimeInMs=nullptr;
 ptrSimLoadScene simLoadScene=nullptr;
 ptrSimCloseScene simCloseScene=nullptr;
@@ -105,25 +108,12 @@ ptrSimSaveScene simSaveScene=nullptr;
 ptrSimLoadModel simLoadModel=nullptr;
 ptrSimSaveModel simSaveModel=nullptr;
 ptrSimDoesFileExist simDoesFileExist=nullptr;
-ptrSimIsObjectInSelection simIsObjectInSelection=nullptr;
-ptrSimAddObjectToSelection simAddObjectToSelection=nullptr;
-ptrSimRemoveObjectFromSelection simRemoveObjectFromSelection=nullptr;
-ptrSimGetObjectSelectionSize simGetObjectSelectionSize=nullptr;
-ptrSimGetObjectLastSelection simGetObjectLastSelection=nullptr;
-ptrSimGetObjectSelection simGetObjectSelection=nullptr;
+ptrSimGetObjectSel simGetObjectSel=nullptr;
+ptrSimSetObjectSel simSetObjectSel=nullptr;
 ptrSimHandleProximitySensor simHandleProximitySensor=nullptr;
 ptrSimReadProximitySensor simReadProximitySensor=nullptr;
 ptrSimHandleDynamics simHandleDynamics=nullptr;
-ptrSimGetScriptHandle simGetScriptHandle=nullptr;
-ptrSimSetScriptText simSetScriptText=nullptr;
-ptrSimGetScriptText simGetScriptText=nullptr;
-ptrSimGetScriptProperty simGetScriptProperty=nullptr;
 ptrSimAssociateScriptWithObject simAssociateScriptWithObject=nullptr;
-ptrSimGetScript simGetScript=nullptr;
-ptrSimGetScriptAssociatedWithObject simGetScriptAssociatedWithObject=nullptr;
-ptrSimGetCustomizationScriptAssociatedWithObject simGetCustomizationScriptAssociatedWithObject=nullptr;
-ptrSimGetObjectAssociatedWithScript simGetObjectAssociatedWithScript=nullptr;
-ptrSimGetScriptName simGetScriptName=nullptr;
 ptrSimHandleMainScript simHandleMainScript=nullptr;
 ptrSimResetScript simResetScript=nullptr;
 ptrSimAddScript simAddScript=nullptr;
@@ -138,10 +128,6 @@ ptrSimReleaseBuffer simReleaseBuffer=nullptr;
 ptrSimCheckCollision simCheckCollision=nullptr;
 ptrSimCheckCollisionEx simCheckCollisionEx=nullptr;
 ptrSimCheckDistance simCheckDistance=nullptr;
-ptrSimGetObjectConfiguration simGetObjectConfiguration=nullptr;
-ptrSimSetObjectConfiguration simSetObjectConfiguration=nullptr;
-ptrSimGetConfigurationTree simGetConfigurationTree=nullptr;
-ptrSimSetConfigurationTree simSetConfigurationTree=nullptr;
 ptrSimSetSimulationTimeStep simSetSimulationTimeStep=nullptr;
 ptrSimGetSimulationTimeStep simGetSimulationTimeStep=nullptr;
 ptrSimGetRealTimeSimulation simGetRealTimeSimulation=nullptr;
@@ -170,19 +156,13 @@ ptrSimSetNavigationMode simSetNavigationMode=nullptr;
 ptrSimGetNavigationMode simGetNavigationMode=nullptr;
 ptrSimSetPage simSetPage=nullptr;
 ptrSimGetPage simGetPage=nullptr;
-ptrSimDisplayDialog simDisplayDialog=nullptr;
-ptrSimGetDialogResult simGetDialogResult=nullptr;
-ptrSimGetDialogInput simGetDialogInput=nullptr;
-ptrSimEndDialog simEndDialog=nullptr;
 ptrSimRegisterScriptCallbackFunction simRegisterScriptCallbackFunction=nullptr;
 ptrSimRegisterScriptVariable simRegisterScriptVariable=nullptr;
+ptrSimRegisterScriptFuncHook simRegisterScriptFuncHook=nullptr;
 ptrSimSetJointTargetVelocity simSetJointTargetVelocity=nullptr;
 ptrSimGetJointTargetVelocity simGetJointTargetVelocity=nullptr;
 ptrSimCopyPasteObjects simCopyPasteObjects=nullptr;
-ptrSimScaleSelectedObjects simScaleSelectedObjects=nullptr;
 ptrSimScaleObjects simScaleObjects=nullptr;
-ptrSimDeleteSelectedObjects simDeleteSelectedObjects=nullptr;
-ptrSimGetObjectUniqueIdentifier simGetObjectUniqueIdentifier=nullptr;
 ptrSimAddDrawingObject simAddDrawingObject=nullptr;
 ptrSimRemoveDrawingObject simRemoveDrawingObject=nullptr;
 ptrSimAddDrawingObjectItem simAddDrawingObjectItem=nullptr;
@@ -209,7 +189,6 @@ ptrSimGetObjectProperty simGetObjectProperty=nullptr;
 ptrSimSetObjectSpecialProperty simSetObjectSpecialProperty=nullptr;
 ptrSimGetObjectSpecialProperty simGetObjectSpecialProperty=nullptr;
 ptrSimReadForceSensor simReadForceSensor=nullptr;
-ptrSimBreakForceSensor simBreakForceSensor=nullptr;
 ptrSimGetShapeVertex simGetShapeVertex=nullptr;
 ptrSimGetShapeTriangle simGetShapeTriangle=nullptr;
 ptrSimSetLightParameters simSetLightParameters=nullptr;
@@ -225,6 +204,8 @@ ptrSimGetLinkDummy simGetLinkDummy=nullptr;
 ptrSimSetLinkDummy simSetLinkDummy=nullptr;
 ptrSimSetModelProperty simSetModelProperty=nullptr;
 ptrSimGetModelProperty simGetModelProperty=nullptr;
+ptrSimSetObjectColor simSetObjectColor=nullptr;
+ptrSimGetObjectColor simGetObjectColor=nullptr;
 ptrSimSetShapeColor simSetShapeColor=nullptr;
 ptrSimGetShapeColor simGetShapeColor=nullptr;
 ptrSimResetDynamicObject simResetDynamicObject=nullptr;
@@ -258,6 +239,10 @@ ptrSimGetObjectFloatParam simGetObjectFloatParam=nullptr;
 ptrSimSetObjectFloatParam simSetObjectFloatParam=nullptr;
 ptrSimGetObjectStringParam simGetObjectStringParam=nullptr;
 ptrSimSetObjectStringParam simSetObjectStringParam=nullptr;
+ptrSimGetScriptInt32Param simGetScriptInt32Param=nullptr;
+ptrSimSetScriptInt32Param simSetScriptInt32Param=nullptr;
+ptrSimGetScriptStringParam simGetScriptStringParam=nullptr;
+ptrSimSetScriptStringParam simSetScriptStringParam=nullptr;
 ptrSimSetSimulationPassesPerRenderingPass simSetSimulationPassesPerRenderingPass=nullptr;
 ptrSimGetRotationAxis simGetRotationAxis=nullptr;
 ptrSimRotateAroundAxis simRotateAroundAxis=nullptr;
@@ -280,21 +265,16 @@ ptrSimSetVisionSensorCharImage simSetVisionSensorCharImage=nullptr;
 ptrSimGetVisionSensorDepthBuffer simGetVisionSensorDepthBuffer=nullptr;
 ptrSimGetObjectQuaternion simGetObjectQuaternion=nullptr;
 ptrSimSetObjectQuaternion simSetObjectQuaternion=nullptr;
-ptrSimRMLPosition simRMLPosition=nullptr;
-ptrSimRMLVelocity simRMLVelocity=nullptr;
-ptrSimRMLPos simRMLPos=nullptr;
-ptrSimRMLVel simRMLVel=nullptr;
-ptrSimRMLStep simRMLStep=nullptr;
-ptrSimRMLRemove simRMLRemove=nullptr;
+ptrSimRuckigPos simRuckigPos=nullptr;
+ptrSimRuckigVel simRuckigVel=nullptr;
+ptrSimRuckigStep simRuckigStep=nullptr;
+ptrSimRuckigRemove simRuckigRemove=nullptr;
 ptrSimBuildMatrixQ simBuildMatrixQ=nullptr;
 ptrSimGetQuaternionFromMatrix simGetQuaternionFromMatrix=nullptr;
-ptrSimFileDialog simFileDialog=nullptr;
-ptrSimMsgBox simMsgBox=nullptr;
 ptrSimGroupShapes simGroupShapes=nullptr;
 ptrSimUngroupShape simUngroupShape=nullptr;
 ptrSimConvexDecompose simConvexDecompose=nullptr;
 ptrSimQuitSimulator simQuitSimulator=nullptr;
-ptrSimEnableEventCallback simEnableEventCallback=nullptr;
 ptrSimSetShapeMaterial simSetShapeMaterial=nullptr;
 ptrSimGetTextureId simGetTextureId=nullptr;
 ptrSimReadTexture simReadTexture=nullptr;
@@ -304,9 +284,8 @@ ptrSimWriteCustomDataBlock simWriteCustomDataBlock=nullptr;
 ptrSimReadCustomDataBlock simReadCustomDataBlock=nullptr;
 ptrSimReadCustomDataBlockTags simReadCustomDataBlockTags=nullptr;
 ptrSimGetShapeGeomInfo simGetShapeGeomInfo=nullptr;
+ptrSimGetObjects simGetObjects=nullptr;
 ptrSimGetObjectsInTree simGetObjectsInTree=nullptr;
-ptrSimSetObjectSizeValues simSetObjectSizeValues=nullptr;
-ptrSimGetObjectSizeValues simGetObjectSizeValues=nullptr;
 ptrSimScaleObject simScaleObject=nullptr;
 ptrSimSetShapeTexture simSetShapeTexture=nullptr;
 ptrSimGetShapeTextureId simGetShapeTextureId=nullptr;
@@ -314,8 +293,6 @@ ptrSimCreateCollectionEx simCreateCollectionEx=nullptr;
 ptrSimAddItemToCollection simAddItemToCollection=nullptr;
 ptrSimDestroyCollection simDestroyCollection=nullptr;
 ptrSimGetCollectionObjects simGetCollectionObjects=nullptr;
-ptrSimSetScriptAttribute simSetScriptAttribute=nullptr;
-ptrSimGetScriptAttribute simGetScriptAttribute=nullptr;
 ptrSimReorientShapeBoundingBox simReorientShapeBoundingBox=nullptr;
 ptrSimSaveImage simSaveImage=nullptr;
 ptrSimLoadImage simLoadImage=nullptr;
@@ -361,7 +338,6 @@ ptrSimGetStackFloatTable simGetStackFloatTable=nullptr;
 ptrSimGetStackDoubleTable simGetStackDoubleTable=nullptr;
 ptrSimUnfoldStackTable simUnfoldStackTable=nullptr;
 ptrSimDebugStack simDebugStack=nullptr;
-ptrSimSetScriptVariable simSetScriptVariable=nullptr;
 ptrSimGetEngineFloatParam simGetEngineFloatParam=nullptr;
 ptrSimGetEngineInt32Param simGetEngineInt32Param=nullptr;
 ptrSimGetEngineBoolParam simGetEngineBoolParam=nullptr;
@@ -410,6 +386,10 @@ ptrSimIsDynamicallyEnabled simIsDynamicallyEnabled=nullptr;
 ptrSimGenerateShapeFromPath simGenerateShapeFromPath=nullptr;
 ptrSimGetClosestPosOnPath simGetClosestPosOnPath=nullptr;
 ptrSimInitScript simInitScript=nullptr;
+ptrSimModuleEntry simModuleEntry=nullptr;
+ptrSimCheckExecAuthorization simCheckExecAuthorization=nullptr;
+
+
 
 
 // Following courtesy of Stephen James:
@@ -440,6 +420,7 @@ ptr_simGetIkGroupObject _simGetIkGroupObject=nullptr;
 ptr_simMpHandleIkGroupObject _simMpHandleIkGroupObject=nullptr;
 ptr_simGetObjectLocalTransformation _simGetObjectLocalTransformation=nullptr;
 ptr_simSetObjectLocalTransformation _simSetObjectLocalTransformation=nullptr;
+ptr_simDynReportObjectCumulativeTransformation _simDynReportObjectCumulativeTransformation=nullptr;
 ptr_simSetObjectCumulativeTransformation _simSetObjectCumulativeTransformation=nullptr;
 ptr_simGetObjectCumulativeTransformation _simGetObjectCumulativeTransformation=nullptr;
 ptr_simIsShapeDynamicallyStatic _simIsShapeDynamicallyStatic=nullptr;
@@ -471,8 +452,6 @@ ptr_simGetAdditionalForceAndTorque _simGetAdditionalForceAndTorque=nullptr;
 ptr_simClearAdditionalForceAndTorque _simClearAdditionalForceAndTorque=nullptr;
 ptr_simGetJointPositionInterval _simGetJointPositionInterval=nullptr;
 ptr_simGetJointType _simGetJointType=nullptr;
-ptr_simIsForceSensorBroken _simIsForceSensorBroken=nullptr;
-ptr_simGetDynamicForceSensorLocalTransformationPart2 _simGetDynamicForceSensorLocalTransformationPart2=nullptr;
 ptr_simIsDynamicMotorEnabled _simIsDynamicMotorEnabled=nullptr;
 ptr_simIsDynamicMotorPositionCtrlEnabled _simIsDynamicMotorPositionCtrlEnabled=nullptr;
 ptr_simIsDynamicMotorTorqueModulationEnabled _simIsDynamicMotorTorqueModulationEnabled=nullptr;
@@ -485,10 +464,6 @@ ptr_simSetDynamicMotorReflectedPositionFromDynamicEngine _simSetDynamicMotorRefl
 ptr_simSetJointSphericalTransformation _simSetJointSphericalTransformation=nullptr;
 ptr_simAddForceSensorCumulativeForcesAndTorques _simAddForceSensorCumulativeForcesAndTorques=nullptr;
 ptr_simAddJointCumulativeForcesOrTorques _simAddJointCumulativeForcesOrTorques=nullptr;
-ptr_simSetDynamicJointLocalTransformationPart2 _simSetDynamicJointLocalTransformationPart2=nullptr;
-ptr_simSetDynamicForceSensorLocalTransformationPart2 _simSetDynamicForceSensorLocalTransformationPart2=nullptr;
-ptr_simSetDynamicJointLocalTransformationPart2IsValid _simSetDynamicJointLocalTransformationPart2IsValid=nullptr;
-ptr_simSetDynamicForceSensorLocalTransformationPart2IsValid _simSetDynamicForceSensorLocalTransformationPart2IsValid=nullptr;
 ptr_simGetGeomWrapFromGeomProxy _simGetGeomWrapFromGeomProxy=nullptr;
 ptr_simGetLocalInertiaFrame _simGetLocalInertiaFrame=nullptr;
 ptr_simGetPurePrimitiveType _simGetPurePrimitiveType=nullptr;
@@ -706,6 +681,63 @@ ptrSimSetModuleMenuItemState simSetModuleMenuItemState=nullptr;
 ptrSimSetInt32Signal simSetIntegerSignal=nullptr;
 ptrSimGetInt32Signal simGetIntegerSignal=nullptr;
 ptrSimClearInt32Signal simClearIntegerSignal=nullptr;
+ptrSimGetObjectName simGetObjectName=nullptr;
+ptrSimSetObjectName simSetObjectName=nullptr;
+ptrSimGetScriptName simGetScriptName=nullptr;
+ptrSimGetScriptHandle simGetScriptHandle=nullptr;
+ptrSimSetScriptVariable simSetScriptVariable=nullptr;
+ptrSimGetObjectHandle simGetObjectHandle=nullptr;
+ptrSimGetObjectHandleEx simGetObjectHandleEx=nullptr;
+ptrSimGetScript simGetScript=nullptr;
+ptrSimGetScriptAssociatedWithObject simGetScriptAssociatedWithObject=nullptr;
+ptrSimGetCustomizationScriptAssociatedWithObject simGetCustomizationScriptAssociatedWithObject=nullptr;
+ptrSimGetObjectAssociatedWithScript simGetObjectAssociatedWithScript=nullptr;
+ptrSimGetObjectConfiguration simGetObjectConfiguration=nullptr;
+ptrSimSetObjectConfiguration simSetObjectConfiguration=nullptr;
+ptrSimGetConfigurationTree simGetConfigurationTree=nullptr;
+ptrSimSetConfigurationTree simSetConfigurationTree=nullptr;
+ptrSimEnableEventCallback simEnableEventCallback=nullptr;
+ptrSimSetObjectSizeValues simSetObjectSizeValues=nullptr;
+ptrSimGetObjectSizeValues simGetObjectSizeValues=nullptr;
+ptrSimRMLPosition simRMLPosition=nullptr;
+ptrSimRMLVelocity simRMLVelocity=nullptr;
+ptrSimRMLPos simRMLPos=nullptr;
+ptrSimRMLVel simRMLVel=nullptr;
+ptrSimRMLStep simRMLStep=nullptr;
+ptrSimRMLRemove simRMLRemove=nullptr;
+ptrSimGetSystemTime simGetSystemTime=nullptr;
+ptrSimGetSystemTimeInMilliseconds simGetSystemTimeInMilliseconds=nullptr;
+ptrSimFileDialog simFileDialog=nullptr;
+ptrSimMsgBox simMsgBox=nullptr;
+ptrSimDisplayDialog simDisplayDialog=nullptr;
+ptrSimGetDialogResult simGetDialogResult=nullptr;
+ptrSimGetDialogInput simGetDialogInput=nullptr;
+ptrSimEndDialog simEndDialog=nullptr;
+ptrSimIsObjectInSelection simIsObjectInSelection=nullptr;
+ptrSimAddObjectToSelection simAddObjectToSelection=nullptr;
+ptrSimRemoveObjectFromSelection simRemoveObjectFromSelection=nullptr;
+ptrSimGetObjectSelectionSize simGetObjectSelectionSize=nullptr;
+ptrSimGetObjectLastSelection simGetObjectLastSelection=nullptr;
+ptrSimGetObjectSelection simGetObjectSelection=nullptr;
+ptrSimScaleSelectedObjects simScaleSelectedObjects=nullptr;
+ptrSimDeleteSelectedObjects simDeleteSelectedObjects=nullptr;
+ptrSimSetNamedStringParam simSetStringNamedParam=nullptr;
+ptrSimGetNamedStringParam simGetStringNamedParam=nullptr;
+ptrSimGetObjectUniqueIdentifier simGetObjectUniqueIdentifier=nullptr;
+ptr_simSetDynamicJointLocalTransformationPart2 _simSetDynamicJointLocalTransformationPart2=nullptr;
+ptr_simSetDynamicForceSensorLocalTransformationPart2 _simSetDynamicForceSensorLocalTransformationPart2=nullptr;
+ptr_simSetDynamicJointLocalTransformationPart2IsValid _simSetDynamicJointLocalTransformationPart2IsValid=nullptr;
+ptr_simSetDynamicForceSensorLocalTransformationPart2IsValid _simSetDynamicForceSensorLocalTransformationPart2IsValid=nullptr;
+ptr_simGetDynamicForceSensorLocalTransformationPart2 _simGetDynamicForceSensorLocalTransformationPart2=nullptr;
+ptr_simIsForceSensorBroken _simIsForceSensorBroken=nullptr;
+ptrSimBreakForceSensor simBreakForceSensor=nullptr;
+ptrSimGetJointMatrix simGetJointMatrix=nullptr;
+ptrSimSetSphericalJointMatrix simSetSphericalJointMatrix=nullptr;
+ptrSimSetScriptAttribute simSetScriptAttribute=nullptr;
+ptrSimGetScriptAttribute simGetScriptAttribute=nullptr;
+ptrSimSetScriptText simSetScriptText=nullptr;
+ptrSimGetScriptText simGetScriptText=nullptr;
+ptrSimGetScriptProperty simGetScriptProperty=nullptr;
 // Deprecated end
 
 
@@ -780,14 +812,17 @@ int getSimProcAddresses(LIBRARY lib)
     simGetStringParam=(ptrSimGetStringParam)(_getProcAddress(lib,"simGetStringParam"));
     simSetArrayParam=(ptrSimSetArrayParam)(_getProcAddress(lib,"simSetArrayParam"));
     simGetArrayParam=(ptrSimGetArrayParam)(_getProcAddress(lib,"simGetArrayParam"));
-    simSetStringNamedParam=(ptrSimSetStringNamedParam)(_getProcAddress(lib,"simSetStringNamedParam"));
-    simGetStringNamedParam=(ptrSimGetStringNamedParam)(_getProcAddress(lib,"simGetStringNamedParam"));
-    simGetObjectHandle=(ptrSimGetObjectHandle)(_getProcAddress(lib,"simGetObjectHandle"));
+    simSetNamedStringParam=(ptrSimSetNamedStringParam)(_getProcAddress(lib,"simSetNamedStringParam"));
+    simGetNamedStringParam=(ptrSimGetNamedStringParam)(_getProcAddress(lib,"simGetNamedStringParam"));
+    simGetObject=(ptrSimGetObject)(_getProcAddress(lib,"simGetObject"));
+    simGetObjectUid=(ptrSimGetObjectUid)(_getProcAddress(lib,"simGetObjectUid"));
+    simGetObjectFromUid=(ptrSimGetObjectFromUid)(_getProcAddress(lib,"simGetObjectFromUid"));
+    simGetScriptHandleEx=(ptrSimGetScriptHandleEx)(_getProcAddress(lib,"simGetScriptHandleEx"));
     simRemoveObject=(ptrSimRemoveObject)(_getProcAddress(lib,"simRemoveObject"));
+    simRemoveObjects=(ptrSimRemoveObjects)(_getProcAddress(lib,"simRemoveObjects"));
     simRemoveModel=(ptrSimRemoveModel)(_getProcAddress(lib,"simRemoveModel"));
-    simGetObjectName=(ptrSimGetObjectName)(_getProcAddress(lib,"simGetObjectName"));
-    simGetObjects=(ptrSimGetObjects)(_getProcAddress(lib,"simGetObjects"));
-    simSetObjectName=(ptrSimSetObjectName)(_getProcAddress(lib,"simSetObjectName"));
+    simGetObjectAlias=(ptrSimGetObjectAlias)(_getProcAddress(lib,"simGetObjectAlias"));
+    simSetObjectAlias=(ptrSimSetObjectAlias)(_getProcAddress(lib,"simSetObjectAlias"));
     simGetObjectMatrix=(ptrSimGetObjectMatrix)(_getProcAddress(lib,"simGetObjectMatrix"));
     simSetObjectMatrix=(ptrSimSetObjectMatrix)(_getProcAddress(lib,"simSetObjectMatrix"));
     simGetObjectPose=(ptrSimGetObjectPose)(_getProcAddress(lib,"simGetObjectPose"));
@@ -801,8 +836,8 @@ int getSimProcAddresses(LIBRARY lib)
     simSetJointTargetPosition=(ptrSimSetJointTargetPosition)(_getProcAddress(lib,"simSetJointTargetPosition"));
     simGetJointTargetPosition=(ptrSimGetJointTargetPosition)(_getProcAddress(lib,"simGetJointTargetPosition"));
     simSetJointMaxForce=(ptrSimSetJointMaxForce)(_getProcAddress(lib,"simSetJointMaxForce"));
-    simGetJointMatrix=(ptrSimGetJointMatrix)(_getProcAddress(lib,"simGetJointMatrix"));
-    simSetSphericalJointMatrix=(ptrSimSetSphericalJointMatrix)(_getProcAddress(lib,"simSetSphericalJointMatrix"));
+    simGetObjectChildPose=(ptrSimGetObjectChildPose)(_getProcAddress(lib,"simGetObjectChildPose"));
+    simSetObjectChildPose=(ptrSimSetObjectChildPose)(_getProcAddress(lib,"simSetObjectChildPose"));
     simGetJointInterval=(ptrSimGetJointInterval)(_getProcAddress(lib,"simGetJointInterval"));
     simSetJointInterval=(ptrSimSetJointInterval)(_getProcAddress(lib,"simSetJointInterval"));
     simGetObjectParent=(ptrSimGetObjectParent)(_getProcAddress(lib,"simGetObjectParent"));
@@ -812,6 +847,7 @@ int getSimProcAddresses(LIBRARY lib)
     simGetJointType=(ptrSimGetJointType)(_getProcAddress(lib,"simGetJointType"));
     simBuildIdentityMatrix=(ptrSimBuildIdentityMatrix)(_getProcAddress(lib,"simBuildIdentityMatrix"));
     simBuildMatrix=(ptrSimBuildMatrix)(_getProcAddress(lib,"simBuildMatrix"));
+    simBuildPose=(ptrSimBuildPose)(_getProcAddress(lib,"simBuildPose"));
     simGetEulerAnglesFromMatrix=(ptrSimGetEulerAnglesFromMatrix)(_getProcAddress(lib,"simGetEulerAnglesFromMatrix"));
     simInvertMatrix=(ptrSimInvertMatrix)(_getProcAddress(lib,"simInvertMatrix"));
     simMultiplyMatrices=(ptrSimMultiplyMatrices)(_getProcAddress(lib,"simMultiplyMatrices"));
@@ -820,8 +856,6 @@ int getSimProcAddresses(LIBRARY lib)
     simReservedCommand=(ptrSimReservedCommand)(_getProcAddress(lib,"simReservedCommand"));
     simGetSimulationTime=(ptrSimGetSimulationTime)(_getProcAddress(lib,"simGetSimulationTime"));
     simGetSimulationState=(ptrSimGetSimulationState)(_getProcAddress(lib,"simGetSimulationState"));
-    simGetSystemTime=(ptrSimGetSystemTime)(_getProcAddress(lib,"simGetSystemTime"));
-    simGetSystemTimeInMilliseconds=(ptrSimGetSystemTimeInMilliseconds)(_getProcAddress(lib,"simGetSystemTimeInMilliseconds"));
     simGetSystemTimeInMs=(ptrSimGetSystemTimeInMs)(_getProcAddress(lib,"simGetSystemTimeInMs"));
     simLoadScene=(ptrSimLoadScene)(_getProcAddress(lib,"simLoadScene"));
     simCloseScene=(ptrSimCloseScene)(_getProcAddress(lib,"simCloseScene"));
@@ -829,25 +863,12 @@ int getSimProcAddresses(LIBRARY lib)
     simLoadModel=(ptrSimLoadModel)(_getProcAddress(lib,"simLoadModel"));
     simSaveModel=(ptrSimSaveModel)(_getProcAddress(lib,"simSaveModel"));
     simDoesFileExist=(ptrSimDoesFileExist)(_getProcAddress(lib,"simDoesFileExist"));
-    simIsObjectInSelection=(ptrSimIsObjectInSelection)(_getProcAddress(lib,"simIsObjectInSelection"));
-    simAddObjectToSelection=(ptrSimAddObjectToSelection)(_getProcAddress(lib,"simAddObjectToSelection"));
-    simRemoveObjectFromSelection=(ptrSimRemoveObjectFromSelection)(_getProcAddress(lib,"simRemoveObjectFromSelection"));
-    simGetObjectSelectionSize=(ptrSimGetObjectSelectionSize)(_getProcAddress(lib,"simGetObjectSelectionSize"));
-    simGetObjectLastSelection=(ptrSimGetObjectLastSelection)(_getProcAddress(lib,"simGetObjectLastSelection"));
-    simGetObjectSelection=(ptrSimGetObjectSelection)(_getProcAddress(lib,"simGetObjectSelection"));
+    simGetObjectSel=(ptrSimGetObjectSel)(_getProcAddress(lib,"simGetObjectSel"));
+    simSetObjectSel=(ptrSimSetObjectSel)(_getProcAddress(lib,"simSetObjectSel"));
     simHandleProximitySensor=(ptrSimHandleProximitySensor)(_getProcAddress(lib,"simHandleProximitySensor"));
     simReadProximitySensor=(ptrSimReadProximitySensor)(_getProcAddress(lib,"simReadProximitySensor"));
     simHandleDynamics=(ptrSimHandleDynamics)(_getProcAddress(lib,"simHandleDynamics"));
-    simGetScriptHandle=(ptrSimGetScriptHandle)(_getProcAddress(lib,"simGetScriptHandle"));
-    simSetScriptText=(ptrSimSetScriptText)(_getProcAddress(lib,"simSetScriptText"));
-    simGetScriptText=(ptrSimGetScriptText)(_getProcAddress(lib,"simGetScriptText"));
-    simGetScriptProperty=(ptrSimGetScriptProperty)(_getProcAddress(lib,"simGetScriptProperty"));
     simAssociateScriptWithObject=(ptrSimAssociateScriptWithObject)(_getProcAddress(lib,"simAssociateScriptWithObject"));
-    simGetScript=(ptrSimGetScript)(_getProcAddress(lib,"simGetScript"));
-    simGetScriptAssociatedWithObject=(ptrSimGetScriptAssociatedWithObject)(_getProcAddress(lib,"simGetScriptAssociatedWithObject"));
-    simGetCustomizationScriptAssociatedWithObject=(ptrSimGetCustomizationScriptAssociatedWithObject)(_getProcAddress(lib,"simGetCustomizationScriptAssociatedWithObject"));
-    simGetObjectAssociatedWithScript=(ptrSimGetObjectAssociatedWithScript)(_getProcAddress(lib,"simGetObjectAssociatedWithScript"));
-    simGetScriptName=(ptrSimGetScriptName)(_getProcAddress(lib,"simGetScriptName"));
     simHandleMainScript=(ptrSimHandleMainScript)(_getProcAddress(lib,"simHandleMainScript"));
     simResetScript=(ptrSimResetScript)(_getProcAddress(lib,"simResetScript"));
     simAddScript=(ptrSimAddScript)(_getProcAddress(lib,"simAddScript"));
@@ -862,10 +883,6 @@ int getSimProcAddresses(LIBRARY lib)
     simCheckCollision=(ptrSimCheckCollision)(_getProcAddress(lib,"simCheckCollision"));
     simCheckCollisionEx=(ptrSimCheckCollisionEx)(_getProcAddress(lib,"simCheckCollisionEx"));
     simCheckDistance=(ptrSimCheckDistance)(_getProcAddress(lib,"simCheckDistance"));
-    simGetObjectConfiguration=(ptrSimGetObjectConfiguration)(_getProcAddress(lib,"simGetObjectConfiguration"));
-    simSetObjectConfiguration=(ptrSimSetObjectConfiguration)(_getProcAddress(lib,"simSetObjectConfiguration"));
-    simGetConfigurationTree=(ptrSimGetConfigurationTree)(_getProcAddress(lib,"simGetConfigurationTree"));
-    simSetConfigurationTree=(ptrSimSetConfigurationTree)(_getProcAddress(lib,"simSetConfigurationTree"));
     simSetSimulationTimeStep=(ptrSimSetSimulationTimeStep)(_getProcAddress(lib,"simSetSimulationTimeStep"));
     simGetSimulationTimeStep=(ptrSimGetSimulationTimeStep)(_getProcAddress(lib,"simGetSimulationTimeStep"));
     simGetRealTimeSimulation=(ptrSimGetRealTimeSimulation)(_getProcAddress(lib,"simGetRealTimeSimulation"));
@@ -894,19 +911,13 @@ int getSimProcAddresses(LIBRARY lib)
     simGetNavigationMode=(ptrSimGetNavigationMode)(_getProcAddress(lib,"simGetNavigationMode"));
     simSetPage=(ptrSimSetPage)(_getProcAddress(lib,"simSetPage"));
     simGetPage=(ptrSimGetPage)(_getProcAddress(lib,"simGetPage"));
-    simDisplayDialog=(ptrSimDisplayDialog)(_getProcAddress(lib,"simDisplayDialog"));
-    simGetDialogResult=(ptrSimGetDialogResult)(_getProcAddress(lib,"simGetDialogResult"));
-    simGetDialogInput=(ptrSimGetDialogInput)(_getProcAddress(lib,"simGetDialogInput"));
-    simEndDialog=(ptrSimEndDialog)(_getProcAddress(lib,"simEndDialog"));
     simRegisterScriptCallbackFunction=(ptrSimRegisterScriptCallbackFunction)(_getProcAddress(lib,"simRegisterScriptCallbackFunction"));
     simRegisterScriptVariable=(ptrSimRegisterScriptVariable)(_getProcAddress(lib,"simRegisterScriptVariable"));
+    simRegisterScriptFuncHook=(ptrSimRegisterScriptFuncHook)(_getProcAddress(lib,"simRegisterScriptFuncHook"));
     simSetJointTargetVelocity=(ptrSimSetJointTargetVelocity)(_getProcAddress(lib,"simSetJointTargetVelocity"));
     simGetJointTargetVelocity=(ptrSimGetJointTargetVelocity)(_getProcAddress(lib,"simGetJointTargetVelocity"));
     simCopyPasteObjects=(ptrSimCopyPasteObjects)(_getProcAddress(lib,"simCopyPasteObjects"));
-    simScaleSelectedObjects=(ptrSimScaleSelectedObjects)(_getProcAddress(lib,"simScaleSelectedObjects"));
     simScaleObjects=(ptrSimScaleObjects)(_getProcAddress(lib,"simScaleObjects"));
-    simDeleteSelectedObjects=(ptrSimDeleteSelectedObjects)(_getProcAddress(lib,"simDeleteSelectedObjects"));
-    simGetObjectUniqueIdentifier=(ptrSimGetObjectUniqueIdentifier)(_getProcAddress(lib,"simGetObjectUniqueIdentifier"));
     simAddDrawingObject=(ptrSimAddDrawingObject)(_getProcAddress(lib,"simAddDrawingObject"));
     simRemoveDrawingObject=(ptrSimRemoveDrawingObject)(_getProcAddress(lib,"simRemoveDrawingObject"));
     simAddDrawingObjectItem=(ptrSimAddDrawingObjectItem)(_getProcAddress(lib,"simAddDrawingObjectItem"));
@@ -933,7 +944,6 @@ int getSimProcAddresses(LIBRARY lib)
     simSetObjectSpecialProperty=(ptrSimSetObjectSpecialProperty)(_getProcAddress(lib,"simSetObjectSpecialProperty"));
     simGetObjectSpecialProperty=(ptrSimGetObjectSpecialProperty)(_getProcAddress(lib,"simGetObjectSpecialProperty"));
     simReadForceSensor=(ptrSimReadForceSensor)(_getProcAddress(lib,"simReadForceSensor"));
-    simBreakForceSensor=(ptrSimBreakForceSensor)(_getProcAddress(lib,"simBreakForceSensor"));
     simGetShapeVertex=(ptrSimGetShapeVertex)(_getProcAddress(lib,"simGetShapeVertex"));
     simGetShapeTriangle=(ptrSimGetShapeTriangle)(_getProcAddress(lib,"simGetShapeTriangle"));
     simSetLightParameters=(ptrSimSetLightParameters)(_getProcAddress(lib,"simSetLightParameters"));
@@ -949,6 +959,8 @@ int getSimProcAddresses(LIBRARY lib)
     simSetLinkDummy=(ptrSimSetLinkDummy)(_getProcAddress(lib,"simSetLinkDummy"));
     simSetModelProperty=(ptrSimSetModelProperty)(_getProcAddress(lib,"simSetModelProperty"));
     simGetModelProperty=(ptrSimGetModelProperty)(_getProcAddress(lib,"simGetModelProperty"));
+    simSetObjectColor=(ptrSimSetObjectColor)(_getProcAddress(lib,"simSetObjectColor"));
+    simGetObjectColor=(ptrSimGetObjectColor)(_getProcAddress(lib,"simGetObjectColor"));
     simSetShapeColor=(ptrSimSetShapeColor)(_getProcAddress(lib,"simSetShapeColor"));
     simGetShapeColor=(ptrSimGetShapeColor)(_getProcAddress(lib,"simGetShapeColor"));
     simResetDynamicObject=(ptrSimResetDynamicObject)(_getProcAddress(lib,"simResetDynamicObject"));
@@ -982,6 +994,10 @@ int getSimProcAddresses(LIBRARY lib)
     simSetObjectFloatParam=(ptrSimSetObjectFloatParam)(_getProcAddress(lib,"simSetObjectFloatParam"));
     simGetObjectStringParam=(ptrSimGetObjectStringParam)(_getProcAddress(lib,"simGetObjectStringParam"));
     simSetObjectStringParam=(ptrSimSetObjectStringParam)(_getProcAddress(lib,"simSetObjectStringParam"));
+    simGetScriptInt32Param=(ptrSimGetScriptInt32Param)(_getProcAddress(lib,"simGetScriptInt32Param"));
+    simSetScriptInt32Param=(ptrSimSetScriptInt32Param)(_getProcAddress(lib,"simSetScriptInt32Param"));
+    simGetScriptStringParam=(ptrSimGetScriptStringParam)(_getProcAddress(lib,"simGetScriptStringParam"));
+    simSetScriptStringParam=(ptrSimSetScriptStringParam)(_getProcAddress(lib,"simSetScriptStringParam"));
     simSetSimulationPassesPerRenderingPass=(ptrSimSetSimulationPassesPerRenderingPass)(_getProcAddress(lib,"simSetSimulationPassesPerRenderingPass"));
     simGetRotationAxis=(ptrSimGetRotationAxis)(_getProcAddress(lib,"simGetRotationAxis"));
     simRotateAroundAxis=(ptrSimRotateAroundAxis)(_getProcAddress(lib,"simRotateAroundAxis"));
@@ -1004,21 +1020,16 @@ int getSimProcAddresses(LIBRARY lib)
     simGetVisionSensorDepthBuffer=(ptrSimGetVisionSensorDepthBuffer)(_getProcAddress(lib,"simGetVisionSensorDepthBuffer"));
     simGetObjectQuaternion=(ptrSimGetObjectQuaternion)(_getProcAddress(lib,"simGetObjectQuaternion"));
     simSetObjectQuaternion=(ptrSimSetObjectQuaternion)(_getProcAddress(lib,"simSetObjectQuaternion"));
-    simRMLPosition=(ptrSimRMLPosition)(_getProcAddress(lib,"simRMLPosition"));
-    simRMLVelocity=(ptrSimRMLVelocity)(_getProcAddress(lib,"simRMLVelocity"));
-    simRMLPos=(ptrSimRMLPos)(_getProcAddress(lib,"simRMLPos"));
-    simRMLVel=(ptrSimRMLVel)(_getProcAddress(lib,"simRMLVel"));
-    simRMLStep=(ptrSimRMLStep)(_getProcAddress(lib,"simRMLStep"));
-    simRMLRemove=(ptrSimRMLRemove)(_getProcAddress(lib,"simRMLRemove"));
+    simRuckigPos=(ptrSimRuckigPos)(_getProcAddress(lib,"simRuckigPos"));
+    simRuckigVel=(ptrSimRuckigVel)(_getProcAddress(lib,"simRuckigVel"));
+    simRuckigStep=(ptrSimRuckigStep)(_getProcAddress(lib,"simRuckigStep"));
+    simRuckigRemove=(ptrSimRuckigRemove)(_getProcAddress(lib,"simRuckigRemove"));
     simBuildMatrixQ=(ptrSimBuildMatrixQ)(_getProcAddress(lib,"simBuildMatrixQ"));
     simGetQuaternionFromMatrix=(ptrSimGetQuaternionFromMatrix)(_getProcAddress(lib,"simGetQuaternionFromMatrix"));
-    simFileDialog=(ptrSimFileDialog)(_getProcAddress(lib,"simFileDialog"));
-    simMsgBox=(ptrSimMsgBox)(_getProcAddress(lib,"simMsgBox"));
     simGroupShapes=(ptrSimGroupShapes)(_getProcAddress(lib,"simGroupShapes"));
     simUngroupShape=(ptrSimUngroupShape)(_getProcAddress(lib,"simUngroupShape"));
     simConvexDecompose=(ptrSimConvexDecompose)(_getProcAddress(lib,"simConvexDecompose"));
     simQuitSimulator=(ptrSimQuitSimulator)(_getProcAddress(lib,"simQuitSimulator"));
-    simEnableEventCallback=(ptrSimEnableEventCallback)(_getProcAddress(lib,"simEnableEventCallback"));
     simSetShapeMaterial=(ptrSimSetShapeMaterial)(_getProcAddress(lib,"simSetShapeMaterial"));
     simGetTextureId=(ptrSimGetTextureId)(_getProcAddress(lib,"simGetTextureId"));
     simReadTexture=(ptrSimReadTexture)(_getProcAddress(lib,"simReadTexture"));
@@ -1028,9 +1039,8 @@ int getSimProcAddresses(LIBRARY lib)
     simReadCustomDataBlock=(ptrSimReadCustomDataBlock)(_getProcAddress(lib,"simReadCustomDataBlock"));
     simReadCustomDataBlockTags=(ptrSimReadCustomDataBlockTags)(_getProcAddress(lib,"simReadCustomDataBlockTags"));
     simGetShapeGeomInfo=(ptrSimGetShapeGeomInfo)(_getProcAddress(lib,"simGetShapeGeomInfo"));
+    simGetObjects=(ptrSimGetObjects)(_getProcAddress(lib,"simGetObjects"));
     simGetObjectsInTree=(ptrSimGetObjectsInTree)(_getProcAddress(lib,"simGetObjectsInTree"));
-    simSetObjectSizeValues=(ptrSimSetObjectSizeValues)(_getProcAddress(lib,"simSetObjectSizeValues"));
-    simGetObjectSizeValues=(ptrSimGetObjectSizeValues)(_getProcAddress(lib,"simGetObjectSizeValues"));
     simScaleObject=(ptrSimScaleObject)(_getProcAddress(lib,"simScaleObject"));
     simSetShapeTexture=(ptrSimSetShapeTexture)(_getProcAddress(lib,"simSetShapeTexture"));
     simGetShapeTextureId=(ptrSimGetShapeTextureId)(_getProcAddress(lib,"simGetShapeTextureId"));
@@ -1038,8 +1048,6 @@ int getSimProcAddresses(LIBRARY lib)
     simAddItemToCollection=(ptrSimAddItemToCollection)(_getProcAddress(lib,"simAddItemToCollection"));
     simDestroyCollection=(ptrSimDestroyCollection)(_getProcAddress(lib,"simDestroyCollection"));
     simGetCollectionObjects=(ptrSimGetCollectionObjects)(_getProcAddress(lib,"simGetCollectionObjects"));
-    simSetScriptAttribute=(ptrSimSetScriptAttribute)(_getProcAddress(lib,"simSetScriptAttribute"));
-    simGetScriptAttribute=(ptrSimGetScriptAttribute)(_getProcAddress(lib,"simGetScriptAttribute"));
     simReorientShapeBoundingBox=(ptrSimReorientShapeBoundingBox)(_getProcAddress(lib,"simReorientShapeBoundingBox"));
     simSaveImage=(ptrSimSaveImage)(_getProcAddress(lib,"simSaveImage"));
     simLoadImage=(ptrSimLoadImage)(_getProcAddress(lib,"simLoadImage"));
@@ -1085,7 +1093,6 @@ int getSimProcAddresses(LIBRARY lib)
     simGetStackDoubleTable=(ptrSimGetStackDoubleTable)(_getProcAddress(lib,"simGetStackDoubleTable"));
     simUnfoldStackTable=(ptrSimUnfoldStackTable)(_getProcAddress(lib,"simUnfoldStackTable"));
     simDebugStack=(ptrSimDebugStack)(_getProcAddress(lib,"simDebugStack"));
-    simSetScriptVariable=(ptrSimSetScriptVariable)(_getProcAddress(lib,"simSetScriptVariable"));
     simGetEngineFloatParam=(ptrSimGetEngineFloatParam)(_getProcAddress(lib,"simGetEngineFloatParam"));
     simGetEngineInt32Param=(ptrSimGetEngineInt32Param)(_getProcAddress(lib,"simGetEngineInt32Param"));
     simGetEngineBoolParam=(ptrSimGetEngineBoolParam)(_getProcAddress(lib,"simGetEngineBoolParam"));
@@ -1134,6 +1141,9 @@ int getSimProcAddresses(LIBRARY lib)
     simGenerateShapeFromPath=(ptrSimGenerateShapeFromPath)(_getProcAddress(lib,"simGenerateShapeFromPath"));
     simGetClosestPosOnPath=(ptrSimGetClosestPosOnPath)(_getProcAddress(lib,"simGetClosestPosOnPath"));
     simInitScript=(ptrSimInitScript)(_getProcAddress(lib,"simInitScript"));
+    simModuleEntry=(ptrSimModuleEntry)(_getProcAddress(lib,"simModuleEntry"));
+    simCheckExecAuthorization=(ptrSimCheckExecAuthorization)(_getProcAddress(lib,"simCheckExecAuthorization"));
+
 
 
     // Following courtesy of Stephen James:
@@ -1162,6 +1172,7 @@ int getSimProcAddresses(LIBRARY lib)
     _simMpHandleIkGroupObject=(ptr_simMpHandleIkGroupObject)(_getProcAddress(lib,"_simMpHandleIkGroupObject"));
     _simGetObjectLocalTransformation=(ptr_simGetObjectLocalTransformation)(_getProcAddress(lib,"_simGetObjectLocalTransformation"));
     _simSetObjectLocalTransformation=(ptr_simSetObjectLocalTransformation)(_getProcAddress(lib,"_simSetObjectLocalTransformation"));
+    _simDynReportObjectCumulativeTransformation=(ptr_simDynReportObjectCumulativeTransformation)(_getProcAddress(lib,"_simDynReportObjectCumulativeTransformation"));
     _simSetObjectCumulativeTransformation=(ptr_simSetObjectCumulativeTransformation)(_getProcAddress(lib,"_simSetObjectCumulativeTransformation"));
     _simGetObjectCumulativeTransformation=(ptr_simGetObjectCumulativeTransformation)(_getProcAddress(lib,"_simGetObjectCumulativeTransformation"));
     _simIsShapeDynamicallyStatic=(ptr_simIsShapeDynamicallyStatic)(_getProcAddress(lib,"_simIsShapeDynamicallyStatic"));
@@ -1193,8 +1204,6 @@ int getSimProcAddresses(LIBRARY lib)
     _simClearAdditionalForceAndTorque=(ptr_simClearAdditionalForceAndTorque)(_getProcAddress(lib,"_simClearAdditionalForceAndTorque"));
     _simGetJointPositionInterval=(ptr_simGetJointPositionInterval)(_getProcAddress(lib,"_simGetJointPositionInterval"));
     _simGetJointType=(ptr_simGetJointType)(_getProcAddress(lib,"_simGetJointType"));
-    _simIsForceSensorBroken=(ptr_simIsForceSensorBroken)(_getProcAddress(lib,"_simIsForceSensorBroken"));
-    _simGetDynamicForceSensorLocalTransformationPart2=(ptr_simGetDynamicForceSensorLocalTransformationPart2)(_getProcAddress(lib,"_simGetDynamicForceSensorLocalTransformationPart2"));
     _simIsDynamicMotorEnabled=(ptr_simIsDynamicMotorEnabled)(_getProcAddress(lib,"_simIsDynamicMotorEnabled"));
     _simIsDynamicMotorPositionCtrlEnabled=(ptr_simIsDynamicMotorPositionCtrlEnabled)(_getProcAddress(lib,"_simIsDynamicMotorPositionCtrlEnabled"));
     _simIsDynamicMotorTorqueModulationEnabled=(ptr_simIsDynamicMotorTorqueModulationEnabled)(_getProcAddress(lib,"_simIsDynamicMotorTorqueModulationEnabled"));
@@ -1207,10 +1216,6 @@ int getSimProcAddresses(LIBRARY lib)
     _simSetJointSphericalTransformation=(ptr_simSetJointSphericalTransformation)(_getProcAddress(lib,"_simSetJointSphericalTransformation"));
     _simAddForceSensorCumulativeForcesAndTorques=(ptr_simAddForceSensorCumulativeForcesAndTorques)(_getProcAddress(lib,"_simAddForceSensorCumulativeForcesAndTorques"));
     _simAddJointCumulativeForcesOrTorques=(ptr_simAddJointCumulativeForcesOrTorques)(_getProcAddress(lib,"_simAddJointCumulativeForcesOrTorques"));
-    _simSetDynamicJointLocalTransformationPart2=(ptr_simSetDynamicJointLocalTransformationPart2)(_getProcAddress(lib,"_simSetDynamicJointLocalTransformationPart2"));
-    _simSetDynamicForceSensorLocalTransformationPart2=(ptr_simSetDynamicForceSensorLocalTransformationPart2)(_getProcAddress(lib,"_simSetDynamicForceSensorLocalTransformationPart2"));
-    _simSetDynamicJointLocalTransformationPart2IsValid=(ptr_simSetDynamicJointLocalTransformationPart2IsValid)(_getProcAddress(lib,"_simSetDynamicJointLocalTransformationPart2IsValid"));
-    _simSetDynamicForceSensorLocalTransformationPart2IsValid=(ptr_simSetDynamicForceSensorLocalTransformationPart2IsValid)(_getProcAddress(lib,"_simSetDynamicForceSensorLocalTransformationPart2IsValid"));
     _simGetGeomWrapFromGeomProxy=(ptr_simGetGeomWrapFromGeomProxy)(_getProcAddress(lib,"_simGetGeomWrapFromGeomProxy"));
     _simGetLocalInertiaFrame=(ptr_simGetLocalInertiaFrame)(_getProcAddress(lib,"_simGetLocalInertiaFrame"));
     _simGetPurePrimitiveType=(ptr_simGetPurePrimitiveType)(_getProcAddress(lib,"_simGetPurePrimitiveType"));
@@ -1429,8 +1434,68 @@ int getSimProcAddresses(LIBRARY lib)
     simSetIntegerSignal=(ptrSimSetInt32Signal)(_getProcAddress(lib,"simSetInt32Signal"));
     simGetIntegerSignal=(ptrSimGetInt32Signal)(_getProcAddress(lib,"simGetInt32Signal"));
     simClearIntegerSignal=(ptrSimClearInt32Signal)(_getProcAddress(lib,"simClearInt32Signal"));
+    simGetObjectName=(ptrSimGetObjectName)(_getProcAddress(lib,"simGetObjectName"));
+    simSetObjectName=(ptrSimSetObjectName)(_getProcAddress(lib,"simSetObjectName"));
+    simGetScriptName=(ptrSimGetScriptName)(_getProcAddress(lib,"simGetScriptName"));
+    simGetScriptHandle=(ptrSimGetScriptHandle)(_getProcAddress(lib,"simGetScriptHandle"));
+    simSetScriptVariable=(ptrSimSetScriptVariable)(_getProcAddress(lib,"simSetScriptVariable"));
+    simGetObjectHandle=(ptrSimGetObjectHandle)(_getProcAddress(lib,"simGetObjectHandle"));
+    simGetObjectHandleEx=(ptrSimGetObjectHandleEx)(_getProcAddress(lib,"simGetObjectHandleEx"));
+    simGetScript=(ptrSimGetScript)(_getProcAddress(lib,"simGetScript"));
+    simGetScriptAssociatedWithObject=(ptrSimGetScriptAssociatedWithObject)(_getProcAddress(lib,"simGetScriptAssociatedWithObject"));
+    simGetCustomizationScriptAssociatedWithObject=(ptrSimGetCustomizationScriptAssociatedWithObject)(_getProcAddress(lib,"simGetCustomizationScriptAssociatedWithObject"));
+    simGetObjectAssociatedWithScript=(ptrSimGetObjectAssociatedWithScript)(_getProcAddress(lib,"simGetObjectAssociatedWithScript"));
+    simGetObjectConfiguration=(ptrSimGetObjectConfiguration)(_getProcAddress(lib,"simGetObjectConfiguration"));
+    simSetObjectConfiguration=(ptrSimSetObjectConfiguration)(_getProcAddress(lib,"simSetObjectConfiguration"));
+    simGetConfigurationTree=(ptrSimGetConfigurationTree)(_getProcAddress(lib,"simGetConfigurationTree"));
+    simSetConfigurationTree=(ptrSimSetConfigurationTree)(_getProcAddress(lib,"simSetConfigurationTree"));
+    simEnableEventCallback=(ptrSimEnableEventCallback)(_getProcAddress(lib,"simEnableEventCallback"));
+    simSetObjectSizeValues=(ptrSimSetObjectSizeValues)(_getProcAddress(lib,"simSetObjectSizeValues"));
+    simGetObjectSizeValues=(ptrSimGetObjectSizeValues)(_getProcAddress(lib,"simGetObjectSizeValues"));
+    simRMLPosition=(ptrSimRMLPosition)(_getProcAddress(lib,"simRMLPosition"));
+    simRMLVelocity=(ptrSimRMLVelocity)(_getProcAddress(lib,"simRMLVelocity"));
+    simRMLPos=(ptrSimRMLPos)(_getProcAddress(lib,"simRMLPos"));
+    simRMLVel=(ptrSimRMLVel)(_getProcAddress(lib,"simRMLVel"));
+    simRMLStep=(ptrSimRMLStep)(_getProcAddress(lib,"simRMLStep"));
+    simRMLRemove=(ptrSimRMLRemove)(_getProcAddress(lib,"simRMLRemove"));
+    simGetSystemTime=(ptrSimGetSystemTime)(_getProcAddress(lib,"simGetSystemTime"));
+    simGetSystemTimeInMilliseconds=(ptrSimGetSystemTimeInMilliseconds)(_getProcAddress(lib,"simGetSystemTimeInMilliseconds"));
+    simFileDialog=(ptrSimFileDialog)(_getProcAddress(lib,"simFileDialog"));
+    simMsgBox=(ptrSimMsgBox)(_getProcAddress(lib,"simMsgBox"));
+    simDisplayDialog=(ptrSimDisplayDialog)(_getProcAddress(lib,"simDisplayDialog"));
+    simGetDialogResult=(ptrSimGetDialogResult)(_getProcAddress(lib,"simGetDialogResult"));
+    simGetDialogInput=(ptrSimGetDialogInput)(_getProcAddress(lib,"simGetDialogInput"));
+    simEndDialog=(ptrSimEndDialog)(_getProcAddress(lib,"simEndDialog"));
+    simIsObjectInSelection=(ptrSimIsObjectInSelection)(_getProcAddress(lib,"simIsObjectInSelection"));
+    simAddObjectToSelection=(ptrSimAddObjectToSelection)(_getProcAddress(lib,"simAddObjectToSelection"));
+    simRemoveObjectFromSelection=(ptrSimRemoveObjectFromSelection)(_getProcAddress(lib,"simRemoveObjectFromSelection"));
+    simGetObjectSelectionSize=(ptrSimGetObjectSelectionSize)(_getProcAddress(lib,"simGetObjectSelectionSize"));
+    simGetObjectLastSelection=(ptrSimGetObjectLastSelection)(_getProcAddress(lib,"simGetObjectLastSelection"));
+    simGetObjectSelection=(ptrSimGetObjectSelection)(_getProcAddress(lib,"simGetObjectSelection"));
+    simScaleSelectedObjects=(ptrSimScaleSelectedObjects)(_getProcAddress(lib,"simScaleSelectedObjects"));
+    simDeleteSelectedObjects=(ptrSimDeleteSelectedObjects)(_getProcAddress(lib,"simDeleteSelectedObjects"));
+    simSetStringNamedParam=(ptrSimSetNamedStringParam)(_getProcAddress(lib,"simSetStringNamedParam"));
+    simGetStringNamedParam=(ptrSimGetNamedStringParam)(_getProcAddress(lib,"simGetStringNamedParam"));
+    simGetObjectUniqueIdentifier=(ptrSimGetObjectUniqueIdentifier)(_getProcAddress(lib,"simGetObjectUniqueIdentifier"));
+    _simSetDynamicJointLocalTransformationPart2=(ptr_simSetDynamicJointLocalTransformationPart2)(_getProcAddress(lib,"_simSetDynamicJointLocalTransformationPart2"));
+    _simSetDynamicForceSensorLocalTransformationPart2=(ptr_simSetDynamicForceSensorLocalTransformationPart2)(_getProcAddress(lib,"_simSetDynamicForceSensorLocalTransformationPart2"));
+    _simSetDynamicJointLocalTransformationPart2IsValid=(ptr_simSetDynamicJointLocalTransformationPart2IsValid)(_getProcAddress(lib,"_simSetDynamicJointLocalTransformationPart2IsValid"));
+    _simSetDynamicForceSensorLocalTransformationPart2IsValid=(ptr_simSetDynamicForceSensorLocalTransformationPart2IsValid)(_getProcAddress(lib,"_simSetDynamicForceSensorLocalTransformationPart2IsValid"));
+    _simGetDynamicForceSensorLocalTransformationPart2=(ptr_simGetDynamicForceSensorLocalTransformationPart2)(_getProcAddress(lib,"_simGetDynamicForceSensorLocalTransformationPart2"));
+    _simIsForceSensorBroken=(ptr_simIsForceSensorBroken)(_getProcAddress(lib,"_simIsForceSensorBroken"));
+    simBreakForceSensor=(ptrSimBreakForceSensor)(_getProcAddress(lib,"simBreakForceSensor"));
+    simGetJointMatrix=(ptrSimGetJointMatrix)(_getProcAddress(lib,"simGetJointMatrix"));
+    simSetSphericalJointMatrix=(ptrSimSetSphericalJointMatrix)(_getProcAddress(lib,"simSetSphericalJointMatrix"));
+    simSetScriptAttribute=(ptrSimSetScriptAttribute)(_getProcAddress(lib,"simSetScriptAttribute"));
+    simGetScriptAttribute=(ptrSimGetScriptAttribute)(_getProcAddress(lib,"simGetScriptAttribute"));
+    simSetScriptText=(ptrSimSetScriptText)(_getProcAddress(lib,"simSetScriptText"));
+    simGetScriptText=(ptrSimGetScriptText)(_getProcAddress(lib,"simGetScriptText"));
+    simGetScriptProperty=(ptrSimGetScriptProperty)(_getProcAddress(lib,"simGetScriptProperty"));
     // Deprecated end
 
+    char *ps=std::getenv("COPPELIASIMPLUGIN_IGNORE_MISSING_SYMBOLS");
+    if (ps!=nullptr)
+        return(1);
 
     char couldNotFind[]="Could not find function";
     if (simRunSimulator==nullptr)
@@ -1528,19 +1593,34 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simGetArrayParam\n",couldNotFind);
         return 0;
     }
-    if (simSetStringNamedParam==nullptr)
+    if (simSetNamedStringParam==nullptr)
     {
-        printf("%s simSetStringNamedParam\n",couldNotFind);
+        printf("%s simSetNamedStringParam\n",couldNotFind);
         return 0;
     }
-    if (simGetStringNamedParam==nullptr)
+    if (simGetNamedStringParam==nullptr)
     {
-        printf("%s simGetStringNamedParam\n",couldNotFind);
+        printf("%s simGetNamedStringParam\n",couldNotFind);
         return 0;
     }
-    if (simGetObjectHandle==nullptr)
+    if (simGetObject==nullptr)
     {
-        printf("%s simGetObjectHandle\n",couldNotFind);
+        printf("%s simGetObject\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectUid==nullptr)
+    {
+        printf("%s simGetObjectUid\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectFromUid==nullptr)
+    {
+        printf("%s simGetObjectFromUid\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptHandleEx==nullptr)
+    {
+        printf("%s simGetScriptHandleEx\n",couldNotFind);
         return 0;
     }
     if (simRemoveObject==nullptr)
@@ -1548,24 +1628,24 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simRemoveObject\n",couldNotFind);
         return 0;
     }
+    if (simRemoveObjects==nullptr)
+    {
+        printf("%s simRemoveObjects\n",couldNotFind);
+        return 0;
+    }
     if (simRemoveModel==nullptr)
     {
         printf("%s simRemoveModel\n",couldNotFind);
         return 0;
     }
-    if (simGetObjectName==nullptr)
+    if (simGetObjectAlias==nullptr)
     {
-        printf("%s simGetObjectName\n",couldNotFind);
+        printf("%s simGetObjectAlias\n",couldNotFind);
         return 0;
     }
-    if (simGetObjects==nullptr)
+    if (simSetObjectAlias==nullptr)
     {
-        printf("%s simGetObjects\n",couldNotFind);
-        return 0;
-    }
-    if (simSetObjectName==nullptr)
-    {
-        printf("%s simSetObjectName\n",couldNotFind);
+        printf("%s simSetObjectAlias\n",couldNotFind);
         return 0;
     }
     if (simGetObjectMatrix==nullptr)
@@ -1633,14 +1713,14 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simSetJointMaxForce\n",couldNotFind);
         return 0;
     }
-    if (simGetJointMatrix==nullptr)
+    if (simGetObjectChildPose==nullptr)
     {
-        printf("%s simGetJointMatrix\n",couldNotFind);
+        printf("%s simGetObjectChildPose\n",couldNotFind);
         return 0;
     }
-    if (simSetSphericalJointMatrix==nullptr)
+    if (simSetObjectChildPose==nullptr)
     {
-        printf("%s simSetSphericalJointMatrix\n",couldNotFind);
+        printf("%s simSetObjectChildPose\n",couldNotFind);
         return 0;
     }
     if (simGetJointInterval==nullptr)
@@ -1688,6 +1768,11 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simBuildMatrix\n",couldNotFind);
         return 0;
     }
+    if (simBuildPose==nullptr)
+    {
+        printf("%s simBuildPose\n",couldNotFind);
+        return 0;
+    }
     if (simGetEulerAnglesFromMatrix==nullptr)
     {
         printf("%s simGetEulerAnglesFromMatrix\n",couldNotFind);
@@ -1728,16 +1813,6 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simGetSimulationState\n",couldNotFind);
         return 0;
     }
-    if (simGetSystemTime==nullptr)
-    {
-        printf("%s simGetSystemTime\n",couldNotFind);
-        return 0;
-    }
-    if (simGetSystemTimeInMilliseconds==nullptr)
-    {
-        printf("%s simGetSystemTimeInMilliseconds\n",couldNotFind);
-        return 0;
-    }
     if (simGetSystemTimeInMs==nullptr)
     {
         printf("%s simGetSystemTimeInMs\n",couldNotFind);
@@ -1773,34 +1848,14 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simDoesFileExist\n",couldNotFind);
         return 0;
     }
-    if (simIsObjectInSelection==nullptr)
+    if (simGetObjectSel==nullptr)
     {
-        printf("%s simIsObjectInSelection\n",couldNotFind);
+        printf("%s simGetObjectSel\n",couldNotFind);
         return 0;
     }
-    if (simAddObjectToSelection==nullptr)
+    if (simSetObjectSel==nullptr)
     {
-        printf("%s simAddObjectToSelection\n",couldNotFind);
-        return 0;
-    }
-    if (simRemoveObjectFromSelection==nullptr)
-    {
-        printf("%s simRemoveObjectFromSelection\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectSelectionSize==nullptr)
-    {
-        printf("%s simGetObjectSelectionSize\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectLastSelection==nullptr)
-    {
-        printf("%s simGetObjectLastSelection\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectSelection==nullptr)
-    {
-        printf("%s simGetObjectSelection\n",couldNotFind);
+        printf("%s simSetObjectSel\n",couldNotFind);
         return 0;
     }
     if (simHandleProximitySensor==nullptr)
@@ -1818,54 +1873,9 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simHandleDynamics\n",couldNotFind);
         return 0;
     }
-    if (simGetScriptHandle==nullptr)
-    {
-        printf("%s simGetScriptHandle\n",couldNotFind);
-        return 0;
-    }
-    if (simSetScriptText==nullptr)
-    {
-        printf("%s simSetScriptText\n",couldNotFind);
-        return 0;
-    }
-    if (simGetScriptText==nullptr)
-    {
-        printf("%s simGetScriptText\n",couldNotFind);
-        return 0;
-    }
-    if (simGetScriptProperty==nullptr)
-    {
-        printf("%s simGetScriptProperty\n",couldNotFind);
-        return 0;
-    }
     if (simAssociateScriptWithObject==nullptr)
     {
         printf("%s simAssociateScriptWithObject\n",couldNotFind);
-        return 0;
-    }
-    if (simGetScript==nullptr)
-    {
-        printf("%s simGetScript\n",couldNotFind);
-        return 0;
-    }
-    if (simGetScriptAssociatedWithObject==nullptr)
-    {
-        printf("%s simGetScriptAssociatedWithObject\n",couldNotFind);
-        return 0;
-    }
-    if (simGetCustomizationScriptAssociatedWithObject==nullptr)
-    {
-        printf("%s simGetCustomizationScriptAssociatedWithObject\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectAssociatedWithScript==nullptr)
-    {
-        printf("%s simGetObjectAssociatedWithScript\n",couldNotFind);
-        return 0;
-    }
-    if (simGetScriptName==nullptr)
-    {
-        printf("%s simGetScriptName\n",couldNotFind);
         return 0;
     }
     if (simHandleMainScript==nullptr)
@@ -1936,26 +1946,6 @@ int getSimProcAddresses(LIBRARY lib)
     if (simCheckDistance==nullptr)
     {
         printf("%s simCheckDistance\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectConfiguration==nullptr)
-    {
-        printf("%s simGetObjectConfiguration\n",couldNotFind);
-        return 0;
-    }
-    if (simSetObjectConfiguration==nullptr)
-    {
-        printf("%s simSetObjectConfiguration\n",couldNotFind);
-        return 0;
-    }
-    if (simGetConfigurationTree==nullptr)
-    {
-        printf("%s simGetConfigurationTree\n",couldNotFind);
-        return 0;
-    }
-    if (simSetConfigurationTree==nullptr)
-    {
-        printf("%s simSetConfigurationTree\n",couldNotFind);
         return 0;
     }
     if (simSetSimulationTimeStep==nullptr)
@@ -2098,26 +2088,6 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simGetPage\n",couldNotFind);
         return 0;
     }
-    if (simDisplayDialog==nullptr)
-    {
-        printf("%s simDisplayDialog\n",couldNotFind);
-        return 0;
-    }
-    if (simGetDialogResult==nullptr)
-    {
-        printf("%s simGetDialogResult\n",couldNotFind);
-        return 0;
-    }
-    if (simGetDialogInput==nullptr)
-    {
-        printf("%s simGetDialogInput\n",couldNotFind);
-        return 0;
-    }
-    if (simEndDialog==nullptr)
-    {
-        printf("%s simEndDialog\n",couldNotFind);
-        return 0;
-    }
     if (simRegisterScriptCallbackFunction==nullptr)
     {
         printf("%s simRegisterScriptCallbackFunction\n",couldNotFind);
@@ -2126,6 +2096,11 @@ int getSimProcAddresses(LIBRARY lib)
     if (simRegisterScriptVariable==nullptr)
     {
         printf("%s simRegisterScriptVariable\n",couldNotFind);
+        return 0;
+    }
+    if (simRegisterScriptFuncHook==nullptr)
+    {
+        printf("%s simRegisterScriptFuncHook\n",couldNotFind);
         return 0;
     }
     if (simSetJointTargetVelocity==nullptr)
@@ -2143,24 +2118,9 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simCopyPasteObjects\n",couldNotFind);
         return 0;
     }
-    if (simScaleSelectedObjects==nullptr)
-    {
-        printf("%s simScaleSelectedObjects\n",couldNotFind);
-        return 0;
-    }
     if (simScaleObjects==nullptr)
     {
         printf("%s simScaleObjects\n",couldNotFind);
-        return 0;
-    }
-    if (simDeleteSelectedObjects==nullptr)
-    {
-        printf("%s simDeleteSelectedObjects\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectUniqueIdentifier==nullptr)
-    {
-        printf("%s simGetObjectUniqueIdentifier\n",couldNotFind);
         return 0;
     }
     if (simAddDrawingObject==nullptr)
@@ -2293,11 +2253,6 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simReadForceSensor\n",couldNotFind);
         return 0;
     }
-    if (simBreakForceSensor==nullptr)
-    {
-        printf("%s simBreakForceSensor\n",couldNotFind);
-        return 0;
-    }
     if (simGetShapeVertex==nullptr)
     {
         printf("%s simGetShapeVertex\n",couldNotFind);
@@ -2371,6 +2326,16 @@ int getSimProcAddresses(LIBRARY lib)
     if (simGetModelProperty==nullptr)
     {
         printf("%s simGetModelProperty\n",couldNotFind);
+        return 0;
+    }
+    if (simSetObjectColor==nullptr)
+    {
+        printf("%s simSetObjectColor\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectColor==nullptr)
+    {
+        printf("%s simGetObjectColor\n",couldNotFind);
         return 0;
     }
     if (simSetShapeColor==nullptr)
@@ -2538,6 +2503,26 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simSetObjectStringParam\n",couldNotFind);
         return 0;
     }
+    if (simGetScriptInt32Param==nullptr)
+    {
+        printf("%s simGetScriptInt32Param\n",couldNotFind);
+        return 0;
+    }
+    if (simSetScriptInt32Param==nullptr)
+    {
+        printf("%s simSetScriptInt32Param\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptStringParam==nullptr)
+    {
+        printf("%s simGetScriptStringParam\n",couldNotFind);
+        return 0;
+    }
+    if (simSetScriptStringParam==nullptr)
+    {
+        printf("%s simSetScriptStringParam\n",couldNotFind);
+        return 0;
+    }
     if (simSetSimulationPassesPerRenderingPass==nullptr)
     {
         printf("%s simSetSimulationPassesPerRenderingPass\n",couldNotFind);
@@ -2648,34 +2633,24 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simSetObjectQuaternion\n",couldNotFind);
         return 0;
     }
-    if (simRMLPosition==nullptr)
+    if (simRuckigPos==nullptr)
     {
-        printf("%s simRMLPosition\n",couldNotFind);
+        printf("%s simRuckigPos\n",couldNotFind);
         return 0;
     }
-    if (simRMLVelocity==nullptr)
+    if (simRuckigVel==nullptr)
     {
-        printf("%s simRMLVelocity\n",couldNotFind);
+        printf("%s simRuckigVel\n",couldNotFind);
         return 0;
     }
-    if (simRMLPos==nullptr)
+    if (simRuckigStep==nullptr)
     {
-        printf("%s simRMLPos\n",couldNotFind);
+        printf("%s simRuckigStep\n",couldNotFind);
         return 0;
     }
-    if (simRMLVel==nullptr)
+    if (simRuckigRemove==nullptr)
     {
-        printf("%s simRMLVel\n",couldNotFind);
-        return 0;
-    }
-    if (simRMLStep==nullptr)
-    {
-        printf("%s simRMLStep\n",couldNotFind);
-        return 0;
-    }
-    if (simRMLRemove==nullptr)
-    {
-        printf("%s simRMLRemove\n",couldNotFind);
+        printf("%s simRuckigRemove\n",couldNotFind);
         return 0;
     }
     if (simBuildMatrixQ==nullptr)
@@ -2686,16 +2661,6 @@ int getSimProcAddresses(LIBRARY lib)
     if (simGetQuaternionFromMatrix==nullptr)
     {
         printf("%s simGetQuaternionFromMatrix\n",couldNotFind);
-        return 0;
-    }
-    if (simFileDialog==nullptr)
-    {
-        printf("%s simFileDialog\n",couldNotFind);
-        return 0;
-    }
-    if (simMsgBox==nullptr)
-    {
-        printf("%s simMsgBox\n",couldNotFind);
         return 0;
     }
     if (simGroupShapes==nullptr)
@@ -2716,11 +2681,6 @@ int getSimProcAddresses(LIBRARY lib)
     if (simQuitSimulator==nullptr)
     {
         printf("%s simQuitSimulator\n",couldNotFind);
-        return 0;
-    }
-    if (simEnableEventCallback==nullptr)
-    {
-        printf("%s simEnableEventCallback\n",couldNotFind);
         return 0;
     }
     if (simSetShapeMaterial==nullptr)
@@ -2768,19 +2728,14 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simGetShapeGeomInfo\n",couldNotFind);
         return 0;
     }
+    if (simGetObjects==nullptr)
+    {
+        printf("%s simGetObjects\n",couldNotFind);
+        return 0;
+    }
     if (simGetObjectsInTree==nullptr)
     {
         printf("%s simGetObjectsInTree\n",couldNotFind);
-        return 0;
-    }
-    if (simSetObjectSizeValues==nullptr)
-    {
-        printf("%s simSetObjectSizeValues\n",couldNotFind);
-        return 0;
-    }
-    if (simGetObjectSizeValues==nullptr)
-    {
-        printf("%s simGetObjectSizeValues\n",couldNotFind);
         return 0;
     }
     if (simScaleObject==nullptr)
@@ -2816,16 +2771,6 @@ int getSimProcAddresses(LIBRARY lib)
     if (simGetCollectionObjects==nullptr)
     {
         printf("%s simGetCollectionObjects\n",couldNotFind);
-        return 0;
-    }
-    if (simSetScriptAttribute==nullptr)
-    {
-        printf("%s simSetScriptAttribute\n",couldNotFind);
-        return 0;
-    }
-    if (simGetScriptAttribute==nullptr)
-    {
-        printf("%s simGetScriptAttribute\n",couldNotFind);
         return 0;
     }
     if (simReorientShapeBoundingBox==nullptr)
@@ -3051,11 +2996,6 @@ int getSimProcAddresses(LIBRARY lib)
     if (simDebugStack==nullptr)
     {
         printf("%s simDebugStack\n",couldNotFind);
-        return 0;
-    }
-    if (simSetScriptVariable==nullptr)
-    {
-        printf("%s simSetScriptVariable\n",couldNotFind);
         return 0;
     }
     if (simGetEngineFloatParam==nullptr)
@@ -3293,6 +3233,17 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s simInitScript\n",couldNotFind);
         return 0;
     }
+    if (simModuleEntry==nullptr)
+    {
+        printf("%s simModuleEntry\n",couldNotFind);
+        return 0;
+    }
+    if (simCheckExecAuthorization==nullptr)
+    {
+        printf("%s simCheckExecAuthorization\n",couldNotFind);
+        return 0;
+    }
+
 
 
     // Following courtesy of Stephen James:
@@ -3416,6 +3367,11 @@ int getSimProcAddresses(LIBRARY lib)
     if (_simSetObjectLocalTransformation==nullptr)
     {
         printf("%s _simSetObjectLocalTransformation\n",couldNotFind);
+        return 0;
+    }
+    if (_simDynReportObjectCumulativeTransformation==nullptr)
+    {
+        printf("%s _simDynReportObjectCumulativeTransformation\n",couldNotFind);
         return 0;
     }
     if (_simSetObjectCumulativeTransformation==nullptr)
@@ -3573,16 +3529,6 @@ int getSimProcAddresses(LIBRARY lib)
         printf("%s _simGetJointType\n",couldNotFind);
         return 0;
     }
-    if (_simIsForceSensorBroken==nullptr)
-    {
-        printf("%s _simIsForceSensorBroken\n",couldNotFind);
-        return 0;
-    }
-    if (_simGetDynamicForceSensorLocalTransformationPart2==nullptr)
-    {
-        printf("%s _simGetDynamicForceSensorLocalTransformationPart2\n",couldNotFind);
-        return 0;
-    }
     if (_simIsDynamicMotorEnabled==nullptr)
     {
         printf("%s _simIsDynamicMotorEnabled\n",couldNotFind);
@@ -3641,26 +3587,6 @@ int getSimProcAddresses(LIBRARY lib)
     if (_simAddJointCumulativeForcesOrTorques==nullptr)
     {
         printf("%s _simAddJointCumulativeForcesOrTorques\n",couldNotFind);
-        return 0;
-    }
-    if (_simSetDynamicJointLocalTransformationPart2==nullptr)
-    {
-        printf("%s _simSetDynamicJointLocalTransformationPart2\n",couldNotFind);
-        return 0;
-    }
-    if (_simSetDynamicForceSensorLocalTransformationPart2==nullptr)
-    {
-        printf("%s _simSetDynamicForceSensorLocalTransformationPart2\n",couldNotFind);
-        return 0;
-    }
-    if (_simSetDynamicJointLocalTransformationPart2IsValid==nullptr)
-    {
-        printf("%s _simSetDynamicJointLocalTransformationPart2IsValid\n",couldNotFind);
-        return 0;
-    }
-    if (_simSetDynamicForceSensorLocalTransformationPart2IsValid==nullptr)
-    {
-        printf("%s _simSetDynamicForceSensorLocalTransformationPart2IsValid\n",couldNotFind);
         return 0;
     }
     if (_simGetGeomWrapFromGeomProxy==nullptr)
@@ -4736,6 +4662,291 @@ int getSimProcAddresses(LIBRARY lib)
     if (simClearIntegerSignal==nullptr)
     {
         printf("%s simClearIntegerSignal\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectName==nullptr)
+    {
+        printf("%s simGetObjectName\n",couldNotFind);
+        return 0;
+    }
+    if (simSetObjectName==nullptr)
+    {
+        printf("%s simSetObjectName\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptName==nullptr)
+    {
+        printf("%s simGetScriptName\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptHandle==nullptr)
+    {
+        printf("%s simGetScriptHandle\n",couldNotFind);
+        return 0;
+    }
+    if (simSetScriptVariable==nullptr)
+    {
+        printf("%s simSetScriptVariable\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectHandle==nullptr)
+    {
+        printf("%s simGetObjectHandle\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectHandleEx==nullptr)
+    {
+        printf("%s simGetObjectHandleEx\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScript==nullptr)
+    {
+        printf("%s simGetScript\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptAssociatedWithObject==nullptr)
+    {
+        printf("%s simGetScriptAssociatedWithObject\n",couldNotFind);
+        return 0;
+    }
+    if (simGetCustomizationScriptAssociatedWithObject==nullptr)
+    {
+        printf("%s simGetCustomizationScriptAssociatedWithObject\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectAssociatedWithScript==nullptr)
+    {
+        printf("%s simGetObjectAssociatedWithScript\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectConfiguration==nullptr)
+    {
+        printf("%s simGetObjectConfiguration\n",couldNotFind);
+        return 0;
+    }
+    if (simSetObjectConfiguration==nullptr)
+    {
+        printf("%s simSetObjectConfiguration\n",couldNotFind);
+        return 0;
+    }
+    if (simGetConfigurationTree==nullptr)
+    {
+        printf("%s simGetConfigurationTree\n",couldNotFind);
+        return 0;
+    }
+    if (simSetConfigurationTree==nullptr)
+    {
+        printf("%s simSetConfigurationTree\n",couldNotFind);
+        return 0;
+    }
+    if (simEnableEventCallback==nullptr)
+    {
+        printf("%s simEnableEventCallback\n",couldNotFind);
+        return 0;
+    }
+    if (simSetObjectSizeValues==nullptr)
+    {
+        printf("%s simSetObjectSizeValues\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectSizeValues==nullptr)
+    {
+        printf("%s simGetObjectSizeValues\n",couldNotFind);
+        return 0;
+    }
+    if (simRMLPosition==nullptr)
+    {
+        printf("%s simRMLPosition\n",couldNotFind);
+        return 0;
+    }
+    if (simRMLVelocity==nullptr)
+    {
+        printf("%s simRMLVelocity\n",couldNotFind);
+        return 0;
+    }
+    if (simRMLPos==nullptr)
+    {
+        printf("%s simRMLPos\n",couldNotFind);
+        return 0;
+    }
+    if (simRMLVel==nullptr)
+    {
+        printf("%s simRMLVel\n",couldNotFind);
+        return 0;
+    }
+    if (simRMLStep==nullptr)
+    {
+        printf("%s simRMLStep\n",couldNotFind);
+        return 0;
+    }
+    if (simRMLRemove==nullptr)
+    {
+        printf("%s simRMLRemove\n",couldNotFind);
+        return 0;
+    }
+    if (simGetSystemTime==nullptr)
+    {
+        printf("%s simGetSystemTime\n",couldNotFind);
+        return 0;
+    }
+    if (simGetSystemTimeInMilliseconds==nullptr)
+    {
+        printf("%s simGetSystemTimeInMilliseconds\n",couldNotFind);
+        return 0;
+    }
+    if (simFileDialog==nullptr)
+    {
+        printf("%s simFileDialog\n",couldNotFind);
+        return 0;
+    }
+    if (simMsgBox==nullptr)
+    {
+        printf("%s simMsgBox\n",couldNotFind);
+        return 0;
+    }
+    if (simDisplayDialog==nullptr)
+    {
+        printf("%s simDisplayDialog\n",couldNotFind);
+        return 0;
+    }
+    if (simGetDialogResult==nullptr)
+    {
+        printf("%s simGetDialogResult\n",couldNotFind);
+        return 0;
+    }
+    if (simGetDialogInput==nullptr)
+    {
+        printf("%s simGetDialogInput\n",couldNotFind);
+        return 0;
+    }
+    if (simEndDialog==nullptr)
+    {
+        printf("%s simEndDialog\n",couldNotFind);
+        return 0;
+    }
+    if (simIsObjectInSelection==nullptr)
+    {
+        printf("%s simIsObjectInSelection\n",couldNotFind);
+        return 0;
+    }
+    if (simAddObjectToSelection==nullptr)
+    {
+        printf("%s simAddObjectToSelection\n",couldNotFind);
+        return 0;
+    }
+    if (simRemoveObjectFromSelection==nullptr)
+    {
+        printf("%s simRemoveObjectFromSelection\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectSelectionSize==nullptr)
+    {
+        printf("%s simGetObjectSelectionSize\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectLastSelection==nullptr)
+    {
+        printf("%s simGetObjectLastSelection\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectSelection==nullptr)
+    {
+        printf("%s simGetObjectSelection\n",couldNotFind);
+        return 0;
+    }
+    if (simScaleSelectedObjects==nullptr)
+    {
+        printf("%s simScaleSelectedObjects\n",couldNotFind);
+        return 0;
+    }
+    if (simDeleteSelectedObjects==nullptr)
+    {
+        printf("%s simDeleteSelectedObjects\n",couldNotFind);
+        return 0;
+    }
+    if (simSetStringNamedParam==nullptr)
+    {
+        printf("%s simSetStringNamedParam\n",couldNotFind);
+        return 0;
+    }
+    if (simGetStringNamedParam==nullptr)
+    {
+        printf("%s simGetStringNamedParam\n",couldNotFind);
+        return 0;
+    }
+    if (simGetObjectUniqueIdentifier==nullptr)
+    {
+        printf("%s simGetObjectUniqueIdentifier\n",couldNotFind);
+        return 0;
+    }
+    if (_simSetDynamicJointLocalTransformationPart2==nullptr)
+    {
+        printf("%s _simSetDynamicJointLocalTransformationPart2\n",couldNotFind);
+        return 0;
+    }
+    if (_simSetDynamicForceSensorLocalTransformationPart2==nullptr)
+    {
+        printf("%s _simSetDynamicForceSensorLocalTransformationPart2\n",couldNotFind);
+        return 0;
+    }
+    if (_simSetDynamicJointLocalTransformationPart2IsValid==nullptr)
+    {
+        printf("%s _simSetDynamicJointLocalTransformationPart2IsValid\n",couldNotFind);
+        return 0;
+    }
+    if (_simSetDynamicForceSensorLocalTransformationPart2IsValid==nullptr)
+    {
+        printf("%s _simSetDynamicForceSensorLocalTransformationPart2IsValid\n",couldNotFind);
+        return 0;
+    }
+    if (_simGetDynamicForceSensorLocalTransformationPart2==nullptr)
+    {
+        printf("%s _simGetDynamicForceSensorLocalTransformationPart2\n",couldNotFind);
+        return 0;
+    }
+    if (_simIsForceSensorBroken==nullptr)
+    {
+        printf("%s _simIsForceSensorBroken\n",couldNotFind);
+        return 0;
+    }
+    if (simBreakForceSensor==nullptr)
+    {
+        printf("%s simBreakForceSensor\n",couldNotFind);
+        return 0;
+    }
+    if (simGetJointMatrix==nullptr)
+    {
+        printf("%s simGetJointMatrix\n",couldNotFind);
+        return 0;
+    }
+    if (simSetSphericalJointMatrix==nullptr)
+    {
+        printf("%s simSetSphericalJointMatrix\n",couldNotFind);
+        return 0;
+    }
+    if (simSetScriptAttribute==nullptr)
+    {
+        printf("%s simSetScriptAttribute\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptAttribute==nullptr)
+    {
+        printf("%s simGetScriptAttribute\n",couldNotFind);
+        return 0;
+    }
+    if (simSetScriptText==nullptr)
+    {
+        printf("%s simSetScriptText\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptText==nullptr)
+    {
+        printf("%s simGetScriptText\n",couldNotFind);
+        return 0;
+    }
+    if (simGetScriptProperty==nullptr)
+    {
+        printf("%s simGetScriptProperty\n",couldNotFind);
         return 0;
     }
     // Deprecated end

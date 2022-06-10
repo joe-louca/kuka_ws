@@ -259,36 +259,36 @@ model.objRefJobInfo={70} -- information about jobs stored in object references. 
 -------------------------------------------------------
 model.handles={}
 
-model.handles.ragnarRef=sim.getObjectHandle('Ragnar_ref')
-model.handles.ragnarGripperPlatformAttachment=sim.getObjectHandle('Ragnar_gripperPlatformAttachment')
-model.handles.ragnarWs=sim.getObjectHandle('Ragnar_ws')
-model.handles.ragnarWsBox=sim.getObjectHandle('Ragnar_wsBox')
+model.handles.ragnarRef=sim.getObject('./Ragnar_ref')
+model.handles.ragnarGripperPlatformAttachment=sim.getObject('./Ragnar_gripperPlatformAttachment')
+model.handles.ragnarWs=sim.getObject('./Ragnar_ws')
+model.handles.ragnarWsBox=sim.getObject('./Ragnar_wsBox')
 
-model.handles.alphaOffsetJ1=sim.getObjectHandle('Ragnar_zRotLeftFront')
-model.handles.betaOffsetJ1=sim.getObjectHandle('Ragnar_xRotLeftFront')
-model.handles.xOffsetJ1=sim.getObjectHandle('Ragnar_yOffsetLeft')
-model.handles.yOffsetJ1=sim.getObjectHandle('Ragnar_xOffsetLeftFront')
+model.handles.alphaOffsetJ1=sim.getObject('./Ragnar_zRotLeftFront')
+model.handles.betaOffsetJ1=sim.getObject('./Ragnar_xRotLeftFront')
+model.handles.xOffsetJ1=sim.getObject('./Ragnar_yOffsetLeft')
+model.handles.yOffsetJ1=sim.getObject('./Ragnar_xOffsetLeftFront')
 
 model.handles.ikTips={}
 for i=1,4,1 do
-    model.handles.ikTips[i]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'a_tip')
+    model.handles.ikTips[i]=sim.getObject('./Ragnar_secondaryArm'..i..'a_tip')
 end
 
 model.handles.motorJoints={}
 for i=1,4,1 do
-    model.handles.motorJoints[i]=sim.getObjectHandle('Ragnar_motor'..i)
+    model.handles.motorJoints[i]=sim.getObject('./Ragnar_motor'..i)
 end
 
 model.handles.tiltAdjustmentAngles={}
-model.handles.tiltAdjustmentAngles[1]=-sim.getJointPosition(sim.getObjectHandle('Ragnar_xRotLeftFront'))
-model.handles.tiltAdjustmentAngles[2]=sim.getJointPosition(sim.getObjectHandle('Ragnar_xRotRightFront'))
-model.handles.tiltAdjustmentAngles[3]=sim.getJointPosition(sim.getObjectHandle('Ragnar_xRotRightRear'))
-model.handles.tiltAdjustmentAngles[4]=-sim.getJointPosition(sim.getObjectHandle('Ragnar_xRotLeftRear'))
+model.handles.tiltAdjustmentAngles[1]=-sim.getJointPosition(sim.getObject('./Ragnar_xRotLeftFront'))
+model.handles.tiltAdjustmentAngles[2]=sim.getJointPosition(sim.getObject('./Ragnar_xRotRightFront'))
+model.handles.tiltAdjustmentAngles[3]=sim.getJointPosition(sim.getObject('./Ragnar_xRotRightRear'))
+model.handles.tiltAdjustmentAngles[4]=-sim.getJointPosition(sim.getObject('./Ragnar_xRotLeftRear'))
 model.handles.panAdjustmentAngles={}
-model.handles.panAdjustmentAngles[1]=-sim.getJointPosition(sim.getObjectHandle('Ragnar_zRotLeftFront'))
-model.handles.panAdjustmentAngles[2]=sim.getJointPosition(sim.getObjectHandle('Ragnar_zRotRightFront'))
-model.handles.panAdjustmentAngles[3]=-sim.getJointPosition(sim.getObjectHandle('Ragnar_zRotRightRear'))
-model.handles.panAdjustmentAngles[4]=sim.getJointPosition(sim.getObjectHandle('Ragnar_zRotLeftRear'))
+model.handles.panAdjustmentAngles[1]=-sim.getJointPosition(sim.getObject('./Ragnar_zRotLeftFront'))
+model.handles.panAdjustmentAngles[2]=sim.getJointPosition(sim.getObject('./Ragnar_zRotRightFront'))
+model.handles.panAdjustmentAngles[3]=-sim.getJointPosition(sim.getObject('./Ragnar_zRotRightRear'))
+model.handles.panAdjustmentAngles[4]=sim.getJointPosition(sim.getObject('./Ragnar_zRotLeftRear'))
 
 model.handles.primaryArms={}
 model.handles.secondaryArms={}
@@ -299,27 +299,27 @@ model.handles.secondaryArmsEndAdjust={}
 model.handles.primaryArmsLAdjust={}
 model.handles.secondaryArmsLAdjust={}
 
-model.handles.leftAndRightSideAdjust={sim.getObjectHandle('Ragnar_yOffsetLeft'),sim.getObjectHandle('Ragnar_yOffsetRight')}
+model.handles.leftAndRightSideAdjust={sim.getObject('./Ragnar_yOffsetLeft'),sim.getObject('./Ragnar_yOffsetRight')}
 
 for i=1,4,1 do
-    model.handles.primaryArms[#model.handles.primaryArms+1]=sim.getObjectHandle('Ragnar_primaryArm'..i..'_part2')
-    model.handles.secondaryArms[#model.handles.secondaryArms+1]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'a_part2')
-    model.handles.secondaryArms[#model.handles.secondaryArms+1]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'b_part2')
+    model.handles.primaryArms[#model.handles.primaryArms+1]=sim.getObject('./Ragnar_primaryArm'..i..'_part2')
+    model.handles.secondaryArms[#model.handles.secondaryArms+1]=sim.getObject('./Ragnar_secondaryArm'..i..'a_part2')
+    model.handles.secondaryArms[#model.handles.secondaryArms+1]=sim.getObject('./Ragnar_secondaryArm'..i..'b_part2')
 
-    model.handles.primaryArmsEndAdjust[#model.handles.primaryArmsEndAdjust+1]=sim.getObjectHandle('Ragnar_primaryArm'..i..'_adjustJ2')
-    model.handles.secondaryArmsEndAdjust[#model.handles.secondaryArmsEndAdjust+1]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'a_adjustJ2')
-    model.handles.secondaryArmsEndAdjust[#model.handles.secondaryArmsEndAdjust+1]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'b_adjustJ2')
+    model.handles.primaryArmsEndAdjust[#model.handles.primaryArmsEndAdjust+1]=sim.getObject('./Ragnar_primaryArm'..i..'_adjustJ2')
+    model.handles.secondaryArmsEndAdjust[#model.handles.secondaryArmsEndAdjust+1]=sim.getObject('./Ragnar_secondaryArm'..i..'a_adjustJ2')
+    model.handles.secondaryArmsEndAdjust[#model.handles.secondaryArmsEndAdjust+1]=sim.getObject('./Ragnar_secondaryArm'..i..'b_adjustJ2')
 
-    model.handles.primaryArmsLAdjust[#model.handles.primaryArmsLAdjust+1]=sim.getObjectHandle('Ragnar_primaryArm'..i..'_adjustJ1')
-    model.handles.secondaryArmsLAdjust[#model.handles.secondaryArmsLAdjust+1]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'a_adjustJ1')
-    model.handles.secondaryArmsLAdjust[#model.handles.secondaryArmsLAdjust+1]=sim.getObjectHandle('Ragnar_secondaryArm'..i..'b_adjustJ1')
+    model.handles.primaryArmsLAdjust[#model.handles.primaryArmsLAdjust+1]=sim.getObject('./Ragnar_primaryArm'..i..'_adjustJ1')
+    model.handles.secondaryArmsLAdjust[#model.handles.secondaryArmsLAdjust+1]=sim.getObject('./Ragnar_secondaryArm'..i..'a_adjustJ1')
+    model.handles.secondaryArmsLAdjust[#model.handles.secondaryArmsLAdjust+1]=sim.getObject('./Ragnar_secondaryArm'..i..'b_adjustJ1')
 end
 
 model.handles.centralCover={}
-model.handles.centralCover[1]=sim.getObjectHandle('Ragnar_centralCover')
+model.handles.centralCover[1]=sim.getObject('./Ragnar_centralCover')
 model.handles.nameElement={}
-model.handles.nameElement[1]=sim.getObjectHandle('Ragnar_frontName')
-model.handles.nameElement[2]=sim.getObjectHandle('Ragnar_rearName')
+model.handles.nameElement[1]=sim.getObject('./Ragnar_frontName')
+model.handles.nameElement[2]=sim.getObject('./Ragnar_rearName')
 
 model.handles.housingItems={}
 for i=1,#model.handles.centralCover,1 do
@@ -328,12 +328,12 @@ end
 for i=1,#model.handles.nameElement,1 do
     model.handles.housingItems[#model.handles.housingItems+1]=model.handles.nameElement[i]
 end
-model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_lightTower')
-model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_topCoverBump')
-model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_downstreamCover')
-model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_downstreamConnector')
-model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_upstreamCover')
-model.handles.housingItems[#model.handles.housingItems+1]=sim.getObjectHandle('Ragnar_upstreamConnector')
+model.handles.housingItems[#model.handles.housingItems+1]=sim.getObject('./Ragnar_lightTower')
+model.handles.housingItems[#model.handles.housingItems+1]=sim.getObject('./Ragnar_topCoverBump')
+model.handles.housingItems[#model.handles.housingItems+1]=sim.getObject('./Ragnar_downstreamCover')
+model.handles.housingItems[#model.handles.housingItems+1]=sim.getObject('./Ragnar_downstreamConnector')
+model.handles.housingItems[#model.handles.housingItems+1]=sim.getObject('./Ragnar_upstreamCover')
+model.handles.housingItems[#model.handles.housingItems+1]=sim.getObject('./Ragnar_upstreamConnector')
 
 
-model.handles.frameModel=sim.getObjectHandle('RagnarFrame')
+model.handles.frameModel=sim.getObject('./RagnarFrame')

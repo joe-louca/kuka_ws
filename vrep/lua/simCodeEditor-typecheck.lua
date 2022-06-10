@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simCodeEditor=require('simCodeEditor')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simCodeEditor.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simCodeEditor'][funcName]=wrapperGenerator(_G['simCodeEditor'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simCodeEditor.__addTypeCheck',true)
 
 return simCodeEditor

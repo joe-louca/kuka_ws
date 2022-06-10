@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simGLTF=require('simGLTF')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simGLTF.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simGLTF'][funcName]=wrapperGenerator(_G['simGLTF'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simGLTF.__addTypeCheck',true)
 
 return simGLTF

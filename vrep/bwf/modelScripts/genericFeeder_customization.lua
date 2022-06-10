@@ -252,18 +252,18 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
         if not data then
             data=sim.readCustomDataBlock(l[i],'XYZ_STATICPICKWINDOW_INFO')
             if data then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
         if not data then
             data=sim.readCustomDataBlock(l[i],simBWF.modelTags.OLDSTATICPLACEWINDOW)
             if data then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -276,7 +276,7 @@ function getAvailableConveyors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -775,7 +775,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -791,7 +791,7 @@ function sysCall_init()
     end
     ----------------------------------------
     writeInfo(_info)
-    functionalPartHolder=sim.getObjectHandle('genericFeeder_functional')
+    functionalPartHolder=sim.getObject('./genericFeeder_functional')
 	
     updatePluginRepresentation()
     previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos=simBWF.readSessionPersistentObjectData(model,"dlgPosAndSize")

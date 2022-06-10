@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSaveModel" id="simSaveModel"></a>simSaveModel / sim.saveModel </h3>
+<p class=subsectionBar><a name="simSaveModel" id="simSaveModel"></a>simSaveModel / sim.saveModel </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSaveModel(int baseOfModelHandle,const simChar* filename)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>baseOfModelHandle</strong>: handle of an object marked as &quot;Object is model base&quot;</div>
 <div><strong>filename</strong>: model filename. The filename extension is required (<em>ttm</em>, or <em>simmodel.xml</em>)</div>
@@ -39,7 +39,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful</div>
@@ -50,7 +50,7 @@ C return value
 Lua synopsis
 </td> 
 <td class=apiTableRightLSyn>
-<div>string buffer=sim.saveModel(int baseOfModelHandle,string filename=nil)</div>
+<div>buffer modelData=sim.saveModel(int baseOfModelHandle,string filename=nil)</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -65,9 +65,17 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div><strong>buffer</strong>: a buffer containing the saved model, if the model was specified to be saved to memory.</div>
+<div><strong>modelData</strong>: a buffer containing the saved model, if the model was specified to be saved to memory.</div>
 </td> 
 </tr> 
+
+<tr class=apiTableTr> 
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>bytes buffer=sim.saveModel(int baseOfModelHandle,string filename=None)</td> 
+</tr> 
+
 </table> 
 
 

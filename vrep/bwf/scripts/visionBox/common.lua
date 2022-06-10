@@ -108,4 +108,4 @@ model.objRefJobInfo={30} -- information about jobs stored in object references. 
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.body=sim.getObjectHandle('visionBox_obj')
+model.handles.body=sim.getObject('./visionBox_obj')

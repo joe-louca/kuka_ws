@@ -93,16 +93,16 @@ model.handles={}
 
 local isPick=(model.readInfo()['type']==0)
 if isPick then
-    model.handles.frameShape=sim.getObjectHandle('pickLocationFrame_shape')
+    model.handles.frameShape=sim.getObject('./pickLocationFrame_shape')
 else
-    model.handles.frameShape=sim.getObjectHandle('placeLocationFrame_shape')
+    model.handles.frameShape=sim.getObject('./placeLocationFrame_shape')
 end
 
 model.handles.calibrationBalls={}
 for i=1,3,1 do
     if isPick then
-        model.handles.calibrationBalls[i]=sim.getObjectHandle('pickLocationFrame_calibrationBall'..i)
+        model.handles.calibrationBalls[i]=sim.getObject('./pickLocationFrame_calibrationBall'..i)
     else
-        model.handles.calibrationBalls[i]=sim.getObjectHandle('placeLocationFrame_calibrationBall'..i)
+        model.handles.calibrationBalls[i]=sim.getObject('./placeLocationFrame_calibrationBall'..i)
     end
 end

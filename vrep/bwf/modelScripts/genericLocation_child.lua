@@ -64,7 +64,7 @@ function isATransporterWithinRange()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     buckets=getAvailableBuckets()
     transporters=getAvailableTransporters()
 end

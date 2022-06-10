@@ -1,5 +1,5 @@
 simBWF=require('simBWF')
-local isCustomizationScript=sim.getScriptAttribute(sim.getScriptHandle(sim.handle_self),sim.scriptattribute_scripttype)==sim.scripttype_customizationscript
+local isCustomizationScript=sim.getScriptAttribute(sim.getScriptAttribute(sim.handle_self,sim.scriptattribute_scripthandle),sim.scriptattribute_scripttype)==sim.scripttype_customizationscript
 
 if false then -- if not sim.isPluginLoaded('Bwf') then
     function sysCall_init()
@@ -18,7 +18,7 @@ else
             else
             
                 -- For backward compatibility:
-                local instanciatedPartHolder=sim.getObjectHandle('instanciatedParts@silentError')
+                local instanciatedPartHolder=sim.getObject('./instanciatedParts@silentError')
                 if instanciatedPartHolder==-1 then
                     local h=sim.createDummy(0.001)
                     sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,0)

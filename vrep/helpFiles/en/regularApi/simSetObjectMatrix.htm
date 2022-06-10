@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetObjectMatrix" id="simSetObjectMatrix"></a>simSetObjectMatrix / sim.setObjectMatrix </h3>
+<p class=subsectionBar><a name="simSetObjectMatrix" id="simSetObjectMatrix"></a>simSetObjectMatrix / sim.setObjectMatrix </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Sets the transformation matrix of an object. Dynamically simulated objects will implicitely be reset before the command is applied (i.e. similar to calling  <a href="simResetDynamicObject.htm">sim.resetDynamicObject</a> just before). See also the other <a href="../apiFunctions.htm#coordinatesAndTransformations">matrix/transformation functions</a>.</td>
+<td class=apiTableRightDescr>Sets the transformation matrix of an object. Dynamically simulated objects, together with their hierarchy tree, will be dynamically reset (this however does not apply to static shapes). See also the other <a href="../apiFunctions.htm#coordinatesAndTransformations">matrix/transformation functions</a>.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetObjectMatrix(simInt objectHandle,simInt relativeToObjectHandle,const simFloat* matrix)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of the object. Can be combined with sim.handleflag_reljointbaseframe (see next argument)</div>
 <div><strong>relativeToObjectHandle</strong>: indicates relative to which reference frame the matrix is specified. Specify -1 to set the absolute transformation matrix, sim.handle_parent to set the transformation matrix relative to the object's parent, or an object handle relative to whose reference frame the transformation matrix is specified. If this handle is the handle of a joint, then the matrix is applied relative to the joint's moving frame (unless <strong>objectHandle</strong> is combined with sim.handleflag_reljointbaseframe, in which case the matrix is applied relative to the joint's base frame).<br>
@@ -45,7 +45,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -56,7 +56,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>sim.setObjectMatrix(int objectHandle,int relativeToObjectHandle,table[12] matrix)<br></td> 
+<td class=apiTableRightLSyn>sim.setObjectMatrix(int objectHandle,int relativeToObjectHandle,float[12] matrix)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -69,25 +69,23 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxSetObjectMatrix">simxSetObjectMatrix</a></div>
-<div>Legacy remote API: -</div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>sim.setObjectMatrix(int objectHandle,int relativeToObjectHandle,list matrix)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

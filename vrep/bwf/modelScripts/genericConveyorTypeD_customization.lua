@@ -10,7 +10,7 @@ end
 function ext_getItemData_pricing()
     local c=readInfo()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.type='conveyor'
     obj.conveyorType='default'
     obj.brVersion=0
@@ -161,7 +161,7 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -174,7 +174,7 @@ function getAvailableMasterConveyors()
         if l[i]~=model then
             local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
             if data then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -791,7 +791,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -811,13 +811,13 @@ function sysCall_init()
     end
     ----------------------------------------
     writeInfo(_info)
-    base=sim.getObjectHandle('genericConveyorTypeD_base')
-    baseBack=sim.getObjectHandle('genericConveyorTypeD_baseBack')
-    baseFront=sim.getObjectHandle('genericConveyorTypeD_baseFront')
-    padBase=sim.getObjectHandle('genericConveyorTypeD_padBase')
-    padBaseShape=sim.getObjectHandle('genericConveyorTypeD_padBaseShape')
-    padWallShape=sim.getObjectHandle('genericConveyorTypeD_padWallShape')
-    path=sim.getObjectHandle('genericConveyorTypeD_path')
+    base=sim.getObject('./genericConveyorTypeD_base')
+    baseBack=sim.getObject('./genericConveyorTypeD_baseBack')
+    baseFront=sim.getObject('./genericConveyorTypeD_baseFront')
+    padBase=sim.getObject('./genericConveyorTypeD_padBase')
+    padBaseShape=sim.getObject('./genericConveyorTypeD_padBaseShape')
+    padWallShape=sim.getObject('./genericConveyorTypeD_padWallShape')
+    path=sim.getObject('./genericConveyorTypeD_path')
 
 	
     updatePluginRepresentation()

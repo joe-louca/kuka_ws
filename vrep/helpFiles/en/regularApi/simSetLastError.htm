@@ -16,30 +16,30 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetLastError" id="simSetLastError"></a>simSetLastError</h3>
+<p class=subsectionBar><a name="simSetLastError" id="simSetLastError"></a>simSetLastError</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Sets a custom error message and possibly raises a script error, if a callback to a plugin is underway. See also <a href="simGetLastError.htm">sim.getLastError</a></td>
+<td class=apiTableRightDescr>Sets a custom error or warning message and possibly raises a script error. See also <a href="simGetLastError.htm">simGetLastError</a></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetLastError(const simChar* funcName,const simChar* errorMessage)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
-<div><strong>funcName</strong>: name of the function where the error originated. .</div>
-<div><strong>errorMessage</strong>: error message</div>
+<div><strong>funcName</strong>: name of the function where the message originated. Can be nullptr.</div>
+<div><strong>errorMessage</strong>: error or warning message. A warning message should start with <em>warning@</em>.</div>
 <div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -64,6 +64,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div></div></td> 
 </tr> 
+
+<tr class=apiTableTr> 
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn><div></div></td> 
+</tr> 
+
 </table> 
 
 

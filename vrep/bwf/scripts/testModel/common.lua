@@ -66,5 +66,5 @@ model.objRefJobInfo={2} -- information about jobs stored in object references. I
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.body=sim.getObjectHandle('testModel_shape')
+model.handles.body=sim.getObject('./testModel_shape')
 

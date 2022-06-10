@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simCreatePointCloud" id="simCreatePointCloud"></a>simCreatePointCloud / sim.createPointCloud </h3>
+<p class=subsectionBar><a name="simCreatePointCloud" id="simCreatePointCloud"></a>simCreatePointCloud / sim.createPointCloud </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simCreatePointCloud(simFloat maxVoxelSize,simInt maxPtCntPerVoxel,simInt options,simFloat pointSize,simVoid* reserved)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>maxVoxelSize</strong>: the maximum size of the OC tree voxels containing points</div>
 <div><strong>maxPtCntPerVoxel</strong>: the maximum number of points allowed in a same OC tree voxel</div>
@@ -47,7 +47,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise the handle of the point cloud</div>
@@ -73,8 +73,14 @@ Lua return values
 <div>Similar to the C-function counterpart</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int handle=sim.createPointCloud(float maxVoxelSize,int maxPtCntPerVoxel,int options,float pointSize)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

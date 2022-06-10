@@ -85,7 +85,7 @@ model.objRefJobInfo={1} -- information about jobs stored in object references. I
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.body=sim.getObjectHandle('RagnarCamera_body')
-model.handles.arrows=sim.getObjectHandle('RagnarCamera_arrows')
-model.handles.sensor=sim.getObjectHandle('RagnarCamera_sensor')
+model.handles.body=sim.getObject('./RagnarCamera_body')
+model.handles.arrows=sim.getObject('./RagnarCamera_arrows')
+model.handles.sensor=sim.getObject('./RagnarCamera_sensor')
 

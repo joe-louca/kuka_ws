@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simSDF=require('simSDF')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simSDF.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simSDF'][funcName]=wrapperGenerator(_G['simSDF'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simSDF.__addTypeCheck',true)
 
 return simSDF

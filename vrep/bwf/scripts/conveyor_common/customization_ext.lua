@@ -70,12 +70,12 @@ end
 
 function model.ext.getSerializationData()
     local data={}
-    data.objectName=sim.getObjectName(model.handle)
-    data.objectAltName=sim.getObjectName(model.handle+sim.handleflag_altname)
+    data.objectName=sim.getObjectAlias(model.handle,1)
+    data.objectAltName=sim.getObjectAlias(model.handle)
     data.matrix=sim.getObjectMatrix(model.handle,-1)
     local parentHandle=sim.getObjectParent(model.handle)
     if parentHandle>=0 then
-        data.parentName=sim.getObjectName(parentHandle)
+        data.parentName=sim.getObjectAlias(parentHandle,1)
     end
     data.embeddedData=model.readInfo()
     

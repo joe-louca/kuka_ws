@@ -1,6 +1,6 @@
 simBWF=require('simBWF')
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,'XYZ_SIMULATIONTIME_INFO')
     data=sim.unpackTable(data)
     simplified=(data['bitCoded']&1)==1

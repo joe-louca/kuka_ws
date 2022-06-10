@@ -52,16 +52,16 @@ setCartridgeEmpty=function()
     sim.setThreadAutomaticSwitch(true)
 end
 
-model=sim.getObjectHandle('genericPingPongPacker')
+model=sim.getObject('./genericPingPongPacker')
 local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
 data=sim.unpackTable(data)
 maxVel=data['cartridgeVelocity']
 maxAccel=data['cartridgeAcceleration']
 dwellTimeDown=data['cartridgeDwellTimeDown']
 dwellTimeUp=data['cartridgeDwellTimeUp']
-j=sim.getObjectHandle('genericPingPongPacker_cartridge1_upDownJoint')
-sens=sim.getObjectHandle('genericPingPongPacker_cartridge1_sensor')
-stopper=sim.getObjectHandle('genericPingPongPacker_cartridge1_stopper')
+j=sim.getObject('./genericPingPongPacker_cartridge1_upDownJoint')
+sens=sim.getObject('./genericPingPongPacker_cartridge1_sensor')
+stopper=sim.getObject('./genericPingPongPacker_cartridge1_stopper')
 
 while sim.getSimulationState()~=sim.simulation_advancing_abouttostop do
     waitForSensor(true)

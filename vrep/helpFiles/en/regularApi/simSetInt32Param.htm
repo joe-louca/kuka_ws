@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<title>simSetInt32Param</title>
+<title>sim.setInt32Param</title>
 <link rel="stylesheet" type="text/css" href="../../style.css">
 </head>
 
@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetInt32Param" id="simSetInt32Param"></a>simSetInt32Param / sim.setInt32Param</h3>
+<p class=subsectionBar><a name="simSetInt32Param" id="simSetInt32Param"></a>simSetInt32Param / sim.setInt32Param</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Sets an <a href="../apiConstants.htm#integerParameters">integer parameter</a>. See also <a href="simGetInt32Param.htm">sim.getInt32Param</a>, <a href="simSetBoolParam.htm">sim.setBoolParam</a>, <a href="simSetArrayParam.htm">sim.setArrayParam</a> and <a href="simSetFloatParam.htm">sim.setFloatParam</a>.<br></td>
+<td class=apiTableRightDescr>Sets an <a href="../apiConstants.htm#integerParameters">integer parameter</a>. See also the other <a href="../apiFunctions.htm#params">simulator parameter related functions</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetInt32Param(simInt parameter,simInt intState)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>parameter</strong>: <a href="../apiConstants.htm#integerParameters">integer parameter identifier</a></div>
 <div><strong>intState</strong>: new state for the parameter</div>
@@ -39,7 +39,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -64,26 +64,23 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none
-</div></td> 
+<div></div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxSetIntParameter">simxSetIntParameter</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxSetIntegerParameter">simxSetIntegerParameter</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>sim.setInt32Param(int parameter,int intState)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

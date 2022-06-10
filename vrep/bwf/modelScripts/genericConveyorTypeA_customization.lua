@@ -10,7 +10,7 @@ end
 function ext_getItemData_pricing()
     local c=readInfo()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.type='conveyor'
     obj.conveyorType='default'
     obj.brVersion=0
@@ -230,7 +230,7 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -243,7 +243,7 @@ function getAvailableMasterConveyors()
         if l[i]~=model then
             local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
             if data then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -673,7 +673,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -695,29 +695,29 @@ function sysCall_init()
     writeInfo(_info)
     
     rotJoints={}
-    rotJoints[1]=sim.getObjectHandle('genericConveyorTypeA_jointB')
-    rotJoints[2]=sim.getObjectHandle('genericConveyorTypeA_jointC')
+    rotJoints[1]=sim.getObject('./genericConveyorTypeA_jointB')
+    rotJoints[2]=sim.getObject('./genericConveyorTypeA_jointC')
 
     middleParts={}
-    middleParts[1]=sim.getObjectHandle('genericConveyorTypeA_sides')
-    middleParts[2]=sim.getObjectHandle('genericConveyorTypeA_textureA')
-    middleParts[3]=sim.getObjectHandle('genericConveyorTypeA_forwarderA')
+    middleParts[1]=sim.getObject('./genericConveyorTypeA_sides')
+    middleParts[2]=sim.getObject('./genericConveyorTypeA_textureA')
+    middleParts[3]=sim.getObject('./genericConveyorTypeA_forwarderA')
     
     endParts={}
-    endParts[1]=sim.getObjectHandle('genericConveyorTypeA_textureB')
-    endParts[2]=sim.getObjectHandle('genericConveyorTypeA_textureC')
-    endParts[3]=sim.getObjectHandle('genericConveyorTypeA_B')
-    endParts[4]=sim.getObjectHandle('genericConveyorTypeA_C')
-    endParts[5]=sim.getObjectHandle('genericConveyorTypeA_forwarderB')
-    endParts[6]=sim.getObjectHandle('genericConveyorTypeA_forwarderC')
+    endParts[1]=sim.getObject('./genericConveyorTypeA_textureB')
+    endParts[2]=sim.getObject('./genericConveyorTypeA_textureC')
+    endParts[3]=sim.getObject('./genericConveyorTypeA_B')
+    endParts[4]=sim.getObject('./genericConveyorTypeA_C')
+    endParts[5]=sim.getObject('./genericConveyorTypeA_forwarderB')
+    endParts[6]=sim.getObject('./genericConveyorTypeA_forwarderC')
 
     sides={}
-    sides[1]=sim.getObjectHandle('genericConveyorTypeA_leftSide')
-    sides[2]=sim.getObjectHandle('genericConveyorTypeA_rightSide')
-    sides[3]=sim.getObjectHandle('genericConveyorTypeA_frontSide')
-    sides[4]=sim.getObjectHandle('genericConveyorTypeA_backSide')
+    sides[1]=sim.getObject('./genericConveyorTypeA_leftSide')
+    sides[2]=sim.getObject('./genericConveyorTypeA_rightSide')
+    sides[3]=sim.getObject('./genericConveyorTypeA_frontSide')
+    sides[4]=sim.getObject('./genericConveyorTypeA_backSide')
 
-    textureHolder=sim.getObjectHandle('genericConveyorTypeA_textureHolder')
+    textureHolder=sim.getObject('./genericConveyorTypeA_textureHolder')
 
 	
     updatePluginRepresentation()

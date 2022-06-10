@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simRotateAroundAxis" id="simRotateAroundAxis"></a>simRotateAroundAxis / sim.rotateAroundAxis </h3>
+<p class=subsectionBar><a name="simRotateAroundAxis" id="simRotateAroundAxis"></a>simRotateAroundAxis / sim.rotateAroundAxis </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simRotateAroundAxis(const simFloat* matrixIn,const simFloat* axis,const simFloat* axisPos,simFloat angle,simFloat* matrixOut)  <br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>matrixIn</strong>: the transformation matrix to rotate</div>
 <div><strong>axis</strong>: the axis vector in absolute coordinates to rotate around</div>
@@ -42,7 +42,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -53,7 +53,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[12] matrixOut=sim.rotateAroundAxis(table[12] matrixIn,table[3] axis,table[3] axisPos,float angle)<br></td> 
+<td class=apiTableRightLSyn>float[12] matrixOut=sim.rotateAroundAxis(float[12] matrixIn,float[3] axis,float[3] axisPos,float angle)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -69,8 +69,14 @@ Lua return values
 <div><strong>matrixOut</strong>: the transformed (rotated) matrix, or nil in case of an error</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list matrixOut=sim.rotateAroundAxis(list matrixIn,list axis,list axisPos,float angle)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

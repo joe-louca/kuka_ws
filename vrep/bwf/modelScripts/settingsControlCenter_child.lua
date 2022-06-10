@@ -1,6 +1,6 @@
 simBWF=require('simBWF')
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     version=sim.getInt32Param(sim.intparam_program_version)
     local data=sim.unpackTable(sim.readCustomDataBlock(model,simBWF.modelTags.OLDOVERRIDE))
     if (data['bitCoded']&8)>0 then
@@ -56,7 +56,7 @@ function sysCall_init()
                 end
             end
             if hh1>=0 then
-                local msg="Detected at least two coincident models: '"..sim.getObjectName(hh1).."' and '"..sim.getObjectName(hh2).."'. Simulation might not run as expected."
+                local msg="Detected at least two coincident models: '"..sim.getObjectAlias(hh1,1).."' and '"..sim.getObjectAlias(hh2,1).."'. Simulation might not run as expected."
                 sim.msgBox(sim.msgbox_type_warning,sim.msgbox_buttons_ok,"Coincident Models",msg)
             end
         end

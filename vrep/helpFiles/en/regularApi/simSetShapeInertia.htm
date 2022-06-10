@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetShapeInertia" id="simSetShapeInertia"></a>simSetShapeInertia / sim.setShapeInertia </h3>
+<p class=subsectionBar><a name="simSetShapeInertia" id="simSetShapeInertia"></a>simSetShapeInertia / sim.setShapeInertia </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetShapeInertia(simInt shapeHandle,const simFloat* inertiaMatrix,const simFloat* transformationMatrix)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>shapeHandle</strong>: handle of the <a href="../shapes.htm">shape object</a></div>
 <div><strong>inertiaMatrix</strong>: the new inertia matrix or tensor (9 values), expressed relative to <em>transformationMatrix</em> (which should coincide with the center of mass). The matrix should be symmetric.</div>
@@ -40,7 +40,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 in case of an error</div>
@@ -50,7 +50,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>sim.setShapeInertia(int shapeHandle,table[9] inertiaMatrix,table[12] transformationMatrix)</td> 
+<td class=apiTableRightLSyn>sim.setShapeInertia(int shapeHandle,float[9] inertiaMatrix,float[12] transformationMatrix)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -63,10 +63,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>sim.setShapeInertia(int shapeHandle,list inertiaMatrix,list transformationMatrix)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

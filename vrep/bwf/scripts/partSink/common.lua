@@ -66,5 +66,5 @@ model.objRefJobInfo={1} -- information about jobs stored in object references. I
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.frame=sim.getObjectHandle('partSink_frame')
-model.handles.cross=sim.getObjectHandle('partSink_cross')
+model.handles.frame=sim.getObject('./partSink_frame')
+model.handles.cross=sim.getObject('./partSink_cross')

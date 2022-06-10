@@ -60,7 +60,7 @@ end
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.hand=sim.getObjectHandle('RagnarGripper_hand')
-model.handles.nails=sim.getObjectHandle('RagnarGripper_nails')
-model.handles.sensor=sim.getObjectHandle('RagnarGripper_sensor')
-model.handles.attachPt=sim.getObjectHandle('RagnarGripper_attachPt')
+model.handles.hand=sim.getObject('./RagnarGripper_hand')
+model.handles.nails=sim.getObject('./RagnarGripper_nails')
+model.handles.sensor=sim.getObject('./RagnarGripper_sensor')
+model.handles.attachPt=sim.getObject('./RagnarGripper_attachPt')

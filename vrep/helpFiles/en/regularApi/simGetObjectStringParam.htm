@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<title>simGetObjectStringParam</title>
+<title>sim.getObjectStringParam</title>
 <link rel="stylesheet" type="text/css" href="../../style.css">
 </head>
 
@@ -16,32 +16,32 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetObjectStringParam" id="simGetObjectStringParam"></a>simGetObjectStringParam / sim.getObjectStringParam </h3>
+<p class=subsectionBar><a name="simGetObjectStringParam" id="simGetObjectStringParam"></a>simGetObjectStringParam / sim.getObjectStringParam </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a string parameter of a <a href="../objects.htm">scene object</a>. See also <a href="simSetObjectStringParam.htm">sim.setObjectStringParam</a>, <a href="simGetObjectInt32Param.htm">simGetObjectInt32Param</a> and <a href="simGetObjectFloatParam.htm">sim.getObjectFloatParam</a><br></td>
+<td class=apiTableRightDescr>Retrieves a string parameter of a <a href="../objects.htm">scene object</a>. See also the other <a href="../apiFunctions.htm#objectParameters">object parameter related functions</a><br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simChar* simGetObjectStringParam(simInt objectHandle,simInt parameterID,simInt* parameterLength)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of the object</div>
-<div><strong>parameterID</strong>: identifier of the parameter to retrieve. See the <a href="../objectParameterIDs.htm">list of all possible object parameter identifiers</a><br>
+<div><strong>parameterID</strong>: identifier of the parameter to retrieve. See the <a href="../objectParameterIDs.htm">list of all possible object parameters</a><br>
 </div>
 <div><strong>parameterLength</strong>: the length of the retrieved parameter</div>
 <div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>A buffer containing the retrieved string, or nullptr in case of an error. The user is in charge of releasing the returned buffer with <a href="simReleaseBuffer.htm">simReleaseBuffer</a>. The returned buffer might contain embedded zeros, and its length is specified by the parameterLength argument.<br>
@@ -52,7 +52,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>string parameter=sim.getObjectStringParam(int objectHandle,int parameterID)<br></td> 
+<td class=apiTableRightLSyn>buffer parameter=sim.getObjectStringParam(int objectHandle,int parameterID)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -69,22 +69,20 @@ Lua return values
 <div></div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetObjectStringParameter">simxGetObjectStringParameter</a></div>
-<div>Legacy remote API: -</div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>string/bytes parameter=sim.getObjectStringParam(int objectHandle,int parameterID)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

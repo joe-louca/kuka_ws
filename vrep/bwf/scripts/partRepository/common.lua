@@ -39,5 +39,5 @@ end
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.originalPartHolder=sim.getObjectHandle('partRepository_modelParts')
-model.handles.proxSensor=sim.getObjectHandle('partRepository_sensor')
+model.handles.originalPartHolder=sim.getObject('./partRepository_modelParts')
+model.handles.proxSensor=sim.getObject('./partRepository_sensor')

@@ -61,6 +61,6 @@ model.objRefJobInfo={1} -- information about jobs stored in object references. I
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.body=sim.getObjectHandle('inputBox_obj')
-model.handles.sigPart=sim.getObjectHandle('inputBox_signalPart')
+model.handles.body=sim.getObject('./inputBox_obj')
+model.handles.sigPart=sim.getObject('./inputBox_signalPart')
 

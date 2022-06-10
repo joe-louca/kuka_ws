@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simCreateCollection" id="simCreateCollection"></a>simCreateCollection / sim.createCollection </h3>
+<p class=subsectionBar><a name="simCreateCollection" id="simCreateCollection"></a>simCreateCollection / sim.createCollection </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -27,20 +27,20 @@ Creates a new <a href="../collections.htm">collection</a>. A collection created 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simCreateCollectionEx(simInt options)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>options</strong>: bit-coded options:</div>
-<div class=tab>bit 0 set (1): collection overrides collidable, measurable, renderable and detectable properties.</div>
+<div class=tab>bit 0 set (1): collection overrides collidable, measurable, detectable properties, and also the visibility state of its objects.</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise the handle of the new collection.</div>
@@ -66,8 +66,14 @@ Lua return values
 <div>Similar to the C-function counterpart</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int collectionHandle=sim.createCollection(int options)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

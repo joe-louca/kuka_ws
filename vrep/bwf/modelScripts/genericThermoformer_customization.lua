@@ -161,7 +161,7 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -803,7 +803,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -819,10 +819,10 @@ function sysCall_init()
     end
     ----------------------------------------
     writeInfo(_info)
-    baseShape=sim.getObjectHandle('genericThermoformer_base')
-    sampleHolder=sim.getObjectHandle('genericThermoformer_sampleHolder')
-    palletHolder=sim.getObjectHandle('genericThermoformer_palletHolder')
-    sensor=sim.getObjectHandle('genericThermoformer_sensor')
+    baseShape=sim.getObject('./genericThermoformer_base')
+    sampleHolder=sim.getObject('./genericThermoformer_sampleHolder')
+    palletHolder=sim.getObject('./genericThermoformer_palletHolder')
+    sensor=sim.getObject('./genericThermoformer_sensor')
 	
 
     -- For backward compatibility:

@@ -91,5 +91,5 @@ model.objRefJobInfo={6,3} -- information about jobs stored in object references.
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.sensor=sim.getObjectHandle('RagnarSensor_sensor')
-model.handles.blueBall=sim.getObjectHandle('RagnarSensor_blueBall')
+model.handles.sensor=sim.getObject('./RagnarSensor_sensor')
+model.handles.blueBall=sim.getObject('./RagnarSensor_blueBall')

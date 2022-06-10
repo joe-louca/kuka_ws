@@ -556,7 +556,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -567,10 +567,10 @@ function sysCall_init()
         data['name']='PILLOWBAG'
     end
     writePartInfo(data)
-    texture=sim.getObjectHandle('genericPillowBag_texture')
-    smallLabel=sim.getObjectHandle('genericPillowBag_smallLabel')
-    largeLabel=sim.getObjectHandle('genericPillowBag_largeLabel')
-    convex=sim.getObjectHandle('genericPillowBag_convex')
+    texture=sim.getObject('./genericPillowBag_texture')
+    smallLabel=sim.getObject('./genericPillowBag_smallLabel')
+    largeLabel=sim.getObject('./genericPillowBag_largeLabel')
+    convex=sim.getObject('./genericPillowBag_convex')
     
     updatePluginRepresentation()
     previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos=simBWF.readSessionPersistentObjectData(model,"dlgPosAndSize")

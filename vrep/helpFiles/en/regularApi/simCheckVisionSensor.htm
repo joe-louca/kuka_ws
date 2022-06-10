@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simCheckVisionSensor" id="simCheckVisionSensor"></a>simCheckVisionSensor / sim.checkVisionSensor </h3>
+<p class=subsectionBar><a name="simCheckVisionSensor" id="simCheckVisionSensor"></a>simCheckVisionSensor / sim.checkVisionSensor </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Checks whether the vision sensor detects the indicated entity. Detection is silent (no visual feedback) compared to <a href="simHandleVisionSensor.htm">sim.handleVisionSensor</a>. The <a href="../visionCallbackFunctions.htm">vision callback functions</a> will be called on the acquired image. Also, the renderable flag of the entity is overridden if the entity is an object. See also <a href="simReadVisionSensor.htm">sim.readVisionSensor</a> and <a href="simCheckVisionSensorEx.htm">sim.checkVisionSensorEx</a>.<br></td>
+<td class=apiTableRightDescr>Checks whether the vision sensor detects the indicated entity. Detection is silent (no visual feedback) compared to <a href="simHandleVisionSensor.htm">sim.handleVisionSensor</a>. The <a href="../visionCallbackFunctions.htm">vision callback functions</a> will be called on the acquired image. Also, the visibility state of the entity is overridden if the entity is an object. See also <a href="simReadVisionSensor.htm">sim.readVisionSensor</a> and <a href="simCheckVisionSensorEx.htm">sim.checkVisionSensorEx</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simCheckVisionSensor(simInt sensorHandle,simInt entityHandle,simFloat** auxValues,simInt** auxValuesCount)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>sensorHandle</strong>: handle of the vision sensor object</div>
 <div><strong>entityHandle</strong>: handle of entity to detect (object or collection), or sim_handle_all to detect all detectable objects<br>
@@ -42,7 +42,8 @@ C synopsis
 </div>
 <br>
 <div>Usage example:</div>
-<pre class=lightBlueBoxNoMarginAndSmall>
+
+<code class="hljs language-c++ simple">
 float* auxValues=nullptr;
 int* auxValuesCount=nullptr;
 float averageColor[3]={0.0f,0.0f,0.0f};
@@ -56,12 +57,12 @@ if (simCheckVisionSensor(sensorHandle,entityHandle,&auxValues,&auxValuesCount)>=
     }
     simReleaseBuffer((char*)auxValues);
     simReleaseBuffer((char*)auxValuesCount);
-}</pre>
+}</code>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise 0 (no detection) or 1 (detection)<br>
@@ -72,7 +73,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int result,table[] auxiliaryValuePacket1,table[] auxiliaryValuePacket2, etc.=sim.checkVisionSensor(int sensorHandle,int entityHandle)<br></td> 
+<td class=apiTableRightLSyn>int result,float[] auxiliaryValuePacket1,float[] auxiliaryValuePacket2, etc.=sim.checkVisionSensor(int sensorHandle,int entityHandle)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -87,28 +88,26 @@ Lua return values
 </td> 
 <td class=apiTableRightLRet>
 <div><strong>result</strong>: 0 (no detection) or 1 (detection)</div>
-<div><strong>auxiliaryValuePacket1</strong>: default auxiliary value packet (same as for the C-function) (table[] values in Lua are indexed from 1, not 0!)</div>
+<div><strong>auxiliaryValuePacket1</strong>: default auxiliary value packet (same as for the C-function) (values in Lua are indexed from 1, not 0!)</div>
 <div><strong>auxiliaryValuePacket2</strong>: additional auxiliary value packet (e.g. from an image processing component)</div>
 <div><strong>auxiliaryValuePacket3</strong>: etc. (the function returns as many tables as there are auxiliary value packets)</div>
 </td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxCheckVisionSensor">simxCheckVisionSensor</a></div>
-<div>Legacy remote API: -</div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int result,list auxiliaryValuePacket1,list auxiliaryValuePacket2, etc.=sim.checkVisionSensor(int sensorHandle,int entityHandle)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

@@ -28,7 +28,7 @@ function model.dlg.generate_callback()
         data.version=1
         sim.writeCustomDataBlock(model.selectedObj,simBWF.modelTags.GENERIC_PART,sim.packTable(data))
         -- Set/attach the correct customization script:
-        local s=sim.getCustomizationScriptAssociatedWithObject(model.selectedObj)
+        local s=sim.getScriptHandle(sim.scripttype_customizationscript,model.selectedObj)
         if s<0 then
             s=sim.addScript(sim.scripttype_customizationscript)
             sim.associateScriptWithObject(s,model.selectedObj)

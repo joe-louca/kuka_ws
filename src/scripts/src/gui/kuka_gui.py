@@ -3,6 +3,7 @@ from tkinter import ttk
 import rospy
 from std_msgs.msg import Float32MultiArray
 from math import pi
+from time import sleep
 
 class CustomScale(ttk.Scale):
     def __init__(self, master=None, **kw):
@@ -90,14 +91,16 @@ scl_ft = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
 scl_ft.grid(row=8,column=1,sticky="nsew")
 scl_ft.set(50)
 
-tk.Label(text="Scale Speed (%)",foreground="black",background="burlywood1",width=7,height=3).grid(row=9,column=0,sticky="nsew",pady= 1)
-scl_spd = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
-scl_spd.grid(row=9,column=1,sticky="nsew")
-scl_spd.set(50)
+tk.Label(text="Scale Speed - Linear (%)",foreground="black",background="burlywood1",width=7,height=3).grid(row=9,column=0,sticky="nsew",pady= 1)
+scl_lin = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
+scl_lin.grid(row=9,column=1,sticky="nsew")
+scl_lin.set(50)
 
-#tk.Label(text="Latency (ms)",foreground="black",background="coral1",width=7,height=3).grid(row=10,column=0,sticky="nsew",pady = 1)
-#scl_lat = tk.Scale(master=root, from_=0, to=2600, orient=tk.HORIZONTAL, resolution=50)
-#scl_lat.grid(row=10,column=1,sticky="nsew")
+tk.Label(text="Scale Speed - Rotation (%)",foreground="black",background="burlywood1",width=7,height=3).grid(row=10,column=0,sticky="nsew",pady= 1)
+scl_rot = tk.Scale(master=root, from_=0, to=100, orient=tk.HORIZONTAL)
+scl_rot.grid(row=10,column=1,sticky="nsew")
+scl_rot.set(50)
+
 
 
 # Set up a variable for JPOS
@@ -105,20 +108,35 @@ global JPOS
 JPOS = [0, 0, 0, 0, 0, 0, 0]
 
 rospy.init_node('gui', anonymous=True)
-sub = rospy.Subscriber("/delayed_jpos_cmd", Float32MultiArray, jpos_callback, queue_size=1)    
+sub = rospy.Subscriber("/delayed_kuka_joints", Float32MultiArray, jpos_callback, queue_size=1)    
 
 rate_hz = rospy.get_param('rate_hz')
 r = rospy.Rate(rate_hz)
 
+got_params = False
 
+while not got_params:
+    sleep(0.1)
+    try:   
+        lin_user_scale = rospy.get_param('lin_user_scale')
+        scl_lin.set(lin_user_scale)
+        rot_user_scale = rospy.get_param('rot_user_scale')
+        scl_rot.set(rot_user_scale)
+        ft_user_scale = rospy.get_param('ft_user_scale')
+        scl_ft.set(ft_user_scale)
+        got_params = True
+    except:
+        pass
 
 while not rospy.is_shutdown():
     ft_user_scale = scl_ft.get()
     rospy.set_param('ft_user_scale', ft_user_scale)
 
-    ws_user_scale = scl_spd.get()
-    rospy.set_param('ws_user_scale', ws_user_scale)
-
+    lin_user_scale = scl_lin.get()
+    rospy.set_param('lin_user_scale', lin_user_scale)
+    rot_user_scale = scl_rot.get()
+    rospy.set_param('rot_user_scale', rot_user_scale)
+    
     #latency = scl_lat.get()
     #latency = latency/2000.0
     #rospy.set_param('latency', latency)
@@ -131,23 +149,9 @@ while not rospy.is_shutdown():
     scl_6.set(JPOS[5]*180/pi)
     scl_7.set(JPOS[6]*180/pi)
 
-    """if rospy.has_param('jpos_cmd'):
-        j1 = rospy.get_param('jpos_cmd/j1')
-        j2 = rospy.get_param('jpos_cmd/j2')
-        j3 = rospy.get_param('jpos_cmd/j3')
-        j4 = rospy.get_param('jpos_cmd/j4')
-        j5 = rospy.get_param('jpos_cmd/j5') # This is the error
-        j6 = rospy.get_param('jpos_cmd/j6')
-        j7 = rospy.get_param('jpos_cmd/j7')
-        scl_1.set(j1)
-        scl_2.set(j2)
-        scl_3.set(j3)
-        scl_4.set(j4)
-        scl_5.set(j5)
-        scl_6.set(j6)
-        scl_7.set(j7)
-    """
     root.update()
     r.sleep()
+root.destroy()
+    
 
        

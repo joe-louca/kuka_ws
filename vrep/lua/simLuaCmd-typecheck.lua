@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simLuaCmd=require('simLuaCmd')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simLuaCmd.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simLuaCmd'][funcName]=wrapperGenerator(_G['simLuaCmd'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simLuaCmd.__addTypeCheck',true)
 
 return simLuaCmd

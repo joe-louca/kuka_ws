@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetScriptText" id="simSetScriptText"></a>simSetScriptText / sim.setScriptText </h3>
+<p class=subsectionBar><a name="simSetScriptText" id="simSetScriptText"></a>simSetScriptText / sim.setScriptText </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Sets a new content for a script (i.e. attaches a new Lua code). During a simulation, the new script content might not be taken into consideration if a previous code was already executed at least once. See also <a href="simGetScriptText.htm">simGetScriptText</a>, <a href="simAddScript.htm">sim.addScript</a> and <a href="simAssociateScriptWithObject.htm">sim.associateScriptWithObject</a>.</td>
+<td class=apiTableRightDescr>Deprecated. See <a href="simSetScriptStringParam.htm">sim.setScriptStringParam</a> instead.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetScriptText(simInt scriptHandle,const simChar* scriptText)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>scriptHandle</strong>: handle of a script</div>
 <div><strong>scriptText</strong>: pointer to a script buffer (0-terminated buffer). This function will copy the buffer content, so that it can immediately be released after this call<br>
@@ -40,7 +40,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -64,10 +64,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>sim.setScriptText(int scriptHandle,string scriptText)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

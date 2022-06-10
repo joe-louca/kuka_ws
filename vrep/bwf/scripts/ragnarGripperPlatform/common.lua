@@ -46,8 +46,8 @@ model.handles={}
 
 model.handles.ikPts={}
 for i=1,4,1 do
-    model.handles.ikPts[i]=sim.getObjectHandle('RagnarGripperPlatform_ikPt'..i)
+    model.handles.ikPts[i]=sim.getObject('./RagnarGripperPlatform_ikPt'..i)
 end
 
-model.handles.gripperAttachmentPoint=sim.getObjectHandle('RagnarGripperPlatform_toolAttachment')
-model.handles.tracing=sim.getObjectHandle('RagnarGripperPlatform_tracing')
+model.handles.gripperAttachmentPoint=sim.getObject('./RagnarGripperPlatform_toolAttachment')
+model.handles.tracing=sim.getObject('./RagnarGripperPlatform_tracing')

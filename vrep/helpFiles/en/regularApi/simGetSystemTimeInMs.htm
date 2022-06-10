@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetSystemTimeInMs" id="simGetSystemTimeInMs"></a>simGetSystemTimeInMs / sim.getSystemTimeInMs </h3>
+<p class=subsectionBar><a name="simGetSystemTimeInMs" id="simGetSystemTimeInMs"></a>simGetSystemTimeInMs / sim.getSystemTimeInMs </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,18 +26,18 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simUInt simGetSystemTimeInMs(simInt previousTime)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>previousTime</strong>: value that indicates how the command should operate:</div>
 <div class=tabTab>&gt;=0: the function returns a time difference with previousTime. PreviousTime must have been previously retrieved with the -1 argument below.</div>
 <div class=tabTab>-1: the function returns a time relative to an arbitrary time. Use this to measure time differences within CoppeliaSim</div>
 <div class=tabTab>-2: the function returns a time as follows:</div>
-<pre class=lightBlueBoxNoMarginAndSmall>
+<code class="hljs language-c++ simple">
 // On Windows:
 returnedValue=TimeGetTime();
 
@@ -45,13 +45,13 @@ returnedValue=TimeGetTime();
 struct timeval now;
 gettimeofday(&now,nullptr);
 returnValue=now.tv_sec*1000+now.tv_usec/1000;
-</pre>
+</code>
 
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>a  time in milliseconds as described here above.</div>
@@ -79,22 +79,22 @@ Lua return values
 </td> 
 </tr> 
 
+
 <tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
+<td class=apiTableLeftPSyn>
+Python synopsis
 </td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetTimeInMs">simxGetTimeInMs</a></div>
-<div>Legacy remote API: -</div>
-</td> 
+<td class=apiTableRightPSyn>int systemTimeOrTimeDiff=sim.getSystemTimeInMs(int previousTime)</td> 
 </tr> 
+
+ 
 
 </table> 
 
 
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

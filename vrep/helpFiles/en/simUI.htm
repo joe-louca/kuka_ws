@@ -63,6 +63,7 @@ td.section { margin: 0; padding: 0; }
 <a href="?#growPlotXRange">simUI.growPlotXRange</a>
 <a href="?#growPlotYRange">simUI.growPlotYRange</a>
 <a href="?#hide">simUI.hide</a>
+<a href="?#inputDialog">simUI.inputDialog</a>
 <a href="?#insertComboboxItem">simUI.insertComboboxItem</a>
 <a href="?#insertTableColumn">simUI.insertTableColumn</a>
 <a href="?#insertTableRow">simUI.insertTableRow</a>
@@ -130,6 +131,7 @@ td.section { margin: 0; padding: 0; }
 <a href="?#setWidgetVisibility">simUI.setWidgetVisibility</a>
 <a href="?#setWindowEnabled">simUI.setWindowEnabled</a>
 <a href="?#show">simUI.show</a>
+<a href="?#supportedImageFormats">simUI.supportedImageFormats</a>
 <a href="?#svgLoadData">simUI.svgLoadData</a>
 <a href="?#svgLoadFile">simUI.svgLoadFile</a>
 <a href="?#updateTreeItemParent">simUI.updateTreeItemParent</a>
@@ -147,7 +149,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">simUI.addCurve(string handle, int id, int type, string name, table[] color, int style, curve_options options)<br>
+<td class="apiTableRightLSyn">simUI.addCurve(string handle, int id, int type, string name, int[3] color, int style, curve_options options)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -162,7 +164,7 @@ td.section { margin: 0; padding: 0; }
 <div>
 <strong>name</strong> (string): name of the curve</div>
 <div>
-<strong>color</strong> (table of int): color of the curve, as RGB values in the 0...255 range</div>
+<strong>color</strong> (table of int, size 3): color of the curve, as RGB values in the 0...255 range</div>
 <div>
 <strong>style</strong> (int): style of the curve. see <a href="#enum:curve_style">simUI.curve_style</a>.</div>
 <div>
@@ -172,6 +174,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.addCurve(string handle, int id, int type, string name, list color, int style, curve_options options)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -192,7 +199,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">simUI.addCurveTimePoints(string handle, int id, string name, table[] x, table[] y)<br>
+<td class="apiTableRightLSyn">simUI.addCurveTimePoints(string handle, int id, string name, double[] x, double[] y)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -215,6 +222,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.addCurveTimePoints(string handle, int id, string name, list x, list y)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -233,7 +245,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">simUI.addCurveXYPoints(string handle, int id, string name, table[] t, table[] x, table[] y)<br>
+<td class="apiTableRightLSyn">simUI.addCurveXYPoints(string handle, int id, string name, double[] t, double[] x, double[] y)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -256,6 +268,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.addCurveXYPoints(string handle, int id, string name, list t, list x, list y)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -300,6 +317,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.addScene3DNode(string handle, int id, int nodeId, int parentNodeId, int type)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -318,7 +340,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">simUI.addTreeItem(string handle, int id, int item_id, table[] text, int parent_id=0, bool expanded=false, bool suppressEvents=true)<br>
+<td class="apiTableRightLSyn">simUI.addTreeItem(string handle, int id, int item_id, string[] text, int parent_id=0, bool expanded=false, bool suppressEvents=true)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -343,6 +365,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.addTreeItem(string handle, int id, int item_id, list text, int parent_id=0, bool expanded=false, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -382,6 +409,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.clearCurve(string handle, int id, string name)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -417,6 +449,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.clearTable(string handle, int id, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -456,6 +493,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.clearTree(string handle, int id, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -493,6 +535,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.collapseAll(string handle, int id, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -511,7 +558,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">table[3] result=simUI.colorDialog(table[3..4] initColor={1,1,1}, string title="Select color", bool showAlphaChannel=false, bool native=true)<br>
+<td class="apiTableRightLSyn">float[3] result=simUI.colorDialog(float[3..4] initColor={1,1,1}, string title="Select color", bool showAlphaChannel=false, bool native=true)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -531,6 +578,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>result</strong> (table of float, size 3): result</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">list result=simUI.colorDialog(list initColor={1,1,1}, string title="Select color", bool showAlphaChannel=false, bool native=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -564,6 +616,11 @@ td.section { margin: 0; padding: 0; }
 <strong>uiHandle</strong> (string): a handle to the created UI</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string uiHandle=simUI.create(string xml)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -593,6 +650,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.destroy(string handle)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -630,6 +692,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.expandAll(string handle, int id, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -671,6 +738,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.expandToDepth(string handle, int id, int depth, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -689,7 +761,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">table[] result=simUI.fileDialog(int type, string title, string startPath, string initName, string extName, string ext, bool native=false)<br>
+<td class="apiTableRightLSyn">string[] result=simUI.fileDialog(int type, string title, string startPath, string initName, string extName, string ext, bool native=false)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -715,6 +787,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>result</strong> (table of string): result</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">list result=simUI.fileDialog(int type, string title, string startPath, string initName, string extName, string ext, bool native=false)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -750,6 +827,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>value</strong> (int): value</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int value=simUI.getCheckboxValue(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -788,6 +870,11 @@ td.section { margin: 0; padding: 0; }
 <strong>count</strong> (int): column count</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int count=simUI.getColumnCount(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -822,6 +909,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>count</strong> (int): Item count.</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int count=simUI.getComboboxItemCount(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -862,6 +954,11 @@ td.section { margin: 0; padding: 0; }
 <strong>text</strong> (string): Item text.</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string text=simUI.getComboboxItemText(string handle, int id, int index)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -880,7 +977,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">table[] items=simUI.getComboboxItems(string handle, int id)<br>
+<td class="apiTableRightLSyn">string[] items=simUI.getComboboxItems(string handle, int id)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -896,6 +993,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>items</strong> (table of string): Array of items (strings).</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">list items=simUI.getComboboxItems(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -934,6 +1036,11 @@ td.section { margin: 0; padding: 0; }
 <strong>index</strong> (int): Index of selected item after inserting all the items.</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int index=simUI.getComboboxSelectedIndex(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -964,6 +1071,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>id</strong> (int): widget id of an edit widget, or -1 if no edit widget was focused and had selected text.</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int id=simUI.getCurrentEditWidget(string handle)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1002,6 +1114,11 @@ td.section { margin: 0; padding: 0; }
 <strong>index</strong> (int): index of the tab (zero-based)</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int index=simUI.getCurrentTab(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1020,7 +1137,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">table[] t, table[] x, table[] y=simUI.getCurveData(string handle, int id, string name)<br>
+<td class="apiTableRightLSyn">double[] t, double[] x, double[] y=simUI.getCurveData(string handle, int id, string name)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -1043,6 +1160,11 @@ td.section { margin: 0; padding: 0; }
 <strong>x</strong> (table of double): x values</div>
 <div>
 <strong>y</strong> (table of double): y values</div>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">list t, list x, list y=simUI.getCurveData(string handle, int id, string name)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -1080,6 +1202,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>value</strong> (string): value</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string value=simUI.getEditValue(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1122,6 +1249,11 @@ td.section { margin: 0; padding: 0; }
 <strong>text</strong> (string): item value</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string text=simUI.getItem(string handle, int id, int row, int column)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1158,6 +1290,11 @@ td.section { margin: 0; padding: 0; }
 <strong>text</strong> (string): text</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string text=simUI.getLabelText(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1191,6 +1328,11 @@ td.section { margin: 0; padding: 0; }
 <strong>x</strong> (int): X position</div>
 <div>
 <strong>y</strong> (int): Y position</div>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int x, int y=simUI.getPosition(string handle)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -1230,6 +1372,11 @@ td.section { margin: 0; padding: 0; }
 <strong>value</strong> (int): value</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int value=simUI.getRadiobuttonValue(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1266,6 +1413,11 @@ td.section { margin: 0; padding: 0; }
 <strong>count</strong> (int): row count</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int count=simUI.getRowCount(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1299,6 +1451,11 @@ td.section { margin: 0; padding: 0; }
 <strong>w</strong> (int): width</div>
 <div>
 <strong>h</strong> (int): height</div>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int w, int h=simUI.getSize(string handle)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -1338,6 +1495,11 @@ td.section { margin: 0; padding: 0; }
 <strong>value</strong> (int): value</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int value=simUI.getSliderValue(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1374,6 +1536,11 @@ td.section { margin: 0; padding: 0; }
 <strong>value</strong> (float): value</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">float value=simUI.getSpinboxValue(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1404,6 +1571,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>title</strong> (string): X position</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string title=simUI.getTitle(string handle)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1440,6 +1612,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>visibility</strong> (bool): true if the window is visible, false otherwise</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">bool visibility=simUI.getWidgetVisibility(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1485,6 +1662,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.growPlotRanges(string handle, int id, double xmin, double xmax, double ymin, double ymax)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1522,6 +1704,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.growPlotXRange(string handle, int id, double xmin, double xmax)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1563,6 +1750,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.growPlotYRange(string handle, int id, double ymin, double ymax)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1594,11 +1786,58 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.hide(string handle)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
 <td class="apiTableRightDescr"> <a href="#create">simUI.create</a> <a href="#destroy">simUI.destroy</a> <a href="#getPosition">simUI.getPosition</a> <a href="#getSize">simUI.getSize</a> <a href="#getTitle">simUI.getTitle</a> <a href="#isVisible">simUI.isVisible</a> <a href="#setPosition">simUI.setPosition</a> <a href="#setSize">simUI.setSize</a> <a href="#setTitle">simUI.setTitle</a> <a href="#setWindowEnabled">simUI.setWindowEnabled</a> <a href="#show">simUI.show</a>
 </td>
+</tr>
+</table>
+<br><h3 class="subsectionBar">
+<a name="inputDialog" id="inputDialog"></a>simUI.inputDialog</h3>
+<table class="apiTable">
+<tr class="apiTableTr">
+<td class="apiTableLeftDescr">
+                                                    Description
+                                                </td>
+<td class="apiTableRightDescr">Display an input dialog.</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftLSyn">Lua synopsis</td>
+<td class="apiTableRightLSyn">string result=simUI.inputDialog(string initValue="", string label="Input value:", string title="")<br>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftLParam">Lua parameters</td>
+<td class="apiTableRightLParam">
+<div>
+<strong>initValue</strong> (string, default: ""): initial value</div>
+<div>
+<strong>label</strong> (string, default: "Input value:"): label above the input field</div>
+<div>
+<strong>title</strong> (string, default: ""): title of input dialog</div>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftLRet">Lua return values</td>
+<td class="apiTableRightLRet"><div>
+<strong>result</strong> (string): result</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string result=simUI.inputDialog(string initValue="", string label="Input value:", string title="")<br>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftDescr">
+                                                See also
+                                            </td>
+<td class="apiTableRightDescr"></td>
 </tr>
 </table>
 <br><h3 class="subsectionBar">
@@ -1633,6 +1872,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.insertComboboxItem(string handle, int id, int index, string text, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1672,6 +1916,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.insertTableColumn(int ui, int widget, int index)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1708,6 +1957,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.insertTableRow(int ui, int widget, int index)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1737,6 +1991,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>visibility</strong> (bool): true if the window is visible, false otherwise</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">bool visibility=simUI.isVisible(string handle)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1779,6 +2038,11 @@ td.section { margin: 0; padding: 0; }
 <strong>result</strong> (int): result</div></td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">int result=simUI.msgBox(int type, int buttons, string title, string message)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1815,6 +2079,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.removeComboboxItem(string handle, int id, int index, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1854,6 +2123,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.removeCurve(string handle, int id, string name)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1889,6 +2163,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.removeScene3DNode(string handle, int id, int nodeId)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -1928,6 +2207,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.removeTableColumn(int ui, int widget, int index)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -1962,6 +2246,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.removeTableRow(int ui, int widget, int index)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2002,6 +2291,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.removeTreeItem(string handle, int id, int item_id, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2035,6 +2329,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.replot(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2078,6 +2377,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.rescaleAxes(string handle, int id, string name, bool onlyEnlargeX=false, bool onlyEnlargeY=false)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2117,6 +2421,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.rescaleAxesAll(string handle, int id, bool onlyEnlargeX=false, bool onlyEnlargeY=false)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2154,6 +2463,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.restoreState(string handle, int id, string state)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2188,6 +2502,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet"><div>
 <strong>state</strong> (string): a string representing the state</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">string state=simUI.saveState(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2227,6 +2546,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setButtonPressed(string handle, int id, bool pressed)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2262,6 +2586,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setButtonText(string handle, int id, string text)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2303,6 +2632,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setCheckboxValue(string handle, int id, int value, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2342,6 +2676,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setColumnCount(string handle, int id, int count, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2379,6 +2718,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setColumnHeaderText(string handle, int id, int column, string text)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2422,6 +2766,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setColumnWidth(string handle, int id, int column, int min_size, int max_size)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2440,7 +2789,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">simUI.setComboboxItems(string handle, int id, table[] items, int index, bool suppressEvents=true)<br>
+<td class="apiTableRightLSyn">simUI.setComboboxItems(string handle, int id, string[] items, int index, bool suppressEvents=true)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -2461,6 +2810,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setComboboxItems(string handle, int id, list items, int index, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2502,6 +2856,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setComboboxSelectedIndex(string handle, int id, int index, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2535,6 +2894,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setCurrentEditWidget(string handle, int id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2576,6 +2940,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setCurrentTab(string handle, int id, int index, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2613,6 +2982,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setEditValue(string handle, int id, string value, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2654,6 +3028,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setEnabled(string handle, int id, bool enabled, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2693,6 +3072,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setImageData(string handle, int id, string data, int width, int height)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2738,6 +3122,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setItem(string handle, int id, int row, int column, string text, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2777,6 +3166,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setItemEditable(string handle, int id, int row, int column, bool editable)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2826,6 +3220,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setItemImage(string handle, int id, int row, int column, string data, int width, int height, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2865,6 +3264,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setLabelText(string handle, int id, string text, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2900,6 +3304,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setLegendVisibility(string handle, int id, bool visible)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -2945,6 +3354,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setMouseOptions(string handle, int id, bool panX, bool panY, bool zoomX, bool zoomY)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -2982,6 +3396,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPlotLabels(string handle, int id, string x, string y)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3027,6 +3446,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPlotRanges(string handle, int id, double xmin, double xmax, double ymin, double ymax)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3062,6 +3486,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPlotXLabel(string handle, int id, string label)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3103,6 +3532,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPlotXRange(string handle, int id, double xmin, double xmax)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3138,6 +3572,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPlotYLabel(string handle, int id, string label)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3179,6 +3618,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPlotYRange(string handle, int id, double ymin, double ymax)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3218,6 +3662,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setPosition(string handle, int x, int y, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3253,6 +3702,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setProgress(string handle, int id, int value)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3294,6 +3748,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setRadiobuttonValue(string handle, int id, int value, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3333,6 +3792,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setRowCount(string handle, int id, int count, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3370,6 +3834,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setRowHeaderText(string handle, int id, int row, string text)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3413,6 +3882,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setRowHeight(string handle, int id, int row, int min_size, int max_size)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3450,6 +3924,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeEnabled(string handle, int id, int nodeId, bool enabled)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3493,6 +3972,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeFloatParam(string handle, int id, int nodeId, string paramName, float value)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3532,6 +4016,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeIntParam(string handle, int id, int nodeId, string paramName, int value)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3575,6 +4064,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeParam(int ui, int widget, int nodeId, string paramName, anything paramValue)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3613,6 +4107,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeStringParam(string handle, int id, int nodeId, string paramName, string value)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3658,6 +4157,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeVector2Param(string handle, int id, int nodeId, string paramName, float x, float y)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3701,6 +4205,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeVector3Param(string handle, int id, int nodeId, string paramName, float x, float y, float z)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3750,6 +4259,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setScene3DNodeVector4Param(string handle, int id, int nodeId, string paramName, float x, float y, float z, float w)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3787,6 +4301,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setSize(string handle, int w, int h, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3828,6 +4347,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setSliderValue(string handle, int id, int value, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3867,6 +4391,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setSpinboxValue(string handle, int id, float value, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3902,6 +4431,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setStyleSheet(string handle, int id, string styleSheet)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -3945,6 +4479,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setTableSelection(string handle, int id, int row, int column, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -3984,6 +4523,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setText(string handle, int id, string text, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -4019,6 +4563,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setTitle(string handle, string title, bool suppressEvents=true)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4060,6 +4609,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setTreeSelection(string handle, int id, int item_id, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -4095,6 +4649,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setUrl(string handle, int id, string url)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4134,6 +4693,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setWidgetVisibility(string handle, int id, bool visibility)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -4171,6 +4735,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.setWindowEnabled(string handle, bool enabled, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -4202,11 +4771,56 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.show(string handle)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
 <td class="apiTableRightDescr"> <a href="#create">simUI.create</a> <a href="#destroy">simUI.destroy</a> <a href="#getPosition">simUI.getPosition</a> <a href="#getSize">simUI.getSize</a> <a href="#getTitle">simUI.getTitle</a> <a href="#hide">simUI.hide</a> <a href="#isVisible">simUI.isVisible</a> <a href="#setPosition">simUI.setPosition</a> <a href="#setSize">simUI.setSize</a> <a href="#setTitle">simUI.setTitle</a> <a href="#setWindowEnabled">simUI.setWindowEnabled</a>
 </td>
+</tr>
+</table>
+<br><h3 class="subsectionBar">
+<a name="supportedImageFormats" id="supportedImageFormats"></a>simUI.supportedImageFormats</h3>
+<table class="apiTable">
+<tr class="apiTableTr">
+<td class="apiTableLeftDescr">
+                                                    Description
+                                                </td>
+<td class="apiTableRightDescr">Return a list of supported image formats</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftLSyn">Lua synopsis</td>
+<td class="apiTableRightLSyn">string[] formatList, string formatListStr=simUI.supportedImageFormats(string separator=nil)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftLParam">Lua parameters</td>
+<td class="apiTableRightLParam"><div>
+<strong>separator</strong> (string, default: nil): if provided, also a string of formats concatenated by separator will be returned</div></td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftLRet">Lua return values</td>
+<td class="apiTableRightLRet">
+<div>
+<strong>formatList</strong> (table of string): list of formats, each item will be the file extension of the format</div>
+<div>
+<strong>formatListStr</strong> (string): concatenated list of formats, if separator is provided</div>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">list formatList, string formatListStr=simUI.supportedImageFormats(string separator=nil)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftDescr">
+                                                See also
+                                            </td>
+<td class="apiTableRightDescr"></td>
 </tr>
 </table>
 <br><h3 class="subsectionBar">
@@ -4237,6 +4851,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.svgLoadData(string handle, int id, string data)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4274,6 +4893,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.svgLoadFile(string handle, int id, string file)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4317,6 +4941,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.updateTreeItemParent(string handle, int id, int item_id, int parent_id, bool suppressEvents=true)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                 See also
                                             </td>
@@ -4335,7 +4964,7 @@ td.section { margin: 0; padding: 0; }
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftLSyn">Lua synopsis</td>
-<td class="apiTableRightLSyn">simUI.updateTreeItemText(string handle, int id, int item_id, table[] text)<br>
+<td class="apiTableRightLSyn">simUI.updateTreeItemText(string handle, int id, int item_id, string[] text)<br>
 </td>
 </tr>
 <tr class="apiTableTr">
@@ -4354,6 +4983,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.updateTreeItemText(string handle, int id, int item_id, list text)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4587,6 +5221,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onclickCallback(string handle, int id)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4621,6 +5260,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onLinkActivatedCallback(string handle, int id, string link)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4659,6 +5303,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onchangeIntCallback(string handle, int id, int value)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4693,6 +5342,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onchangeDoubleCallback(string handle, int id, float value)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4731,6 +5385,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onchangeStringCallback(string handle, int id, string value)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4767,6 +5426,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.oneditingfinishedCallback(string handle, int id, string value)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4795,6 +5459,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.oncloseCallback(string handle)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4839,6 +5508,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onPlottableClickCallback(string handle, int id, string curve, int index, float x, float y)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4873,6 +5547,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onLegendClickCallback(string handle, int id, string curve)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -4915,6 +5594,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onCellActivateCallback(string handle, int id, int row, int column, string cellValue)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4953,6 +5637,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onTableSelectionChangeCallback(string handle, int id, int row, int column)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -4987,6 +5676,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onTreeSelectionChangeCallback(string handle, int id, int item_id)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">
@@ -5033,6 +5727,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onMouseEventCallback(string handle, int id, int type, keyboard_modifiers mods, int x, int y)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -5071,6 +5770,11 @@ td.section { margin: 0; padding: 0; }
 <td class="apiTableRightLRet">-</td>
 </tr>
 <tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onKeyPressCallback(string handle, int id, int key, string text)<br>
+</td>
+</tr>
+<tr class="apiTableTr">
 <td class="apiTableLeftDescr">
                                                     See also
                                                 </td>
@@ -5105,6 +5809,11 @@ td.section { margin: 0; padding: 0; }
 <tr class="apiTableTr">
 <td class="apiTableLeftLRet">Lua return values</td>
 <td class="apiTableRightLRet">-</td>
+</tr>
+<tr class="apiTableTr">
+<td class="apiTableLeftPSyn">Python synopsis</td>
+<td class="apiTableRightPSyn">simUI.onScene3DObjectClickCallback(string handle, int id, int nodeId)<br>
+</td>
 </tr>
 <tr class="apiTableTr">
 <td class="apiTableLeftDescr">

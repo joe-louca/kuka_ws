@@ -65,7 +65,7 @@ function getMasterDeltaShiftIfApplicable()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
     data=sim.unpackTable(data)
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,1)
@@ -73,7 +73,7 @@ function sysCall_init()
     masterConveyor=simBWF.getReferencedObjectHandle(model,3)
     getTriggerType()
     middleRadius=data['outerRadius']-data['width']*0.5
-    joint=sim.getObjectHandle('genericCurvedConveyorTypeA360_joint')
+    joint=sim.getObject('./genericCurvedConveyorTypeA360_joint')
     lastT=sim.getSimulationTime()
     beltVelocity=0
     totShift=0

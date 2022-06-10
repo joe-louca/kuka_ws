@@ -16,29 +16,29 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetObjectSizeFactor" id="simGetObjectSizeFactor"></a>simGetObjectSizeFactor / sim.getObjectSizeFactor </h3>
+<p class=subsectionBar><a name="simGetObjectSizeFactor" id="simGetObjectSizeFactor"></a>simGetObjectSizeFactor / sim.getObjectSizeFactor </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves the size factor of a scene object. The size factor is different from the real object size. Use this to be able to react to scaling operations. See also <a href="simGetObjectSizeValues.htm">sim.getObjectSizeValues</a>.<br></td>
+<td class=apiTableRightDescr>Retrieves the size factor of a scene object. The size factor is different from the real object size. Use this to be able to adapt to scaling operations. See also the other <a href="../apiFunctions.htm#size">size and scaling functions</a>.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simFloat simGetObjectSizeFactor(simInt objectHandle)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of the scene object</div>
 <div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>size factor or negative value in case of an error<br>
@@ -65,8 +65,14 @@ Lua return values
 <div>Similar to the C-function counterpart</div>
 <div></div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>float sizeFactor=sim.getObjectSizeFactor(int objectHandle)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

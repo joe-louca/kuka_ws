@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetObjectParent" id="simSetObjectParent"></a>simSetObjectParent / sim.setObjectParent</h3>
+<p class=subsectionBar><a name="simSetObjectParent" id="simSetObjectParent"></a>simSetObjectParent / sim.setObjectParent</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Sets an object's parent object. See also <a href="simGetObjectParent.htm">sim.getObjectParent</a>.<br></td>
+<td class=apiTableRightDescr>Sets an object's parent object. Dynamically simulated objects, together with their hierarchy tree, will be dynamically reset (this however does not apply to static shapes). See also <a href="simGetObjectParent.htm">sim.getObjectParent</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetObjectParent(simInt objectHandle,simInt parentObjectHandle,simBool keepInPlace)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of the object that will become child of the parent object. Can be combined with <a href="../apiConstants.htm#specialHandleFlags">sim_handleflag_assembly</a> (simply add sim_handleflag_assembly to <strong>objectHandle</strong>), if the two objects can be assembled via a predefined assembly transformation (refer to the <strong>assembling</strong> option in the <a href="../commonPropertiesDialog.htm">object common properties</a>). In that case, <strong>parentObjectHandle</strong> can't be -1, and <strong>keepInPlace</strong> should be set to false.</div>
 <div><strong>parentObjectHandle</strong>: handle of the object that will become parent, or -1 if the object should become parentless.</div>
@@ -40,7 +40,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -51,7 +51,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>sim.setObjectParent(int objectHandle,int parentObjectHandle,boolean keepInPlace)<br></td> 
+<td class=apiTableRightLSyn>sim.setObjectParent(int objectHandle,int parentObjectHandle,bool keepInPlace)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -63,25 +63,23 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxSetObjectParent">simxSetObjectParent</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxSetObjectParent">simxSetObjectParent</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>sim.setObjectParent(int objectHandle,int parentObjectHandle,bool keepInPlace)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

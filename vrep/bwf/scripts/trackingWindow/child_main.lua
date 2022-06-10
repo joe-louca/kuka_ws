@@ -55,7 +55,7 @@ function sysCall_sensing()
             retData={}
             retData.points={{0,0,0.3}}
             retData.pointIds={1}
-            retData.partIds={sim.getObjectHandle('genericBox#')}
+            retData.partIds={sim.getObject('./genericBox#')}
         end
         if reply=='ok' then
             local pts=retData.points
@@ -78,7 +78,7 @@ function sysCall_sensing()
                         local dat={theMatr[4],theMatr[8],theMatr[12]}
                         sim.addDrawingObjectItem(model.sphereContainer,dat)
                     end
- --                   print(ptIds[i],partIds[i],sim.getObjectName(partIds[i])
+ --                   print(ptIds[i],partIds[i],sim.getObjectAlias(partIds[i],1)
  --                   -- We create parts that were detected in the real world (but only when the position is correct in simulation):
 --                    print(model.createParts,partIds,partIds[i]>=0,tr)
                     if model.createParts and partIds and partIds[i]>=0 and tr==1 and model.createdPartsInOnlineMode[ptIds[i]]==nil then

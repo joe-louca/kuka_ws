@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetObjectVelocity" id="simGetObjectVelocity"></a>simGetObjectVelocity / sim.getObjectVelocity</h3>
+<p class=subsectionBar><a name="simGetObjectVelocity" id="simGetObjectVelocity"></a>simGetObjectVelocity / sim.getObjectVelocity</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetObjectVelocity(simInt objectHandle,simFloat* linearVelocity,simFloat* angularVelocity)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of a <a href="../objects.htm">scene object</a>. It is recommended to add <em><a href="../apiConstants.htm#specialHandleFlags">sim.handleflag_axis</a></em> to the object handle, in order to obtain the <em>regular</em> angular velocity for the object, i.e. the rotation axis and the rotation velocity that is represented by the axis' length.</div>
 <div><strong>linearVelocity</strong>: pointer to 3 values that will receive the linear velocity. Can be nullptr</div>
@@ -40,7 +40,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful</div>
@@ -50,7 +50,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[3] linearVelocity,table[3] angularVelocity=sim.getObjectVelocity(int objectHandle)</td> 
+<td class=apiTableRightLSyn>float[3] linearVelocity,float[3] angularVelocity=sim.getObjectVelocity(int objectHandle)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -68,22 +68,20 @@ Lua return values
 </td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetObjectVelocity">simxGetObjectVelocity</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxGetObjectVelocity">simxGetObjectVelocity</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list linearVelocity,list angularVelocity=sim.getObjectVelocity(int objectHandle)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

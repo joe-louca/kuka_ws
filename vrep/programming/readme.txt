@@ -17,16 +17,17 @@ coppeliaRobotics
                   |__ simExtIK
                   |__ simExtDynamics
                   |__ libPlugin
-                  |__ simExtCodeEditor
+                  |__ zmqRemoteApi
+                  |__ wsRemoteApi
                   |__ remoteApi
                   |__ remoteApiBindings
-                  |__ b0RemoteApiBindings
+                  |__ simExtCodeEditor
                   |__ simExtRemoteApi
                   |__ simExtJoystick
                   |__ simExtCam
                   |__ simExtURDF
                   |__ simExtSDF
-                  |__ simExtRML2
+                  |__ simExtRuckig
                   |__ simExtRRS1
                   |__ simExtMTB
                   |__ simExtUI
@@ -42,8 +43,6 @@ coppeliaRobotics
                   |__ simExtQhull
                   |__ simExtVision
                   |__ simExtExternalRenderer
-                  |__ simExtLuaRemoteApiClient
-                  |__ simExtB0
                   |__ simExtIM
                   |__ simExtBubbleRob
                   |__ simExtK3
@@ -53,15 +52,15 @@ coppeliaRobotics
                   |__ simExtGLTF
                   |__ simExtZMQ
                   |__ simExtURLDrop
+                  |__ simExtSubprocess
+                  |__ simExtEigen
                   |__ standAloneKinematicsDemo1
                   |__ standAloneKinematicsDemo2
                   |__ bubbleRobClient
                   |__ bubbleRobServer
                   |__ bubbleRobZmqServer
-                  |__ b0_bubbleRob
                   |__ rcsServer
                   |__ mtbServer
-                  |__ bluezero
                   |
                   |__ ros_packages
                   |            |__ simExtROS
@@ -103,8 +102,11 @@ Various common items:
 -   'remoteApiBindings' (requires 'remoteApi' if libs need to be rebuilt)
     https://github.com/CoppeliaRobotics/remoteApiBindings
 
--   'b0RemoteApiBindings' (requires 'bluezero' if libs need to be rebuilt)
-    https://github.com/CoppeliaRobotics/b0RemoteApiBindings
+-   'zmqRemoteApi'
+    https://github.com/CoppeliaRobotics/zmqRemoteApi
+
+-   'wsRemoteApi'
+    https://github.com/CoppeliaRobotics/wsRemoteApi
 
 -   'coppeliaGeometricRoutines' (requires 'include', 'common' and 'simMath'):
     https://github.com/CoppeliaRobotics/coppeliaGeometricRoutines
@@ -143,8 +145,8 @@ Various plugins:
 -   'simExtSDF' (requires 'include' and 'common', 'simMath' and 'libPlugin'):
     https://github.com/CoppeliaRobotics/simExtSDF
 
--   'simExtRML2' (requires 'include' and 'common'):
-    https://github.com/CoppeliaRobotics/simExtRML2
+-   'simExtRuckig' (requires 'include' and 'common'):
+    https://github.com/CoppeliaRobotics/simExtRuckig
 
 -   'simExtRRS1' (requires 'include' and 'common'):
     https://github.com/CoppeliaRobotics/simExtRRS1
@@ -200,9 +202,6 @@ Various plugins:
 -   'simExtLuaRemoteApiClient' (requires 'include' and 'common'):
     https://github.com/CoppeliaRobotics/simExtLuaRemoteApiClient
 
--   'simExtB0' (requires 'include', 'common' and 'libPlugin'):
-    https://github.com/CoppeliaRobotics/simExtB0
-
 -   'simExtIM' (requires 'include', 'common' and 'libPlugin'):
     https://github.com/CoppeliaRobotics/simExtIM
 
@@ -224,6 +223,12 @@ Various plugins:
 -   'simExtURLDrop' (requires 'include' and 'common' and 'libPlugin'):
     https://github.com/CoppeliaRobotics/simExtURLDrop
 
+-   'simExtSubprocess' (requires 'include' and 'common' and 'libPlugin' and Qt):
+    https://github.com/CoppeliaRobotics/simExtSubprocess
+
+-   'simExtEigen' (requires 'include' and 'common' and 'libPlugin' and Eigen):
+    https://github.com/CoppeliaRobotics/simExtEigen
+
 Various other repositories:		
 ---------------------------
 
@@ -242,9 +247,6 @@ Various other repositories:
 -   'bubbleRobZmqServer' (requires 'include' and 'common'):
     https://github.com/CoppeliaRobotics/bubbleRobZmqServer
     
--   'b0_bubbleRob' (requires 'include' and 'common'):
-    https://github.com/CoppeliaRobotics/b0_bubbleRob
-
 -   'rcsServer' (requires 'include' and 'common'):
     https://github.com/CoppeliaRobotics/rcsServer
 

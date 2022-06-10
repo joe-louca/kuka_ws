@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<title>simSetThreadAutomaticSwitch</title>
+<title>sim.setThreadAutomaticSwitch</title>
 <link rel="stylesheet" type="text/css" href="../../style.css">
 </head>
 
@@ -16,29 +16,29 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetThreadAutomaticSwitch" id="simSetThreadAutomaticSwitch"></a>sim.setThreadAutomaticSwitch </h3>
+<p class=subsectionBar><a name="simSetThreadAutomaticSwitch" id="simSetThreadAutomaticSwitch"></a>sim.setThreadAutomaticSwitch </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Allows to temporarily forbid automatic thread interruptions, i.e. preemptive threading. Explicit thread interruptions, i.e. switching, are still allowed. For complete control over thread switching, see also <a href="simGetThreadAutomaticSwitch.htm">sim.getThreadAutomaticSwitch</a>, <a href="simSetThreadSwitchAllowed.htm">sim.setThreadSwitchAllowed</a>, <a href="simSetThreadSwitchTiming.htm">sim.setThreadSwitchTiming</a> and <a href="simSwitchThread.htm">sim.switchThread</a>.</td>
+<td class=apiTableRightDescr>Allows to temporarily forbid automatic thread interruptions, i.e. preemptive threading. Explicit thread interruptions, i.e. switching, are still allowed. For complete control over thread switching, see also the other <a href="../apiFunctions.htm#threads">thread related functions</a>.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn><div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div></div>
@@ -48,7 +48,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int autoSwitchForbidLevel=sim.setThreadAutomaticSwitch(boolean allowAutoSwitch / int forbidLevel)<br></td> 
+<td class=apiTableRightLSyn>int autoSwitchForbidLevel=sim.setThreadAutomaticSwitch(bool allowAutoSwitch / int forbidLevel)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -57,9 +57,10 @@ Lua synopsis
 <div><strong>forbidLevel</strong>: allows to set an auto switch forbid level: a level &gt; 0 indicates that automatic thread interruption is disabled.</div>
 <div></div>
 <div>Best is to always use following to temporarily forbid automatic thread interruptions:</div>
-<pre class=lightRedBoxNoMarginAndSmall>local initialForbidLevel=sim.setThreadAutomaticSwitch(false) -- forbid automatic thread switches
+<code class="hljs language-lua simple">
+local initialForbidLevel=sim.setThreadAutomaticSwitch(false) -- forbid automatic thread switches
 ...
-sim.setThreadAutomaticSwitch(initialForbidLevel) -- restore to initial state</pre>
+sim.setThreadAutomaticSwitch(initialForbidLevel) -- restore to initial state</code>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -69,8 +70,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div><strong>autoSwitchForbidLevel</strong>: the forbid switch level before calling the function, i.e. the forbid switch level that should be restored later on.</div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int autoSwitchForbidLevel=sim.setThreadAutomaticSwitch(bool allowAutoSwitch / int forbidLevel)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

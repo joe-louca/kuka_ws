@@ -120,7 +120,7 @@ function ext_enableDisableStats_fromCustomizationScript(enableIt)
 end
 
 function getToolHandleAndStacking()
-    local toolAttachment=sim.getObjectHandle('ragnar_toolAttachment')
+    local toolAttachment=sim.getObject('./ragnar_toolAttachment')
     local h=sim.getObjectChild(toolAttachment,0)
     if h>=0 then
         local data=sim.readCustomDataBlock(h,simBWF.modelTags.RAGNARGRIPPER)
@@ -851,7 +851,8 @@ RobPick = function(partData,attachPart,theStackingShift,approachHeight,blend,nul
         local rmlObj=sim.rmlPos(4,0.0001,-1,curPVA,MaxVAJ,selVec,partPV)
         res,nextPVA=sim.rmlStep(rmlObj,dt)
         sim.rmlRemove(rmlObj)
-
+        
+        
         newPos = {nextPVA[1],nextPVA[2],nextPVA[3]}
         sim.setObjectPosition(simTargetDummy,model,newPos)
 --simTipDummy
@@ -957,8 +958,6 @@ RobPlace = function(TrackPart,detachPart,approachHeight,blend,nulling,dwTime,att
                     attachPart1ToPart2(attachedPartSaved,attachToTrackingLocation)
                 end
             end
---            detachPart(partHandleToPick)
-           -- sim.setScriptSimulationParameter(sim.getScriptAssociatedWithObject(suctionPad),'active','false')
         end
         if (mDone == 2) and(t2 < sim.getSimulationTime()) then
             mDone =3
@@ -1068,7 +1067,7 @@ prepareStatisticsDialog=function(enabled)
                 <label id="3" text="Average loss time: 0.00 [s]" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
                 <label id="2" text="Idle time: 100.0 [%]" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
         ]]
-        statUi=simBWF.createCustomUi(xml,sim.getObjectName(model)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
+        statUi=simBWF.createCustomUi(xml,sim.getObjectAlias(model,1)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
     end
 end
 --[[
@@ -1141,26 +1140,26 @@ end
 function coroutineMain()
     -- Begin of the thread code:
     sim.setThreadAutomaticSwitch(false)
-    model=sim.getObjectHandle(sim.handle_self)
-    simTipDummy=sim.getObjectHandle('Ragnar_InvKinTip')
-    simTargetDummy=sim.getObjectHandle('Ragnar_InvKinTarget')
-    simTip1=sim.getObjectHandle('Ragnar_RLoopArmTip14')
-    simTarget1=sim.getObjectHandle('Ragnar_RLoopArmTarget14')
-    simTip2=sim.getObjectHandle('Ragnar_RLoopArmTip15')
-    simTarget2=sim.getObjectHandle('Ragnar_RLoopArmTarget15')
-    simTip3=sim.getObjectHandle('Ragnar_RLoopArmTip16')
-    simTarget3=sim.getObjectHandle('Ragnar_RLoopArmTarget16')
+    model=sim.getObject('.')
+    simTipDummy=sim.getObject('./Ragnar_InvKinTip')
+    simTargetDummy=sim.getObject('./Ragnar_InvKinTarget')
+    simTip1=sim.getObject('./Ragnar_RLoopArmTip14')
+    simTarget1=sim.getObject('./Ragnar_RLoopArmTarget14')
+    simTip2=sim.getObject('./Ragnar_RLoopArmTip15')
+    simTarget2=sim.getObject('./Ragnar_RLoopArmTarget15')
+    simTip3=sim.getObject('./Ragnar_RLoopArmTip16')
+    simTarget3=sim.getObject('./Ragnar_RLoopArmTarget16')
     
     simNotIkJoints={}
-    simNotIkJoints[1]=sim.getObjectHandle('Ragnar_frontAdjust')
-    simNotIkJoints[2]=sim.getObjectHandle('Ragnar_upperArmAdjust0')
-    simNotIkJoints[3]=sim.getObjectHandle('Ragnar_lowerArmAdjustA0')
-    simNotIkJoints[4]=sim.getObjectHandle('Ragnar_lowerArmAdjustB3')
-    simNotIkJoints[5]=sim.getObjectHandle('Ragnar_upperArmAdjust3')
-    simNotIkJoints[6]=sim.getObjectHandle('Ragnar_lowerArmAdjustB2')
-    simNotIkJoints[7]=sim.getObjectHandle('Ragnar_upperArmAdjust2')
-    simNotIkJoints[8]=sim.getObjectHandle('Ragnar_lowerArmAdjustA1')
-    simNotIkJoints[9]=sim.getObjectHandle('Ragnar_upperArmAdjust1')
+    simNotIkJoints[1]=sim.getObject('./Ragnar_frontAdjust')
+    simNotIkJoints[2]=sim.getObject('./Ragnar_upperArmAdjust0')
+    simNotIkJoints[3]=sim.getObject('./Ragnar_lowerArmAdjustA0')
+    simNotIkJoints[4]=sim.getObject('./Ragnar_lowerArmAdjustB3')
+    simNotIkJoints[5]=sim.getObject('./Ragnar_upperArmAdjust3')
+    simNotIkJoints[6]=sim.getObject('./Ragnar_lowerArmAdjustB2')
+    simNotIkJoints[7]=sim.getObject('./Ragnar_upperArmAdjust2')
+    simNotIkJoints[8]=sim.getObject('./Ragnar_lowerArmAdjustA1')
+    simNotIkJoints[9]=sim.getObject('./Ragnar_upperArmAdjust1')
     
     -- Prepare the ik group, using the convenience function 'simIK.addIkElementFromScene':
     ikEnv=simIK.createEnvironment()
@@ -1179,10 +1178,10 @@ function coroutineMain()
     
     -- Following are the joints that we control when in FK mode:
     fkDrivingJoints={-1,-1,-1,-1}
-    fkDrivingJoints[1]=sim.getObjectHandle('Ragnar_A1DrivingJoint1')
-    fkDrivingJoints[2]=sim.getObjectHandle('Ragnar_A1DrivingJoint2')
-    fkDrivingJoints[3]=sim.getObjectHandle('Ragnar_A1DrivingJoint3')
-    fkDrivingJoints[4]=sim.getObjectHandle('Ragnar_A1DrivingJoint4')
+    fkDrivingJoints[1]=sim.getObject('./Ragnar_A1DrivingJoint1')
+    fkDrivingJoints[2]=sim.getObject('./Ragnar_A1DrivingJoint2')
+    fkDrivingJoints[3]=sim.getObject('./Ragnar_A1DrivingJoint3')
+    fkDrivingJoints[4]=sim.getObject('./Ragnar_A1DrivingJoint4')
 
     fkDrivingJoints_inIkEnv={}
     for i=1,#fkDrivingJoints,1 do
@@ -1191,10 +1190,10 @@ function coroutineMain()
     
     -- Following are the joints that we control when in IK mode (we use joints in order to be able to use the moveToConfig command here too):
     ikDrivingJoints={-1,-1,-1,-1}
-    ikDrivingJoints[1]=sim.getObjectHandle('Ragnar_T_X')
-    ikDrivingJoints[2]=sim.getObjectHandle('Ragnar_T_Y')
-    ikDrivingJoints[3]=sim.getObjectHandle('Ragnar_T_X')
-    ikDrivingJoints[4]=sim.getObjectHandle('Ragnar_T_TH')
+    ikDrivingJoints[1]=sim.getObject('./Ragnar_T_X')
+    ikDrivingJoints[2]=sim.getObject('./Ragnar_T_Y')
+    ikDrivingJoints[3]=sim.getObject('./Ragnar_T_X')
+    ikDrivingJoints[4]=sim.getObject('./Ragnar_T_TH')
 
     local ragnarSettings=sim.readCustomDataBlock(model,simBWF.modelTags.RAGNAR)
     ragnarSettings=sim.unpackTable(ragnarSettings)

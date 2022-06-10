@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGenerateTimeOptimalTrajectory" id="simGenerateTimeOptimalTrajectory"></a>sim.generateTimeOptimalTrajectory</h3>
+<p class=subsectionBar><a name="simGenerateTimeOptimalTrajectory" id="simGenerateTimeOptimalTrajectory"></a>sim.generateTimeOptimalTrajectory</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,19 +26,19 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn><div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div></div>
@@ -48,7 +48,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[] outputPath,table[] times=sim.generateTimeOptimalTrajectory(table[] path,table[] pathLengths,table[] minMaxVel,table[] minMaxAccel,int trajPtSamples=1000,string boundaryCondition='not-a-knot',float timeout=5)</td> 
+<td class=apiTableRightLSyn>float[] outputPath,float[] times=sim.generateTimeOptimalTrajectory(float[] path,float[] pathLengths,float[] minMaxVel,float[] minMaxAccel,int trajPtSamples=1000,string boundaryCondition='not-a-knot',float timeout=5)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -70,8 +70,14 @@ Lua return values
 <div><strong>outputPath</strong>: the generated path</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list outputPath,list times=sim.generateTimeOptimalTrajectory(list path,list pathLengths,list minMaxVel,list minMaxAccel,int trajPtSamples=1000,string boundaryCondition='not-a-knot',float timeout=5)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

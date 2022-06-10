@@ -50,7 +50,7 @@ function model.updatePluginRepresentation_template(partHandle)
     for i=simBWF.PART_DESTINATIONFIRST_REF,simBWF.PART_DESTINATIONLAST_REF,1 do
         local h=simBWF.getReferencedObjectHandle(partHandle,i)
         if h>=0 then
-            --print(h,sim.getObjectName(h+sim.handleflag_altname))
+            --print(h,sim.getObjectAlias(h))
             dest[#dest+1]=h
         end
     end

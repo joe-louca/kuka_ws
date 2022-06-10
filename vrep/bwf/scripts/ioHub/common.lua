@@ -78,5 +78,5 @@ model.objRefJobInfo={22} -- information about jobs stored in object references. 
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.body=sim.getObjectHandle('IOhub_obj')
+model.handles.body=sim.getObject('./IOhub_obj')
 

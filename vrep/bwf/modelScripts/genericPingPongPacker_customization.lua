@@ -439,7 +439,7 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -1057,8 +1057,8 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
-    targetTracking=sim.getObjectHandle('genericPingPongPacker_targetTracking')
+    model=sim.getObject('.')
+    targetTracking=sim.getObject('./genericPingPongPacker_targetTracking')
     prepareAndClearTrackingWIndowInfo()
 
     _MODELVERSION_=0
@@ -1077,62 +1077,62 @@ function sysCall_init()
     ----------------------------------------
     writeInfo(_info)
     rotJoints={}
-    rotJoints[1]=sim.getObjectHandle('genericPingPongPacker_jointB')
-    rotJoints[2]=sim.getObjectHandle('genericPingPongPacker_jointC')
+    rotJoints[1]=sim.getObject('./genericPingPongPacker_jointB')
+    rotJoints[2]=sim.getObject('./genericPingPongPacker_jointC')
 
     middleParts={}
-    middleParts[1]=sim.getObjectHandle('genericPingPongPacker_sides')
-    middleParts[2]=sim.getObjectHandle('genericPingPongPacker_textureA')
-    middleParts[3]=sim.getObjectHandle('genericPingPongPacker_forwarderA')
+    middleParts[1]=sim.getObject('./genericPingPongPacker_sides')
+    middleParts[2]=sim.getObject('./genericPingPongPacker_textureA')
+    middleParts[3]=sim.getObject('./genericPingPongPacker_forwarderA')
     
     endParts={}
-    endParts[1]=sim.getObjectHandle('genericPingPongPacker_textureB')
-    endParts[2]=sim.getObjectHandle('genericPingPongPacker_textureC')
-    endParts[3]=sim.getObjectHandle('genericPingPongPacker_B')
-    endParts[4]=sim.getObjectHandle('genericPingPongPacker_C')
-    endParts[5]=sim.getObjectHandle('genericPingPongPacker_forwarderB')
-    endParts[6]=sim.getObjectHandle('genericPingPongPacker_forwarderC')
+    endParts[1]=sim.getObject('./genericPingPongPacker_textureB')
+    endParts[2]=sim.getObject('./genericPingPongPacker_textureC')
+    endParts[3]=sim.getObject('./genericPingPongPacker_B')
+    endParts[4]=sim.getObject('./genericPingPongPacker_C')
+    endParts[5]=sim.getObject('./genericPingPongPacker_forwarderB')
+    endParts[6]=sim.getObject('./genericPingPongPacker_forwarderC')
 
     sides={}
-    sides[1]=sim.getObjectHandle('genericPingPongPacker_leftSide')
-    sides[2]=sim.getObjectHandle('genericPingPongPacker_rightSide')
+    sides[1]=sim.getObject('./genericPingPongPacker_leftSide')
+    sides[2]=sim.getObject('./genericPingPongPacker_rightSide')
 
     baseJoints={}
-    baseJoints[1]=sim.getObjectHandle('genericPingPongPacker_j0')
-    baseJoints[2]=sim.getObjectHandle('genericPingPongPacker_j1')
-    baseJoints[3]=sim.getObjectHandle('genericPingPongPacker_j2A')
-    baseJoints[4]=sim.getObjectHandle('genericPingPongPacker_j2B')
-    baseJoints[5]=sim.getObjectHandle('genericPingPongPacker_j2B')
-    baseJoints[6]=sim.getObjectHandle('genericPingPongPacker_jrot')
-    baseJoints[7]=sim.getObjectHandle('genericPingPongPacker_jholderRot')
+    baseJoints[1]=sim.getObject('./genericPingPongPacker_j0')
+    baseJoints[2]=sim.getObject('./genericPingPongPacker_j1')
+    baseJoints[3]=sim.getObject('./genericPingPongPacker_j2A')
+    baseJoints[4]=sim.getObject('./genericPingPongPacker_j2B')
+    baseJoints[5]=sim.getObject('./genericPingPongPacker_j2B')
+    baseJoints[6]=sim.getObject('./genericPingPongPacker_jrot')
+    baseJoints[7]=sim.getObject('./genericPingPongPacker_jholderRot')
 
-    textureHolder=sim.getObjectHandle('genericPingPongPacker_textureHolder')
+    textureHolder=sim.getObject('./genericPingPongPacker_textureHolder')
 
     cartridge1={}
     cartridge2={}
     cartridges={cartridge1,cartridge2}
-    cartridgeDefPosDummy=sim.getObjectHandle('genericPingPongPacker_cartridge1_defPos')
-    cartridge2SpecialSensor=sim.getObjectHandle('genericPingPongPacker_cartridge2_sensor2')
+    cartridgeDefPosDummy=sim.getObject('./genericPingPongPacker_cartridge1_defPos')
+    cartridge2SpecialSensor=sim.getObject('./genericPingPongPacker_cartridge2_sensor2')
     for cartr=1,2,1 do
-        cartridges[cartr]['forwardJointH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_forwardJoint')
-        cartridges[cartr]['H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr)
-        cartridges[cartr]['centerH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_center')
-        cartridges[cartr]['wallAH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_wallA')
-        cartridges[cartr]['wallBH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_wallB')
-        cartridges[cartr]['wallCH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_wallC')
-        cartridges[cartr]['flipJointH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_flipJoint')
-        cartridges[cartr]['flipH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_flip')
-        cartridges[cartr]['flipJointBH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_flipJointB')
-        cartridges[cartr]['baseB1H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_baseB1')
-        cartridges[cartr]['baseB2H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_baseB2')
-        cartridges[cartr]['flipJointCH']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_flipJointC')
-        cartridges[cartr]['baseC1H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_baseC1')
-        cartridges[cartr]['baseC2H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_baseC2')
-        cartridges[cartr]['div1H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_divWall1')
-        cartridges[cartr]['div2H']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_divWall2')
-        cartridges[cartr]['sensor']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_sensor')
-        cartridges[cartr]['stopper']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_stopper')
-        cartridges[cartr]['targets']=sim.getObjectHandle('genericPingPongPacker_cartridge'..cartr..'_targets')
+        cartridges[cartr]['forwardJointH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_forwardJoint')
+        cartridges[cartr]['H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr)
+        cartridges[cartr]['centerH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_center')
+        cartridges[cartr]['wallAH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_wallA')
+        cartridges[cartr]['wallBH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_wallB')
+        cartridges[cartr]['wallCH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_wallC')
+        cartridges[cartr]['flipJointH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_flipJoint')
+        cartridges[cartr]['flipH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_flip')
+        cartridges[cartr]['flipJointBH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_flipJointB')
+        cartridges[cartr]['baseB1H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_baseB1')
+        cartridges[cartr]['baseB2H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_baseB2')
+        cartridges[cartr]['flipJointCH']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_flipJointC')
+        cartridges[cartr]['baseC1H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_baseC1')
+        cartridges[cartr]['baseC2H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_baseC2')
+        cartridges[cartr]['div1H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_divWall1')
+        cartridges[cartr]['div2H']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_divWall2')
+        cartridges[cartr]['sensor']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_sensor')
+        cartridges[cartr]['stopper']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_stopper')
+        cartridges[cartr]['targets']=sim.getObject('./genericPingPongPacker_cartridge'..cartr..'_targets')
     end
 
 	

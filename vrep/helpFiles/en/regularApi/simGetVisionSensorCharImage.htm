@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetVisionSensorCharImage" id="simGetVisionSensorCharImage"></a>simGetVisionSensorCharImage / sim.getVisionSensorCharImage</h3>
+<p class=subsectionBar><a name="simGetVisionSensorCharImage" id="simGetVisionSensorCharImage"></a>simGetVisionSensorCharImage / sim.getVisionSensorCharImage</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simUChar* simGetVisionSensorCharImage(simInt sensorHandle,simInt* resolutionX,simInt* resolutionY)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>sensorHandle</strong>: handle of the vision sensor.  Can be combined with <a href="../apiConstants.htm#specialHandleFlags">sim_handleflag_greyscale</a> (simply add sim_handleflag_greyscale to sensorHandle), if you wish to retrieve the grey scale equivalent.</div>
 <div><strong>resolutionX/resolutionY</strong>: the returned vision sensor resolution</div>
@@ -39,7 +39,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>image buffer (buffer size is resolutionX*resolution*3 or resolutionX*resolutionY in case of a grey scale image retrieval) or nullptr in case of an error. The user is in charge of releasing the returned buffer with <a href="simReleaseBuffer.htm">simReleaseBuffer</a>. Returned values are in the range of 0-255 (0=min. intensity, 255=max. intensity)<br>
@@ -50,7 +50,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>string imageBuffer,int resolutionX,int resolutionY=sim.getVisionSensorCharImage(int sensorHandle,int posX=0,int posY=0,int sizeX=0,int sizeY=0,float rgbaCutOff=0)</td> 
+<td class=apiTableRightLSyn>buffer imageBuffer,int resolutionX,int resolutionY=sim.getVisionSensorCharImage(int sensorHandle,int posX=0,int posY=0,int sizeX=0,int sizeY=0,float rgbaCutOff=0)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -66,25 +66,23 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div><strong>imageBuffer</strong>: a string containing rgb (or rgba) values (table[] size is sizeX*sizeY*3 (or sizeX*sizeY*4 in case of rgba), rgb(a) values in the range 0-255). In case of a grey scale image retrieval, the image buffer will contain grey values or grey+alpha values in the range 0-255.</div></td> 
+<div><strong>imageBuffer</strong>: a string containing rgb (or rgba) values (sizeX*sizeY*3 (or sizeX*sizeY*4 in case of rgba), rgb(a) values in the range 0-255). In case of a grey scale image retrieval, the image buffer will contain grey values or grey+alpha values in the range 0-255.</div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetVisionSensorImage">simxGetVisionSensorImage</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxGetVisionSensorImage">simxGetVisionSensorImage</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bytes imageBuffer,int resolutionX,int resolutionY=sim.getVisionSensorCharImage(int sensorHandle,int posX=0,int posY=0,int sizeX=0,int sizeY=0,float rgbaCutOff=0)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

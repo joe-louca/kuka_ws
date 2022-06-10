@@ -118,7 +118,7 @@ function getAvailableDestinations()
         if data then
             data=sim.unpackTable(data)
             if (data['bitCoded']&2)==0 then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -296,7 +296,7 @@ function createDlg()
         local c=readInfo()
         local loc=getAvailableDestinations()
         local exceptItems={}
-        exceptItems[sim.getObjectName(model)]=true
+        exceptItems[sim.getObjectAlias(model,1)]=true
         comboDestination=simBWF.populateCombobox(ui,12,loc,exceptItems,simBWF.getObjectNameOrNone(simBWF.getReferencedObjectHandle(model,simBWF.TELEPORTER_DESTINATION_REF)),true,{{simBWF.NONE_TEXT,-1}})
 
         setDlgItemContent()
@@ -323,7 +323,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()

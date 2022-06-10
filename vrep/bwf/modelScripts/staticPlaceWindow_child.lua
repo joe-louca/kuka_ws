@@ -251,7 +251,7 @@ removeTrackedLocation=function(associatedDummyHandle)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.OLDSTATICPLACEWINDOW)
     data=sim.unpackTable(data)
     sensorHandle=simBWF.getReferencedObjectHandle(model,simBWF.STATICPLACEWINDOW_SENSOR_REF)

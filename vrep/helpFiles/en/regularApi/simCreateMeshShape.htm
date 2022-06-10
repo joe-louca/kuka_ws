@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simCreateMeshShape" id="simCreateMeshShape"></a>simCreateMeshShape / sim.createMeshShape </h3>
+<p class=subsectionBar><a name="simCreateMeshShape" id="simCreateMeshShape"></a>simCreateMeshShape / sim.createMeshShape </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simCreateMeshShape(simInt options,simFloat shadingAngle,const simFloat* vertices,simInt verticesSize,const simInt* indices,simInt indicesSize,simFloat* reserved)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>options</strong>: Bit-coded: if bit0 is set (1), backfaces are culled. If bit1 is set (2), edges are visible</div>
 <div><strong>shadingAngle</strong>: the shading angle</div>
@@ -44,7 +44,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise the handle of the newly created shape<br>
@@ -55,7 +55,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int objectHandle=sim.createMeshShape(int options,float shadingAngle,table[] vertices,table[] indices)<br></td> 
+<td class=apiTableRightLSyn>int objectHandle=sim.createMeshShape(int options,float shadingAngle,float[] vertices,int[] indices)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -75,8 +75,14 @@ Lua return values
 <div></div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int objectHandle=sim.createMeshShape(int options,float shadingAngle,list vertices,list indices)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

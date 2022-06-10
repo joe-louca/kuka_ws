@@ -77,9 +77,11 @@ catkin_install_python(PROGRAMS
    src/delay/delayed_v_hap_out_delay.py
    src/delay/gripper_cmd_delay.py
    src/delay/timestep_delay.py
+   src/delay/kuka_joints_delay.py
    
    # Feedback
-   src/feedback/ft_compensation.py
+   src/feedback/axia_ft_compensation.py
+   src/feedback/robotiq_ft_compensation.py
    src/feedback/sim_ft.py
    src/feedback/joy_vibrate.py
 
@@ -87,7 +89,6 @@ catkin_install_python(PROGRAMS
    src/gui/kuka_gui.py
    src/gui/cam1.py
    src/gui/cam2.py
-   src/gui/cam3.py
    
    # User Monitoring
    src/user/blink_detector.py

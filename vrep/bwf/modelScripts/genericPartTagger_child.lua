@@ -64,8 +64,8 @@ function isPartDetected(partHandle)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
---    sensor=sim.getObjectHandle('genericPartTagger_sensor')
+    model=sim.getObject('.')
+--    sensor=sim.getObject('./genericPartTagger_sensor')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.PARTTAGGER)
     data=sim.unpackTable(data)
     if (data['bitCoded']&8)>0 then
@@ -112,7 +112,7 @@ function sysCall_sensing()
                     local colorChanged=false
                     local data=sim.readCustomDataBlock(p[i],simBWF.modelTags.PART)
                     data=sim.unpackTable(data)
-                    local lline="Object name '"..sim.getObjectName(p[i]).."':\n"
+                    local lline="Object name '"..sim.getObjectAlias(p[i],1).."':\n"
                     lline=lline.."    --> from part with name '"..data['name'].."' and destination '"..data['destination'].."'\n" 
                     if changeName then
                         local newName=getDistributionValue(newNameDistribution)

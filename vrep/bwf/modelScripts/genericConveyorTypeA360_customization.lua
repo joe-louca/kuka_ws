@@ -98,7 +98,7 @@ function getAvailableSensors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_BINARYSENSOR_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -111,7 +111,7 @@ function getAvailableMasterConveyors()
         if l[i]~=model then
             local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
             if data then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -165,7 +165,7 @@ function updateConveyor()
 
     local err=sim.getInt32Param(sim.intparam_error_report_mode)
     sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
-    local obj=sim.getObjectHandle('genericCurvedConveyorTypeB_sides')
+    local obj=sim.getObject('./genericCurvedConveyorTypeB_sides')
     sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
     if obj>=0 then
         sim.removeObject(obj)
@@ -188,12 +188,7 @@ function updateConveyor()
         sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,1+256)
         sim.setObjectInt32Param(h,sim.shapeintparam_respondable,1)
         sim.setObjectSpecialProperty(h,sim.objectspecialproperty_collidable+sim.objectspecialproperty_measurable+sim.objectspecialproperty_detectable_all+sim.objectspecialproperty_renderable)
-        local suff=sim.getNameSuffix(sim.getObjectName(model))
-        local name='genericCurvedConveyorTypeB_sides'
-        if suff>=0 then
-            name=name..'#'..suff
-        end
-        sim.setObjectName(h,name)
+        sim.setObjectAlias(h,"genericCurvedConveyorTypeB_sides")
         sim.setObjectParent(h,model,true)
     end
 --]]
@@ -566,7 +561,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -587,11 +582,11 @@ function sysCall_init()
     ----------------------------------------
     writeInfo(_info)
 
-    front=sim.getObjectHandle('genericCurvedConveyorTypeA360_front')
-    middle=sim.getObjectHandle('genericCurvedConveyorTypeA360_middle')
-    conveyor=sim.getObjectHandle('genericCurvedConveyorTypeA360_conveyor')
-    sidePad=sim.getObjectHandle('genericCurvedConveyorTypeA360_sidePad')
-    textureHolder=sim.getObjectHandle('genericCurvedConveyorTypeA360_textureHolder')
+    front=sim.getObject('./genericCurvedConveyorTypeA360_front')
+    middle=sim.getObject('./genericCurvedConveyorTypeA360_middle')
+    conveyor=sim.getObject('./genericCurvedConveyorTypeA360_conveyor')
+    sidePad=sim.getObject('./genericCurvedConveyorTypeA360_sidePad')
+    textureHolder=sim.getObject('./genericCurvedConveyorTypeA360_textureHolder')
 	
     updatePluginRepresentation()
     previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos=simBWF.readSessionPersistentObjectData(model,"dlgPosAndSize")

@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simBuildMatrixQ" id="simBuildMatrixQ"></a>simBuildMatrixQ / sim.buildMatrixQ </h3>
+<p class=subsectionBar><a name="simBuildMatrixQ" id="simBuildMatrixQ"></a>simBuildMatrixQ / sim.buildMatrixQ </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simBuildMatrixQ(const simFloat* position,const simFloat* quaternion,simFloat* matrix)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>position</strong>: pointer to 3 simFloat values representing the position component</div>
 <div><strong>quaternion</strong>: pointer to 4 simFloat values representing the orientation quaternion (x,y,z,w)</div>
@@ -44,7 +44,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -55,7 +55,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[12] matrix=sim.buildMatrixQ(table[3] position,table[4] quaternion)<br></td> 
+<td class=apiTableRightLSyn>float[12] matrix=sim.buildMatrixQ(float[3] position,float[4] quaternion)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -73,8 +73,14 @@ Lua return values
 <div><strong>matrix</strong>: table containing the transformation matrix (except for the last row). Note: table values in Lua are indexed from 1, not 0</div>
 <div></div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list matrix=sim.buildMatrixQ(list position,list quaternion)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

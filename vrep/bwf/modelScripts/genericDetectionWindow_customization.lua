@@ -9,7 +9,7 @@ end
 
 function ext_getItemData_pricing()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.type='ragnarVision'
     obj.visionType='default'
     obj.brVersion=0
@@ -407,15 +407,15 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
     simBWF.checkIfCodeAndModelMatch(model,_CODEVERSION_,_info['version'])
     writeInfo(_info)
-    box=sim.getObjectHandle('genericDetectionWindow_box')
-    sensor1=sim.getObjectHandle('genericDetectionWindow_sensor1')
-    sensor2=sim.getObjectHandle('genericDetectionWindow_sensor2')
+    box=sim.getObject('./genericDetectionWindow_box')
+    sensor1=sim.getObject('./genericDetectionWindow_sensor1')
+    sensor2=sim.getObject('./genericDetectionWindow_sensor2')
     
     updatePluginRepresentation()
     previousDlgPos,algoDlgSize,algoDlgPos,distributionDlgSize,distributionDlgPos,previousDlg1Pos=simBWF.readSessionPersistentObjectData(model,"dlgPosAndSize")

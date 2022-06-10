@@ -4,8 +4,7 @@ require 'checkargs'
 
 local simROS2=require('simROS2')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simROS2.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simROS2'][funcName]=wrapperGenerator(_G['simROS2'][funcName])
     end
@@ -73,6 +72,8 @@ table.insert(__initFunctions, function()
         end
     end)
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simROS2.__addTypeCheck',true)
 
 return simROS2

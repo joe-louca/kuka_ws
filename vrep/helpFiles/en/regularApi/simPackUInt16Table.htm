@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simPackUInt16Table" id="simPackUInt16Table"></a>simPackUInt16Table / sim.packUInt16Table </h3>
+<p class=subsectionBar><a name="simPackUInt16Table" id="simPackUInt16Table"></a>simPackUInt16Table / sim.packUInt16Table </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -27,19 +27,19 @@ Packs a table of uint16 numbers into a string. See also <a href="simUnpackUInt16
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn><div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div></div>
@@ -49,7 +49,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>string data=sim.packUInt16Table(table[] uint16Numbers,int startUint16Index=0,int uint16Count=0)</td> 
+<td class=apiTableRightLSyn>buffer data=sim.packUInt16Table(int[] uint16Numbers,int startUint16Index=0,int uint16Count=0)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -67,8 +67,14 @@ Lua return values
 </div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bytes data=sim.packUInt16Table(list uint16Numbers,int startUint16Index=0,int uint16Count=0)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

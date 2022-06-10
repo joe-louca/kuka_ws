@@ -128,10 +128,10 @@ model.objRefJobInfo={8,5} -- information about jobs stored in object references.
 -- Handles:
 -------------------------------------------------------
 model.handles={}
-model.handles.base=sim.getObjectHandle('genericThermoformer_base')
-model.handles.station=sim.getObjectHandle('genericThermoformer_station')
-model.handles.otherStations=sim.getObjectHandle('genericThermoformer_otherStations')
-model.handles.boxes=sim.getObjectHandle('genericThermoformer_boxes')
-model.handles.trigger=sim.getObjectHandle('genericThermoformer_trigger')
+model.handles.base=sim.getObject('./genericThermoformer_base')
+model.handles.station=sim.getObject('./genericThermoformer_station')
+model.handles.otherStations=sim.getObject('./genericThermoformer_otherStations')
+model.handles.boxes=sim.getObject('./genericThermoformer_boxes')
+model.handles.trigger=sim.getObject('./genericThermoformer_trigger')
 
 

@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simIsDynamicallyEnabled" id="simIsDynamicallyEnabled"></a>simIsDynamicallyEnabled / sim.isDynamicallyEnabled</h3>
+<p class=subsectionBar><a name="simIsDynamicallyEnabled" id="simIsDynamicallyEnabled"></a>simIsDynamicallyEnabled / sim.isDynamicallyEnabled</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,19 +26,19 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simIsDynamicallyEnabled(simInt objectHandle)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
-<div><strong>ojectHandle</strong>: handle of the scene object. See also <a href="simGetObjectHandle.htm">sim.getObjectHandle</a>.</div>
+<div><strong>ojectHandle</strong>: handle of the scene object. See also <a href="simGetObject.htm">sim.getObject</a>.</div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, 0 if the object is not dynamically enabled, 1 if the object is dynamically enabled.<br>
@@ -49,7 +49,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>boolean dynamicallyEnabled=sim.isDynamicallyEnabled(int objectHandle)</td> 
+<td class=apiTableRightLSyn>bool dynamicallyEnabled=sim.isDynamicallyEnabled(int objectHandle)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -65,8 +65,14 @@ Lua return values
 <div>Similar to the C-function counterpart</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bool dynamicallyEnabled=sim.isDynamicallyEnabled(int objectHandle)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

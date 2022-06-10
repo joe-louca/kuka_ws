@@ -19,86 +19,17 @@ function sysCall_beforeSimulation()
 end
 
 function sysCall_beforeInstanceSwitch()
-    _S.path.hideCtrlPtDlg()
+    _S.path.beforeInstanceSwitch()
+end
+
+function sysCall_afterInstanceSwitch()
+    _S.path.afterInstanceSwitch()
 end
 
 function sysCall_userConfig()
-    local simStopped=sim.getSimulationState()==sim.simulation_stopped
-    
-    local pos=' placement="relative" position="-50,50" '
-    if _S.path.pathDlgPos then
-        pos=' placement="absolute" position="'.._S.path.pathDlgPos[1]..','.._S.path.pathDlgPos[2]..'" '
+    if sim.getSimulationState()==sim.simulation_stopped then
+        _S.path.openUserConfigDlg()
     end
-    local xml ='<ui title="'..sim.getObjectName(_S.path.model)..'" closeable="true" on-close="_S.path.removeDlg" modal="true" enabled="'..tostring(simStopped)..'" '..pos..[[>
-        <label text="Main properties:" style="* {font-weight: bold;}"/>
-        <group layout="form" flat="true">
-        
-        <checkbox text="Path is closed" on-change="_S.path.closed_callback" id="1" />
-        <label text=""/>
-
-        <checkbox text="Generate extruded shape" on-change="_S.path.generateShape_callback" id="3" />
-        <label text=""/>
-
-        <checkbox text="Hidden path during simulation" on-change="_S.path.hideDuringSimulation_callback" id="2" />
-        <label text=""/>
-
-        <checkbox text="Path && ctrl points always hidden" on-change="_S.path.alwaysHide_callback" id="16" />
-        <label text=""/>
-        
-        <checkbox text="Show orientation frames" on-change="_S.path.showOrientation_callback" id="14" />
-        <label text=""/>
-
-        <checkbox text="Show control point dialog" on-change="_S.path.noCtrlPtDlg_callback" id="17" />
-        <label text=""/>
-        
-        <label text="Smoothness"/>
-        <edit on-editing-finished="_S.path.smoothness_callback" id="4" />
-
-        <label text="Subdivisions"/>
-        <edit on-editing-finished="_S.path.pointCnt_callback" id="5" />
-        </group>
-        
-        <checkbox text="Automatic path orientation:" style="* {font-weight: bold;}" on-change="_S.path.autoOrient_callback" id="6"/>
-        <group layout="form" flat="true" id="15">
-
-        <radiobutton text="X axis along path, Y axis up" on-click="_S.path.align_callback" id="7"/>
-        <label text=""/>
-
-        <radiobutton text="X axis along path, Z axis up" on-click="_S.path.align_callback" id="8"/>
-        <label text=""/>
-
-        <radiobutton text="Y axis along path, X axis up" on-click="_S.path.align_callback" id="9"/>
-        <label text=""/>
-
-        <radiobutton text="Y axis along path, Z axis up" on-click="_S.path.align_callback" id="10"/>
-        <label text=""/>
-
-        <radiobutton text="Z axis along path, X axis up" on-click="_S.path.align_callback" id="11"/>
-        <label text=""/>
-
-        <radiobutton text="Z axis along path, Y axis up" on-click="_S.path.align_callback" id="12"/>
-        <label text=""/>
-        
-        <label text="Up vector"/>
-        <edit on-editing-finished="_S.path.upVector_callback" id="13" />
-        
-        </group>
-
-        <label text="Initialize path from ctrl point data:" style="* {font-weight: bold;}"/>
-        <group layout="vbox" flat="true">
-
-        <edit id="20" />
-        <button text="ctrl points as position data, i.e. x,y,z,..." on-click="_S.path.generate_callback" id="21"/>
-        <button text="ctrl points as pose data, i.e. x,y,z,qx,qy,qz,qw,..." on-click="_S.path.generate_callback" id="22"/>
-        </group>
-        
-        <label text="Output path data:" style="* {font-weight: bold;}"/>
-        <group layout="vbox" flat="true">
-        <button text="Copy to status bar" on-click="_S.path.output_callback" id="31"/>
-        </group>
-    </ui>]]
-    _S.path.ui=simUI.create(xml)
-    _S.path.setDlgItemContent()
 end
 
 function sysCall_beforeCopy(inData)
@@ -175,7 +106,7 @@ function _S.path.init()
     _S.path.pathCreationTag='ABC_PATH_CREATION'
     _S.path.shapeTag='ABC_PATHSHAPE_INFO'
     _S.path.childTag='PATH_CHILD' -- old: childTag not used anymore
-    _S.path.model=sim.getObjectHandle(sim.handle_self)
+    _S.path.model=sim.getObject('.')
     _S.path.uniqueId=sim.getStringParam(sim.stringparam_uniqueid)
     _S.path.refreshDelayInMs=200
     _S.path.lastRefreshTimeInMs=sim.getSystemTimeInMs(-1)
@@ -183,6 +114,101 @@ function _S.path.init()
     _S.path.tickCont={-1,-1,-1}
     _S.path.createNewIfNeeded()
     return _S.path.setup()
+end
+
+function _S.path.beforeInstanceSwitch()
+    _S.path.hideCtrlPtDlg()
+    _S.path.closeToReopenUserConfigDlg()
+end
+
+function _S.path.afterInstanceSwitch()
+    _S.path.reopenUserConfigDlg()
+end
+
+function _S.path.reopenUserConfigDlg()
+    if _S.path.reopenUserConfDlg then
+        _S.path.openUserConfigDlg()
+    end
+end
+
+function _S.path.openUserConfigDlg()
+    if _S.path.ui==nil then
+        _S.path.reopenUserConfDlg=nil
+        local pos=' placement="relative" position="-50,50" '
+        if _S.path.pathDlgPos then
+            pos=' placement="absolute" position="'.._S.path.pathDlgPos[1]..','.._S.path.pathDlgPos[2]..'" '
+        end
+        local xml ='<ui title="'..sim.getObjectAlias(_S.path.model,1)..'" closeable="true" on-close="_S.path.closeUserConfigDlg" modal="false" '..pos..[[>
+            <label text="Main properties:" style="* {font-weight: bold;}"/>
+            <group layout="form" flat="true">
+            
+            <checkbox text="Path is closed" on-change="_S.path.closed_callback" id="1" />
+            <label text=""/>
+
+            <checkbox text="Generate extruded shape" on-change="_S.path.generateShape_callback" id="3" />
+            <label text=""/>
+
+            <checkbox text="Hidden path during simulation" on-change="_S.path.hideDuringSimulation_callback" id="2" />
+            <label text=""/>
+
+            <checkbox text="Path && ctrl points always hidden" on-change="_S.path.alwaysHide_callback" id="16" />
+            <label text=""/>
+            
+            <checkbox text="Show orientation frames" on-change="_S.path.showOrientation_callback" id="14" />
+            <label text=""/>
+
+            <checkbox text="Show control point dialog" on-change="_S.path.noCtrlPtDlg_callback" id="17" />
+            <label text=""/>
+            
+            <label text="Smoothness"/>
+            <edit on-editing-finished="_S.path.smoothness_callback" id="4" />
+
+            <label text="Subdivisions"/>
+            <edit on-editing-finished="_S.path.pointCnt_callback" id="5" />
+            </group>
+            
+            <checkbox text="Automatic path orientation:" style="* {font-weight: bold;}" on-change="_S.path.autoOrient_callback" id="6"/>
+            <group layout="form" flat="true" id="15">
+
+            <radiobutton text="X axis along path, Y axis up" on-click="_S.path.align_callback" id="7"/>
+            <label text=""/>
+
+            <radiobutton text="X axis along path, Z axis up" on-click="_S.path.align_callback" id="8"/>
+            <label text=""/>
+
+            <radiobutton text="Y axis along path, X axis up" on-click="_S.path.align_callback" id="9"/>
+            <label text=""/>
+
+            <radiobutton text="Y axis along path, Z axis up" on-click="_S.path.align_callback" id="10"/>
+            <label text=""/>
+
+            <radiobutton text="Z axis along path, X axis up" on-click="_S.path.align_callback" id="11"/>
+            <label text=""/>
+
+            <radiobutton text="Z axis along path, Y axis up" on-click="_S.path.align_callback" id="12"/>
+            <label text=""/>
+            
+            <label text="Up vector"/>
+            <edit on-editing-finished="_S.path.upVector_callback" id="13" />
+            
+            </group>
+
+            <label text="Initialize path from ctrl point data:" style="* {font-weight: bold;}"/>
+            <group layout="vbox" flat="true">
+
+            <edit id="20" />
+            <button text="ctrl points as position data, i.e. x,y,z,..." on-click="_S.path.generate_callback" id="21"/>
+            <button text="ctrl points as pose data, i.e. x,y,z,qx,qy,qz,qw,..." on-click="_S.path.generate_callback" id="22"/>
+            </group>
+            
+            <label text="Output path data:" style="* {font-weight: bold;}"/>
+            <group layout="vbox" flat="true">
+            <button text="Copy to status bar" on-click="_S.path.output_callback" id="31"/>
+            </group>
+        </ui>]]
+        _S.path.ui=simUI.create(xml)
+        _S.path.setDlgItemContent()
+    end
 end
 
 function _S.path.createNewIfNeeded()
@@ -230,7 +256,7 @@ function _S.path.createNew(ctrlPts,onlyPosData,options,pointCount,smoothing,auto
         ctrlPt=sim.createDummy(0.01,{0,0.96,0.66,0,0,0,0,0,0,0,0,0})
         sim.setObjectParent(ctrlPt,_S.path.model,true)
         sim.setObjectPosition(ctrlPt,_S.path.model,fp(ctrlPts,i))
-        sim.setSimilarName(ctrlPt,sim.getObjectName(_S.path.model),'__ctrlPt')
+        sim.setObjectAlias(ctrlPt,'ctrlPt')
         if onlyPosData then
             sim.setObjectQuaternion(ctrlPt,_S.path.model,{0,0,0,1})
         else
@@ -247,9 +273,7 @@ end
 
 function _S.path.cleanup()
     _S.path.hideCtrlPtDlg()
-    if _S.path.ui then
-        simUI.destroy(_S.path.ui)
-    end
+    _S.path.closeUserConfigDlg()
     -- Untag path dummies that are not part of the control pts (e.g. from another path):
     local d=sim.getObjectsInTree(_S.path.model,sim.object_dummy_type,1)
     for i=1,#d,1 do
@@ -305,6 +329,7 @@ function _S.path.afterSimulation()
         local h=_S.path.ctrlPts[i].handle
         sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,v)
     end
+    _S.path.reopenUserConfigDlg()
 end
 
 function _S.path.beforeSimulation()
@@ -318,6 +343,7 @@ function _S.path.beforeSimulation()
         local h=_S.path.ctrlPts[i].handle
         sim.setObjectInt32Param(h,sim.objintparam_visibility_layer,0)
     end
+    _S.path.closeToReopenUserConfigDlg()
 end
 
 function _S.path.getCtrlPtsPoseId()
@@ -330,57 +356,124 @@ function _S.path.getCtrlPtsPoseId()
     return sim.packTable(p)
 end
 
+function _S.path.computeFingerPrint()
+    local p={}
+    local p1={}
+    for i=1,#_S.path.ctrlPts,1 do
+        local pp=sim.getObjectPose(_S.path.ctrlPts[i].handle,sim.handle_parent)
+        for j=1,7,1 do
+            p1[#p1+1]=pp[j]
+        end
+    end
+    return {sim.packFloatTable(p1),sim.packTable(_S.path.readInfo())}
+end
+
+function _S.path.areFingerPrintSame(fp1,fp2)
+    if #fp1==0 or #fp2==0 or #fp1[1]~=#fp2[1] or fp1[2]~=fp2[2] then
+        return false
+    end
+    local p1=sim.unpackFloatTable(fp1[1])
+    local p2=sim.unpackFloatTable(fp2[1])
+    for i=1,#p1,1 do
+        if math.abs(p1[i]-p2[i])>0.0001 then
+            return false
+        end
+    end
+    return true
+end
+
+function _S.path.setPathShape(shape)
+    local shapes=sim.getObjectsInTree(_S.path.model,sim.object_shape_type,1+2)
+    for i=1,#shapes,1 do
+        local dat=sim.readCustomDataBlock(shapes[i],_S.path.shapeTag)
+        if dat then
+            sim.removeObject(shapes[i])
+        end
+    end
+    if sim.isHandle(shape) then
+        sim.writeCustomDataBlock(shape,_S.path.shapeTag,"a")
+        sim.setObjectParent(shape,_S.path.model,false)
+        local p=sim.getObjectProperty(shape)
+        sim.setObjectProperty(shape,p|sim.objectproperty_selectmodelbaseinstead|sim.objectproperty_dontshowasinsidemodel)
+        sim.setObjectAlias(shape,'shape')
+        sim.writeCustomDataBlock(shape,_S.path.childTag,'') -- old: childTag not used anymore
+    end
+end
+
+function _S.path.getPathShapeColor()
+    local shapes=sim.getObjectsInTree(_S.path.model,sim.object_shape_type,1+2)
+    for i=1,#shapes,1 do
+        local dat=sim.readCustomDataBlock(shapes[i],_S.path.shapeTag)
+        if dat then
+            local r,col=sim.getShapeColor(shapes[i],'',sim.colorcomponent_ambient_diffuse)
+            return col
+        end
+    end
+end
+
 function _S.path.setup()
     local ctrlPtsHandles=_S.path.getCtrlPts()
+    _S.path.removeLine(1)
+    _S.path.removeLine(2)
     if #_S.path.ctrlPts>1 then
+        local fingerPrint=_S.path.computeFingerPrint()
+        local ffp=sim.readCustomTableData(_S.path.model,'__pathFingerPrint__')
         local c=_S.path.readInfo()
         _S.path.paths={}
-        _S.path.paths[1],_S.path.paths[2],_S.path.paths[3],_S.path.paths[4]=_S.path.computePaths()
-        if (c.bitCoded & 2)~=0 then -- path is closed. First and last pts are duplicate
-            sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS',sim.packDoubleTable(_S.path.paths[1],0,#_S.path.paths[1]-7))
-            sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS_X',sim.packDoubleTable(_S.path.paths[3],0,#_S.path.paths[3]-5))
+        if not _S.path.areFingerPrintSame(fingerPrint,ffp) or _S.path.forceFullRebuild then
+            _S.path.forceFullRebuild=nil
+            sim.writeCustomTableData(_S.path.model,'__pathFingerPrint__',fingerPrint)
+            _S.path.paths[1],_S.path.paths[2],_S.path.paths[3],_S.path.paths[4]=_S.path.computePaths()
+            if (c.bitCoded & 2)~=0 then -- path is closed. First and last pts are duplicate
+                sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS',sim.packDoubleTable(_S.path.paths[1],0,#_S.path.paths[1]-7))
+                sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS_X',sim.packDoubleTable(_S.path.paths[3],0,#_S.path.paths[3]-5))
+            else
+                sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS',sim.packDoubleTable(_S.path.paths[1]))
+                sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS_X',sim.packDoubleTable(_S.path.paths[3]))
+            end
+            sim.writeCustomDataBlock(_S.path.model,'PATH',sim.packDoubleTable(_S.path.paths[2]))
+            sim.writeCustomDataBlock(_S.path.model,'PATH_X',sim.packDoubleTable(_S.path.paths[4]))
+
+            local prevColor=_S.path.getPathShapeColor()
+            _S.path.setPathShape(-1)
+            if _S.path.shaping and (c.bitCoded&4)~=0 then
+                local s=_S.path.shaping(_S.path.paths[2],(c.bitCoded&2)~=0,c.upVector)
+                _S.path.setPathShape(s)
+                if prevColor then
+                    sim.setShapeColor(s,'',sim.colorcomponent_ambient_diffuse,prevColor)
+                end
+            end
+            
+            if _S.path.refreshTrigger then
+                _S.path.refreshTrigger(ctrlPtsHandles,_S.path.paths[2],c)
+            end
         else
-            sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS',sim.packDoubleTable(_S.path.paths[1]))
-            sim.writeCustomDataBlock(_S.path.model,'PATHCTRLPTS_X',sim.packDoubleTable(_S.path.paths[3]))
+            _S.path.paths[1]=sim.unpackDoubleTable(sim.readCustomDataBlock(_S.path.model,'PATHCTRLPTS'))
+            _S.path.paths[2]=sim.unpackDoubleTable(sim.readCustomDataBlock(_S.path.model,'PATH'))
+            _S.path.paths[3]=sim.unpackDoubleTable(sim.readCustomDataBlock(_S.path.model,'PATHCTRLPTS_X'))
+            _S.path.paths[4]=sim.unpackDoubleTable(sim.readCustomDataBlock(_S.path.model,'PATH_X'))
+            if (c.bitCoded & 2)~=0 then -- path is closed. First and last pts are duplicate
+                for i=1,7,1 do
+                    _S.path.paths[1][#_S.path.paths[1]+1]=_S.path.paths[1][i]
+                end
+                for i=1,5,1 do
+                    _S.path.paths[3][#_S.path.paths[3]+1]=_S.path.paths[3][i]
+                end
+            end
         end
-        sim.writeCustomDataBlock(_S.path.model,'PATH',sim.packDoubleTable(_S.path.paths[2]))
-        sim.writeCustomDataBlock(_S.path.model,'PATH_X',sim.packDoubleTable(_S.path.paths[4]))
-        _S.path.removeLine(1)
-        _S.path.removeLine(2)
         _S.path.displayLine(1)
         _S.path.displayLine(2)
-        if _S.path.refreshTrigger then
-            _S.path.refreshTrigger(ctrlPtsHandles,_S.path.paths[2],c)
-        end
-        local shapes=sim.getObjectsInTree(_S.path.model,sim.object_shape_type,1+2)
-        for i=1,#shapes,1 do
-            local dat=sim.readCustomDataBlock(shapes[i],_S.path.shapeTag)
-            if dat then
-                sim.removeObject(shapes[i])
-            end
-        end
-        if _S.path.shaping and (c.bitCoded&4)~=0 then
-            local s=_S.path.shaping(_S.path.paths[2],(c.bitCoded&2)~=0,c.upVector)
-            if sim.isHandle(s) then
-                sim.writeCustomDataBlock(s,_S.path.shapeTag,"a")
-                sim.setObjectParent(s,_S.path.model,false)
-                local p=sim.getObjectProperty(s)
-                sim.setObjectProperty(s,p|sim.objectproperty_selectmodelbaseinstead|sim.objectproperty_dontshowasinsidemodel)
-                sim.setSimilarName(s,sim.getObjectName(_S.path.model),'__shape')
-                sim.writeCustomDataBlock(s,_S.path.childTag,'') -- old: childTag not used anymore
-            end
-        end
-        
         _S.path.refresh=false
         _S.path.lastRefreshTimeInMs=sim.getSystemTimeInMs(-1)
     else
-        _S.path.removeLine(1)
-        _S.path.removeLine(2)
         sysCall_afterDelete=nil
         sysCall_beforeCopy=nil
         sysCall_afterCopy=nil
         sysCall_afterCreate=nil
         sim.removeModel(_S.path.model)
+    end
+    if sim.getSimulationState()~=sim.simulation_stopped then
+        _S.path.beforeSimulation()
     end
     return ctrlPtsHandles,_S.path.paths[2]
 end
@@ -575,11 +668,18 @@ function _S.path.getCtrlPts()
     return handles
 end
 
-function _S.path.removeDlg()
-    local x,y=simUI.getPosition(_S.path.ui)
-    _S.path.pathDlgPos={x,y}
-    simUI.destroy(_S.path.ui)
-    _S.path.ui=nil
+function _S.path.closeToReopenUserConfigDlg()
+    _S.path.reopenUserConfDlg=_S.path.closeUserConfigDlg()
+end
+
+function _S.path.closeUserConfigDlg()
+    if _S.path.ui then
+        local x,y=simUI.getPosition(_S.path.ui)
+        _S.path.pathDlgPos={x,y}
+        simUI.destroy(_S.path.ui)
+        _S.path.ui=nil
+        return true
+    end
 end
 
 function _S.path.setDlgItemContent()

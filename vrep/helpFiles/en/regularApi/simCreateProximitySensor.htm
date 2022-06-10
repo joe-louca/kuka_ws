@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simCreateProximitySensor" id="simCreateProximitySensor"></a>simCreateProximitySensor / sim.createProximitySensor </h3>
+<p class=subsectionBar><a name="simCreateProximitySensor" id="simCreateProximitySensor"></a>simCreateProximitySensor / sim.createProximitySensor </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,19 +26,19 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
-<td class=apiTableRightCSyn>simInt simCreateProximitySensor(simInt sensorType,simInt subType,simInt options,const simInt* intParams,const simFloat* floatParams,const simFloat* color)<br></td> 
+<td class=apiTableRightCSyn>simInt simCreateProximitySensor(simInt sensorType,simInt subType,simInt options,const simInt* intParams,const simFloat* floatParams,const simFloat* reserved)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>sensorType</strong>: the desired <a href="../apiConstants.htm#sceneObjectSubTypes">proximity sensor type</a> (e.g. sim_proximitysensor_cone_subtype)</div>
-<div><strong>subType</strong>: the desired <a href="../apiConstants.htm#sceneObjectSpecialProperties">proximity sensor sub-type</a> (e.g. sim_objectspecialproperty_detectable_ultrasonic)</div>
+<div><strong>subType</strong>: deprecated. Set to 16</div>
 <div><strong>options</strong>: bit-coded options:</div>
 <div class=tab>bit 0 set (1): the sensor will be explicitely handled</div>
-<div class=tab>bit 1 set (2): the detection volumes are not shown when detecting something</div>
-<div class=tab>bit 2 set (4): the detection volumes are not shown when not detecting anything</div>
+<div class=tab>bit 1 set (2): reserved. Set to 0</div>
+<div class=tab>bit 2 set (4): the detection volume is not shown</div>
 <div class=tab>bit 3 set (8): front faces are not detected</div>
 <div class=tab>bit 4 set (16): back faces are not detected</div>
 <div class=tab>bit 5 set (32): fast detection (i.e. not exact detection)</div>
@@ -70,13 +70,13 @@ C synopsis
 <div class=tab>floatParams[12]: sensing point size</div>
 <div class=tab>floatParams[13]: reserved. Set to 0.0</div>
 <div class=tab>floatParams[14]: reserved. Set to 0.0</div>
-<div><strong>color</strong>: pointer to 4x4x3 values representing the various colors of the sensor ((passive, active, ray, closest distance) x (ambient_diffuse rgb, 3 reserved values (set to zer0), specular rgb and emission rgb)). Can be nullptr for default values<br>
+<div><strong>reserved</strong>: set to nullptr<br>
 </div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise the handle of the force sensor</div>
@@ -86,7 +86,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int sensorHandle=sim.createProximitySensor(int sensorType,int subType,int options,table[8] intParams,table[15] floatParams,table[48] color=nil)<br></td> 
+<td class=apiTableRightLSyn>int sensorHandle=sim.createProximitySensor(int sensorType,int subType,int options,int[8] intParams,float[15] floatParams)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -103,6 +103,14 @@ Lua return values
 <div></div>
 </td> 
 </tr> 
+
+<tr class=apiTableTr> 
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int sensorHandle=sim.createProximitySensor(int sensorType,int subType,int options,list intParams,list floatParams)</td> 
+</tr> 
+
 </table> 
 
 

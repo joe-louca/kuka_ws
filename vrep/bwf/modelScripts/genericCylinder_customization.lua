@@ -314,7 +314,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -322,7 +322,7 @@ function sysCall_init()
     writeInfo(_info)
     auxCylinders={}
     for i=1,2,1 do
-        auxCylinders[i]=sim.getObjectHandle('genericCylinder_auxCylinder'..i)
+        auxCylinders[i]=sim.getObject('./genericCylinder_auxCylinder'..i)
     end
     local data=readPartInfo()
     if data['name']=='<partName>' then

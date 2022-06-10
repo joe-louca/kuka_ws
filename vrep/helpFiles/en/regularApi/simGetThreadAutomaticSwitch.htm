@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<title>simGetThreadAutomaticSwitch</title>
+<title>sim.getThreadAutomaticSwitch</title>
 <link rel="stylesheet" type="text/css" href="../../style.css">
 </head>
 
@@ -16,29 +16,29 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetThreadAutomaticSwitch" id="simGetThreadAutomaticSwitch"></a>sim.getThreadAutomaticSwitch </h3>
+<p class=subsectionBar><a name="simGetThreadAutomaticSwitch" id="simGetThreadAutomaticSwitch"></a>sim.getThreadAutomaticSwitch </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Queries whether the current thread will automatically be interrupted, i.e. switched. See also <a href="simSetThreadAutomaticSwitch.htm">sim.setThreadAutomaticSwitch</a> and <a href="simGetThreadSwitchAllowed.htm">sim.getThreadSwitchAllowed</a>.</td>
+<td class=apiTableRightDescr>Queries whether the current thread will automatically be interrupted, i.e. switched. For complete control over thread switching, see also the other <a href="../apiFunctions.htm#threads">thread related functions</a>.</td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn><div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div></div>
@@ -48,12 +48,12 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>boolean result=sim.getThreadAutomaticSwitch()</td> 
+<td class=apiTableRightLSyn>bool result=sim.getThreadAutomaticSwitch()</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
 <td class=apiTableRightLParam>
-<div>none</div>
+<div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -63,8 +63,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div><strong>result</strong>: if true, the thread will automatically be interrupted, i.e. switched.</div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bool result=sim.getThreadAutomaticSwitch()</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

@@ -237,7 +237,7 @@ displayConsoleIfNeeded=function(info)
     if console then
         sim.auxiliaryConsolePrint(console,nil)
         for key,value in pairs(info) do
-            local str=sim.getObjectName(key)..':\n'
+            local str=sim.getObjectAlias(key,1)..':\n'
             str=str..'    handle: '..key..', partName: '..value['partName']..', destinationName: '..value['destinationName']..'\n'
             str=str..'    pick position: ('
             str=str..simBWF.format("%.0f",value['pickPos'][1]*1000)..','
@@ -266,7 +266,7 @@ prepareStatisticsDialog=function(enabled)
                 <label id="3" text="" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
                 <label id="4" text="" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
         ]]
-        statUi=simBWF.createCustomUi(xml,sim.getObjectName(model)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
+        statUi=simBWF.createCustomUi(xml,sim.getObjectAlias(model,1)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
     end
 end
 
@@ -288,10 +288,10 @@ updateStatisticsDialog=function(totalP,detectedPNoLabel,detectedPWithLabel)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
-    sensor1=sim.getObjectHandle('genericDetectionWindow_sensor1')
-    sensor2=sim.getObjectHandle('genericDetectionWindow_sensor2')
-    sensor3=sim.getObjectHandle('genericDetectionWindow_sensor3')
+    model=sim.getObject('.')
+    sensor1=sim.getObject('./genericDetectionWindow_sensor1')
+    sensor2=sim.getObject('./genericDetectionWindow_sensor2')
+    sensor3=sim.getObject('./genericDetectionWindow_sensor3')
     local data=sim.readCustomDataBlock(model,'XYZ_DETECTIONWINDOW_INFO')
     data=sim.unpackTable(data)
     width=data['width']

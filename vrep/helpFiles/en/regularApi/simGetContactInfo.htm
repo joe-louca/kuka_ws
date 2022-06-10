@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetContactInfo" id="simGetContactInfo"></a>simGetContactInfo / sim.getContactInfo </h3>
+<p class=subsectionBar><a name="simGetContactInfo" id="simGetContactInfo"></a>simGetContactInfo / sim.getContactInfo </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetContactInfo(simInt dynamicPass,simInt objectHandle,simInt index,simInt* objectHandles,simFloat* contactInfo)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>dynamicPass</strong>: a specific dynamic sub-step index or sim_handle_all. By default a call to <a href="simHandleDynamics.htm">simHandleDynamics</a> executes the dynamics engine x times, with x times smaller time steps (where x is a parameter that can be adjusted). At each of those sub-steps, contacts are created and destroyed. With the dynamicPass argument you can select which sub-step you wish to retrieve contacts from (zero-based index), or sim_handle_all to retrieve the contacts of all sub-steps. See also <a href="simGetInt32Param.htm">simGetInt32Param</a>(sim_intparam_dynamic_step_divider).<br>
 </div>
@@ -47,7 +47,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 in case of an error, 0 if no contact was found at the given index or 1 if a contact was returned.<br>
@@ -58,7 +58,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[2] collidingObjects,table[3] collisionPoint,table[3] reactionForce,table[3] normalVector=sim.getContactInfo(int dynamicPass,int objectHandle,int index)<br></td> 
+<td class=apiTableRightLSyn>int[2] collidingObjects,float[3] collisionPoint,float[3] reactionForce,float[3] normalVector=sim.getContactInfo(int dynamicPass,int objectHandle,int index)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -77,8 +77,14 @@ Lua return values
 <div><strong>normalVector</strong>: the normal vector at the contact point</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list collidingObjects,list collisionPoint,list reactionForce,list normalVector=sim.getContactInfo(int dynamicPass,int objectHandle,int index)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

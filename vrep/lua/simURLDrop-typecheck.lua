@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simURLDrop=require('simURLDrop')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simURLDrop.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simURLDrop'][funcName]=wrapperGenerator(_G['simURLDrop'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simURLDrop.__addTypeCheck',true)
 
 return simURLDrop

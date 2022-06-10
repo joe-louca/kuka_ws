@@ -9,7 +9,7 @@ end
 
 function ext_getItemData_pricing()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.type='locationFrame'
     obj.frameType='pickOrPlace'
     obj.brVersion=0
@@ -199,7 +199,7 @@ function removeDlg()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()

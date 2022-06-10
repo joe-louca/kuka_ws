@@ -111,25 +111,25 @@ local isPick=(model.readInfo()['type']==0)
 model.handles={}
 
 if isPick then
-    model.handles.trackBox1=sim.getObjectHandle('pickTrackingWindow_box1')
-    model.handles.trackBox2=sim.getObjectHandle('pickTrackingWindow_box2')
-    model.handles.stopLineBox=sim.getObjectHandle('pickTrackingWindow_stopLine')
-    model.handles.startLineBox=sim.getObjectHandle('pickTrackingWindow_startLine')
-    model.handles.refFrame=sim.getObjectHandle('pickTrackingWindow_refFrame')
-    model.handles.upstreamMarginBox=sim.getObjectHandle('pickTrackingWindow_upstreamMargin')
+    model.handles.trackBox1=sim.getObject('./pickTrackingWindow_box1')
+    model.handles.trackBox2=sim.getObject('./pickTrackingWindow_box2')
+    model.handles.stopLineBox=sim.getObject('./pickTrackingWindow_stopLine')
+    model.handles.startLineBox=sim.getObject('./pickTrackingWindow_startLine')
+    model.handles.refFrame=sim.getObject('./pickTrackingWindow_refFrame')
+    model.handles.upstreamMarginBox=sim.getObject('./pickTrackingWindow_upstreamMargin')
 else
-    model.handles.trackBox1=sim.getObjectHandle('placeTrackingWindow_box1')
-    model.handles.trackBox2=sim.getObjectHandle('placeTrackingWindow_box2')
-    model.handles.stopLineBox=sim.getObjectHandle('placeTrackingWindow_stopLine')
-    model.handles.startLineBox=sim.getObjectHandle('placeTrackingWindow_startLine')
-    model.handles.refFrame=sim.getObjectHandle('placeTrackingWindow_refFrame')
-    model.handles.upstreamMarginBox=sim.getObjectHandle('placeTrackingWindow_upstreamMargin')
+    model.handles.trackBox1=sim.getObject('./placeTrackingWindow_box1')
+    model.handles.trackBox2=sim.getObject('./placeTrackingWindow_box2')
+    model.handles.stopLineBox=sim.getObject('./placeTrackingWindow_stopLine')
+    model.handles.startLineBox=sim.getObject('./placeTrackingWindow_startLine')
+    model.handles.refFrame=sim.getObject('./placeTrackingWindow_refFrame')
+    model.handles.upstreamMarginBox=sim.getObject('./placeTrackingWindow_upstreamMargin')
 end
 model.handles.calibrationBalls={}
 for i=1,3,1 do
     if isPick then
-        model.handles.calibrationBalls[i]=sim.getObjectHandle('pickTrackingWindow_calibrationBall'..i)
+        model.handles.calibrationBalls[i]=sim.getObject('./pickTrackingWindow_calibrationBall'..i)
     else
-        model.handles.calibrationBalls[i]=sim.getObjectHandle('placeTrackingWindow_calibrationBall'..i)
+        model.handles.calibrationBalls[i]=sim.getObject('./placeTrackingWindow_calibrationBall'..i)
     end
 end

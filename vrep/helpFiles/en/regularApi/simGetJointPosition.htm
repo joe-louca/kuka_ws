@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetJointPosition" id="simGetJointPosition"></a>simGetJointPosition / sim.getJointPosition</h3>
+<p class=subsectionBar><a name="simGetJointPosition" id="simGetJointPosition"></a>simGetJointPosition / sim.getJointPosition</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves the intrinsic position of a joint. This function cannot be used with spherical joints (use <a href="simGetJointMatrix.htm">sim.getJointMatrix</a> instead). See also <a href="simSetJointPosition.htm">sim.setJointPosition</a>.<br></td>
+<td class=apiTableRightDescr>Retrieves the intrinsic position of a joint. This function cannot be used with spherical joints (use <a href="simGetObjectChildPose.htm">sim.getObjectChildPose</a> instead). See also <a href="simSetJointPosition.htm">sim.setJointPosition</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetJointPosition(simInt objectHandle,simFloat* position)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectHandle</strong>: handle of the joint</div>
 <div><strong>position</strong>: intrinsic position of the joint. This is a one-dimensional value: if the joint is revolute, the rotation angle is returned, if the joint is prismatic, the translation amount is returned, etc.<br>
@@ -40,7 +40,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -66,22 +66,20 @@ Lua return values
 <div><strong>position</strong>: intrinsic position of the joint</div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetJointPosition">simxGetJointPosition</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxGetJointPosition">simxGetJointPosition</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>float position=sim.getJointPosition(int objectHandle)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

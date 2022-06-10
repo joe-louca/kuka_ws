@@ -32,7 +32,7 @@ function getTriggerType()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
     data=sim.unpackTable(data)
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,1)
@@ -40,17 +40,17 @@ function sysCall_init()
     getTriggerType()
     local err=sim.getInt32Param(sim.intparam_error_report_mode)
     sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
-    textureB=sim.getObjectHandle('genericPingPongPacker_textureB')
-    textureC=sim.getObjectHandle('genericPingPongPacker_textureC')
-    jointB=sim.getObjectHandle('genericPingPongPacker_jointB')
-    jointC=sim.getObjectHandle('genericPingPongPacker_jointC')
+    textureB=sim.getObject('./genericPingPongPacker_textureB')
+    textureC=sim.getObject('./genericPingPongPacker_textureC')
+    jointB=sim.getObject('./genericPingPongPacker_jointB')
+    jointC=sim.getObject('./genericPingPongPacker_jointC')
     sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
-    textureA=sim.getObjectHandle('genericPingPongPacker_textureA')
-    forwarderA=sim.getObjectHandle('genericPingPongPacker_forwarderA')
+    textureA=sim.getObject('./genericPingPongPacker_textureA')
+    forwarderA=sim.getObject('./genericPingPongPacker_forwarderA')
     sensors={}
-    sensors[1]=sim.getObjectHandle('genericPingPongPacker_cartridge1_sensor')
-    sensors[2]=sim.getObjectHandle('genericPingPongPacker_cartridge2_sensor')
-    sensors[3]=sim.getObjectHandle('genericPingPongPacker_cartridge2_sensor2')
+    sensors[1]=sim.getObject('./genericPingPongPacker_cartridge1_sensor')
+    sensors[2]=sim.getObject('./genericPingPongPacker_cartridge2_sensor')
+    sensors[3]=sim.getObject('./genericPingPongPacker_cartridge2_sensor2')
 
     lastT=sim.getSimulationTime()
     beltVelocity=0

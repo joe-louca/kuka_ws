@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simAddDrawingObject" id="simAddDrawingObject"></a>simAddDrawingObject / sim.addDrawingObject </h3>
+<p class=subsectionBar><a name="simAddDrawingObject" id="simAddDrawingObject"></a>simAddDrawingObject / sim.addDrawingObject </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simAddDrawingObject(simInt objectType,simFloat size,simFloat duplicateTolerance,simInt parentObjectHandle,simInt maxItemCount,const simFloat* ambient_diffuse,const simFloat* setToNULL,const simFloat* specular,const simFloat* emission)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>objectType</strong>: a <a href="../apiConstants.htm#customDrawingObjects">drawing object type combined with attributes</a></div>
 <div><strong>size</strong>: size of the item (width of lines or size of points are in pixels, other sizes are in meters</div>
@@ -48,7 +48,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>handle of the drawing object if successful, -1 otherwise</div>
@@ -58,7 +58,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int drawingObjectHandle=sim.addDrawingObject(int objectType,float size,float duplicateTolerance,int parentObjectHandle,int maxItemCount,table[3] ambient_diffuse=nil,nil,table[3] specular=nil,table[3] emission=nil)<br></td> 
+<td class=apiTableRightLSyn>int drawingObjectHandle=sim.addDrawingObject(int objectType,float size,float duplicateTolerance,int parentObjectHandle,int maxItemCount,float[3] ambient_diffuse=nil,nil,float[3] specular=nil,float[3] emission=nil)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -77,22 +77,20 @@ Lua return values
 </td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxAddDrawingObject_points">simxAddDrawingObject_points</a>, <a href="../b0RemoteApi-cpp.htm#simxAddDrawingObject_segments">simxAddDrawingObject_segments</a>, <a href="../b0RemoteApi-cpp.htm#simxAddDrawingObject_triangles">simxAddDrawingObject_triangles</a>, <a href="../b0RemoteApi-cpp.htm#simxAddDrawingObject_spheres">simxAddDrawingObject_spheres</a>, <a href="../b0RemoteApi-cpp.htm#simxAddDrawingObject_cubes">simxAddDrawingObject_cubes</a></div>
-<div>Legacy remote API: -</div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int drawingObjectHandle=sim.addDrawingObject(int objectType,float size,float duplicateTolerance,int parentObjectHandle,int maxItemCount,list ambient_diffuse=None,None,list specular=None,list emission=None)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

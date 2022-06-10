@@ -131,6 +131,6 @@ model.objRefJobInfo={6,1,2,3,4} -- information about jobs stored in object refer
 -------------------------------------------------------
 model.handles={}
 
-model.handles.producedPartsDummy=sim.getObjectHandle('genericFeeder_ownedParts')
+model.handles.producedPartsDummy=sim.getObject('./genericFeeder_ownedParts')
 
 

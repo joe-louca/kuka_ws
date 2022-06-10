@@ -23,9 +23,9 @@ td.section { margin: 0; padding: 0; }
 <div align="center"><table class="allEncompassingTable">
 
 <tr><td id="title" class="section"><h1>Vision plugin API reference</h1></td></tr>
-<tr><td id="info" class="section"><p class="infoBox">API functions for performing simple image processing, and handling special types of vision algorithms.</p></td></tr>
+<tr><td id="info" class="section"><p class="warningBox">API functions for performing simple image processing, and handling special types of vision algorithms.</p></td></tr>
 
-<tr><td id="alphabetical" class="section"><pre class="lightGreyBox">
+<tr><td id="alphabetical" class="section"><pre class="apiList">
 <a href="?#simVision.addBuffer1ToWorkImg">simVision.addBuffer1ToWorkImg</a>
 <a href="?#simVision.addWorkImgToBuffer1">simVision.addWorkImgToBuffer1</a>
 <a href="?#simVision.binaryWorkImg">simVision.binaryWorkImg</a>
@@ -40,6 +40,7 @@ td.section { margin: 0; padding: 0; }
 <a href="?#simVision.createVelodyneVPL16">simVision.createVelodyneVPL16</a>
 <a href="?#simVision.destroyVelodyneHDL64E">simVision.destroyVelodyneHDL64E</a>
 <a href="?#simVision.destroyVelodyneVPL16">simVision.destroyVelodyneVPL16</a>
+<a href="?#simVision.distort">simVision.distort</a>
 <a href="?#simVision.edgeDetectionOnWorkImg">simVision.edgeDetectionOnWorkImg</a>
 <a href="?#simVision.handleAnaglyphStereo">simVision.handleAnaglyphStereo</a>
 <a href="?#simVision.handleSpherical">simVision.handleSpherical</a>
@@ -70,16 +71,19 @@ td.section { margin: 0; padding: 0; }
 <a href="?#simVision.workImgToBuffer1">simVision.workImgToBuffer1</a>
 <a href="?#simVision.workImgToBuffer2">simVision.workImgToBuffer2</a>
 <a href="?#simVision.workImgToSensorDepthMap">simVision.workImgToSensorDepthMap</a>
-<a href="?#simVision.workImgToSensorImg">simVision.workImgToSensorImg</a></pre></td></tr>
+<a href="?#simVision.workImgToSensorImg">simVision.workImgToSensorImg</a></pre>
+<br>
+</td></tr>
 
 <tr><td id="category" class="section">
 
-<h3 class=subsectionBar><a name="environment"></a>Handling special types of sensors</h3>
-<pre class=lightGreyBox>
+<h2><a name="environment"></a>Handling special types of sensors</h2>
+<pre class=apiList>
 <a href="?#simVision.createVelodyneHDL64E">simVision.createVelodyneHDL64E</a>
 <a href="?#simVision.createVelodyneVPL16">simVision.createVelodyneVPL16</a>
 <a href="?#simVision.destroyVelodyneHDL64E">simVision.destroyVelodyneHDL64E</a>
 <a href="?#simVision.destroyVelodyneVPL16">simVision.destroyVelodyneVPL16</a>
+<a href="?#simVision.distort">simVision.distort</a>
 <a href="?#simVision.handleAnaglyphStereo">simVision.handleAnaglyphStereo</a>
 <a href="?#simVision.handleSpherical">simVision.handleSpherical</a>
 <a href="?#simVision.handleVelodyneHDL64E">simVision.handleVelodyneHDL64E</a>
@@ -87,8 +91,8 @@ td.section { margin: 0; padding: 0; }
 </pre>
 
 
-<h3 class=subsectionBar><a name="simpleProcessing"></a>Simple image handling and processing</h3>
-<pre class=lightGreyBox>
+<h2><a name="simpleProcessing"></a>Simple image handling and processing</h2>
+<pre class=apiList>
 <a href="?#simVision.addBuffer1ToWorkImg">simVision.addBuffer1ToWorkImg</a>
 <a href="?#simVision.addWorkImgToBuffer1">simVision.addWorkImgToBuffer1</a>
 <a href="?#simVision.binaryWorkImg">simVision.binaryWorkImg</a>
@@ -130,8 +134,8 @@ td.section { margin: 0; padding: 0; }
 </td></tr>
 
 <tr><td id="commands" class="section">
-<h3 class=subsectionBarTab><a name="simVision.createVelodyneHDL64E" id="simVision.createVelodyneHDL64E"></a>simVision.createVelodyneHDL64E</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.createVelodyneHDL64E" id="simVision.createVelodyneHDL64E"></a>simVision.createVelodyneHDL64E</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -143,7 +147,7 @@ Creates a handle for generating data similar to a Velodyne HDL64E. See also <a h
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int handle=simVision.createVelodyneHDL64E(table[4] visionSensorHandles,float frequency,int options=0,int pointSize=2,table[2] coloring_closeFarDist={1,5},float displayScalingFactor=1,int pointCloudHandle=-1)</td> 
+<td class=apiTableRightLSyn>int handle=simVision.createVelodyneHDL64E(int[4] visionSensorHandles,float frequency,int options=0,int pointSize=2,float[2] coloring_closeFarDist={1,5},float displayScalingFactor=1,int pointCloudHandle=-1)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -169,6 +173,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div><strong>handle</strong>: the created Velodyne HDL64E handle.</div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int handle=simVision.createVelodyneHDL64E(list visionSensorHandles,float frequency,int options=0,int pointSize=2,list coloring_closeFarDist=[1,5],float displayScalingFactor=1,int pointCloudHandle=-1)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -176,8 +188,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.createVelodyneVPL16" id="simVision.createVelodyneVPL16"></a>simVision.createVelodyneVPL16</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.createVelodyneVPL16" id="simVision.createVelodyneVPL16"></a>simVision.createVelodyneVPL16</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -189,7 +201,7 @@ Creates a handle for generating data similar to a Velodyne VPL16. See also <a hr
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int handle=simVision.createVelodyneVPL16(table[4] visionSensorHandles,float frequency,int options=0,int pointSize=2,table[2] coloring_closeFarDist={1,5},float displayScalingFactor=1,int pointCloudHandle=-1)</td> 
+<td class=apiTableRightLSyn>int handle=simVision.createVelodyneVPL16(int[4] visionSensorHandles,float frequency,int options=0,int pointSize=2,float[2] coloring_closeFarDist={1,5},float displayScalingFactor=1,int pointCloudHandle=-1)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -215,6 +227,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div><strong>handle</strong>: the created Velodyne VPL16 handle.</div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int handle=simVision.createVelodyneVPL16(list visionSensorHandles,float frequency,int options=0,int pointSize=2,list coloring_closeFarDist=[1,5],float displayScalingFactor=1,int pointCloudHandle=-1)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -222,8 +242,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.destroyVelodyneHDL64E" id="simVision.destroyVelodyneHDL64E"></a>simVision.destroyVelodyneHDL64E</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.destroyVelodyneHDL64E" id="simVision.destroyVelodyneHDL64E"></a>simVision.destroyVelodyneHDL64E</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -248,8 +268,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.destroyVelodyneHDL64E(int velodyneHandle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -257,8 +285,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.destroyVelodyneVPL16" id="simVision.destroyVelodyneVPL16"></a>simVision.destroyVelodyneVPL16</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.destroyVelodyneVPL16" id="simVision.destroyVelodyneVPL16"></a>simVision.destroyVelodyneVPL16</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -283,8 +311,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.destroyVelodyneVPL16(int velodyneHandle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -292,8 +328,55 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.handleAnaglyphStereo" id="simVision.handleAnaglyphStereo"></a>simVision.handleAnaglyphStereo</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.distort" id="simVision.distort"></a>simVision.distort</p>
+<table class=apiTable>
+<tr class=apiTableTr> 
+<td class=apiTableLeftDescr>
+Description 
+</td> 
+<td class=apiTableRightDescr>
+Transforms (distorts) a vision sensor image via pixel remapping.</td>
+</tr> 
+<tr class=apiTableTr> 
+<td class=apiTableLeftLSyn>
+Lua synopsis
+</td> 
+<td class=apiTableRightLSyn>simVision.distort(int visionSensorHandle,int[] pixelMap=nil,float[] depthScalings=nil)</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=apiTableLeftLParam>Lua parameters</td> 
+<td class=apiTableRightLParam>
+<div><strong>visionSensorHandle</strong>: the handle of the vision sensor.</div>
+<div><strong>pixelMap</strong>: a table containing indices to new pixel positions. Should be of size resX*resY. Consecutive, incremental indices (starting at 0) represents the identity transformation. Can be omitted if a map was previously provided and doesn't need change.</div>
+<div><strong>depthScaling</strong>: an optional table containing scaling factors for each depth value.</div>
+</td> 
+</tr> 
+<tr class=apiTableTr> 
+<td class=apiTableLeftLRet>
+Lua return values
+</td> 
+<td class=apiTableRightLRet>
+<div></div>
+</td> 
+</tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.distort(int visionSensorHandle,list pixelMap=None,list depthScalings=None)</td> 
+</tr>
+
+</table> 
+<br>
+
+
+
+
+
+
+<p class=subsectionBar><a name="simVision.handleAnaglyphStereo" id="simVision.handleAnaglyphStereo"></a>simVision.handleAnaglyphStereo</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -305,7 +388,7 @@ Allows to generate an anaglyph stereo image from two individual vision sensors (
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.handleAnaglyphStereo(int rgbVisionSensorHandle,table[2] handlesOfTwoVisionSensors,table[6] leftAndRightColors=nil)</td> 
+<td class=apiTableRightLSyn>simVision.handleAnaglyphStereo(int rgbVisionSensorHandle,int[2] handlesOfTwoVisionSensors,float[6] leftAndRightColors=nil)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -320,8 +403,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.handleAnaglyphStereo(int rgbVisionSensorHandle,list handlesOfTwoVisionSensors,list leftAndRightColors=None)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -329,8 +420,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.handleSpherical" id="simVision.handleSpherical"></a>simVision.handleSpherical</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.handleSpherical" id="simVision.handleSpherical"></a>simVision.handleSpherical</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -342,7 +433,7 @@ Allows to generate an RGB and/or depth image that covers all directions, i.e. sp
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.handleSpherical(int rgbVisionSensorHandle,table[6] handlesOfSixVisionSensors,float horizontalAngle,float verticalAngle,int depthVisionSensorHandle=-1)</td> 
+<td class=apiTableRightLSyn>simVision.handleSpherical(int rgbVisionSensorHandle,int[6] handlesOfSixVisionSensors,float horizontalAngle,float verticalAngle,int depthVisionSensorHandle=-1)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -359,8 +450,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.handleSpherical(int rgbVisionSensorHandle,list handlesOfSixVisionSensors,float horizontalAngle,float verticalAngle,int depthVisionSensorHandle=-1)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -368,8 +467,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.handleVelodyneHDL64E" id="simVision.handleVelodyneHDL64E"></a>simVision.handleVelodyneHDL64E</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.handleVelodyneHDL64E" id="simVision.handleVelodyneHDL64E"></a>simVision.handleVelodyneHDL64E</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -381,7 +480,7 @@ Handles a velodyne HDL64E sensor (i.e. generates and displays detection points. 
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[]/string points,string colors=simVision.handleVelodyneHDL64E(int velodyneHandle,float dt)</td> 
+<td class=apiTableRightLSyn>float[]/buffer points,buffer colors=simVision.handleVelodyneHDL64E(int velodyneHandle,float dt)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -395,9 +494,18 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div><strong>points</strong>: a table containing the detected points, or a coded string.</div></td> 
-<div><strong>colors</strong>: a coded string containing the colors of each point (3 byte values for each point (RGB)). The colors are only returned if the Velodyne model is appropriately configured.</div></td> 
+<div><strong>points</strong>: a table containing the detected points, or a coded string.</div>
+<div><strong>colors</strong>: a coded string containing the colors of each point (3 byte values for each point (RGB)). The colors are only returned if the Velodyne model is appropriately configured.</div>
+</td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>list/bytes points,bytes colors=simVision.handleVelodyneHDL64E(int velodyneHandle,float dt)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -405,8 +513,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.handleVelodyneVPL16" id="simVision.handleVelodyneVPL16"></a>simVision.handleVelodyneVPL16</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.handleVelodyneVPL16" id="simVision.handleVelodyneVPL16"></a>simVision.handleVelodyneVPL16</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -418,7 +526,7 @@ Handles a velodyne VPL16 sensor (i.e. generates and displays detection points. S
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[]/string points,string colors=simVision.V(int velodyneHandle,float dt)</td> 
+<td class=apiTableRightLSyn>float[]/buffer points,buffer colors=simVision.handleVelodyneVPL16(int velodyneHandle,float dt)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -432,15 +540,24 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div><strong>points</strong>: a table containing the detected points, or a coded string.</div></td> 
-<div><strong>colors</strong>: a coded string containing the colors of each point (3 byte values for each point (RGB)). The colors are only returned if the Velodyne model is appropriately configured.</div></td> 
+<div><strong>points</strong>: a table containing the detected points, or a coded string.</div>
+<div><strong>colors</strong>: a coded string containing the colors of each point (3 byte values for each point (RGB)). The colors are only returned if the Velodyne model is appropriately configured.</div>
+</td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>list/bytes points,bytes colors=simVision.handleVelodyneVPL16(int velodyneHandle,float dt)</td> 
+</tr>
+
 </table> 
 <br>
 
 
-<h3 class=subsectionBarTab><a name="simVision.addBuffer1ToWorkImg" id="simVision.addBuffer1ToWorkImg"></a>simVision.addBuffer1ToWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.addBuffer1ToWorkImg" id="simVision.addBuffer1ToWorkImg"></a>simVision.addBuffer1ToWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -465,8 +582,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.addBuffer1ToWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -474,8 +599,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.addWorkImgToBuffer1" id="simVision.addWorkImgToBuffer1"></a>simVision.addWorkImgToBuffer1</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.addWorkImgToBuffer1" id="simVision.addWorkImgToBuffer1"></a>simVision.addWorkImgToBuffer1</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -500,8 +625,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.addWorkImgToBuffer1(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -509,8 +642,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.binaryWorkImg" id="simVision.binaryWorkImg"></a>simVision.binaryWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.binaryWorkImg" id="simVision.binaryWorkImg"></a>simVision.binaryWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -522,7 +655,7 @@ Transforms the <em>work image</em> into a binary image, with optional triggering
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int trigger,string packedPacket=simVision.binaryWorkImg(int handle,float threshold,float oneProportion,float oneTol,float xCenter,float xCenterTol,float yCenter,float yCenterTol,float orient,float orientTol,float roundness,bool enableTrigger,table[3] overlayColor={1.0,0.0,1.0}))</td> 
+<td class=apiTableRightLSyn>int trigger,buffer packedPacket=simVision.binaryWorkImg(int handle,float threshold,float oneProportion,float oneTol,float xCenter,float xCenterTol,float yCenter,float yCenterTol,float orient,float orientTol,float roundness,bool enableTrigger,float[3] overlayColor={1.0,0.0,1.0}))</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -556,6 +689,14 @@ Lua return values
 <div>e) the binary image <em>roundness</em> value</div>
 </td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int trigger,bytes packedPacket=simVision.binaryWorkImg(int handle,float threshold,float oneProportion,float oneTol,float xCenter,float xCenterTol,float yCenter,float yCenterTol,float orient,float orientTol,float roundness,bool enableTrigger,list overlayColor=[1.0,0.0,1.0]))</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -563,8 +704,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.blobDetectionOnWorkImg" id="simVision.blobDetectionOnWorkImg"></a>simVision.blobDetectionOnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.blobDetectionOnWorkImg" id="simVision.blobDetectionOnWorkImg"></a>simVision.blobDetectionOnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -576,7 +717,7 @@ Performs blob detection on the <em>work image</em>.</td>
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int trigger,string packedPacket=simVision.blobDetectionOnWorkImg(int handle,float threshold,float minBlobSize,bool diffColor,table[3] overlayColor={1.0,0.0,1.0}))</td> 
+<td class=apiTableRightLSyn>int trigger,buffer packedPacket=simVision.blobDetectionOnWorkImg(int handle,float threshold,float minBlobSize,bool diffColor,float[3] overlayColor={1.0,0.0,1.0}))</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -606,6 +747,14 @@ Lua return values
 <div>c.6) the blob bounding box relative height</div>
 </td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int trigger,bytes packedPacket=simVision.blobDetectionOnWorkImg(int handle,float threshold,float minBlobSize,bool diffColor,list overlayColor=[1.0,0.0,1.0]))</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -613,8 +762,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.buffer1ToWorkImg" id="simVision.buffer1ToWorkImg"></a>simVision.buffer1ToWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.buffer1ToWorkImg" id="simVision.buffer1ToWorkImg"></a>simVision.buffer1ToWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -639,8 +788,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.buffer1ToWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -648,8 +805,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.buffer2ToWorkImg" id="simVision.buffer2ToWorkImg"></a>simVision.buffer2ToWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.buffer2ToWorkImg" id="simVision.buffer2ToWorkImg"></a>simVision.buffer2ToWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -674,8 +831,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.buffer2ToWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -683,8 +848,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.changedPixelsOnWorkImg" id="simVision.changedPixelsOnWorkImg"></a>simVision.changedPixelsOnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.changedPixelsOnWorkImg" id="simVision.changedPixelsOnWorkImg"></a>simVision.changedPixelsOnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -696,7 +861,7 @@ Returns the pixels that changed the <em>work image</em>, from one frame to the n
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int trigger,string packedPacket=simVision.changedPixelsOnWorkImg(int handle,float threshold)</td> 
+<td class=apiTableRightLSyn>int trigger,buffer packedPacket=simVision.changedPixelsOnWorkImg(int handle,float threshold)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -717,6 +882,14 @@ Lua return values
 <div>a.3) the y coordinate of the pixel</div>
 </td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int trigger,bytes packedPacket=simVision.changedPixelsOnWorkImg(int handle,float threshold)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -724,8 +897,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.circularCutWorkImg" id="simVision.circularCutWorkImg"></a>simVision.circularCutWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.circularCutWorkImg" id="simVision.circularCutWorkImg"></a>simVision.circularCutWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -752,8 +925,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.circularCutWorkImg(int handle,float radius,bool toBuffer1)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -761,8 +942,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.colorSegmentationOnWorkImg" id="simVision.colorSegmentationOnWorkImg"></a>simVision.colorSegmentationOnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.colorSegmentationOnWorkImg" id="simVision.colorSegmentationOnWorkImg"></a>simVision.colorSegmentationOnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -788,8 +969,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.colorSegmentationOnWorkImg(int handle,float colorDistance)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -797,8 +986,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.coordinatesFromWorkImg" id="simVision.coordinatesFromWorkImg"></a>simVision.coordinatesFromWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.coordinatesFromWorkImg" id="simVision.coordinatesFromWorkImg"></a>simVision.coordinatesFromWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -810,7 +999,7 @@ Extracts coordinates from the <em>work image</em> (based on the view field of a 
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int trigger,string packedPacket,string colorData=simVision.coordinatesFromWorkImg(int handle,table[2] pointCount,bool angularSpace,bool returnColorData)</td> 
+<td class=apiTableRightLSyn>int trigger,buffer packedPacket,buffer colorData=simVision.coordinatesFromWorkImg(int handle,int[2] pointCount,bool angularSpace,bool returnColorData)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -838,6 +1027,14 @@ Lua return values
 <div><strong>colorData</strong>: optional color data (use <a href="regularApi/simUnpackUInt8Table.htm">sim.unpackUInt8Table</a> to unpack) containing RGB triplets for each point.</div>
 </td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int trigger,bytes packedPacket,bytes colorData=simVision.coordinatesFromWorkImg(int handle,list pointCount,bool angularSpace,bool returnColorData)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -845,8 +1042,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.edgeDetectionOnWorkImg" id="simVision.edgeDetectionOnWorkImg"></a>simVision.edgeDetectionOnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.edgeDetectionOnWorkImg" id="simVision.edgeDetectionOnWorkImg"></a>simVision.edgeDetectionOnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -872,8 +1069,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.edgeDetectionOnWorkImg(int handle,float threshold)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -881,8 +1086,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.horizontalFlipWorkImg" id="simVision.horizontalFlipWorkImg"></a>simVision.horizontalFlipWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.horizontalFlipWorkImg" id="simVision.horizontalFlipWorkImg"></a>simVision.horizontalFlipWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -907,8 +1112,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.horizontalFlipWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -916,8 +1129,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.intensityScaleOnWorkImg" id="simVision.intensityScaleOnWorkImg"></a>simVision.intensityScaleOnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.intensityScaleOnWorkImg" id="simVision.intensityScaleOnWorkImg"></a>simVision.intensityScaleOnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -945,8 +1158,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.intensityScaleOnWorkImg(int handle,float start,float end,bool greyscale)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -954,8 +1175,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.matrix3x3OnWorkImg" id="simVision.matrix3x3OnWorkImg"></a>simVision.matrix3x3OnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.matrix3x3OnWorkImg" id="simVision.matrix3x3OnWorkImg"></a>simVision.matrix3x3OnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -967,7 +1188,7 @@ Applies a 3X3 matrix filter to the <em>work image</em>.</td>
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.matrix3x3OnWorkImg(int handle,int passes,float multiplier,table[9] matrix)</td> 
+<td class=apiTableRightLSyn>simVision.matrix3x3OnWorkImg(int handle,int passes,float multiplier,float[9] matrix)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -983,8 +1204,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.matrix3x3OnWorkImg(int handle,int passes,float multiplier,list matrix)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -992,8 +1221,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.matrix5x5OnWorkImg" id="simVision.matrix5x5OnWorkImg"></a>simVision.matrix5x5OnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.matrix5x5OnWorkImg" id="simVision.matrix5x5OnWorkImg"></a>simVision.matrix5x5OnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1005,7 +1234,7 @@ Applies a 5X5 matrix filter to the <em>work image</em>.</td>
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.matrix5x5OnWorkImg(int handle,int passes,float multiplier,table[25] matrix)</td> 
+<td class=apiTableRightLSyn>simVision.matrix5x5OnWorkImg(int handle,int passes,float multiplier,float[25] matrix)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1021,8 +1250,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.matrix5x5OnWorkImg(int handle,int passes,float multiplier,list matrix)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1030,8 +1267,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.multiplyWorkImgWithBuffer1" id="simVision.multiplyWorkImgWithBuffer1"></a>simVision.multiplyWorkImgWithBuffer1</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.multiplyWorkImgWithBuffer1" id="simVision.multiplyWorkImgWithBuffer1"></a>simVision.multiplyWorkImgWithBuffer1</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1056,8 +1293,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.multiplyWorkImgWithBuffer1(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1065,8 +1310,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.normalizeWorkImg" id="simVision.normalizeWorkImg"></a>simVision.normalizeWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.normalizeWorkImg" id="simVision.normalizeWorkImg"></a>simVision.normalizeWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1091,8 +1336,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.normalizeWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1100,8 +1353,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.rectangularCutWorkImg" id="simVision.rectangularCutWorkImg"></a>simVision.rectangularCutWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.rectangularCutWorkImg" id="simVision.rectangularCutWorkImg"></a>simVision.rectangularCutWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1113,7 +1366,7 @@ Performs a rectangular cut on the <em>work image</em>.</td>
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.rectangularCutWorkImg(int handle,table[2] rectangle,bool toBuffer1)</td> 
+<td class=apiTableRightLSyn>simVision.rectangularCutWorkImg(int handle,float[2] rectangle,bool toBuffer1)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1128,8 +1381,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.rectangularCutWorkImg(int handle,list rectangle,bool toBuffer1)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1137,8 +1398,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.resizeWorkImg" id="simVision.resizeWorkImg"></a>simVision.resizeWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.resizeWorkImg" id="simVision.resizeWorkImg"></a>simVision.resizeWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1150,7 +1411,7 @@ Scales the <em>work image</em>. The resolution remains same.</td>
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.resizeWorkImg(int handle,table[2] scaling)</td> 
+<td class=apiTableRightLSyn>simVision.resizeWorkImg(int handle,float[2] scaling)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1164,8 +1425,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.resizeWorkImg(int handle,list scaling)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1173,8 +1442,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.rotateWorkImg" id="simVision.rotateWorkImg"></a>simVision.rotateWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.rotateWorkImg" id="simVision.rotateWorkImg"></a>simVision.rotateWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1200,8 +1469,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.rotateWorkImg(int handle,float angle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1209,8 +1486,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.scaleAndOffsetWorkImg" id="simVision.scaleAndOffsetWorkImg"></a>simVision.scaleAndOffsetWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.scaleAndOffsetWorkImg" id="simVision.scaleAndOffsetWorkImg"></a>simVision.scaleAndOffsetWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1222,7 +1499,7 @@ Shifts and scales colors of the <em>work image</em>, in the RGB or HSL space: co
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.scaleAndOffsetWorkImg(int handle,table[3] colorPreOffset,table[3] colorScaling,table[3] colorPostOffset,bool rgbSpace)</td> 
+<td class=apiTableRightLSyn>simVision.scaleAndOffsetWorkImg(int handle,float[3] colorPreOffset,float[3] colorScaling,float[3] colorPostOffset,bool rgbSpace)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1239,8 +1516,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.scaleAndOffsetWorkImg(int handle,list colorPreOffset,list colorScaling,list colorPostOffset,bool rgbSpace)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1248,8 +1533,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.selectiveColorOnWorkImg" id="simVision.selectiveColorOnWorkImg"></a>simVision.selectiveColorOnWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.selectiveColorOnWorkImg" id="simVision.selectiveColorOnWorkImg"></a>simVision.selectiveColorOnWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1261,7 +1546,7 @@ Selects a specific color in the RGB or HSL space of the <em>work image</em>.</td
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.selectiveColorOnWorkImg(int handle,table[3] nominalColor,table[3] colorTolerance,bool rgbSpace,bool keepColor,bool toBuffer1)</td> 
+<td class=apiTableRightLSyn>simVision.selectiveColorOnWorkImg(int handle,float[3] nominalColor,float[3] colorTolerance,bool rgbSpace,bool keepColor,bool toBuffer1)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1279,8 +1564,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.selectiveColorOnWorkImg(int handle,list nominalColor,list colorTolerance,bool rgbSpace,bool keepColor,bool toBuffer1)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1288,8 +1581,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.sensorDepthMapToWorkImg" id="simVision.sensorDepthMapToWorkImg"></a>simVision.sensorDepthMapToWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.sensorDepthMapToWorkImg" id="simVision.sensorDepthMapToWorkImg"></a>simVision.sensorDepthMapToWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1314,8 +1607,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.sensorDepthMapToWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1323,8 +1624,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.sensorImgToWorkImg" id="simVision.sensorImgToWorkImg"></a>simVision.sensorImgToWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.sensorImgToWorkImg" id="simVision.sensorImgToWorkImg"></a>simVision.sensorImgToWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1349,8 +1650,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.sensorImgToWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1358,8 +1667,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.sharpenWorkImg" id="simVision.sharpenWorkImg"></a>simVision.sharpenWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.sharpenWorkImg" id="simVision.sharpenWorkImg"></a>simVision.sharpenWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1384,8 +1693,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.sharpenWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1393,8 +1710,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.shiftWorkImg" id="simVision.shiftWorkImg"></a>simVision.shiftWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.shiftWorkImg" id="simVision.shiftWorkImg"></a>simVision.shiftWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1406,7 +1723,7 @@ Shifts the <em>work image</em>.</td>
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.shiftWorkImg(int handle,table[2] shift,bool wrap)</td> 
+<td class=apiTableRightLSyn>simVision.shiftWorkImg(int handle,float[2] shift,bool wrap)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1421,8 +1738,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.shiftWorkImg(int handle,list shift,bool wrap)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1430,8 +1755,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.subtractBuffer1FromWorkImg" id="simVision.subtractBuffer1FromWorkImg"></a>simVision.subtractBuffer1FromWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.subtractBuffer1FromWorkImg" id="simVision.subtractBuffer1FromWorkImg"></a>simVision.subtractBuffer1FromWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1456,8 +1781,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.subtractBuffer1FromWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1465,8 +1798,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.subtractWorkImgFromBuffer1" id="simVision.subtractWorkImgFromBuffer1"></a>simVision.subtractWorkImgFromBuffer1</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.subtractWorkImgFromBuffer1" id="simVision.subtractWorkImgFromBuffer1"></a>simVision.subtractWorkImgFromBuffer1</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1491,8 +1824,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.subtractWorkImgFromBuffer1(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1500,8 +1841,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.swapBuffers" id="simVision.swapBuffers"></a>simVision.swapBuffers</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.swapBuffers" id="simVision.swapBuffers"></a>simVision.swapBuffers</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1526,8 +1867,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.swapBuffers(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1535,8 +1884,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.swapWorkImgWithBuffer1" id="simVision.swapWorkImgWithBuffer1"></a>simVision.swapWorkImgWithBuffer1</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.swapWorkImgWithBuffer1" id="simVision.swapWorkImgWithBuffer1"></a>simVision.swapWorkImgWithBuffer1</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1561,8 +1910,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.swapWorkImgWithBuffer1(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1570,8 +1927,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.uniformImgToWorkImg" id="simVision.uniformImgToWorkImg"></a>simVision.uniformImgToWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.uniformImgToWorkImg" id="simVision.uniformImgToWorkImg"></a>simVision.uniformImgToWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1583,7 +1940,7 @@ Applies a uniform color to the <em>work image</em> (buffer used for image proces
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>simVision.uniformImgToWorkImg(int handle,table[3] color)</td> 
+<td class=apiTableRightLSyn>simVision.uniformImgToWorkImg(int handle,float[3] color)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1597,8 +1954,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.uniformImgToWorkImg(int handle,list color)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1606,8 +1971,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.velodyneDataFromWorkImg" id="simVision.velodyneDataFromWorkImg"></a>simVision.velodyneDataFromWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.velodyneDataFromWorkImg" id="simVision.velodyneDataFromWorkImg"></a>simVision.velodyneDataFromWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1619,7 +1984,7 @@ Extracts Velodyne coordinates from the <em>work image</em> (based on the view fi
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int trigger,string packedPacket,string colorData=simVision.velodyneDataFromWorkImg(int handle,table[2] pointCount,float verticalScanAngle,bool returnColorData=false)</td> 
+<td class=apiTableRightLSyn>int trigger,buffer packedPacket,buffer colorData=simVision.velodyneDataFromWorkImg(int handle,int[2] pointCount,float verticalScanAngle,bool returnColorData=false)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -1647,14 +2012,22 @@ Lua return values
 <div><strong>colorData</strong>: optional color data (use <a href="regularApi/simUnpackUInt8Table.htm">sim.unpackUInt8Table</a> to unpack) containing RGB triplets for each point.</div>
 </td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>int trigger,bytes packedPacket,bytes colorData=simVision.velodyneDataFromWorkImg(int handle,list pointCount,float verticalScanAngle,bool returnColorData=False)</td> 
+</tr>
+
 </table> 
 <br>
 
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.verticalFlipWorkImg" id="simVision.verticalFlipWorkImg"></a>simVision.verticalFlipWorkImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.verticalFlipWorkImg" id="simVision.verticalFlipWorkImg"></a>simVision.verticalFlipWorkImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1679,8 +2052,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.verticalFlipWorkImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1688,8 +2069,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.workImgToBuffer1" id="simVision.workImgToBuffer1"></a>simVision.workImgToBuffer1</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.workImgToBuffer1" id="simVision.workImgToBuffer1"></a>simVision.workImgToBuffer1</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1714,8 +2095,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.workImgToBuffer1(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1723,8 +2112,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.workImgToBuffer2" id="simVision.workImgToBuffer2"></a>simVision.workImgToBuffer2</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.workImgToBuffer2" id="simVision.workImgToBuffer2"></a>simVision.workImgToBuffer2</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1749,8 +2138,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.workImgToBuffer2(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
@@ -1758,8 +2155,8 @@ Lua return values
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.workImgToSensorDepthMap" id="simVision.workImgToSensorDepthMap"></a>simVision.workImgToSensorDepthMap</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.workImgToSensorDepthMap" id="simVision.workImgToSensorDepthMap"></a>simVision.workImgToSensorDepthMap</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1784,16 +2181,24 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.workImgToSensorDepthMap(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 
 
 
 
-<h3 class=subsectionBarTab><a name="simVision.workImgToSensorImg" id="simVision.workImgToSensorImg"></a>simVision.workImgToSensorImg</h3>
-<table class=apiTableTab>
+<p class=subsectionBar><a name="simVision.workImgToSensorImg" id="simVision.workImgToSensorImg"></a>simVision.workImgToSensorImg</p>
+<table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
@@ -1818,8 +2223,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
+
+<tr class="apiTableTr">
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>simVision.workImgToSensorImg(int handle)</td> 
+</tr>
+
 </table> 
 <br>
 

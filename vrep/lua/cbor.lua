@@ -251,7 +251,11 @@ function encoder.table(t, opts)
 		local encoded_v = encode(v, opts);
 		array[i] = encoded_v;
 
-		map[p], p = encode(k, opts), p + 1;
+		if type(k) == 'string' then
+			map[p], p = encoder['utf8string'](k, opts), p + 1;
+		else
+			map[p], p = encode(k, opts), p + 1;
+		end
 		map[p], p = encoded_v, p + 1;
 	end
 	-- map[p] = "\255";
@@ -271,7 +275,11 @@ end
 function encoder.map(t, opts)
 	local map, p, len = { "\191" }, 2, 0;
 	for k, v in pairs(t) do
-		map[p], p = encode(k, opts), p + 1;
+		if type(k) == 'string' then
+			map[p], p = encoder['utf8string'](k, opts), p + 1;
+		else
+			map[p], p = encode(k, opts), p + 1;
+		end
 		map[p], p = encode(v, opts), p + 1;
 		len = len + 1;
 	end

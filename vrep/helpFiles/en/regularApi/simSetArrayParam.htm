@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<title>simSetArrayParam</title>
+<title>sim.setArrayParam</title>
 <link rel="stylesheet" type="text/css" href="../../style.css">
 </head>
 
@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSetArrayParam" id="simSetArrayParam"></a>simSetArrayParam / sim.setArrayParam</h3>
+<p class=subsectionBar><a name="simSetArrayParam" id="simSetArrayParam"></a>simSetArrayParam / sim.setArrayParam</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Sets 3 values of an <a href="../apiConstants.htm#arrayParameters">array parameter</a>. See also <a href="simGetArrayParam.htm">sim.getArrayParam</a>, <a href="simSetBoolParam.htm">sim.setBoolParam</a>, <a href="simSetInt32Param.htm">sim.setInt32Param</a> and <a href="simSetFloatParam.htm">sim.setFloatParam</a>.<br></td>
+<td class=apiTableRightDescr>Sets 3 values of an <a href="../apiConstants.htm#arrayParameters">array parameter</a>. See also the other <a href="../apiFunctions.htm#params">simulator parameter related functions</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSetArrayParam(simInt parameter,const simVoid* parameterValues)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>parameter</strong>: <a href="../apiConstants.htm#arrayParameters">array parameter identifier</a></div>
 <div><strong>parameterValues</strong>: array of 3 simFloat values related to the parameter (simVoid is kept for backward compatibility).</div>
@@ -39,7 +39,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -50,7 +50,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>sim.setArrayParam(int parameter,table[] parameterValues)<br></td> 
+<td class=apiTableRightLSyn>sim.setArrayParam(int parameter,float[] parameterValues)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -64,25 +64,23 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div></div></td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxSetArrayParameter">simxSetArrayParameter</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxSetArrayParameter">simxSetArrayParameter</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>sim.setArrayParam(int parameter,list parameterValues)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

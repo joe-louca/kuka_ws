@@ -4,12 +4,12 @@
 graph=require('graph_customization')
 
 function sysCall_init()
-    graphHandle=sim.getObjectHandle(sim.handle_self)
+    graphHandle=sim.getObject('.')
     
     -- Create/update data streams/curves:
     sim.destroyGraphCurve(graphHandle,-1)
-    stream1=sim.addDataStream(graphHandle,'Object position X','m')
-    objectHandle=sim.getObjectHandle('Shape')
+    stream1=sim.addGraphStream(graphHandle,'Object position X','m')
+    objectHandle=sim.getObject('./cube')
     startTime=sim.getSystemTime()
     
     graph.init()
@@ -21,11 +21,11 @@ function appendMeasurementPts()
     sim.setGraphStreamValue(graphHandle,stream1,p[1])
     
     graph.handle(sim.getSystemTime()-startTime)
+    graph.updateCurves()
 end
 
 function sysCall_sensing()
     appendMeasurementPts()
-    graph.updateCurves()
 end
 
 function sysCall_nonSimulation()
@@ -36,7 +36,6 @@ function sysCall_suspended()
     appendMeasurementPts()
 end
 
--- Overwrite following system callback functions:
 function sysCall_beforeSimulation()
 end
 
@@ -104,7 +103,7 @@ function sysCall_userConfig()
     if not _S.graph.previousDlgPos then
         _S.graph.previousDlgPos=' placement="relative" position="-50,50">'
     end
-    local xml='<ui title="'..sim.getObjectName(_S.graph.model)..'" closeable="true" on-close="_S.graph.removeDlg" modal="true" resizable="false" activate="false" layout="form" '.._S.graph.previousDlgPos..' enabled="'..tostring(simStopped)..'" >'
+    local xml='<ui title="'..sim.getObjectAlias(_S.graph.model,1)..'" closeable="true" on-close="_S.graph.removeDlg" modal="true" resizable="false" activate="false" layout="form" '.._S.graph.previousDlgPos..' enabled="'..tostring(simStopped)..'" >'
           xml=xml..[[<label text="Visible while simulation not running"/>
             <checkbox text="" on-change="_S.graph.visibleDuringNonSimulation_callback" id="1" />
 
@@ -129,7 +128,7 @@ function sysCall_userConfig()
             <label text="Preferred graph position"/>
             <combobox id="6" on-change="_S.graph.graphPosChanged_callback"></combobox></ui>
     ]]
---    _S.graph.ui=_S.graph.utils.createCustomUi(xml,sim.getObjectName(_S.graph.model),_S.graph.previousDlgPos,true,'_S.graph.removeDlg',true,false,false,'layout="form" enabled="'..tostring(simStopped)..'"')
+--    _S.graph.ui=_S.graph.utils.createCustomUi(xml,sim.getObjectAlias(_S.graph.model,1),_S.graph.previousDlgPos,true,'_S.graph.removeDlg',true,false,false,'layout="form" enabled="'..tostring(simStopped)..'"')
     _S.graph.ui=simUI.create(xml)
     _S.graph.setDlgItemContent()
 end
@@ -360,9 +359,12 @@ function _S.graph.prepareCurves()
                         curveOptions.scatter_shape=simUI.curve_scatter_shape.plus
                     end
                     curveOptions.line_style=simUI.line_style.dashed
-                else
-
                 end
+                --if (curveType&8)==8 then
+                --    -- helper curves, for good framing
+                --    curveStyle=simUI.curve_style.scatter
+                --    curveOptions={scatter_size=0}
+                --end
                 if legendVisible then
                     legendVisibleCnt=legendVisibleCnt+1
                 else
@@ -580,7 +582,7 @@ function _S.graph.createPlot()
             _S.graph.previousPlotDlgSize=''
         end
         
-        local xml='<ui title="'..sim.getObjectName(_S.graph.model)..'" closeable="true" on-close="_S.graph.onClosePlot_callback" resizable="true" activate="false" layout="grid" '.._S.graph.previousPlotDlgPos.._S.graph.previousPlotDlgSize..'>'
+        local xml='<ui title="'..sim.getObjectAlias(_S.graph.model,1)..'" closeable="true" on-close="_S.graph.onClosePlot_callback" resizable="true" activate="false" layout="grid" '.._S.graph.previousPlotDlgPos.._S.graph.previousPlotDlgSize..'>'
         if #_S.graph.plots>1 then xml=xml..'<tabs id="77">' end
         if ((c['bitCoded'] & 4)~=0) then
             if #_S.graph.plots>1 then xml=xml..'<tab title="Time graph">' end
@@ -600,7 +602,7 @@ function _S.graph.createPlot()
         xml=xml..'<label id="3" /></ui>'
         
         _S.graph.plotUi=simUI.create(xml)
-        --_S.graph.plotUi=_S.graph.utils.createCustomUi(xml,sim.getObjectName(_S.graph.model),_S.graph.previousPlotDlgPos,true,"_S.graph.onClosePlot_callback",false,true,false,'layout="grid"',_S.graph.previousPlotDlgSize)
+        --_S.graph.plotUi=_S.graph.utils.createCustomUi(xml,sim.getObjectAlias(_S.graph.model,1),_S.graph.previousPlotDlgPos,true,"_S.graph.onClosePlot_callback",false,true,false,'layout="grid"',_S.graph.previousPlotDlgSize)
         if ((c['bitCoded'] & 4)~=0) then
             simUI.setPlotLabels(_S.graph.plotUi,1,"Time (seconds)","")
         end
@@ -680,7 +682,7 @@ function _S.graph.getUpdateTick(v)
 end
 
 function _S.graph.init()
-    _S.graph.model=sim.getObjectHandle(sim.handle_self)
+    _S.graph.model=sim.getObject('.')
 	if sim.getExplicitHandling(_S.graph.model)==0 then
 		sim.setExplicitHandling(_S.graph.model,1)
 	end

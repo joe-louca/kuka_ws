@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simAddGraphCurve" id="simAddGraphCurve"></a>simAddGraphCurve / sim.addGraphCurve </h3>
+<p class=subsectionBar><a name="simAddGraphCurve" id="simAddGraphCurve"></a>simAddGraphCurve / sim.addGraphCurve </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simAddGraphCurve(simInt graphHandle,const simChar* curveName,simInt dim,const simInt* streamIds,const simFloat* defaultValues,const simChar* unitStr,simInt simInt options,const simFloat* color,simInt curveWidth)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>graphHandle</strong>: handle of the graph </div>
 <div><strong>curveName</strong>: name of the curve</div>
@@ -46,7 +46,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise the id of the created/updated curve<br>
@@ -57,7 +57,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int curveId=sim.addGraphCurve(int graphHandle,string curveName,int dim,table[] streamIds,table[] defaultValues,string unitStr,int options=0,table[3] color={0,1,0},int curveWidth=2)</td> 
+<td class=apiTableRightLSyn>int curveId=sim.addGraphCurve(int graphHandle,string curveName,int dim,int[] streamIds,float[] defaultValues,string unitStr,int options=0,float[3] color={0,1,0},int curveWidth=2)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -73,8 +73,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div>Similar to the C-function counterpart</div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int curveId=sim.addGraphCurve(int graphHandle,string curveName,int dim,list streamIds,list defaultValues,string unitStr,int options=0,list color=[0,1,0],int curveWidth=2)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

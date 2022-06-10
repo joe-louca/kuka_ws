@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simModifyGhost" id="simModifyGhost"></a>simModifyGhost / sim.modifyGhost </h3>
+<p class=subsectionBar><a name="simModifyGhost" id="simModifyGhost"></a>simModifyGhost / sim.modifyGhost </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simModifyGhost(simInt ghostGroup,simInt ghostId,simInt operation,simFloat floatValue,simInt options,simInt optionsMask,const simFloat* colorOrTransformation)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>ghostGroup</strong>: an identifier that allows, together with <strong>ghostId</strong>, identifying which ghosts to modify.</div>
 <div><strong>ghostId</strong>: an identifier that allows, together with <strong>ghostGroup</strong>, identifying which ghosts to modify. If -1, then all ghosts that match <strong>ghostGroup</strong> will be modified.</div>
@@ -67,7 +67,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful, otherwise a value depending on the <strong>operation</strong> performed.</div>
@@ -77,7 +77,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int result=sim.modifyGhost(int ghostGroup,int ghostId,int operation,float floatValue,int options=nil,int optionsMask=nil,table[] colorOrTransformation=nil)</td> 
+<td class=apiTableRightLSyn>int result=sim.modifyGhost(int ghostGroup,int ghostId,int operation,float floatValue,int options=nil,int optionsMask=nil,float[] colorOrTransformation=nil)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 

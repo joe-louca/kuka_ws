@@ -17,14 +17,30 @@
    margin-right: 3em; 
    line-height: 130%;
  }
- li {
+  ul {
+   margin-left: 4em;
+ }
+ 
+li {
+    list-style-type: square;
    margin-left: 4em;
    margin-right: 3em; 
    line-height: 130%;
  }
- h2 {
-   color: #3366CC;
+ 
+  h1 {
+   color: #888888;
+   text-align: center;
  }
+ 
+h2 {
+   color: #888888;
+   border-bottom: 1px solid #ddd;
+   margin-left: 2em;
+   margin-right: 2em;
+   margin-bottom: 1em;
+ }
+ 
  h3 {
    margin-left: 3em;
    margin-right: 3em; 
@@ -49,7 +65,7 @@ a:active {text-decoration: none; color:#1919B0;}
 a:hover {text-decoration: underline; color: red;}
  
 .imageLabel{
-	text-align: center;
+    text-align: center;
    font-size: 12px;
 } 
 
@@ -64,22 +80,22 @@ a:hover {text-decoration: underline; color: red;}
  }
 
  .subsectionTable{
-	border: 0px;
-	margin-left: 3em;
+    border: 0px;
+    margin-left: 3em;
  }
  
  .subsectionTd {
-	width: auto;
-	border: 0px;
-	border-collapse: collapse;
+    width: auto;
+    border: 0px;
+    border-collapse: collapse;
 
-	margin-left: 3em;
-	font-size: 24px;
-	padding-left: 10px;
-	padding-right: 10px;
-	background-color: #BBBBBB;
-	border: 0px;
-	color: #FFFFFF;
+    margin-left: 3em;
+    font-size: 24px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #BBBBBB;
+    border: 0px;
+    color: #FFFFFF;
  }
  
  .subsectionTd a:link {text-decoration: none; color:#E8E8FF;}
@@ -92,11 +108,10 @@ a:hover {text-decoration: underline; color: red;}
  .subsectionBar{
    margin-left: 3em;
    margin-right: 3em; 
-   font-size: 14px;
    padding: 4px;
-   background-color: #BBBBBB;
-   border: 0px;
-   color: #FFFFFF;
+   background: #eeeeee;
+   border: 1px solid #555555;
+    border-radius: 5px 5px 5px 5px;
  }
 
  .subsectionBar a:link {text-decoration: none; color:#E8E8FF;}
@@ -140,7 +155,6 @@ a:hover {text-decoration: underline; color: red;}
    margin-right: 4em;
  }
  
- 
  .lightWhiteBox{
     background-color: #FAFAFA;
    border: 0px solid #CCCCCC;
@@ -152,94 +166,6 @@ a:hover {text-decoration: underline; color: red;}
    margin-right: 4em;
  }
 
- .lightRedBox{
-    background-color: #FFF4F4;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 90%;
-   line-height: 125%;
-   margin-left: 4em;
-   margin-right: 4em;
- }
-
- .lightBlueBox{
-    background-color: #DDFFFF;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 90%;
-   line-height: 125%;
-   margin-left: 4em;
-   margin-right: 4em;
- }
-
-  .lightBlueBoxTab{
-    background-color: #DDFFFF;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 90%;
-   line-height: 125%;
-   margin-left: 6em;
-   margin-right: 4em;
- }
-
- .lightPurpleBox{
-    background-color: #f7f0ff;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 90%;
-   line-height: 125%;
-   margin-left: 4em;
-   margin-right: 4em;
- }
-
-  .lightPurpleBoxTab{
-    background-color: #f7f0ff;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 90%;
-   line-height: 125%;
-   margin-left: 6em;
-   margin-right: 4em;
- }
- 
-  .lightBlueBoxNoMarginAndSmall{
-    background-color: #DDFFFF;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 80%;
-   line-height: 125%;
-   margin-left: 0em;
-   margin-right: 0em;
- }
-
- .lightRedBoxNoMarginAndSmall{
-    background-color: #FFF4F4;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 80%;
-   line-height: 125%;
-   margin-left: 0em;
-   margin-right: 0em;
- }
-
-.lightPurpleBoxNoMarginAndSmall{
-    background-color: #f7f0ff;
-   border: 0px solid #CCCCCC;
-   padding: 10px;
-   font-family: 'Monotype.com', "Courier New", Courier, monospace;
-   font-size: 80%;
-   line-height: 125%;
-   margin-left: 0em;
-   margin-right: 0em;
- }
- 
  .lightGreyBox{
    background-color: #EAEAEA;
    border: 0px solid #5C5C5C;
@@ -249,16 +175,6 @@ a:hover {text-decoration: underline; color: red;}
    line-height: 125%;
    margin-left: 4em;
    margin-right: 4em; 
- }
-
- .greyBox{
-   background-color: #EAEAEA;
-   border: 0px solid #5C5C5C;
-   padding: 10px;
-   font-size: 90%;
-   line-height: 125%;
-   margin-left: 4em;
-   margin-right: 4em;
  }
 
  .tab{
@@ -277,354 +193,488 @@ a:hover {text-decoration: underline; color: red;}
  }
 
  .allEncompassingTable{
-	background-color: #FFFFFF;
- 	border: 0;
-	width: 870px;
-	border: none;
-	padding: 5px;
-	text-align: left;
+    background-color: #FFFFFF;
+     border: 0;
+    width: 870px;
+    border: none;
+    padding: 5px;
+    text-align: left;
  }
- 
- .creditTable{
-   margin-left: 3em;
-   margin-right: 3em; 
-	background-color: #EAEAEA;
-	border: 0px solid #5C5C5C;
-	width: 780px;
-	border: none;
-	padding: 5px;
-	font-size: 12px;
-
-	text-align: left;
- }
-
- .lightYellowTable{
-   margin-left: 3em;
-   margin-right: 3em; 
-	background-color: #FFFFDD;
-	border: 1px solid #5C5C5C;
-	width: 780px;
-	padding: 5px;
-	text-align: left;
- }
-
- 
+  
  .apiConstantsTable{
    margin-left: 3em;
    margin-right: 3em; 
-	background-color: #EAEAEA;
-	border: 0px solid #5C5C5C;
-	width: 780px;
-	padding: 5px;
-	font-size: 14px;
+    background-color: #EAEAEA;
+    border: 0px solid #5C5C5C;
+    width: 780px;
+    padding: 5px;
+    font-size: 14px;
 
-	text-align: left;
+    text-align: left;
  }
  
-  .streamTable{
-   margin-left: 4em;
-   margin-right: 4em; 
-	border: 0px solid #D4D4D4;
-	border-collapse: collapse;
-	padding: 0px;
-	font-size: 12px;
- }
- 
- .streamTableTr{
-	border: 1px solid #D4D4D4;
- }
- 
-  .streamTableLeft{
-	border: 1px solid #D4D4D4;
-	background-color: #edeada;
-	text-align: left;
-	vertical-align: top;
-	width: 300px;
- }
- .streamTableRight{
-	background-color: #edeada;
-	text-align: left;
-	vertical-align: top;
-	width: 450px;
- }
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
  .apiTableTab{
-	width: 780px;
-	border: 0px solid black;
-	border-collapse: collapse;
-	padding: 0px;
+    width: 780px;
+    border: 0px solid black;
+    border-collapse: collapse;
+    padding: 0px;
     margin-left: 6em;
-	margin-right: 4em; 
-	font-size: 14px;
+    margin-right: 4em; 
+    font-size: 14px;
 }
  
  .apiTable{
-	width: 780px;
-	border: 0px solid black;
-	border-collapse: collapse;
-	padding: 0px;
+    width: 780px;
+    border: 0px solid black;
+    border-collapse: collapse;
+    padding: 0px;
     margin-left: 4em;
-	margin-right: 4em; 
-	font-size: 14px;
+    margin-right: 4em; 
+    font-size: 14px;
 }
  
  .apiTableTr{
-	border: 1px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
  }
  
   .apiTableLeftDescr{
-	background-color: #f5efe4;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #f5f5f5;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
  .apiTableRightDescr{
-	background-color: #ebe5db;
-	text-align: left;
-	vertical-align: top;
+    background-color: #f5f5f5;
+    text-align: left;
+    vertical-align: top;
  }
  
 .apiTableLeftCSyn{
-	background-color: #f0feff;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fafaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
  .apiTableRightCSyn{
-	background-color: #e0fcff;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fafaff;
+    text-align: left;
+    vertical-align: top;
  }
 
 .apiTableLeftCParam{
-	background-color: #f0feff;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fafaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
   .apiTableRightCParam{
-	background-color: #e0fcff;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fafaff;
+    text-align: left;
+    vertical-align: top;
  }
 
  .apiTableLeftCRet{
-	background-color: #f0feff;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fafaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
  
   .apiTableRightCRet{
-	background-color: #e0fcff;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fafaff;
+    text-align: left;
+    vertical-align: top;
  }
 
  .apiTableLeftLSyn{
-	background-color: #fff8ed;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffafa;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
   .apiTableRightLSyn{
-	background-color: #fff1db;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffafa;
+    text-align: left;
+    vertical-align: top;
+ }
+
+ .apiTableLeftPSyn{
+    background-color: #fafffa;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
+ }
+
+  .apiTableRightPSyn{
+    background-color: #fafffa;
+    text-align: left;
+    vertical-align: top;
  }
 
 .apiTableLeftLParam{
-	background-color: #fff8ed;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffafa;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
   .apiTableRightLParam{
-	background-color: #fff1db;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffafa;
+    text-align: left;
+    vertical-align: top;
  }
 
  .apiTableLeftLRet{
-	background-color: #fff8ed;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffafa;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
   .apiTableRightLRet{
-	background-color: #fff1db;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffafa;
+    text-align: left;
+    vertical-align: top;
  }
  
  
  
  .remApiTableLeftCSyn{
-	background-color: #f5edfa;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
  .remApiTableRightCSyn{
-	background-color: #eadff2;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffaff;
+    text-align: left;
+    vertical-align: top;
  }
 
 .remApiTableLeftCParam{
-	background-color: #f5edfa;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
  .remApiTableRightCParam{
-	background-color: #eadff2;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffaff;
+    text-align: left;
+    vertical-align: top;
  }
 
  .remApiTableLeftCRet{
-	background-color: #f5edfa;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
  
   .remApiTableRightCRet{
-	background-color: #eadff2;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffaff;
+    text-align: left;
+    vertical-align: top;
  }
 
 .remApiTableLeftLanguages{
-	background-color: #f0defa;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #fffaff;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
  
   .remApiTableRightLanguages{
-	background-color: #e4cef0;
-	text-align: left;
-	vertical-align: top;
+    background-color: #fffaff;
+    text-align: left;
+    vertical-align: top;
  }
 
 
 
  
  .rosApiTableLeftIn{
-	background-color: #eddada;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #eddada;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
  .rosApiTableRightIn{
-	background-color: #edcccc;
-	text-align: left;
-	vertical-align: top;
+    background-color: #edcccc;
+    text-align: left;
+    vertical-align: top;
  }
 
  .rosApiTableLeftOut{
-	background-color: #eddada;
-	border: 1px solid #CCCCCC;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #eddada;
+    border: 1px solid #CCCCCC;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
  
   .rosApiTableRightOut{
-	background-color: #edcccc;
-	text-align: left;
-	vertical-align: top;
+    background-color: #edcccc;
+    text-align: left;
+    vertical-align: top;
  }
 
  
  
  
  .auxApiTableLeftCSyn{
-	background-color: #E1E1E1;
-	border: 1px solid black;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #E1E1E1;
+    border: 1px solid black;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
  .auxApiTableRightCSyn{
-	background-color: #D1D1D1;
-	text-align: left;
-	vertical-align: top;
+    background-color: #D1D1D1;
+    text-align: left;
+    vertical-align: top;
  }
 
 .auxApiTableLeftCParam{
-	background-color: #E1E1E1;
-	border: 1px solid black;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #E1E1E1;
+    border: 1px solid black;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
 
  .auxApiTableRightCParam{
-	background-color: #D1D1D1;
-	text-align: left;
-	vertical-align: top;
+    background-color: #D1D1D1;
+    text-align: left;
+    vertical-align: top;
  }
 
  .auxApiTableLeftCRet{
-	background-color: #E1E1E1;
-	border: 1px solid black;
-	text-align: left;
-	vertical-align: top;
-	width: 130px;
+    background-color: #E1E1E1;
+    border: 1px solid black;
+    text-align: left;
+    vertical-align: top;
+    width: 130px;
  }
  
   .auxApiTableRightCRet{
-	background-color: #D1D1D1;
-	text-align: left;
-	vertical-align: top;
+    background-color: #D1D1D1;
+    text-align: left;
+    vertical-align: top;
  }
+ 
+ 
+.licenseBox {
+  width: 700px;
+  font-family: monospace;
+  background: #eeeeee;
+  border: 1px solid #cccccc;
+  border-radius: 10px 10px 10px 10px;
+  margin: 0 auto;
+}
 
+.warningBox {
+  width: 700px;
+  font-family: monospace;
+  background: #ffffee;
+  border: 1px solid #cccccc;
+  border-radius: 10px 10px 10px 10px;
+  margin: 0 auto;
+  margin-bottom: 1em;
+}
+
+.apiList {
+  width: 750px;
+  font-family: "Courier New", Courier;
+  background: #eeeeee;
+  border: 1px solid #cccccc;
+  border-radius: 5px 5px 5px 5px;
+  margin: 0 auto;
+}
+
+.constList {
+  width: 750px;
+  background: #fafafa;
+  border: 1px solid #cccccc;
+  border-radius: 5px 5px 5px 5px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+code {
+  font-family: monospace;
+  white-space: pre;
+  background: #eeeeee;
+  border: 1px solid #cccccc;
+  display: block;
+  border-radius: 0 0 10px 10px;
+  margin-left: 5em;
+  margin-right: 5em;
+  margin-bottom: 1em;
+}
+
+code.hljs {
+  padding: 0 !important;
+  padding-bottom: 10px !important;
+}
+
+code.coppelia-coppeliasim-script {
+  border-top: 1px solid #e0a0a0;
+  background: #fffafa;
+}
+
+code.api-list {
+  font-family: courier;
+}
+
+code.coppelia-coppeliasim-script::before {
+  content: "CoppeliaSim script";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #e0a0a0;
+  float: right;
+  padding: 2px;
+} 
+
+code.simple {
+  border-top: 1px solid #a0a0a0;
+  background: #ffffff;
+  margin-left: 0em;
+  margin-right: 0em;
+}
+
+code.coppelia-coppeliasim-plugin {
+  border-top: 1px solid #a0a0e0;
+  background: #fafaff;
+}
+
+code.coppelia-coppeliasim-plugin::before {
+  content: "CoppeliaSim plugin";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #a0a0e0;
+  float: right;
+  padding: 2px;
+} 
  
- 
- 
- 
- 
- 
- 
- 
+code.coppelia-zmq-remote-api-client {
+  border-top: 1px solid #e0a0e0;
+  background: #fffaff;
+}
+
+code.coppelia-zmq-remote-api-client::before {
+  content: "ZeroMQ remote API client";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #e0a0e0;
+  float: right;
+  padding: 2px;
+} 
+
+code.coppelia-ws-remote-api-client {
+  border-top: 1px solid #e0a0e0;
+  background: #fffaff;
+}
+
+code.coppelia-ws-remote-api-client::before {
+  content: "WebSocket remote API client";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #e0a0e0;
+  float: right;
+  padding: 2px;
+} 
+
+code.coppelia-legacy-remote-api-client {
+  border-top: 1px solid #e0a0e0;
+  background: #fffaff;
+}
+
+code.coppelia-legacy-remote-api-client::before {
+  content: "Legacy remote API client";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #e0a0e0;
+  float: right;
+  padding: 2px;
+} 
+
+code.coppelia-b0-remote-api-client {
+  border-top: 1px solid #e0a0e0;
+  background: #fffaff;
+}
+
+code.coppelia-b0-remote-api-client::before {
+  content: "B0-based remote API client";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #e0a0e0;
+  float: right;
+  padding: 2px;
+} 
+
+code.coppelia-external-code {
+  border-top: 1px solid #a0a0a0;
+}
+
+code.coppelia-external-code::before {
+  content: "Code";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #a0a0a0;
+  float: right;
+  padding: 2px;
+} 
+
+code.coppelia-terminal {
+  border-top: 1px solid #707070;
+  background: #cccccc;
+}
+
+code.coppelia-terminal::before {
+  content: "Terminal";
+  font-size: 66%;
+  font-weight: bolder;
+  font-family: sans-serif;
+  color: white;
+  background-color: #909090;
+  float: right;
+  padding: 2px;
+} 
+
  /* simStubsGen: classes used by generated documentation */
  code.code-block, code.code-inline {
    white-space: pre;
@@ -656,13 +706,7 @@ a:hover {text-decoration: underline; color: red;}
  p.info {
    margin-left: 3em;
  }
- ul {
-   margin-left: 4em;
- }
  
- h1 {
-   text-align: center;
- }
  .homeTitle {
    font-family: Arial, Helvetica, sans-serif;
    font-size: 36pt;

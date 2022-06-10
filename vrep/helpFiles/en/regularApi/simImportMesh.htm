@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simImportMesh" id="simImportMesh"></a>simImportMesh / sim.importMesh </h3>
+<p class=subsectionBar><a name="simImportMesh" id="simImportMesh"></a>simImportMesh / sim.importMesh </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simImportMesh(simInt fileformat,const simChar* pathAndFilename,simInt options,simFloat identicalVerticeTolerance,simFloat scalingFactor,simFloat*** vertices,simInt** verticesSizes,simInt*** indices,simInt** indicesSizes,simFloat*** reserved,simChar*** names)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>fileformat</strong>: set to 0. Fileformat is automatically detected</div>
 
@@ -57,7 +57,7 @@ C synopsis
 </div>
 <br>
 <div>USAGE EXAMPLE:</div>
-<pre class=lightBlueBoxNoMarginAndSmall>
+<code class="hljs language-c++ simple">
 simFloat** vertices;
 simInt* verticesSizes;
 simInt** indices;
@@ -79,12 +79,12 @@ if (elementCount>0)
     simReleaseBuffer((simChar*)indices);
     simReleaseBuffer((simChar*)verticesSizes);
     simReleaseBuffer((simChar*)vertices);
-}</pre>
+}</code>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>Number of imported meshes, or 0 or -1 if the operation was not successful<br>
@@ -95,7 +95,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[] vertices,table[] indices=sim.importMesh(int fileformat,string pathAndFilename,int options,float identicalVerticeTolerance,float scalingFactor)<br></td> 
+<td class=apiTableRightLSyn>float[] vertices,int[] indices=sim.importMesh(int fileformat,string pathAndFilename,int options,float identicalVerticeTolerance,float scalingFactor)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -114,19 +114,25 @@ Lua return values
 </div>
 <br>
 <div>USAGE EXAMPLE (e.g. in a <a href="../customizationScripts.htm">customization script</a>):</div>
-<pre class=lightRedBoxNoMarginAndSmall>
+<code class="hljs language-lua simple">
 if (importButtonPressed) then
     vertices,indices,reserved,names=sim.importMesh(1,"d:\\example.dxf",0,0.0001,1)
     for i=1,#vertices,1 do
         h=sim.createMeshShape(2,20*math.pi/180,vertices[i],indices[i])
         sim.setShapeColor(h,"",sim.colorcomponent_ambient,{0.5,0.5,0.5})
-        sim.setObjectName(h,names[i])
+        sim.setObjectAlias(h,names[i])
     end
-end</pre>
+end</code>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list vertices,list indices=sim.importMesh(int fileformat,string pathAndFilename,int options,float identicalVerticeTolerance,float scalingFactor)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

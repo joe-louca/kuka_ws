@@ -148,7 +148,7 @@ removeTrackedPart=function(partHandle)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,'XYZ_STATICPICKWINDOW_INFO')
     data=sim.unpackTable(data)
     sensorHandle=simBWF.getReferencedObjectHandle(model,simBWF.STATICPICKWINDOW_SENSOR_REF)

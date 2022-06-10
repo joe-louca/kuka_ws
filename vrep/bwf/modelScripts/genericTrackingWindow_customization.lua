@@ -9,16 +9,16 @@ end
 
 function ext_getItemData_pricing()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.type='trackingWindow'
     obj.windowType='pickOrPlace'
     obj.brVersion=0
 
     local dep={}
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDTRACKINGWINDOW_INPUT_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDTRACKINGWINDOW_CONVEYOR_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     if #dep>0 then
         obj.dependencies=dep
     end
@@ -149,7 +149,7 @@ function getAvailableConveyors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -163,7 +163,7 @@ function getAvailableDetectionOrTrackingWindows()
             local data1=sim.readCustomDataBlock(l[i],simBWF.modelTags.TRACKINGWINDOW)
             local data2=sim.readCustomDataBlock(l[i],'XYZ_DETECTIONWINDOW_INFO')
             if data1 or data2 then
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -1110,7 +1110,7 @@ function removeDlg()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -1126,9 +1126,9 @@ function sysCall_init()
     end
     ----------------------------------------
     writeInfo(_info)
-    trackBox=sim.getObjectHandle('genericTrackingWindow_track')
-    stopLineBox=sim.getObjectHandle('genericTrackingWindow_stopLine')
-    transferBox=sim.getObjectHandle('genericTrackingWindow_transfer')
+    trackBox=sim.getObject('./genericTrackingWindow_track')
+    stopLineBox=sim.getObject('./genericTrackingWindow_stopLine')
+    transferBox=sim.getObject('./genericTrackingWindow_transfer')
     
     -- Following for backward compatibility:
     createPalletPointsIfNeeded()

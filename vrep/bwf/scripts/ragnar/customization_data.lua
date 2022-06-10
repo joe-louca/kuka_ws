@@ -94,12 +94,12 @@ function model.handleJobConsistency(removeJobsExceptCurrent)
             if gripper>=0 then
                 newJob.gripper.id=sim.getObjectStringParam(gripper,sim.objstringparam_unique_id)
                 newJob.gripper.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',gripper))
-                newJob.gripper.altName=sim.getObjectName(gripper+sim.handleflag_altname)
+                newJob.gripper.altName=sim.getObjectAlias(gripper)
             end
             if model.platform>=0 then
                 newJob.platform.id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
                 newJob.platform.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.platform))
-                newJob.platform.altName=sim.getObjectName(model.platform+sim.handleflag_altname)
+                newJob.platform.altName=sim.getObjectAlias(model.platform)
             end
             model.copyModelParamsToJob(data,jobNames[i])
             simBWF.writeObjectReferencesForSpecificJob(model.handle,objRefs,i)
@@ -142,7 +142,7 @@ function model.createNewJob()
         local id=sim.getObjectStringParam(model.gripper,sim.objstringparam_unique_id)
         data.jobData.jobs[newJobName].gripper.id=id
         data.jobData.jobs[newJobName].gripper.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.gripper))
-        data.jobData.jobs[newJobName].gripper.altName=sim.getObjectName(model.gripper+sim.handleflag_altname)
+        data.jobData.jobs[newJobName].gripper.altName=sim.getObjectAlias(model.gripper)
     else
         data.jobData.jobs[newJobName].gripper={}
     end
@@ -150,7 +150,7 @@ function model.createNewJob()
         local id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
         data.jobData.jobs[newJobName].platform.id=id
         data.jobData.jobs[newJobName].platform.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.platform))
-        data.jobData.jobs[newJobName].platform.altName=sim.getObjectName(model.platform+sim.handleflag_altname)
+        data.jobData.jobs[newJobName].platform.altName=sim.getObjectAlias(model.platform)
     else
         data.jobData.jobs[newJobName].platform={}
     end
@@ -249,13 +249,13 @@ function model.switchFromJobToCurrent(oldJobName)
     if platformId then
         local newPlatform=sim.loadModel(serializedJobModels[platformId])
         simBWF.callCustomizationScriptFunction('model.ext.replaceInfo',newPlatform,sim.unpackTable(data.jobData.jobs[model.currentJob].platform.info))
-        sim.setObjectName(newPlatform+sim.handleflag_altname+sim.handleflag_silenterror,data.jobData.jobs[model.currentJob].platform.altName) -- setting name can fail (normal)
+        sim.setObjectAlias(newPlatform,data.jobData.jobs[model.currentJob].platform.altName)
         local gripperId=data.jobData.jobs[model.currentJob].gripper.id
         if gripperId then
             local newGripper=sim.loadModel(serializedJobModels[gripperId])
             simBWF.callCustomizationScriptFunction('model.ext.attachGripper',newPlatform,newGripper)
             simBWF.callCustomizationScriptFunction('model.ext.replaceInfo',newGripper,sim.unpackTable(data.jobData.jobs[model.currentJob].gripper.info))
-            sim.setObjectName(newGripper+sim.handleflag_altname+sim.handleflag_silenterror,data.jobData.jobs[model.currentJob].gripper.altName) -- setting name can fail (normal)
+            sim.setObjectAlias(newGripper,data.jobData.jobs[model.currentJob].gripper.altName)
         end
         model.attachPlatformToEmptySpot(newPlatform)
         sim.removeObjectFromSelection(sim.handle_all) -- When loaded, a model is automatically selected. Make sure this doesn't happen
@@ -303,7 +303,7 @@ function model.updateJobDataFromCurrentSituation(jobName)
         local id=sim.getObjectStringParam(model.gripper,sim.objstringparam_unique_id)
         data.jobData.jobs[jobName].gripper.id=id
         data.jobData.jobs[jobName].gripper.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.gripper))
-        data.jobData.jobs[jobName].gripper.altName=sim.getObjectName(model.gripper+sim.handleflag_altname)
+        data.jobData.jobs[jobName].gripper.altName=sim.getObjectAlias(model.gripper)
     else
         data.jobData.jobs[jobName].gripper={}
     end
@@ -311,7 +311,7 @@ function model.updateJobDataFromCurrentSituation(jobName)
         local id=sim.getObjectStringParam(model.platform,sim.objstringparam_unique_id)
         data.jobData.jobs[jobName].platform.id=id
         data.jobData.jobs[jobName].platform.info=sim.packTable(simBWF.callCustomizationScriptFunction('model.ext.readInfo',model.platform))
-        data.jobData.jobs[jobName].platform.altName=sim.getObjectName(model.platform+sim.handleflag_altname)
+        data.jobData.jobs[jobName].platform.altName=sim.getObjectAlias(model.platform)
     else
         data.jobData.jobs[jobName].platform={}
     end

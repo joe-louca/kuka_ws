@@ -29,9 +29,9 @@
 
 <p>Using the API function <a href="regularApi/simCheckCollision.htm">sim.checkCollision</a>, one can easily detect collision between entities, for instance collision detection between a robot and its environment, from within a <a href="childScripts.htm">child script</a>, in each simulation step:</p>
 
-<pre class=lightRedBox>
+<code class="hljs language-lua coppelia-coppeliasim-script">
 function sysCall_init()
-    local robotBase=sim.getObjectHandle('robotModelName')
+    local robotBase=sim.getObject('/robotModelAlias')
     robotCollection=sim.createCollection(0)
     sim.addItemToCollection(robotCollection,sim.handle_tree,robotBase,0)
 end
@@ -41,11 +41,11 @@ function sysCall_sensing()
     if result&gt;0 then
         print('Robot is colliding. Colliding pair is '..getAsString(pairHandles))
     end
-end</pre>
+end</code>
 
 <p>One can also temporarily modify the color of <a href="objects.htm">objects</a> or whole <a href="collections.htm">collections</a>, in order to visually indicate a collision:</p>
 
-<pre class=lightRedBox>
+<code class="hljs language-lua coppelia-coppeliasim-script">
 function changePairColor(entityPair,colorPair)
     originalColorData={}
     originalColorData[1]=sim.changeEntityColor(entityPair[1],colorPair[1])
@@ -61,7 +61,7 @@ function restorePairColor()
 end
 
 function sysCall_init()
-    local robotBase=sim.getObjectHandle('irb360')
+    local robotBase=sim.getObject('/irb360')
     robotCollection=sim.createCollection(0)
     sim.addItemToCollection(robotCollection,sim.handle_tree,robotBase,0)
     collisionColors={{1,0,0},{1,0,1}} -- collider and collidee
@@ -80,11 +80,13 @@ end
 
 function sysCall_cleanup()
     restorePairColor()
-end</pre>
+end</code>
 
 
 
 <p>CoppeliaSim's collision detection functionality is also available as stand-alone routines via the <a href="coppeliaGeometricRoutines.htm">Coppelia geometric routines</a>.</p>
+
+<p>See also the <a href="addOns.htm">add-on</a> <em>Collision check</em> that allows to quickly check for self-collision, collision with the environment, or collision between two entities.</p>
 
 
 <br>

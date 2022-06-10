@@ -39,7 +39,7 @@ prepareStatisticsDialog=function(enabled)
         local xml =[[
                 <label id="1" text="Part destruction count: 0" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
         ]]
-        statUi=simBWF.createCustomUi(xml,sim.getObjectName(model)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
+        statUi=simBWF.createCustomUi(xml,sim.getObjectAlias(model,1)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
     end
 end
 
@@ -50,8 +50,8 @@ updateStatisticsDialog=function(enabled)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
-    sensor=sim.getObjectHandle('genericPartSink_sensor')
+    model=sim.getObject('.')
+    sensor=sim.getObject('./genericPartSink_sensor')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.PARTSINK)
     data=sim.unpackTable(data)
     operational=data['status']~='disabled'

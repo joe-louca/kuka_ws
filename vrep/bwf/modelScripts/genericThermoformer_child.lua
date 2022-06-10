@@ -138,7 +138,7 @@ handlePartAtLocation=function(h)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
     data=sim.unpackTable(data)
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,1)
@@ -155,9 +155,9 @@ function sysCall_init()
     color=data['color']
     dwellTime=data['dwellTime']
     timeForIdlePartToDeactivate=simBWF.modifyPartDeactivationTime(data['deactivationTime'])
-    sampleHolder=sim.getObjectHandle('genericThermoformer_sampleHolder')
-    partHolder=sim.getObjectHandle('genericThermoformer_partHolder')
-    sensor=sim.getObjectHandle('genericThermoformer_sensor')
+    sampleHolder=sim.getObject('./genericThermoformer_sampleHolder')
+    partHolder=sim.getObject('./genericThermoformer_partHolder')
+    sensor=sim.getObject('./genericThermoformer_sensor')
     beltVelocity=0
     totShift=0
     movementUnderway=false

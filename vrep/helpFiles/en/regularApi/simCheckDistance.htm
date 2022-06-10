@@ -16,22 +16,22 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simCheckDistance" id="simCheckDistance"></a>simCheckDistance / sim.checkDistance </h3>
+<p class=subsectionBar><a name="simCheckDistance" id="simCheckDistance"></a>simCheckDistance / sim.checkDistance </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Checks the minimum distance between two entities. The measurable flags of the entities are overridden if the entities are objects.<br></td>
+<td class=apiTableRightDescr>Checks the minimum distance between two entities. The measurable flags of the entities are overridden if the entities are objects. If the entities are both the same collection (i.e. with the same collection handle), then same objects will not be checked against themselve.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simCheckDistance(simInt entity1Handle,simInt entity2Handle,simFloat threshold,simFloat* distanceData)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>entity1Handle</strong>: handle of entity 1 (can be an object handle or a collection handle)<br>
 </div>
@@ -45,7 +45,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>0 or 1 if operation was successful (1 if distance is smaller than threshold), -1 otherwise<br>
@@ -56,7 +56,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>int result,table[7] distanceData,table[2] objectHandlePair=sim.checkDistance(int entity1Handle,int entity2Handle,float threshold=0)<br></td> 
+<td class=apiTableRightLSyn>int result,float[7] distanceData,int[2] objectHandlePair=sim.checkDistance(int entity1Handle,int entity2Handle,float threshold=0)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -80,22 +80,20 @@ Lua return values
 </td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxCheckDistance">simxCheckDistance</a></div>
-<div>Legacy remote API: <a href="../b0RemoteApi-cpp.htm#simxCheckDistance">simxCheckDistance</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>int result,list distanceData,list objectHandlePair=sim.checkDistance(int entity1Handle,int entity2Handle,float threshold=0)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

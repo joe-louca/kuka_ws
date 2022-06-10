@@ -12,7 +12,7 @@ function updatePluginRepresentation()
     local c=readInfo()
     local data={}
     data.id=model
-    data.name=sim.getObjectName(model)
+    data.name=sim.getObjectAlias(model,1)
     data.pos=sim.getObjectPosition(model,-1)
     data.ypr=sim.getObjectOrientation(model,-1)
     data.primaryArmLength=c.primaryArmLengthInMM/1000
@@ -24,7 +24,7 @@ end
 function ext_getItemData_pricing()
     local c=readInfo()
     local obj={}
-    obj.name=sim.getObjectName(model)
+    obj.name=sim.getObjectAlias(model,1)
     obj.brVersion=0
     obj.type='ragnar'
     obj.ragnarType='default'
@@ -38,28 +38,28 @@ function ext_getItemData_pricing()
     obj.secondary_arms=c.secondaryArmLengthInMM
     local dep={}
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_PARTTRACKING1_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_PARTTRACKING2_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_STATICWINDOW1_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_TARGETTRACKING1_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_TARGETTRACKING2_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_DROPLOCATION1_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_DROPLOCATION2_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_DROPLOCATION3_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local id=simBWF.getReferencedObjectHandle(model,simBWF.OLDRAGNAR_DROPLOCATION4_REF)
-    if id>=0 then dep[#dep+1]=sim.getObjectName(id) end
+    if id>=0 then dep[#dep+1]=sim.getObjectAlias(id,1) end
     local ob=sim.getObjectsInTree(model)
     for i=1,#ob,1 do
         local data=sim.readCustomDataBlock(ob[i],simBWF.modelTags.RAGNARGRIPPER)
         if data then
-            dep[#dep+1]=sim.getObjectName(ob[i])
+            dep[#dep+1]=sim.getObjectAlias(ob[i],1)
             break
         end
     end
@@ -123,7 +123,7 @@ function getAvailableStaticPartWindows()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_STATICPICKWINDOW_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -135,7 +135,7 @@ function getAvailableStaticTargetWindows()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],'XYZ_STATICPLACEWINDOW_INFO')
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -147,7 +147,7 @@ function getAvailableTrackingWindows()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.TRACKINGWINDOW)
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -161,9 +161,9 @@ function getAvailableDropLocations(returnMap)
         local data2=sim.readCustomDataBlock(l[i],'XYZ_BUCKET_INFO')
         if data1 or data2 then
             if returnMap then
-                retL[sim.getObjectName(l[i])]=l[i]
+                retL[sim.getObjectAlias(l[i],1)]=l[i]
             else
-                retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+                retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
             end
         end
     end
@@ -931,7 +931,7 @@ function showStatisticsClick_callback(ui,id,newVal)
     simBWF.markUndoPoint()
     writeInfo(c)
     if sim.getSimulationState()~=sim.simulation_stopped then
-        sim.callScriptFunction("ext_enableDisableStats_fromCustomizationScript@"..sim.getObjectName(model),sim.scripttype_childscript,newVal~=0)
+        sim.callScriptFunction("ext_enableDisableStats_fromCustomizationScript@"..sim.getObjectAlias(model,1),sim.scripttype_childscript,newVal~=0)
     end
 end
 
@@ -1029,7 +1029,7 @@ function pause_callback()
     updateEnabledDisabledItems()
     enableMouseInteractionsOnPlot(true)
     if plotUi then
-        simUI.setTitle(plotUi,sim.getObjectName(model)..' (paused)',true)
+        simUI.setTitle(plotUi,sim.getObjectAlias(model,1)..' (paused)',true)
     end
 end
 
@@ -1038,7 +1038,7 @@ function resume_callback()
     updateEnabledDisabledItems()
     enableMouseInteractionsOnPlot(false)
     if plotUi then
-        simUI.setTitle(plotUi,sim.getObjectName(model)..' (online)',true)
+        simUI.setTitle(plotUi,sim.getObjectAlias(model,1)..' (online)',true)
     end
 end
 
@@ -1092,7 +1092,7 @@ function connect()
         if not previousPlotDlgPos then
             previousPlotDlgPos="bottomRight"
         end
-        plotUi=simBWF.createCustomUi(xml,sim.getObjectName(model)..' (online)',previousPlotDlgPos,true,"closePlot",false,true,false,nil,previousPlotDlgSize)
+        plotUi=simBWF.createCustomUi(xml,sim.getObjectAlias(model,1)..' (online)',previousPlotDlgPos,true,"closePlot",false,true,false,nil,previousPlotDlgSize)
         simUI.setPlotLabels(plotUi,1,"Time (seconds)","degrees")
         if not plotTabIndex then
             plotTabIndex=0
@@ -1149,7 +1149,7 @@ function disconnect()
     data.id=model
     simBWF.query('ragnar_disconnectReal',data)
     if plotUi then
-        simUI.setTitle(plotUi,sim.getObjectName(model),true)
+        simUI.setTitle(plotUi,sim.getObjectAlias(model,1),true)
     end
     if sim.fastIdleLoop then
         sim.fastIdleLoop(false)
@@ -1760,7 +1760,7 @@ function sysCall_init()
     version=sim.getInt32Param(sim.intparam_program_version)
     revision=sim.getInt32Param(sim.intparam_program_revision)
 
-    model=sim.getObjectHandle(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -1813,13 +1813,13 @@ function sysCall_init()
     connected=false
     paused=false
 
-    ikTarget=sim.getObjectHandle('Ragnar_InvKinTarget')
-    ikModeTipDummy=sim.getObjectHandle('Ragnar_InvKinTip')
+    ikTarget=sim.getObject('./Ragnar_InvKinTarget')
+    ikModeTipDummy=sim.getObject('./Ragnar_InvKinTip')
     fkDrivingJoints={-1,-1,-1,-1}
-    fkDrivingJoints[1]=sim.getObjectHandle('Ragnar_A1DrivingJoint1')
-    fkDrivingJoints[2]=sim.getObjectHandle('Ragnar_A1DrivingJoint2')
-    fkDrivingJoints[3]=sim.getObjectHandle('Ragnar_A1DrivingJoint3')
-    fkDrivingJoints[4]=sim.getObjectHandle('Ragnar_A1DrivingJoint4')
+    fkDrivingJoints[1]=sim.getObject('./Ragnar_A1DrivingJoint1')
+    fkDrivingJoints[2]=sim.getObject('./Ragnar_A1DrivingJoint2')
+    fkDrivingJoints[3]=sim.getObject('./Ragnar_A1DrivingJoint3')
+    fkDrivingJoints[4]=sim.getObject('./Ragnar_A1DrivingJoint4')
 
 
     dlgMainTabIndex=0
@@ -1833,75 +1833,75 @@ function sysCall_init()
     upperArmLAdjust={}
     lowerArmLAdjust={}
 
-    frontAndRearCoverAdjust={sim.getObjectHandle('Ragnar_frontAdjust'),sim.getObjectHandle('Ragnar_rearAdjust')}
+    frontAndRearCoverAdjust={sim.getObject('./Ragnar_frontAdjust'),sim.getObject('./Ragnar_rearAdjust')}
     middleCoverParts={}
 
     drivingJoints={}
 
     for i=1,4,1 do
-        drivingJoints[#upperLinks+1]=sim.getObjectHandle('Ragnar_A1DrivingJoint'..i)
+        drivingJoints[#upperLinks+1]=sim.getObject('./Ragnar_A1DrivingJoint'..i)
 
-        upperLinks[#upperLinks+1]=sim.getObjectHandle('Ragnar_upperArmLink'..i-1)
-        lowerLinks[#lowerLinks+1]=sim.getObjectHandle('Ragnar_lowerArmLinkA'..i-1)
-        lowerLinks[#lowerLinks+1]=sim.getObjectHandle('Ragnar_lowerArmLinkB'..i-1)
+        upperLinks[#upperLinks+1]=sim.getObject('./Ragnar_upperArmLink'..i-1)
+        lowerLinks[#lowerLinks+1]=sim.getObject('./Ragnar_lowerArmLinkA'..i-1)
+        lowerLinks[#lowerLinks+1]=sim.getObject('./Ragnar_lowerArmLinkB'..i-1)
 
-        upperArmAdjust[#upperArmAdjust+1]=sim.getObjectHandle('Ragnar_upperArmAdjust'..i-1)
-        lowerArmAdjust[#lowerArmAdjust+1]=sim.getObjectHandle('Ragnar_lowerArmAdjustA'..i-1)
-        lowerArmAdjust[#lowerArmAdjust+1]=sim.getObjectHandle('Ragnar_lowerArmAdjustB'..i-1)
+        upperArmAdjust[#upperArmAdjust+1]=sim.getObject('./Ragnar_upperArmAdjust'..i-1)
+        lowerArmAdjust[#lowerArmAdjust+1]=sim.getObject('./Ragnar_lowerArmAdjustA'..i-1)
+        lowerArmAdjust[#lowerArmAdjust+1]=sim.getObject('./Ragnar_lowerArmAdjustB'..i-1)
 
-        upperArmLAdjust[#upperArmLAdjust+1]=sim.getObjectHandle('Ragnar_upperArmLAdjust'..i-1)
-        lowerArmLAdjust[#lowerArmLAdjust+1]=sim.getObjectHandle('Ragnar_lowerArmLAdjustA'..i-1)
-        lowerArmLAdjust[#lowerArmLAdjust+1]=sim.getObjectHandle('Ragnar_lowerArmLAdjustB'..i-1)
+        upperArmLAdjust[#upperArmLAdjust+1]=sim.getObject('./Ragnar_upperArmLAdjust'..i-1)
+        lowerArmLAdjust[#lowerArmLAdjust+1]=sim.getObject('./Ragnar_lowerArmLAdjustA'..i-1)
+        lowerArmLAdjust[#lowerArmLAdjust+1]=sim.getObject('./Ragnar_lowerArmLAdjustB'..i-1)
     end
 
     for i=1,5,1 do
-        middleCoverParts[i]=sim.getObjectHandle('Ragnar_middleCover'..i)
+        middleCoverParts[i]=sim.getObject('./Ragnar_middleCover'..i)
     end
 
-    frameModel=sim.getObjectHandle('Ragnar_frame')
+    frameModel=sim.getObject('./Ragnar_frame')
     frameBeams={}
     for i=1,8,1 do
-        frameBeams[i]=sim.getObjectHandle('Ragnar_frame_beam'..i)
+        frameBeams[i]=sim.getObject('./Ragnar_frame_beam'..i)
     end
     frameJoints={}
-    frameJoints[1]=sim.getObjectHandle('Ragnar_frame_widthJ1')
-    frameJoints[2]=sim.getObjectHandle('Ragnar_frame_widthJ2')
-    frameJoints[3]=sim.getObjectHandle('Ragnar_frame_heightJ1')
-    frameJoints[4]=sim.getObjectHandle('Ragnar_frame_heightJ2')
-    frameJoints[5]=sim.getObjectHandle('Ragnar_frame_heightJ3')
-    frameJoints[6]=sim.getObjectHandle('Ragnar_frame_heightJ4')
-    frameJoints[7]=sim.getObjectHandle('Ragnar_frame_lengthJ1')
-    frameJoints[8]=sim.getObjectHandle('Ragnar_frame_lengthJ2')
-    frameJoints[9]=sim.getObjectHandle('Ragnar_frame_lengthJ3')
-    frameJoints[10]=sim.getObjectHandle('Ragnar_frame_lengthJ4')
+    frameJoints[1]=sim.getObject('./Ragnar_frame_widthJ1')
+    frameJoints[2]=sim.getObject('./Ragnar_frame_widthJ2')
+    frameJoints[3]=sim.getObject('./Ragnar_frame_heightJ1')
+    frameJoints[4]=sim.getObject('./Ragnar_frame_heightJ2')
+    frameJoints[5]=sim.getObject('./Ragnar_frame_heightJ3')
+    frameJoints[6]=sim.getObject('./Ragnar_frame_heightJ4')
+    frameJoints[7]=sim.getObject('./Ragnar_frame_lengthJ1')
+    frameJoints[8]=sim.getObject('./Ragnar_frame_lengthJ2')
+    frameJoints[9]=sim.getObject('./Ragnar_frame_lengthJ3')
+    frameJoints[10]=sim.getObject('./Ragnar_frame_lengthJ4')
 
     frameOpenClose={}
     for i=1,3,1 do
-        frameOpenClose[i]=sim.getObjectHandle('Ragnar_frame_openCloseJ'..i)
+        frameOpenClose[i]=sim.getObject('./Ragnar_frame_openCloseJ'..i)
     end
 
-    workspace=sim.getObjectHandle('Ragnar_workspace')
+    workspace=sim.getObject('./Ragnar_workspace')
 
 
-    simTipDummy=sim.getObjectHandle('Ragnar_InvKinTip')
-    simTargetDummy=sim.getObjectHandle('Ragnar_InvKinTarget')
-    simTip1=sim.getObjectHandle('Ragnar_RLoopArmTip14')
-    simTarget1=sim.getObjectHandle('Ragnar_RLoopArmTarget14')
-    simTip2=sim.getObjectHandle('Ragnar_RLoopArmTip15')
-    simTarget2=sim.getObjectHandle('Ragnar_RLoopArmTarget15')
-    simTip3=sim.getObjectHandle('Ragnar_RLoopArmTip16')
-    simTarget3=sim.getObjectHandle('Ragnar_RLoopArmTarget16')
+    simTipDummy=sim.getObject('./Ragnar_InvKinTip')
+    simTargetDummy=sim.getObject('./Ragnar_InvKinTarget')
+    simTip1=sim.getObject('./Ragnar_RLoopArmTip14')
+    simTarget1=sim.getObject('./Ragnar_RLoopArmTarget14')
+    simTip2=sim.getObject('./Ragnar_RLoopArmTip15')
+    simTarget2=sim.getObject('./Ragnar_RLoopArmTarget15')
+    simTip3=sim.getObject('./Ragnar_RLoopArmTip16')
+    simTarget3=sim.getObject('./Ragnar_RLoopArmTarget16')
     
     simNotIkJoints={}
-    simNotIkJoints[1]=sim.getObjectHandle('Ragnar_frontAdjust')
-    simNotIkJoints[2]=sim.getObjectHandle('Ragnar_upperArmAdjust0')
-    simNotIkJoints[3]=sim.getObjectHandle('Ragnar_lowerArmAdjustA0')
-    simNotIkJoints[4]=sim.getObjectHandle('Ragnar_lowerArmAdjustB3')
-    simNotIkJoints[5]=sim.getObjectHandle('Ragnar_upperArmAdjust3')
-    simNotIkJoints[6]=sim.getObjectHandle('Ragnar_lowerArmAdjustB2')
-    simNotIkJoints[7]=sim.getObjectHandle('Ragnar_upperArmAdjust2')
-    simNotIkJoints[8]=sim.getObjectHandle('Ragnar_lowerArmAdjustA1')
-    simNotIkJoints[9]=sim.getObjectHandle('Ragnar_upperArmAdjust1')
+    simNotIkJoints[1]=sim.getObject('./Ragnar_frontAdjust')
+    simNotIkJoints[2]=sim.getObject('./Ragnar_upperArmAdjust0')
+    simNotIkJoints[3]=sim.getObject('./Ragnar_lowerArmAdjustA0')
+    simNotIkJoints[4]=sim.getObject('./Ragnar_lowerArmAdjustB3')
+    simNotIkJoints[5]=sim.getObject('./Ragnar_upperArmAdjust3')
+    simNotIkJoints[6]=sim.getObject('./Ragnar_lowerArmAdjustB2')
+    simNotIkJoints[7]=sim.getObject('./Ragnar_upperArmAdjust2')
+    simNotIkJoints[8]=sim.getObject('./Ragnar_lowerArmAdjustA1')
+    simNotIkJoints[9]=sim.getObject('./Ragnar_upperArmAdjust1')
     
     -- Prepare the ik group, using the convenience function 'simIK.addIkElementFromScene':
     ikEnv=simIK.createEnvironment()

@@ -1,98 +1,17 @@
 ConfigUI={}
 
-function ConfigUI:readBlock(name)
-    local objectHandle=sim.getObjectHandle(sim.handle_self)
-    local data=sim.readCustomDataBlock(objectHandle,name)
-    return data
-end
+function ConfigUI:validateElemSchema(elemName,elemSchema)
+    -- try to fix what is possible to fix:
+    --   - infer missing information
+    --   - migrate deprecated notations to current
+    -- anything else -> error()
 
-function ConfigUI:writeBlock(name,data)
-    local objectHandle=sim.getObjectHandle(sim.handle_self)
-    sim.writeCustomDataBlock(objectHandle,name,data)
-end
-
-function ConfigUI:findAllInstances()
-    local instances={}
-    for i,handle in ipairs(sim.getObjectsWithTag('modelType')) do
-        if self.modelType==sim.readCustomDataBlock(handle,'modelType') then
-            table.insert(instances,handle)
-        end
-    end
-    return instances
-end
-
-function ConfigUI:findLinkedInstances()
-    local instances={}
-    for i,handle in ipairs(self:findAllInstances()) do
-        if self.instanceTag==sim.readCustomDataBlock(handle,'instanceTag') then
-            table.insert(instances,handle)
-        end
-    end
-    return instances
-end
-
-function ConfigUI:copyConfigToLinkedInstances()
-    local cfg=self:readBlock('config')
-    local objectHandle=sim.getObjectHandle(sim.handle_self)
-    for i,handle in ipairs(self:findLinkedInstances()) do
-        if handle~=objectHandle then
-            sim.writeCustomDataBlock(handle,'config',cfg)
-        end
-    end
-end
-
-function ConfigUI:defaultConfig()
-    local ret={}
-    for k,v in pairs(self.schema) do ret[k]=v.default end
-    return ret
-end
-
-function ConfigUI:readConfig()
-    self.config=self:defaultConfig()
-    local data=self:readBlock('config')
-    if data then
-        for k,v in pairs(sim.unpackTable(data)) do
-            self.config[k]=v
-        end
-    end
-end
-
-function ConfigUI:writeConfig()
-    self:writeBlock('config',sim.packTable(self.config))
-end
-
-function ConfigUI:readUIState()
-    self.uistate=self.uistate or {}
-    local data=self:readBlock('@tmp/uistate')
-    if data then
-        for k,v in pairs(sim.unpackTable(data)) do
-            self.uistate[k]=v
-        end
-    end
-end
-
-function ConfigUI:writeUIState()
-    self:writeBlock('@tmp/uistate',sim.packTable(self.uistate))
-end
-
-function ConfigUI:showUi()
-    if not self.uiHandle then
-        self:readConfig()
-        self:createUi()
-    end
-end
-
-function ConfigUI:uiElementNextID()
-    if not self.uiNextID then self.uiNextID=1 end
-    local ret=self.uiNextID
-    self.uiNextID=self.uiNextID+1
-    return ret
-end
-
-function ConfigUI:uiElementXML(elemName,elemSchema)
-    local xml=''
     elemSchema.key=elemSchema.key or elemName
+
+    elemSchema.name=elemSchema.name or elemName
+
     elemSchema.ui=elemSchema.ui or {}
+
     if elemSchema.ui.fromUiValue or elemSchema.ui.toUiValue then
         assert(elemSchema.ui.fromUiValue and elemSchema.ui.toUiValue,'"fromUiValue" and "toUiValue" must be both set')
         if elemSchema.minimum then
@@ -102,6 +21,7 @@ function ConfigUI:uiElementXML(elemName,elemSchema)
             elemSchema.ui.maximum=elemSchema.ui.toUiValue(elemSchema.maximum)
         end
     end
+
     -- auto-guess type if missing:
     if not elemSchema.type then
         if elemSchema.choices then
@@ -112,6 +32,24 @@ function ConfigUI:uiElementXML(elemName,elemSchema)
             error('missing type')
         end
     end
+
+    -- standard default value if not given:
+    if elemSchema.default==nil then
+        if elemSchema.type=='string' then
+            elemSchema.default=''
+        elseif elemSchema.type=='int' or elemSchema.type=='float' then
+            elemSchema.default=0
+        elseif elemSchema.type=='color' then
+            elemSchema.default={0.85,0.85,1.0}
+        elseif elemSchema.type=='bool' then
+            elemSchema.default=false
+        end
+    end
+
+    if elemSchema.default==nil then
+        error('missing "default" for key "'..elemName..'"')
+    end
+
     -- auto-guess control if missing:
     if not elemSchema.ui.control then
         if elemSchema.type=='string' then
@@ -132,12 +70,118 @@ function ConfigUI:uiElementXML(elemName,elemSchema)
             error('missing "ui.control" and cannot infer it from type')
         end
     end
+
     local controlFuncs=ConfigUI.Controls[elemSchema.ui.control]
     if controlFuncs==nil then
         error('unknown ui control: "'..elemSchema.ui.control..'"')
     end
+end
+
+function ConfigUI:validateSchema()
+    for elemName,elemSchema in pairs(self.schema) do
+        local success,errorMessage=pcall(function()
+            self:validateElemSchema(elemName,elemSchema)
+        end)
+        if not success then
+            error('element "'..elemName..'": '..errorMessage)
+        end
+    end
+end
+
+function ConfigUI:getObjectName()
+    if self.getObjectNameCallback then
+        return self:getObjectNameCallback()
+    end
+    local objectHandle=sim.getObject('.')
+    return sim.getObjectAlias(objectHandle,1)
+end
+
+function ConfigUI:readBlock(name)
+    if self.readBlockCallback then
+        return self:readBlockCallback(name)
+    end
+    local objectHandle=sim.getObject('.')
+    local data=sim.readCustomDataBlock(objectHandle,name)
+    return data
+end
+
+function ConfigUI:writeBlock(name,data)
+    if self.writeBlockCallback then
+        return self:writeBlockCallback(name,data)
+    end
+    local objectHandle=sim.getObject('.')
+    sim.writeCustomDataBlock(objectHandle,name,data)
+end
+
+function ConfigUI:readInfo()
+    self.info={}
+    local data=self:readBlock(self.dataBlockName.info)
+    if data then
+        for k,v in pairs(sim.unpackTable(data)) do
+            self.info[k]=v
+        end
+    end
+end
+
+function ConfigUI:writeInfo()
+    self:writeBlock(self.dataBlockName.info,sim.packTable(self.info))
+end
+
+function ConfigUI:readSchema()
+    local data=self:readBlock(self.dataBlockName.schema)
+    if data then
+        data=sim.unpackTable(data)
+        self.schema={}
+        for k,v in pairs(data) do
+            self.schema[k]=v
+        end
+    elseif self.schema==nil then
+        error('schema not provided, and not found in the custom data block '..self.dataBlockName.schema)
+    end
+end
+
+function ConfigUI:defaultConfig()
+    local ret={}
+    for k,v in pairs(self.schema) do ret[k]=v.default end
+    return ret
+end
+
+function ConfigUI:readConfig()
+    self.config=self:defaultConfig()
+    local data=self:readBlock(self.dataBlockName.config)
+    if data then
+        for k,v in pairs(sim.unpackTable(data)) do
+            self.config[k]=v
+        end
+    end
+end
+
+function ConfigUI:writeConfig()
+    self:writeBlock(self.dataBlockName.config,sim.packTable(self.config))
+end
+
+function ConfigUI:showUi()
+    if not self.uiHandle then
+        self:readConfig()
+        self:createUi()
+    end
+end
+
+function ConfigUI:uiElementNextID()
+    if not self.uiNextID then self.uiNextID=1 end
+    local ret=self.uiNextID
+    self.uiNextID=self.uiNextID+1
+    return ret
+end
+
+function ConfigUI:uiElementXML(elemName,elemSchema)
+    local xml=''
+    local controlFuncs=ConfigUI.Controls[elemSchema.ui.control]
     if (controlFuncs.hasLabel or function() return true end)(self,elemSchema) then
-        xml=xml..string.format('<label text="%s:" style="margin-top: 5px;" /><br/>\n',elemSchema.name)
+        if not elemSchema.ui.idLabel then
+            elemSchema.ui.idLabel=configUi:uiElementNextID()
+        end
+        xml=xml..string.format('<label id="%d" text="%s:" style="margin-top: 5px;" /><br/>\n',elemSchema.ui.idLabel,elemSchema.name)
     end
     local xml2=controlFuncs.create(self,elemSchema)
     if xml2~=nil then xml=xml..xml2..'<br/>\n' end
@@ -152,75 +196,103 @@ function ConfigUI:uiElementXML(elemName,elemSchema)
     return xml
 end
 
+function ConfigUI:splitElemsByKey(uiElemsOrdered,key,defaultValue)
+    local keyNames,seenKey={},{}
+    for _,elemName in ipairs(uiElemsOrdered) do
+        if self.schema[elemName]==nil then error('element "'..elemName..'" not present in schema') end
+        local elemSchema=self.schema[elemName]
+        local value=elemSchema.ui[key] or defaultValue
+        if not seenKey[value] then
+            seenKey[value]=true
+            table.insert(keyNames,value)
+        end
+    end
+    local elemsSplitByKey={}
+    for _,value in ipairs(keyNames) do
+        local elemsInCurrentKey={}
+        for _,elemName in ipairs(uiElemsOrdered) do
+            local elemSchema=self.schema[elemName]
+            if (elemSchema.ui[key] or defaultValue)==value then
+                table.insert(elemsInCurrentKey,elemName)
+            end
+        end
+        table.insert(elemsSplitByKey,elemsInCurrentKey)
+    end
+    return keyNames,elemsSplitByKey
+end
+
+function ConfigUI:splitElems()
+    -- first order ui elements by 'order' key:
+    local uiElemsOrdered={}
+    for elemName,elemSchema in pairs(self.schema) do
+        elemSchema.ui=elemSchema.ui or {}
+        elemSchema.ui.order=elemSchema.ui.order or 0
+        table.insert(uiElemsOrdered,elemName)
+    end
+    table.sort(uiElemsOrdered,function(a,b) return self.schema[a].ui.order<self.schema[b].ui.order end)
+
+    -- split uiElemsOrdered by 'tab', then by 'group', then by 'col':
+    local uiElemsSplit={}
+    local tabNames,uiElemsSplitByTab=self:splitElemsByKey(uiElemsOrdered,'tab','')
+    for tabIndex,elems in ipairs(uiElemsSplitByTab) do
+        local groupNames,uiElemsSplitByGroup=self:splitElemsByKey(elems,'group',1)
+        uiElemsSplit[tabIndex]=uiElemsSplitByGroup
+        for groupIndex,elems in ipairs(uiElemsSplit[tabIndex]) do
+            local columnNames,uiElemsSplitByCol=self:splitElemsByKey(elems,'col',1)
+            uiElemsSplit[tabIndex][groupIndex]=uiElemsSplitByCol
+        end
+    end
+
+    return uiElemsSplit,tabNames
+end
+
 function ConfigUI:createUi()
     if self.uiHandle then return end
     self.uiNextID=1
-    local objectHandle=sim.getObjectHandle(sim.handle_self)
     local xml='<ui'
-    xml=xml..string.format(' title="%s config"',sim.getObjectName(objectHandle))
-    self:readUIState()
+    xml=xml..string.format(' title="%s config"',self:getObjectName())
     if self.uistate.pos then
         xml=xml..string.format(' placement="absolute" position="%d,%d" ',self.uistate.pos[1],self.uistate.pos[2])
     else
         xml=xml..' placement="relative" position="-30,100" '
     end
     xml=xml..' closeable="true" on-close="ConfigUI_close"'
-    xml=xml..' layout="grid"'
+    xml=xml..' layout="vbox"'
+    xml=xml..' content-margins="0,0,0,0"'
     xml=xml..'>\n'
-    local uiElems,uiTabs,uiTabsOrdered={},{},{}
-    for k,v in pairs(self.schema) do
-        v.ui=v.ui or {}
-        table.insert(uiElems,k)
+    local uiElemsSplit,tabNames=self:splitElems()
+    if #tabNames>1 then
+        if not self.uiTabsID then
+            self.uiTabsID=self:uiElementNextID()
+        end
+        xml=xml..'<tabs id="'..self.uiTabsID..'">\n'
     end
-    table.sort(uiElems,function(a,b)
-        a=self.schema[a].ui.order or 0
-        b=self.schema[b].ui.order or 0
-        return a<b
-    end)
-    for _,k in ipairs(uiElems) do
-        local v=self.schema[k]
-        local tab=v.ui.tab or ''
-        if not uiTabs[tab] then
-            uiTabs[tab]={}
-            table.insert(uiTabsOrdered,tab)
+    for tabIndex,tabName in ipairs(tabNames) do
+        if #tabNames>1 then
+            xml=xml..'<tab title="'..tabName..'" layout="vbox" content-margins="0,0,0,0">\n'
         end
-        table.insert(uiTabs[tab],k)
-    end
-    local tabsAsColumns=self.tabsAsColumns
-    if #uiTabsOrdered>1 then
-        if not tabsAsColumns then
-            if not self.uiTabsID then
-                self.uiTabsID=self:uiElementNextID()
-            end
-            xml=xml..'<tabs id="'..self.uiTabsID..'">\n'
-        end
-    end
-    for _,tab in ipairs(uiTabsOrdered) do
-        if #uiTabsOrdered>1 then
-            if tabsAsColumns then
-                xml=xml..'<group flat="true" layout="grid">\n'
-            else
-                xml=xml..'<tab title="'..tab..'" layout="grid">\n'
-            end
-        end
-        for _,k in ipairs(uiTabs[tab]) do
-            xml=xml..self:uiElementXML(k,self.schema[k])
-        end
-        if #uiTabsOrdered>1 then
-            xml=xml..'<group flat="true" layout="vbox"><stretch/></group>\n'
-            if tabsAsColumns then
+        for groupIndex,groupElems in ipairs(uiElemsSplit[tabIndex]) do
+            xml=xml..'<group flat="'..(#uiElemsSplit[tabIndex]>0 and 'false' or 'true')..'" layout="hbox" content-margins="0,0,0,0"><!-- group '..groupIndex..' -->\n'
+            for colIndex,colElems in ipairs(groupElems) do
+                xml=xml..'<group flat="true" layout="grid" content-margins="0,0,0,0"><!-- group '..groupIndex..', col '..colIndex..' -->\n'
+                for _,elemName in ipairs(colElems) do
+                    xml=xml..self:uiElementXML(elemName,self.schema[elemName])
+                end
+                xml=xml..'<group flat="true" layout="vbox" content-margins="0,0,0,0"><stretch/></group><!-- column vertical fill -->\n'
                 xml=xml..'</group>\n'
-            else
-                xml=xml..'</tab>\n'
             end
+            xml=xml..'</group>\n'
+        end
+        if #tabNames>1 then
+            xml=xml..'<stretch/><!-- tab vertical fill -->\n'
+            xml=xml..'</tab>\n'
         end
     end
-    if #uiTabsOrdered>1 then
-        if not tabsAsColumns then
-            xml=xml..'</tabs>\n'
-        end
+    if #tabNames>1 then
+        xml=xml..'</tabs>\n'
     end
     xml=xml..'</ui>'
+    self.uiXML=xml
     self.uiHandle=simUI.create(xml)
     if self.uiTabsID and self.uistate.currentTab then
         simUI.setCurrentTab(self.uiHandle,self.uiTabsID,self.uistate.currentTab)
@@ -228,6 +300,20 @@ function ConfigUI:createUi()
     ConfigUI.handleMap=ConfigUI.handleMap or {}
     ConfigUI.handleMap[self.uiHandle]=self
     self:configChanged()
+end
+
+function ConfigUI:closeUi(user)
+    if self.uiHandle then
+        self:saveUIPos()
+        if user==true then -- closed by user -> remember uistate
+            self.uistate.open=false
+        end
+        simUI.destroy(self.uiHandle)
+        self.uiHandle=nil
+        if user==false then -- has been closed programmatically, e.g. from cleanup
+            self.uistate.open=true
+        end
+    end
 end
 
 function ConfigUI_changed(ui)
@@ -248,6 +334,26 @@ function ConfigUI_close(ui)
     if self then self:uiClosed() end
 end
 
+function ConfigUI:updateEnabledFlag()
+    if not self.uiHandle then return end
+    local setEnabled=self.hideDisabledWidgets and simUI.setWidgetVisibility or simUI.setEnabled
+    for elemName,elemSchema in pairs(self.schema) do
+        local enabled=elemSchema.ui.enabled
+        if enabled==nil then enabled=true end
+        if type(enabled)=='function' then enabled=enabled(self,self.config) end
+        if type(elemSchema.ui.id)=='table' then
+            for _,id in pairs(elemSchema.ui.id) do
+                setEnabled(self.uiHandle,id,enabled)
+            end
+        else
+            setEnabled(self.uiHandle,elemSchema.ui.id,enabled)
+        end
+        if elemSchema.ui.idLabel then
+            setEnabled(self.uiHandle,elemSchema.ui.idLabel,enabled)
+        end
+    end
+end
+
 function ConfigUI:configChanged()
     if not self.uiHandle then return end
     for elemName,elemSchema in pairs(self.schema) do
@@ -260,6 +366,7 @@ function ConfigUI:configChanged()
             controlFuncs.setValue(self,elemSchema,v)
         end
     end
+    self:updateEnabledFlag()
 end
 
 function ConfigUI:uiChanged()
@@ -272,12 +379,16 @@ function ConfigUI:uiChanged()
         if v~=nil and elemSchema.ui.fromUiValue then
             v=elemSchema.ui.fromUiValue(v)
         end
+        if v~=nil and elemSchema.type=='int' then
+            v=math.floor(v)
+        end
         if v~=nil then
             self.config[elemName]=v
         end
     end
     self:writeConfig()
     self:generate()
+    self:updateEnabledFlag()
 end
 
 function ConfigUI:uiEvent(elemName)
@@ -295,68 +406,56 @@ function ConfigUI:saveUIPos()
         if self.uiTabsID then
             self.uistate.currentTab=simUI.getCurrentTab(self.uiHandle,self.uiTabsID)
         end
-        self:writeUIState()
     end
 end
 
 function ConfigUI:uiClosed()
-    if self.uiHandle then
-        self:saveUIPos()
-        self.uistate.open=false
-        self:writeUIState()
-        simUI.destroy(self.uiHandle)
-        self.uiHandle=nil
-    end
-end
-
-function ConfigUI:setupSysCall(name,f)
-    name='sysCall_'..name
-    if _G[name] then
-        local oldFn=_G[name]
-        _G[name]=function()
-            oldFn()
-            f()
-        end
-    else
-        _G[name]=f
-    end
+    self:closeUi(true)
 end
 
 function ConfigUI:sysCall_init()
-    self:writeBlock('modelType',self.modelType)
-
-    self.instanceTag=self:readBlock('instanceTag') or tostring(sim.getSystemTimeInMs(0))
-    self:writeBlock('instanceTag',self.instanceTag)
-
+    self:readSchema()
+    self:validateSchema()
+    self:readInfo()
+    self.info.modelType=self.modelType
+    self:writeInfo()
     self:readConfig()
     self:writeConfig()
     self:generate()
-    self:readUIState()
+
+    -- read a saved uistate here if any (see ConfigUI:sysCall_cleanup):
+    self.uistate=self.uistate or {}
+    local data=self:readBlock('@tmp/uistate')
+    self:writeBlock('@tmp/uistate',nil)
+    if data then
+        for k,v in pairs(sim.unpackTable(data)) do
+            self.uistate[k]=v
+        end
+    end
     if self.uistate.open then self:showUi() end
 end
 
 function ConfigUI:sysCall_cleanup()
-    if self.uiHandle then
-        self:saveUIPos()
-        simUI.destroy(self.uiHandle)
-        self.uiHandle=nil
-        self.uistate.open=true
-        self:writeUIState()
-    end
+    self:closeUi(false)
+    -- save uistate here so it can persist a script restart:
+    self:writeBlock('@tmp/uistate',sim.packTable(self.uistate))
 end
 
 function ConfigUI:sysCall_userConfig()
-    self:showUi()
+    if sim.getSimulationState()==sim.simulation_stopped then
+        self:showUi()
+    end
 end
 
 function ConfigUI:sysCall_nonSimulation()
     if self.generatePending then --and (self.generatePending+self.generationTime)<sim.getSystemTime() then
         self.generatePending=false
         self.generateCallback(self.config)
+        -- sim.announceSceneContentChange() leave this out for now
     end
-    
+
     -- poll for external config change:
-    local data=self:readBlock('config')
+    local data=self:readBlock(self.dataBlockName.config)
     if data and data~=sim.packTable(self.config) then
         self:readConfig()
         self:configChanged() -- updates ui
@@ -365,8 +464,18 @@ function ConfigUI:sysCall_nonSimulation()
     end
 end
 
+function ConfigUI:sysCall_beforeSimulation()
+    self:closeUi()
+end
+
 function ConfigUI:sysCall_sensing()
-    sysCall_nonSimulation()
+    self:sysCall_nonSimulation()
+end
+
+function ConfigUI:sysCall_afterSimulation()
+    if self.uistate.open then
+        self:showUi()
+    end
 end
 
 function ConfigUI:setGenerateCallback(f)
@@ -384,14 +493,24 @@ function ConfigUI:__index(k)
 end
 
 setmetatable(ConfigUI,{__call=function(meta,modelType,schema,genCb)
-    local self=setmetatable({modelType=modelType,schema=schema},meta)
-    self.generatePending=false
+    local self=setmetatable({
+        dataBlockName={
+            config='__config__',
+            info='__info__',
+            schema='__schema__',
+        },
+        modelType=modelType,
+        schema=schema,
+        generatePending=false,
+    },meta)
     self:setGenerateCallback(genCb)
-    self:setupSysCall('init',function() self:sysCall_init() end)
-    self:setupSysCall('cleanup',function() self:sysCall_cleanup() end)
-    self:setupSysCall('userConfig',function() self:sysCall_userConfig() end)
-    self:setupSysCall('nonSimulation',function() self:sysCall_nonSimulation() end)
-    self:setupSysCall('sensing',function() self:sysCall_sensing() end)
+    sim.registerScriptFuncHook('sysCall_init',function() self:sysCall_init() end)
+    sim.registerScriptFuncHook('sysCall_cleanup',function() self:sysCall_cleanup() end)
+    sim.registerScriptFuncHook('sysCall_userConfig',function() self:sysCall_userConfig() end)
+    sim.registerScriptFuncHook('sysCall_nonSimulation',function() self:sysCall_nonSimulation() end)
+    sim.registerScriptFuncHook('sysCall_beforeSimulation',function() self:sysCall_beforeSimulation() end)
+    sim.registerScriptFuncHook('sysCall_sensing',function() self:sysCall_sensing() end)
+    sim.registerScriptFuncHook('sysCall_afterSimulation',function() self:sysCall_afterSimulation() end)
     return self
 end})
 
@@ -475,14 +594,75 @@ end
 function ConfigUI.Controls.slider.onEvent(configUi,elemSchema)
 end
 
+ConfigUI.Controls.combo={}
+
+function ConfigUI.Controls.combo.create(configUi,elemSchema)
+    local xml=''
+    assert(elemSchema.type=='choices','unsupported type for combo: '..elemSchema.type)
+    assert(elemSchema.choices,'missing "choices"')
+    local choices=elemSchema.choices
+    if type(choices)=='function' then
+        choices=choices(configUi,elemSchema)
+    end
+
+    elemSchema.ui.items={}
+    for val,name in pairs(choices) do
+        table.insert(elemSchema.ui.items,val)
+    end
+    table.sort(elemSchema.ui.items)
+
+    elemSchema.ui.itemIndex={}
+    for index,value in ipairs(elemSchema.ui.items) do
+        if elemSchema.ui.itemIndex[value] then
+            error(string.format('value "%s" is not unique!',value))
+        end
+        elemSchema.ui.itemIndex[value]=index
+    end
+
+    if not elemSchema.ui.id then
+        elemSchema.ui.id=configUi:uiElementNextID()
+    end
+    xml=xml..'<combobox id="'..elemSchema.ui.id..'" on-change="ConfigUI_changed">'
+    for _,val in ipairs(elemSchema.ui.items) do
+        xml=xml..'<item>'..choices[val]..'</item>'
+    end
+    xml=xml..'</combobox>'
+    return xml
+end
+
+function ConfigUI.Controls.combo.setValue(configUi,elemSchema,value)
+    local choices=elemSchema.choices
+    if type(choices)=='function' then
+        choices=choices(configUi,elemSchema)
+    end
+    assert(choices[value]~=nil,'invalid value: '..tostring(value))
+    simUI.setComboboxSelectedIndex(configUi.uiHandle,elemSchema.ui.id,elemSchema.ui.itemIndex[value]-1)
+end
+
+function ConfigUI.Controls.combo.getValue(configUi,elemSchema)
+    local index=simUI.getComboboxSelectedIndex(configUi.uiHandle,elemSchema.ui.id)
+    if index~=-1 then
+        local value=elemSchema.ui.items[index+1]
+        return value
+    end
+end
+
+function ConfigUI.Controls.combo.onEvent(configUi,elemSchema)
+end
+
 ConfigUI.Controls.radio={}
 
 function ConfigUI.Controls.radio.create(configUi,elemSchema)
     local xml=''
     assert(elemSchema.type=='choices','unsupported type for radio: '..elemSchema.type)
     assert(elemSchema.choices,'missing "choices"')
+    local choices=elemSchema.choices
+    if type(choices)=='function' then
+        choices=choices(configUi,elemSchema)
+    end
+
     local vals={}
-    for val,name in pairs(elemSchema.choices) do table.insert(vals,val) end
+    for val,name in pairs(choices) do table.insert(vals,val) end
     table.sort(vals)
     if not elemSchema.ui.id then
         elemSchema.ui.id={}
@@ -494,7 +674,7 @@ function ConfigUI.Controls.radio.create(configUi,elemSchema)
     for _,val in ipairs(vals) do
         xml=xml..'<radiobutton'
         xml=xml..' id="'..elemSchema.ui.id[val]..'"'
-        xml=xml..' text="'..elemSchema.choices[val]..'"'
+        xml=xml..' text="'..choices[val]..'"'
         xml=xml..' on-click="ConfigUI_changed"'
         xml=xml..'/>'
     end

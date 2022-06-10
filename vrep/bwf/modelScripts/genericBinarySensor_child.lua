@@ -4,7 +4,7 @@ prepareStatisticsDialog=function(enabled)
         local xml = [[
                 <label id="1" text="BLA" style="* {font-size: 20px; font-weight: bold; margin-left: 20px; margin-right: 20px;}"/>
         ]]
-        statUi=simBWF.createCustomUi(xml,sim.getObjectName(model)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
+        statUi=simBWF.createCustomUi(xml,sim.getObjectAlias(model,1)..' Statistics','bottomLeft',true--[[,onCloseFunction,modal,resizable,activate,additionalUiAttribute--]])
     end
 end
 
@@ -82,8 +82,8 @@ checkSensor=function()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
-    sensor=sim.getObjectHandle('genericBinarySensor_sensor')
+    model=sim.getObject('.')
+    sensor=sim.getObject('./genericBinarySensor_sensor')
     local data=sim.readCustomDataBlock(model,'XYZ_BINARYSENSOR_INFO')
     data=sim.unpackTable(data)
     detectPartsOnly=(data['bitCoded']&2)>0

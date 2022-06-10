@@ -101,7 +101,6 @@ function model.getPartTable()
     local l=sim.getObjectsInTree(model.handles.originalPartHolder,sim.handle_all,1+2)
     local retL={}
     for i=1,#l,1 do
- --       print(sim.getObjectName(l[i]),sim.getObjectName(l[i]+sim.handleflag_altname),simBWF.getObjectAltName(l[i]))
         retL[#retL+1]={simBWF.getObjectAltName(l[i]),l[i]}
     end
     return retL
@@ -231,7 +230,7 @@ function model.getAllPartNameMap()
 end
 
 function model.removeAssociatedCustomizationScriptIfAvailable(h)
-    local sh=sim.getCustomizationScriptAssociatedWithObject(h)
+    local sh=sim.getScriptHandle(sim.scripttype_customizationscript,h)
     if sh>0 then
         sim.removeScript(sh)
     end

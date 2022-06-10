@@ -37,7 +37,7 @@ function sysCall_sensing()
             retData={}
             retData.points={{0,0,0.3}}
             retData.pointIds={1}
-            retData.partIds={sim.getObjectHandle('genericBox#')}
+            retData.partIds={sim.getObject('./genericBox#')}
         end
         if reply=='ok' then
             local pts=retData.points
@@ -50,7 +50,7 @@ function sysCall_sensing()
                         local ptAbs=sim.multiplyVector(model.m,ptRel)
                         sim.addDrawingObjectItem(model.sphereContainer,ptAbs)
                     end
- --                   print(ptIds[i],partIds[i],sim.getObjectName(partIds[i])
+ --                   print(ptIds[i],partIds[i],sim.getObjectAlias(partIds[i],1)
                     -- We create parts that were detected / that exist in the real world:
                     if model.createParts and partIds and partIds[i]>=0 and model.createdPartsInOnlineMode[ptIds[i]]==nil then
                         local partData=simBWF.readPartInfo(partIds[i])

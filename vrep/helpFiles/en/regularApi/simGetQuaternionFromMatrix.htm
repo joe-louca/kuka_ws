@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetQuaternionFromMatrix" id="simGetQuaternionFromMatrix"></a>simGetQuaternionFromMatrix / sim.getQuaternionFromMatrix </h3>
+<p class=subsectionBar><a name="simGetQuaternionFromMatrix" id="simGetQuaternionFromMatrix"></a>simGetQuaternionFromMatrix / sim.getQuaternionFromMatrix </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetQuaternionFromMatrix(const simFloat* matrix,simFloat* quaternion)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>matrix</strong>: pointer to 12 simFloat values (the last row of the 4x4 matrix (0,0,0,1) is not needed)</div>
 <div class=tab>The x-axis of the orientation component is (matrix[0],matrix[4],matrix[8])</div>
@@ -43,7 +43,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -54,7 +54,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[4] quaternion=sim.getQuaternionFromMatrix(table[12] matrix)</td> 
+<td class=apiTableRightLSyn>float[4] quaternion=sim.getQuaternionFromMatrix(float[12] matrix)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -70,8 +70,14 @@ Lua return values
 <div><strong>quaternion</strong>: table of 4 numbers representing the quaternion</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list quaternion=sim.getQuaternionFromMatrix(list matrix)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

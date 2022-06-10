@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simTransformVector" id="simTransformVector"></a>simTransformVector</h3>
+<p class=subsectionBar><a name="simTransformVector" id="simTransformVector"></a>simTransformVector</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simTransformVector(const simFloat* matrix,simFloat* vect)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>matrix</strong>: the transformation matrix</div>
 <div class=tab>The x-axis of the orientation component is (matrix[0],matrix[4],matrix[8])</div>
@@ -45,7 +45,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful</div>
@@ -69,6 +69,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div></div></td> 
 </tr> 
+
+<tr class=apiTableTr> 
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>See <a href="simMultiplyVector.htm">sim.multiplyVector</a></td> 
+</tr> 
+
 </table> 
 
 

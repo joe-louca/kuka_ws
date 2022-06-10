@@ -25,13 +25,13 @@ end
 -------------------------------------------------------
 model.specHandles={}
 
-model.specHandles.backSide=sim.getObjectHandle('genericConveyorTypeC_backSide')
-model.specHandles.frontSide=sim.getObjectHandle('genericConveyorTypeC_frontSide')
-model.specHandles.leftSide=sim.getObjectHandle('genericConveyorTypeC_leftSide')
-model.specHandles.rightSide=sim.getObjectHandle('genericConveyorTypeC_rightSide')
-model.specHandles.base=sim.getObjectHandle('genericConveyorTypeC_base')
-model.specHandles.baseBack=sim.getObjectHandle('genericConveyorTypeC_baseBack')
-model.specHandles.baseFront=sim.getObjectHandle('genericConveyorTypeC_baseFront')
-model.specHandles.padBase=sim.getObjectHandle('genericConveyorTypeC_padBase')
-model.specHandles.pad=sim.getObjectHandle('genericConveyorTypeC_pad')
-model.specHandles.path=sim.getObjectHandle('genericConveyorTypeC_path')
+model.specHandles.backSide=sim.getObject('./genericConveyorTypeC_backSide')
+model.specHandles.frontSide=sim.getObject('./genericConveyorTypeC_frontSide')
+model.specHandles.leftSide=sim.getObject('./genericConveyorTypeC_leftSide')
+model.specHandles.rightSide=sim.getObject('./genericConveyorTypeC_rightSide')
+model.specHandles.base=sim.getObject('./genericConveyorTypeC_base')
+model.specHandles.baseBack=sim.getObject('./genericConveyorTypeC_baseBack')
+model.specHandles.baseFront=sim.getObject('./genericConveyorTypeC_baseFront')
+model.specHandles.padBase=sim.getObject('./genericConveyorTypeC_padBase')
+model.specHandles.pad=sim.getObject('./genericConveyorTypeC_pad')
+model.specHandles.path=sim.getObject('./genericConveyorTypeC_path')

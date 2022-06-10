@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetVisionSensorResolution" id="simGetVisionSensorResolution"></a>simGetVisionSensorResolution / sim.getVisionSensorResolution </h3>
+<p class=subsectionBar><a name="simGetVisionSensorResolution" id="simGetVisionSensorResolution"></a>simGetVisionSensorResolution / sim.getVisionSensorResolution </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetVisionSensorResolution(simInt sensorHandle,simInt* resolution)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>sensorHandle</strong>: handle of the vision sensor</div>
 <div><strong>resolution</strong>: 2 values for the x and y component</div>
@@ -39,7 +39,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -50,7 +50,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>table[2] resolution=sim.getVisionSensorResolution(int sensorHandle) <br></td> 
+<td class=apiTableRightLSyn>int[2] resolution=sim.getVisionSensorResolution(int sensorHandle) <br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -66,8 +66,14 @@ Lua return values
 <div><strong>resolution</strong>: table containing the x and y resolution</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>list resolution=sim.getVisionSensorResolution(int sensorHandle)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

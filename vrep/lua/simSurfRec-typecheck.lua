@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simSurfRec=require('simSurfRec')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simSurfRec.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simSurfRec'][funcName]=wrapperGenerator(_G['simSurfRec'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simSurfRec.__addTypeCheck',true)
 
 return simSurfRec

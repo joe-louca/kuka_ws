@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetModuleInfo" id="simGetModuleInfo"></a>simGetModuleInfo / sim.getModuleInfo</h3>
+<p class=subsectionBar><a name="simGetModuleInfo" id="simGetModuleInfo"></a>simGetModuleInfo / sim.getModuleInfo</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -27,12 +27,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetModuleInfo(const simChar* moduleName,simInt infoType,simChar** stringInfo,simInt* intInfo)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>moduleName</strong>: the name of the plugin. See <a href="simGetModuleName.htm">sim.getModuleName</a>.</div>
 <div><strong>infoType</strong>: <a href="../apiConstants.htm#moduleInfos">the type of information</a> to retrieve</div>
@@ -42,7 +42,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 in case of an error</div>
@@ -68,8 +68,14 @@ Lua return values
 <div>Similar to the C-function counterpart</div>
 </td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>string/int info=sim.getModuleInfo(string moduleName,int infoType)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

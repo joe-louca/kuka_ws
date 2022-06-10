@@ -25,7 +25,7 @@ getColorFromIntensity=function(intensity)
 end
 
 function sysCall_init()
-    dummy=sim.getObjectAssociatedWithScript(sim.handle_self)
+    dummy=sim.getObject('.')
     model=getRobotHandle(dummy)
     local ragnarSettings=sim.readCustomDataBlock(model,simBWF.modelTags.RAGNAR)
     ragnarSettings=sim.unpackTable(ragnarSettings)

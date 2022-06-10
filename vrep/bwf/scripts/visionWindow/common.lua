@@ -123,16 +123,16 @@ model.objRefJobInfo={6,4} -- information about jobs stored in object references.
 -------------------------------------------------------
 model.handles={}
 model.handles.calibrationBalls={model.handle}
-model.handles.detectorBox=sim.getObjectHandle('VisionWindow_detectorBox@silentError')
-model.handles.detectorSensor=sim.getObjectHandle('VisionWindow_detectorSensor@silentError')
+model.handles.detectorBox=sim.getObject('./VisionWindow_detectorBox@silentError')
+model.handles.detectorSensor=sim.getObject('./VisionWindow_detectorSensor@silentError')
 for i=2,3,1 do
-    model.handles.calibrationBalls[i]=sim.getObjectHandle('VisionWindow_calibrationBall'..i..'@silentError')
+    model.handles.calibrationBalls[i]=sim.getObject('./VisionWindow_calibrationBall'..i..'@silentError')
 end
 if model.handles.detectorBox==-1 then
     -- for backward compatibility:
-    model.handles.detectorBox=sim.getObjectHandle('RagnarVision_detectorBox')
-    model.handles.detectorSensor=sim.getObjectHandle('RagnarVision_detectorSensor')
+    model.handles.detectorBox=sim.getObject('./RagnarVision_detectorBox')
+    model.handles.detectorSensor=sim.getObject('./RagnarVision_detectorSensor')
     for i=2,3,1 do
-        model.handles.calibrationBalls[i]=sim.getObjectHandle('RagnarVision_calibrationBall'..i)
+        model.handles.calibrationBalls[i]=sim.getObject('./RagnarVision_calibrationBall'..i)
     end
 end

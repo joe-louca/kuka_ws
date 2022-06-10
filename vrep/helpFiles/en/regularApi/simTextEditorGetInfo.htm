@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simTextEditorGetInfo" id="simTextEditorGetInfo"></a>sim.textEditorGetInfo </h3>
+<p class=subsectionBar><a name="simTextEditorGetInfo" id="simTextEditorGetInfo"></a>sim.textEditorGetInfo </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,19 +26,19 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn><div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div></div>
@@ -48,7 +48,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn><div>string text,table[2] pos,table[2] size,boolean visible=sim.textEditorGetInfo(int handle)</div></td> 
+<td class=apiTableRightLSyn><div>string text,int[2] pos,int[2] size,bool visible=sim.textEditorGetInfo(int handle)</div></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -67,6 +67,14 @@ Lua return values
 <div><strong>visible</strong>: the visible state the editor</div>
 </td> 
 </tr> 
+
+<tr class=apiTableTr> 
+<td class=apiTableLeftPSyn>
+Python synopsis
+</td> 
+<td class=apiTableRightPSyn>string text,list pos,list size,bool visible=sim.textEditorGetInfo(int handle)</td> 
+</tr> 
+
 </table> 
 
 

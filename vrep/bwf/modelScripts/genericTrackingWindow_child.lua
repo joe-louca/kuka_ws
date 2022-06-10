@@ -62,7 +62,7 @@ displayConsoleIfNeeded=function(info)
         for key,value in pairs(info) do
             local str='<DESTROYED OBJECT>:\n'
             if sim.isHandle(key) then
-                str=sim.getObjectName(key)..':\n'
+                str=sim.getObjectAlias(key,1)..':\n'
             end
             str=str..'    handle: '..key..', partName: '..value['partName']..', destinationName: '..value['destinationName']..'\n'
             str=str..'    pick position: ('
@@ -228,9 +228,9 @@ attachDummiesAndDecorate=function(part,partData)
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
-    trackingWindowShape=sim.getObjectHandle('genericTrackingWindow_track')
-    stopLineShape=sim.getObjectHandle('genericTrackingWindow_stopLine')
+    model=sim.getObject('.')
+    trackingWindowShape=sim.getObject('./genericTrackingWindow_track')
+    stopLineShape=sim.getObject('./genericTrackingWindow_stopLine')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.TRACKINGWINDOW)
     data=sim.unpackTable(data)
     local err=sim.getInt32Param(sim.intparam_error_report_mode)

@@ -4,8 +4,7 @@ require 'checkargs'
 
 local simUI=require('simUI')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simUI.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simUI'][funcName]=wrapperGenerator(_G['simUI'][funcName])
     end
@@ -87,6 +86,8 @@ table.insert(__initFunctions, function()
         end
     end)
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simUI.__addTypeCheck',true)
 
 return simUI

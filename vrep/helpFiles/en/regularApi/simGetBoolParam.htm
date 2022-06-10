@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Language" content="en-us">
-<title>simGetBoolParam</title>
+<title>sim.getBoolParam</title>
 <link rel="stylesheet" type="text/css" href="../../style.css">
 </head>
 
@@ -16,30 +16,30 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetBoolParam" id="simGetBoolParam"></a>simGetBoolParam / sim.getBoolParam</h3>
+<p class=subsectionBar><a name="simGetBoolParam" id="simGetBoolParam"></a>simGetBoolParam / sim.getBoolParam</p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
 Description 
 </td> 
-<td class=apiTableRightDescr>Retrieves a boolean value. See the <a href="../apiConstants.htm#booleanParameters">boolean parameter identifiers</a>. See also <a href="simSetBoolParam.htm">sim.setBoolParam</a>, <a href="simGetInt32Param.htm">sim.getInt32Param</a>, <a href="simGetFloatParam.htm">sim.getFloatParam</a>, <a href="simGetArrayParam.htm">sim.getArrayParam</a> and <a href="simGetStringParam.htm">sim.getStringParam</a>.<br></td>
+<td class=apiTableRightDescr>Retrieves a bool parameter. See the <a href="../apiConstants.htm#booleanParameters">bool parameter identifiers</a>. See also the other <a href="../apiFunctions.htm#params">simulator parameter related functions</a>.<br></td>
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetBoolParam(simInt parameter)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
-<div><strong>parameter</strong>: <a href="../apiConstants.htm#booleanParameters">boolean parameter identifier</a></div>
+<div><strong>parameter</strong>: <a href="../apiConstants.htm#booleanParameters">bool parameter identifier</a></div>
 <div></div>
 </td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>value of the parameter (0 or 1) or -1 in case of an error</div>
@@ -49,7 +49,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>boolean boolState=sim.getBoolParam(int parameter)<br></td> 
+<td class=apiTableRightLSyn>bool boolState=sim.getBoolParam(int parameter)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -62,26 +62,24 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div><strong>boolState</strong>: value of the boolean parameter</div>
+<div><strong>boolState</strong>: value of the bool parameter</div>
 </td> 
 </tr> 
 
-<tr class=apiTableTr> 
-<td class=remApiTableLeftCParam>
-Remote API equiv.
-</td> 
-<td class=remApiTableRightCParam>
-<div>B0-based remote API: <a href="../b0RemoteApi-cpp.htm#simxGetBoolParameter">simxGetBoolParameter</a></div>
-<div>Legacy remote API: <a href="../remoteApiFunctions.htm#simxGetBooleanParameter">simxGetBooleanParameter</a></div>
-</td> 
-</tr> 
+ 
+
+
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bool boolState=sim.getBoolParam(int parameter)</td>
+</tr>
 
 </table> 
 
-
 <br>
 </td>
-</tr>
+
 </table>
 </div>
 </body>

@@ -4,8 +4,7 @@ require 'checkargs'
 
 local simAssimp=require('simAssimp')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simAssimp.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simAssimp'][funcName]=wrapperGenerator(_G['simAssimp'][funcName])
     end
@@ -37,6 +36,8 @@ table.insert(__initFunctions, function()
         end
     end)
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simAssimp.__addTypeCheck',true)
 
 return simAssimp

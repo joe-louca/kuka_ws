@@ -28,6 +28,7 @@
 <li><a href="aviRecorder.htm">video data, via various formats</a></li>
 <li><a href="#image">image data, via various formats</a></li>
 <li><a href="#text">text/binary data</a></li>
+<li><a href="#misc">miscellaneous data</a></li>
 
 <p>New importers/exports can easily be created via an <a href="addOns.htm">add-on</a>, or via a <a href="plugins.htm">plugin</a>.</p>
 
@@ -35,9 +36,9 @@
 <br>
 
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="mesh"></a>Importing/exporting mesh data
-</td></tr></table> 
+</h2>
 
 
 
@@ -52,9 +53,9 @@
 
 
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="gltf"></a>Exporting a simulation as GLTF
-</td></tr></table> 
+</h2>
 
 
 <p>A scene or simulation can be exported via the GLTF format. The result will be a still scene or an animated scene. The functionality is available via two distinct <a href="addOns.htm">add-ons</a>: <em>GLTFExporter</em> and <em>GLTFAnimationExporter</em>, available via [Menu bar --&gt; Add-ons].</p>
@@ -62,9 +63,9 @@
 
 <br>
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="image"></a>Importing/exporting images
-</td></tr></table> 
+</h2>
 
 
 <p>Images can be imported/exported with <a href="regularApi/simLoadImage.htm">sim.loadImage</a> and <a href="regularApi/simSaveImage.htm">sim.saveImage</a>. </p>
@@ -72,14 +73,15 @@
 
 <br>
 
-<table class=subsectionTable><tr class=subsectionTd><td class=subsectionTd>
+<h2>
 <a name="text"></a>Importing/exporting text/binary data
-</td></tr></table> 
+</h2>
 
 <p>Following example illustrates how to log a joint angle to a file, as text data:</p>
   
-<pre class=lightRedBox>function sysCall_init()
-    jointHandle=sim.getObjectHandle('Joint')
+<code class="hljs language-lua coppelia-coppeliasim-script">
+function sysCall_init()
+    jointHandle=sim.getObject('/Joint')
     file=io.open('jointAngles.txt','w+')
     file:write('Joint angles for each simulation step:\n\n')
 end
@@ -92,15 +94,63 @@ end
 
 function sysCall_cleanup()
     file:close()
-end</pre>
+end</code>
 
 <p>Following example illustrates how to read a file, line by line:</p>
   
-<pre class=lightRedBox>for line in io.lines('textFile.txt') do 
+<code class="hljs language-lua coppelia-coppeliasim-script">
+for line in io.lines('textFile.txt') do 
     print(line)
-end</pre>
+end</code>
 
 
+
+<br>
+<br>
+
+<h2>
+<a name="misc"></a>Importing miscellaneous data
+</h2>
+
+<p>The <em>Floor Plan Importer</em> add-on can create shapes from a floor plan image, by mapping each pixel value to either a <em>wall</em>, a <em>door</em> or a <em>window</em>.</p>
+
+<p>A floor-plan image looks like this:</p>
+
+<p align=center><img src="images/floorPlanZoom.png"></p>
+<p class=imageLabel>[Example of a floor-plan image]</p>
+<br>
+
+<p>Note that above image is zoomed in, and actual lines are 1px thick.</p>
+
+<p>Different gray levels are used to indicate different classes. In this example, 0 is used for walls, 82 for window holes, and 187 for door holes. These values can be configured (see below) and anything outside the given ranges will be ignored, so it is possible to use a floor plan that contains more annotations, but only extract wall/door/window lines if given in a specific gray value.</p>
+
+<p>Various other formats derived from or related to images can also be imported. For a complete list of supported formats, use <a href="simUI.htm#supportedImageFormats">simUI.supportedImageFormats</a>. Following example illustrates the PGM format:</p>
+
+<pre class=lightWhiteBox>P2
+18 6
+3
+0 0 0 0 0 0 0 0 0 0 0 0 2 2 2 2 0 0
+0 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 0
+0 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 0
+0 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 0
+0 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 0
+0 0 1 1 1 1 0 0 0 0 0 0 2 2 2 2 0 0</pre>
+
+<p>The add-on is available via [Menu bar --&gt; Modules]. After selecting the menu entry, an image file must be selected, then a few import options can be specified:</p>
+
+<ul>
+    <li><em>pixel size</em>: the scaling of the image. One pixel in the image will correspond to this length in the real world.</li>
+    <li>For every class (walls, windows, doors):
+        <ul>
+            <li><em>height</em>: the height of the wall/hole in the real world.</li>
+            <li><em>range</em>: the range of the intensity (grayscale value) in the image.</li>
+        </ul>
+    </li>
+    <li><em>color</em>: the color of the walls shape.</li>
+    <li><em>respondable</em>: wether the walls shape will be respondable.</li>
+    <li><em>optimize</em>: if checked, the lines will be dissected to a minimal number of rectangles, so the shape will contain a low count of pure (cuboid) shapes.</li>
+    <li><em>invert image values</em>: if checked, the image values will be inverted before processing.</li>
+</ul>
 
 <br>
 <br>

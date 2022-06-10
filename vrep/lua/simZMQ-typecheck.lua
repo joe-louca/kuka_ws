@@ -4,12 +4,13 @@ require 'checkargs'
 
 local simZMQ=require('simZMQ')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simZMQ.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simZMQ'][funcName]=wrapperGenerator(_G['simZMQ'][funcName])
     end
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simZMQ.__addTypeCheck',true)
 
 return simZMQ

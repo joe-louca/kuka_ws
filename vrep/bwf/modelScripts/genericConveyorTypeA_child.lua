@@ -65,7 +65,7 @@ function getMasterDeltaShiftIfApplicable()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
     data=sim.unpackTable(data)
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,1)
@@ -76,13 +76,13 @@ function sysCall_init()
     height=data['height']
     local err=sim.getInt32Param(sim.intparam_error_report_mode)
     sim.setInt32Param(sim.intparam_error_report_mode,0) -- do not report errors
-    textureB=sim.getObjectHandle('genericConveyorTypeA_textureB')
-    textureC=sim.getObjectHandle('genericConveyorTypeA_textureC')
-    jointB=sim.getObjectHandle('genericConveyorTypeA_jointB')
-    jointC=sim.getObjectHandle('genericConveyorTypeA_jointC')
+    textureB=sim.getObject('./genericConveyorTypeA_textureB')
+    textureC=sim.getObject('./genericConveyorTypeA_textureC')
+    jointB=sim.getObject('./genericConveyorTypeA_jointB')
+    jointC=sim.getObject('./genericConveyorTypeA_jointC')
     sim.setInt32Param(sim.intparam_error_report_mode,err) -- report errors again
-    textureA=sim.getObjectHandle('genericConveyorTypeA_textureA')
-    forwarderA=sim.getObjectHandle('genericConveyorTypeA_forwarderA')
+    textureA=sim.getObject('./genericConveyorTypeA_textureA')
+    forwarderA=sim.getObject('./genericConveyorTypeA_forwarderA')
     lastT=sim.getSimulationTime()
     beltVelocity=0
     totShift=0

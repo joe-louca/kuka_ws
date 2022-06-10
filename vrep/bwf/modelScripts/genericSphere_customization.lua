@@ -290,7 +290,7 @@ end
 
 function sysCall_init()
     dlgMainTabIndex=0
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -298,7 +298,7 @@ function sysCall_init()
     writeInfo(_info)
     auxSpheres={}
     for i=1,3,1 do
-        auxSpheres[i]=sim.getObjectHandle('genericSphere_auxSphere'..i)
+        auxSpheres[i]=sim.getObject('./genericSphere_auxSphere'..i)
     end
     local data=readPartInfo()
     if data['name']=='<partName>' then

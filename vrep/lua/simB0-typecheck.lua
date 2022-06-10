@@ -4,8 +4,7 @@ require 'checkargs'
 
 local simB0=require('simB0')
 
-__initFunctions=__initFunctions or {}
-table.insert(__initFunctions, function()
+function simB0.__addTypeCheck()
     local function wrapFunc(funcName,wrapperGenerator)
         _G['simB0'][funcName]=wrapperGenerator(_G['simB0'][funcName])
     end
@@ -49,6 +48,8 @@ table.insert(__initFunctions, function()
         end
     end)
 
-end)
+end
+
+sim.registerScriptFuncHook('sysCall_init','simB0.__addTypeCheck',true)
 
 return simB0

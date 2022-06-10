@@ -52,7 +52,7 @@ function model.dlg.editDestinations_callback(ui,id,newVal)
                 if c then
                     txt=txt..","
                 end
-                txt=txt.."'"..sim.getObjectName(r+sim.handleflag_altname).."'"
+                txt=txt.."'"..sim.getObjectAlias(r).."'"
             end
             c=true
         end

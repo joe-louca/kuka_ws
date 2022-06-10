@@ -1,17 +1,30 @@
 <?xml version="1.0"?>
 <!--roslaunch launch KUKA.launch lat:=100 hap:=Y/N pp:=1 task:=0 -->
 <launch>
+	<!-- Add some harware -->
 	<arg name="kuka" default="true"/>
 	<arg name="robotiq" default="true"/>
-	<arg name="axia" default="true"/>	
-		
+	
+	<!-- Choose a force-torque sensor -->
+	<arg name="axia_ft" default="true"/>
+	<arg name="robotiq_ft" default="false"/>	
+	<arg name="sim_ft" default="false"/>
+	
+	<!-- Choose a controller input -->
 	<arg name="haption" default="true"/>
 	<arg name="falcon" default="false"/>
 	<arg name="joy" default="false"/>	
 	
+	<!-- Choose a control method -->
 	<arg name="NoControl" default="true"/>	
 	<arg name="TDPA" default="false"/>	
 
+	<!-- Choose a task -->
+	<arg name="NoTask" default="false"/>
+	<arg name="Peel" default="true"/>
+	<arg name="Screw" default="false"/>
+	
+	<!-- Add some data recording -->
 	<arg name="cameras" default="false"/>
 	<arg name="record_data" default="false"/>	
 	<arg name="sim_only" default="false"/>
@@ -35,18 +48,20 @@
 	<!-- Load config file and start position -->
 	<node pkg="scripts" type="config_kuka.py" name="config"/>
 	<node pkg="scripts" type="timestep.py" name="timestep" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
-	
+	<!--node pkg="scripts" type="kuka_gui.py" name="gui" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/-->
+		
 	<!-- Start up nodes to subscribe and add delay -->	
 	<node pkg="scripts" type="timestep_delay.py" name="delayed_timestep" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
 	<node pkg="scripts" type="F_kuka_out_delay.py" name="F_kuka_out_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
 	<node pkg="scripts" type="delayed_F_kuka_out_delay.py" name="delayed_F_kuka_out_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
 	<node pkg="scripts" type="v_hap_out_delay.py" name="v_hap_out_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
 	<node pkg="scripts" type="delayed_v_hap_out_delay.py" name="delayed_v_hap_out_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
-	<node pkg="scripts" type="gripper_cmd_delay.py" name="gripper_cmd_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
+	<node pkg="scripts" type="gripper_cmd_delay.py" name="gripper_cmd_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+	<node pkg="scripts" type="kuka_joints_delay.py" name="kuka_joints_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
 	
 	<!-- Start up controller node -->	
 	<group if="$(arg NoControl)">
-		<node pkg="scripts" type="NoControl_node" name="NoControl_controller_node" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
+		<node pkg="scripts" type="NoControl_node" name="NoControl_controller_node" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>	
 	</group>
 	<group if="$(arg TDPA)">
 		<node pkg="scripts" type="TDPA_node" name="TDPA_controller_node" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
@@ -54,7 +69,7 @@
 	
 	<!-- Start up input node -->	
 	<group if="$(arg haption)">
-		<node pkg="launch" type="run_haption.sh" name="Haption" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+		<node pkg="launch" type="run_haption.sh" name="Haption" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>
 	</group>	
 	<group if="$(arg falcon)">
 		<node pkg="scripts" type="falcon_node" name="Falcon" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
@@ -66,31 +81,36 @@
 	<!-- Launch coppelia -->
 	<node pkg="launch" type="run_cop_KUKA.sh" name="Coppelia_KUKA_Sim" output="screen"/>
 	
-
-	<!-- Robotiq -->	
-	<group if="$(arg robotiq)">
-		<node pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" name="Robotiq_Connection" args="/dev/ttyUSB0"/>
-		<node pkg="robotiq_2f_gripper_control" type="gripper_cmd_pub.py" name="Robotiq_Commander" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>
+	<!-- Force Torque Sensor -->		
+	<group if="$(arg robotiq_ft)">
+		<node pkg="robotiq_ft_sensor" type="rq_sensor" name="RobotiqFT_Connection" args="/dev/ttyUSB1"/>
+		<node pkg="scripts" type="robotiq_ft_compensation.py" name="Tool_FT_Compensation" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 	</group>
-	
-	<!-- Axia -->		
-	<group if="$(arg axia)">
+	<group if="$(arg axia_ft)">
 		<node pkg="netft_utils" type="netft_node" name="Axia_Connection" args="192.168.1.2 --rate $(arg axia_rate)"/>
-		<node pkg="scripts" type="ft_compensation.py" name="Tool_FT_Compensation" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+		<node pkg="scripts" type="axia_ft_compensation.py" name="Tool_FT_Compensation" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 	</group>
-	<group unless="$(arg axia)">
+	<group if="$(arg sim_ft)">
 		<node pkg="scripts" type="sim_ft.py" name="Sim_FT_Delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 	</group>	
 	
 	<!-- Kuka -->
 	<group if="$(arg kuka)">
-		<node pkg="launch" type="run_iiwaPy3.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>		
+		<group if="$(arg NoTask)">
+			<node pkg="launch" type="run_iiwaPy3.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>
+		</group>
+		<group if="$(arg Peel)">
+			<node pkg="launch" type="run_iiwaPy_peel.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>		
+		</group>
+		<group if="$(arg Screw)">
+			<node pkg="launch" type="run_iiwaPy_screw.sh" name="KUKA_Connection" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>				
+		</group>		
 	</group>
 	
 	<!-- Camera views -->
 	<group if="$(arg cameras)">
 		<node pkg="scripts" type="cam1.py" name="camera_1" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
-		<node pkg="scripts" type="cam2.py" name="camera_2" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+		<!--node pkg="scripts" type="cam2.py" name="camera_2" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/-->		
 		<node pkg="launch" type="cam_show.sh" name="Cam_Show" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
 	</group>	
 	
@@ -101,5 +121,10 @@
 		<node pkg="scripts" type="bag.sh" name="bag_data" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
 	</group>	
 
+	<!-- Robotiq -->	
+	<group if="$(arg robotiq)">
+		<node pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" name="Robotiq_Connection" args="/dev/ttyUSB0"/>
+		<node pkg="robotiq_2f_gripper_control" type="gripper_cmd_pub.py" name="Robotiq_Commander" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>
+	</group>
 
 </launch>

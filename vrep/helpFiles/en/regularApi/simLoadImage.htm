@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simLoadImage" id="simLoadImage"></a>simLoadImage / sim.loadImage </h3>
+<p class=subsectionBar><a name="simLoadImage" id="simLoadImage"></a>simLoadImage / sim.loadImage </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simUChar* simLoadImage(simInt* resolution,simInt options,const simChar* filenameOrBuffer,simVoid* reserved)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>resolution</strong>: a pointer that will accept the image resolution.</div>
 <div><strong>options</strong>: bit-coded. If bit0 is set (1), then the returned image is rgba, otherwise it is rgb.</div>
@@ -41,7 +41,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>nullptr if operation was not successful, otherwise a buffer containing the image data. The user is in charge of releasing the buffer with <a href="simReleaseBuffer.htm">simReleaseBuffer</a>.</div>
@@ -51,7 +51,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>string image,table[2] resolution=sim.loadImage(int options,string filenameOrBuffer)</td> 
+<td class=apiTableRightLSyn>buffer image,int[2] resolution=sim.loadImage(int options,string/buffer filenameOrBuffer)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
@@ -65,8 +65,14 @@ Lua return values
 <td class=apiTableRightLRet>
 <div>Similar to the C-function counterpart</div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bytes image,list resolution=sim.loadImage(int options,string/bytes filenameOrBuffer)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

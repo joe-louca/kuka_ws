@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simSaveScene" id="simSaveScene"></a>simSaveScene / sim.saveScene </h3>
+<p class=subsectionBar><a name="simSaveScene" id="simSaveScene"></a>simSaveScene / sim.saveScene </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,19 +26,19 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simSaveScene(const simChar* filename)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>filename</strong>: scene filename. The filename extension is required (<em>ttt</em>, <em>or simscene.xml</em>)</div>
 <div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 if operation was not successful<br>
@@ -49,12 +49,12 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>sim.saveScene(string filename)</td> 
+<td class=apiTableRightLSyn>buffer buffer=sim.saveScene(string filename=nil)</td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 
 <td class=apiTableRightLParam>
-<div>Similar to the C-function counterpart</div>
+<div>Similar to the C-function counterpart. If nil, will return a buffer representing the serialized scene</div>
 <div></div></td> 
 </tr> 
 <tr class=apiTableTr> 
@@ -62,10 +62,16 @@ Lua synopsis
 Lua return values
 </td> 
 <td class=apiTableRightLRet>
-<div>none</div></td> 
+<div>If filename is nil, a buffer representing the serialized scene will be returned</div></td> 
 </tr> 
-</table> 
 
+
+<tr class=apiTableTr>
+<td class=apiTableLeftPSyn>Python synopsis</td>
+<td class=apiTableRightPSyn>bytes buffer=sim.saveScene(string filename=None)</td>
+</tr>
+
+</table> 
 
 <br>
 </td>

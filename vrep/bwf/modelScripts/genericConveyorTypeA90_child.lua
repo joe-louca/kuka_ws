@@ -65,16 +65,16 @@ function getMasterDeltaShiftIfApplicable()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     local data=sim.readCustomDataBlock(model,simBWF.modelTags.CONVEYOR)
     data=sim.unpackTable(data)
     stopTriggerSensor=simBWF.getReferencedObjectHandle(model,1)
     startTriggerSensor=simBWF.getReferencedObjectHandle(model,2)
     masterConveyor=simBWF.getReferencedObjectHandle(model,3)
     getTriggerType()
-    path=sim.getObjectHandle('genericCurvedConveyorTypeA90_path')
-    endPad1=sim.getObjectHandle('genericCurvedConveyorTypeA90_endPad1')
-    endPad2=sim.getObjectHandle('genericCurvedConveyorTypeA90_endPad2')
+    path=sim.getObject('./genericCurvedConveyorTypeA90_path')
+    endPad1=sim.getObject('./genericCurvedConveyorTypeA90_endPad1')
+    endPad2=sim.getObject('./genericCurvedConveyorTypeA90_endPad2')
     lastT=sim.getSimulationTime()
     beltVelocity=0
     totShift=0

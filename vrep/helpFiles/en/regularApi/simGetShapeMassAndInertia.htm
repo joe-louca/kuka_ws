@@ -16,7 +16,7 @@
 <p><a href="../../index.html" TARGET="_top"><img src="../images/homeImg.png"></a></p>
 
 <h1>Regular API function</h1>
-<h3 class=subsectionBar><a name="simGetShapeMassAndInertia" id="simGetShapeMassAndInertia"></a>simGetShapeMassAndInertia / sim.getShapeMassAndInertia </h3>
+<p class=subsectionBar><a name="simGetShapeMassAndInertia" id="simGetShapeMassAndInertia"></a>simGetShapeMassAndInertia / sim.getShapeMassAndInertia </p>
 <table class=apiTable>
 <tr class=apiTableTr> 
 <td class=apiTableLeftDescr>
@@ -26,12 +26,12 @@ Description
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCSyn>
-C synopsis
+C/C++<br>synopsis
 </td> 
 <td class=apiTableRightCSyn>simInt simGetShapeMassAndInertia(simInt shapeHandle,simFloat* mass,simFloat* inertiaMatrix,simFloat* centerOfMass,const simFloat* transformation)</td> 
 </tr> 
 <tr class=apiTableTr> 
-<td class=apiTableLeftCParam>C parameters</td> 
+<td class=apiTableLeftCParam>C/C++<br>parameters</td> 
 <td class=apiTableRightCParam>
 <div><strong>shapeHandle</strong>: handle of the <a href="../shapes.htm">shape object</a></div>
 <div><strong>mass</strong>: the mass of the object</div>
@@ -42,7 +42,7 @@ C synopsis
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftCRet>
-C return value
+C/C++<br>return value
 </td> 
 <td class=apiTableRightCRet>
 <div>-1 in case of an error
@@ -53,7 +53,7 @@ C return value
 <td class=apiTableLeftLSyn>
 Lua synopsis
 </td> 
-<td class=apiTableRightLSyn>float mass,table[9] inertiaMatrix,table[3] centerOfMass=sim.getShapeMassAndInertia(int shapeHandle,table[12] transformation=nil)<br></td> 
+<td class=apiTableRightLSyn>float mass,float[9] inertiaMatrix,float[3] centerOfMass=sim.getShapeMassAndInertia(int shapeHandle,float[12] transformation=nil)<br></td> 
 </tr> 
 <tr class=apiTableTr> 
 <td class=apiTableLeftLParam>Lua parameters</td> 

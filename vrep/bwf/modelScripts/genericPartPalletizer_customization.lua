@@ -101,7 +101,7 @@ function getAvailableConveyors()
     for i=1,#l,1 do
         local data=sim.readCustomDataBlock(l[i],simBWF.modelTags.CONVEYOR)
         if data then
-            retL[#retL+1]={sim.getObjectName(l[i]),l[i]}
+            retL[#retL+1]={sim.getObjectAlias(l[i],1),l[i]}
         end
     end
     return retL
@@ -873,7 +873,7 @@ function removeDlg()
 end
 
 function sysCall_init()
-    model=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model=sim.getObject('.')
     _MODELVERSION_=0
     _CODEVERSION_=0
     local _info=readInfo()
@@ -884,7 +884,7 @@ function sysCall_init()
         _info['conveyor']=nil
     end
     writeInfo(_info)
-    box=sim.getObjectHandle('genericPartPalletizer_box')
+    box=sim.getObject('./genericPartPalletizer_box')
     
     -- Following for backward compatibility:
     createPalletPointsIfNeeded()

@@ -275,12 +275,7 @@ function simBWF.getPartRepositoryHandles()
 
     if #repoP==1 then
         local repo=repoP[1]
-        local suff=sim.getNameSuffix(sim.getObjectName(repo))
-        local nm='partRepository_modelParts'
-        if suff>=0 then
-            nm=nm..'#'..suff
-        end
-        local partHolder=simBWF.getObjectHandle_noErrorNoSuffixAdjustment(nm)
+        local partHolder=sim.getObject("./partRepository_modelParts",{proxy=repo})
         if partHolder>=0 then
             return repo,partHolder
         end
@@ -343,11 +338,11 @@ function simBWF.getAllPossiblePartDestinations()
 
     local l=sim.getObjectsWithTag(simBWF.modelTags.LOCATIONFRAME,true)
     for i=1,#l,1 do
-        retVal[sim.getObjectName(l[i]+sim.handleflag_altname)]=l[i]
+        retVal[sim.getObjectAlias(l[i])]=l[i]
     end
     local l=sim.getObjectsWithTag(simBWF.modelTags.TRACKINGWINDOW,true)
     for i=1,#l,1 do
-        retVal[sim.getObjectName(l[i]+sim.handleflag_altname)]=l[i]
+        retVal[sim.getObjectAlias(l[i])]=l[i]
     end
     return retVal
 end
@@ -396,7 +391,7 @@ end
 
 function simBWF.getObjectNameOrNone(objectHandle)
     if objectHandle>=0 then
-        return sim.getObjectName(objectHandle)
+        return sim.getObjectAlias(objectHandle,1)
     end
     return simBWF.NONE_TEXT
 end
@@ -554,14 +549,14 @@ end
 function simBWF.writeSessionPersistentObjectData(objectHandle,dataName,...)
     -- Call utils function instead once version is stable
     local data={...}
-    local nm="___"..sim.getScriptHandle()..sim.getObjectName(objectHandle)..sim.getInt32Param(sim.intparam_scene_unique_id)..sim.getObjectStringParam(objectHandle,sim.objstringparam_dna)..dataName
+    local nm="___"..sim.getScriptHandle()..sim.getObjectAlias(objectHandle,1)..sim.getInt32Param(sim.intparam_scene_unique_id)..sim.getObjectStringParam(objectHandle,sim.objstringparam_dna)..dataName
     data=sim.packTable(data)
     sim.writeCustomDataBlock(sim.handle_app,nm,data)
 end
 
 function simBWF.readSessionPersistentObjectData(objectHandle,dataName)
     -- Call utils function instead once version is stable
-    local nm="___"..sim.getScriptHandle()..sim.getObjectName(objectHandle)..sim.getInt32Param(sim.intparam_scene_unique_id)..sim.getObjectStringParam(objectHandle,sim.objstringparam_dna)..dataName
+    local nm="___"..sim.getScriptHandle()..sim.getObjectAlias(objectHandle,1)..sim.getInt32Param(sim.intparam_scene_unique_id)..sim.getObjectStringParam(objectHandle,sim.objstringparam_dna)..dataName
     local data=sim.readCustomDataBlock(sim.handle_app,nm)
     if data then
         data=sim.unpackTable(data)
@@ -572,7 +567,7 @@ function simBWF.readSessionPersistentObjectData(objectHandle,dataName)
 end
 
 function simBWF.getUiTitleNameFromModel(model,modelVersion,codeVersion)
-    local retVal=sim.getObjectName(model+sim.handleflag_altname)
+    local retVal=sim.getObjectAlias(model)
     if modelVersion then
         retVal=retVal.." (V"..modelVersion..")"
     end
@@ -747,14 +742,14 @@ end
 function simBWF.callScriptFunction_noError(funcName,objectId,scriptType,...)
     local err=sim.getInt32Param(sim.intparam_error_report_mode)
     sim.setInt32Param(sim.intparam_error_report_mode,0)
-    local funcNameAtScriptName=funcName..'@'..sim.getObjectName(objectId)
+    local funcNameAtScriptName=funcName..'@'..sim.getObjectAlias(objectId,1)
     local ret1,ret2,ret3,ret4,ret5,ret6,ret7,ret8=sim.callScriptFunction(funcNameAtScriptName,scriptType,...)
     sim.setInt32Param(sim.intparam_error_report_mode,err)
     return ret1,ret2,ret3,ret4,ret5,ret6,ret7,ret8
 end
 
 function simBWF.callScriptFunction(funcName,objectId,scriptType,...)
-    local funcNameAtScriptName=funcName..'@'..sim.getObjectName(objectId)
+    local funcNameAtScriptName=funcName..'@'..sim.getObjectAlias(objectId,1)
     local ret1,ret2,ret3,ret4,ret5,ret6,ret7,ret8=sim.callScriptFunction(funcNameAtScriptName,scriptType,...)
     return ret1,ret2,ret3,ret4,ret5,ret6,ret7,ret8
 end
@@ -942,10 +937,7 @@ function simBWF.getObjectHandleFromAltName(altName)
 end
 
 function simBWF.getObjectAltName(objectHandle)
-    if (simBWF.getVrepVersion()>30400 or simBWF.getVrepRevision()>15) then
-        return sim.getObjectName(objectHandle+sim.handleflag_altname)
-    end
-    return sim.getObjectName(objectHandle)
+    return sim.getObjectAlias(objectHandle)
 end
 
 function simBWF.setObjectAltName(objectHandle,altName)
@@ -960,7 +952,7 @@ function simBWF.setObjectAltName(objectHandle,altName)
                     correctedName=correctedName..'_'
                 end
             end
-            return sim.setObjectName(objectHandle+sim.handleflag_altname+sim.handleflag_silenterror,correctedName)
+            return sim.setObjectAlias(objectHandle,correctedName)
         end
     end
     return(-1)
@@ -1064,7 +1056,7 @@ function simBWF.format(fmt,...)
 end
 
 function simBWF.appendCommonModelData(model,modelTag,createModelDataWithVersionNumber)
-    model.handle=sim.getObjectAssociatedWithScript(sim.handle_self)
+    model.handle=sim.getObject('.')
     model.tagName=modelTag
     model.codeVersion=-1
     local data=sim.readCustomDataBlock(model.handle,model.tagName)
