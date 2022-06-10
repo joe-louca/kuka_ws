@@ -16,8 +16,8 @@
 	<arg name="joy" default="false"/>	
 	
 	<!-- Choose a control method -->
-	<arg name="NoControl" default="true"/>	
-	<arg name="TDPA" default="false"/>	
+	<arg name="NoControl" default="false"/>	
+	<arg name="TDPA" default="true"/>	
 
 	<!-- Choose a task -->
 	<arg name="NoTask" default="false"/>

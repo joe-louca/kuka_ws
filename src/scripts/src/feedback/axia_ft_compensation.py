@@ -38,8 +38,8 @@ class FT:
                 self.biased = True
 
         
-        Ax_F_sensor = Ax_F_sensor - Ax_F_bias
-        Ax_T_sensor = Ax_T_sensor - Ax_T_bias
+        Ax_F_sensor = Ax_F_sensor - self.Ax_F_bias
+        Ax_T_sensor = Ax_T_sensor - self.Ax_T_bias
         
         
         ## Convert to world frame

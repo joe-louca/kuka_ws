@@ -5,7 +5,6 @@ from math import pi
 from math import sin
 from math import cos
 from math import atan2
-from math import asin
 from math import sqrt
 import time
 from datetime import datetime
@@ -20,13 +19,14 @@ class KukaControl:
         self.frame_id = 0
         self.timestamp = rospy.Time.now()
         
+        
         # Setup connection to iiwa
         self.IP_of_robot = '172.31.1.148'        
         self.connection_state = False
         self.connect_to_iiwa()
 
         # Set some parameters
-        timestep = 0.01#0.002           # Secs (Good at 0.01) - Docs says >20ms for servo control #0.001s, 200Hz bit shakey
+        timestep = 0.01#0.002           # Secs (Good at 0.01) - Docs says >20ms for servo control
         rate_hz = 200#100               # Hz
         kuka_joints_msg = Float32MultiArray() # Initialise msg to publish
         cmd = [None, None, None, None, None, None]
@@ -37,9 +37,9 @@ class KukaControl:
             print('Kuka Arm: Moving to home position')
             start_pos = [0, -25*pi/180, 0, 75*pi/180, 0, -75*pi/180, 0]
             self.iiwa.movePTPJointSpace(start_pos,[0.1])
-            
+
             print('Kuka Arm: Moving to task start position - Peel')
-            start_pos = [-27*pi/180, -45*pi/180, 0, 79*pi/180, 0*pi/180, -55*pi/180, -45*pi/180]
+            start_pos = [-23*pi/180, -60*pi/180, 0, 50*pi/180, 0*pi/180, -70*pi/180, -23*pi/180]
             self.iiwa.movePTPJointSpace(start_pos,[0.2])
             
             kuka_pos = self.iiwa.getEEFPos() # (in mm and rads)
