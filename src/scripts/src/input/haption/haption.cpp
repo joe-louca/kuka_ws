@@ -187,6 +187,12 @@ int main(int argc, char* argv[])
 	    	virtGetDeadMan(VC, &deadman);
 	    	if(deadman == 1)
 	    	{
+	    		if (clutch_counter == 0) 
+	    		{
+	    			double start_time = ros::Time::now().toSec();
+	    			n.setParam("start_time",start_time);
+	    		}
+	    		
 	    		// Update clutch counter
 	    		if((deadman == 1) && (last_deadman == 0)) 
 	    		{

@@ -89,12 +89,16 @@ catkin_install_python(PROGRAMS
    src/gui/kuka_gui.py
    src/gui/cam1.py
    src/gui/cam2.py
+   src/gui/cam_gui.py
    
    # User Monitoring
    src/user/blink_detector.py
    src/user/user_phys.py
    src/user/user_cam.py
    
+   src/data_recording/cam1_record.py
+   src/data_recording/cam2_record.py
+      
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -2,77 +2,73 @@
 
 import rospy
 import numpy as np
+import os
 import cv2
-from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
 
-class CAMERA:   
-    def add_delay(self, added_row, delayed_tbl):
-        latency = rospy.get_param('latency')
-        delayed_tbl.append(added_row)                                   # Add new row to end of list (newest at bottom)
-        row_len = len(added_row)-1                                      # Length of added row
-        tbl_len = len(delayed_tbl)                                      # Number of rows in of table                        
 
-        retrieved_row = []
-        retrieved = False
-        elapsed_time = rospy.get_time()
-        
-        for i in range(tbl_len):                                        # Starting at the oldest, For each row   
-            if elapsed_time > delayed_tbl[i][row_len] + latency:        # If row is old enough
-                retrieved_row = delayed_tbl[i][:row_len]                # Get this row and remove timestamp
-                delayed_tbl = delayed_tbl[i+1:]                         # Keep only new rows (all rows at this point and below)            
-                retrieved = True                                        # Update marker
+def RECORD_USER():
+    rospy.init_node('user_cam', anonymous=True)
+    rate = rospy.Rate(20)
+    #start_time = rospy.get_param('start_time') # float (s)
+    start_time = rospy.get_time()
+    path = '~/gui_test.mp4'
+    
+    #trial_id = rospy.get_param('trial_id')
+    #pp_id = rospy.get_param('participant_id')
+    #if int(trial_id) == 0:
+    #    path = '~/RemoteHD/UserTrialData/P'+str(pp_id)+'/_Baseline_usercam.mp4'
+    #else:
+    #    path =  '~/RemoteHD/UserTrialData/P'+str(pp_id)+'/_T'+str(trial_id)+'_usercam.mp4'
+
+    cam1_id = '/dev/video6'
+    cam2_id = '/dev/video4'
+
+    #vid1_capture = cv2.VideoCapture(cam1_id)
+
+    vid1_capture = cv2.VideoCapture(4) #4 or 6
+    
+    vid_cod = cv2.VideoWriter_fourcc(*'mp4v')
+    output = cv2.VideoWriter(os.path.expanduser(path), vid_cod, 20.0, (640*2+50,480))
+
+    while not rospy.is_shutdown():
+        # Read the frame from the camera
+        success1, frame1 = vid1_capture.read()
+
+        if success1:
+            timestamp = str(round(rospy.get_time() - start_time,2))
+            draw_text(frame1, 'Camera 1')
+            draw_text(frame1, timestamp, pos=(5, 450), font_thickness=1)
+
+            # Write the frame to file
+            output.write(frame1)
+
+            # Display the frame
+            cv2.imshow("Camera Views", frame1)
+            if cv2.waitKey(50) & 0xFF == ord('q'):
                 break
-        
-        return retrieved_row, retrieved, delayed_tbl
 
-    def __init__(self):
-        # Get rate and latency parameters
-        #rate_hz = rospy.get_param('rate_hz')
-        rate_hz = 100 # fps
-        self.latency = rospy.get_param('latency')
+        # Sleep
+        rate.sleep()
 
-        # Set up frame storage lists
-        delayed_frame_tbl = []
+    vid1_capture.release()
+    output.release()
+    cv2.destroyAllWindows()
 
-        # Connect to camera
-        cam_address = 'http://192.168.132.60:4747/video'
-        cap = cv2.VideoCapture(cam_address)
+def draw_text(img, text,
+          font=cv2.FONT_HERSHEY_SIMPLEX,
+          pos=(5, 5),
+          font_scale=1,
+          font_thickness=2,
+          text_color=(0, 0, 0),
+          text_color_bg=(255, 255, 255)
+          ):
+    x, y = pos
+    text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
+    text_w, text_h = text_size
+    cv2.rectangle(img, pos, (x + text_w, y + text_h), text_color_bg, -1)
+    cv2.putText(img, text, (x, y + text_h + font_scale - 1), font, font_scale, text_color, font_thickness)
 
-        # Initialise CV to ros image converter
-        bridge = CvBridge()
+    return text_size
 
-        # Initialise publisher
-        rospy.init_node('cam1_node', anonymous=True)
-        pub = rospy.Publisher("cameras/cam1", Image,queue_size=1)
-        
-        rate = rospy.Rate(rate_hz)
-
-        while not rospy.is_shutdown():
-            # Get image
-            ret, frame = cap.read() # 640x480 size
-            height, width, layers = frame.shape
-            resize_factor = 1
-            new_h = int(height / resize_factor)
-            new_w = int(width / resize_factor)
-            resize = cv2.resize(frame, (new_w, new_h))
-            # Store with timestamp
-            t = rospy.get_time()
-            timestamped_frame = [resize, t]
-            
-            frame, retrieved, delayed_frame_tbl = self.add_delay(timestamped_frame, delayed_frame_tbl)
-            
-            if retrieved:
-                # Convert to image and publish delayed frame
-                f = frame[0]
-                pub.publish(bridge.cv2_to_imgmsg(f, "bgr8"))
-                
-            rate.sleep()
-
-        cap.release() 
-
-
-        
 if __name__ == '__main__':
-    CAMERA()
- 
+    RECORD_USER()

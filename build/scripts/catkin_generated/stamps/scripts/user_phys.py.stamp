@@ -24,11 +24,13 @@ def main():
         data = data.decode()
         data_list = data.split(", ")
         try:
+            #print(data_list)
             EMG1 = float(data_list[0])
-            HR = float(data_list[1])
+            EMG2 = float(data_list[1])
+            HR = float(data_list[3])
             t = rospy.get_time() - start_time
 
-            user_phys_msg.data = [EMG1, HR, t]
+            user_phys_msg.data = [EMG1, EMG2, HR, t]
             pub.publish(user_phys_msg)
         except:
             pass

@@ -30,14 +30,14 @@ class CAMERA:
     def __init__(self):
         # Get rate and latency parameters
         #rate_hz = rospy.get_param('rate_hz')
-        rate_hz = 35 # fps
+        rate_hz = 24 # fps
         self.latency = rospy.get_param('latency')
 
         # Set up frame storage lists
         delayed_frame_tbl = []
 
         # Connect to camera
-        cam_address = 'http://192.168.132.146:4747/video'
+        cam_address = 'http://192.168.1.102:4747/video'
         cap = cv2.VideoCapture(cam_address)
 
         # Initialise CV to ros image converter

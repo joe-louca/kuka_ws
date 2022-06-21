@@ -26,16 +26,20 @@ class FT:
                                 [ax_tz]])
         frame_id = ft_msg.header.seq
         
-        ## Remove bias (baseline axia reading with tool attached) - THIS IS GOOD
-        Ax_F_bias = np.array([[-14.2], 
-                              [-15.3], 
-                              [-45.5]])
-        Ax_T_bias = np.array([[-1.14], 
-                              [ 1.27], 
-                              [ 0.09]])        
+        if not self.biased:
+            bias_ready = rospy.get_param('bias_ready')
+            if bias_ready:
+                self.Ax_F_bias = np.array([[ax_fx],
+                                           [ax_fy],
+                                           [ax_fz]])
+                self.Ax_T_bias = np.array([[ax_tx],
+                                           [ax_ty],
+                                           [ax_tz]])
+                self.biased = True
+
         
-        Ax_F_sensor = Ax_F_sensor - Ax_F_bias
-        Ax_T_sensor = Ax_T_sensor - Ax_T_bias
+        Ax_F_sensor = Ax_F_sensor - self.Ax_F_bias
+        Ax_T_sensor = Ax_T_sensor - self.Ax_T_bias
         
         
         ## Convert to world frame
@@ -60,12 +64,12 @@ class FT:
                 ft_tz = W_T_sensor[2][0].item()
 
                 # Build publish message
-                self.pub_msg.twist.linear.x = ft_x*0.1
-                self.pub_msg.twist.linear.y = ft_y*0.1
-                self.pub_msg.twist.linear.z = ft_z*0.1
-                self.pub_msg.twist.angular.x = ft_tx*0.1
-                self.pub_msg.twist.angular.y = ft_ty*0.1
-                self.pub_msg.twist.angular.z = ft_tz*0.1
+                self.pub_msg.twist.linear.x = ft_x*0.5
+                self.pub_msg.twist.linear.y = ft_y*0.5
+                self.pub_msg.twist.linear.z = ft_z*0.5
+                self.pub_msg.twist.angular.x = ft_tx*0.0
+                self.pub_msg.twist.angular.y = ft_ty*0.0
+                self.pub_msg.twist.angular.z = ft_tz*0.0
                 self.pub_msg.header.seq = frame_id
                 self.pub_msg.header.stamp = rospy.get_rostime()
                 
@@ -117,6 +121,14 @@ class FT:
         self.send_msg_ = False
         self.Rot_ready_ = False
         self.Tool_ready_ = False
+        self.biased = False
+        
+        self.Ax_F_bias = np.array([[0], 
+                                   [0], 
+                                   [0]])
+        self.Ax_T_bias = np.array([[0], 
+                                   [0], 
+                                   [0]])
         
         rospy.Subscriber("/netft_data", WrenchStamped, self.call_Ax_ft, queue_size=1)
         rospy.Subscriber("/ft_tool", WrenchStamped, self.call_Tool_ft, queue_size=1)

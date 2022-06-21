@@ -13,6 +13,7 @@ import rospy
 from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 import numpy as np
+import urllib.request
 
 class KukaControl:
     def __init__(self):          
@@ -116,6 +117,9 @@ class KukaControl:
         except:
             print('Kuka Arm: Error stopping servo')
             pass
+
+        time.sleep(1)
+        self.iiwa.realTime_stopDirectServoCartesian()
         self.disconnect_from_iiwa()                                 # Disconnect
         
     def connect_to_iiwa(self):
@@ -226,10 +230,14 @@ class KukaControl:
         yaw = atan2(siny_cosp, cosy_cosp)
 
         return [yaw, pitch, roll]
+
+    def BaselineAxia(self):
+        code = 0
+        while code != 200:
+            get_url = urllib.request.urlopen('http://192.168.1.2/rundata.cgi?cmd=setuserbias')
+            code = get_url.getcode()
     
 if __name__ == '__main__':
-    rospy.init_node('KUKA', anonymous=True)
-    try:
-        KukaControl()
-    except rospy.ROSInterruptException:
-        pass
+    rospy.init_node('KUKA', anonymous=False)
+    KukaControl()
+

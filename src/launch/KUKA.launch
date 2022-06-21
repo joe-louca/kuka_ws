@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--roslaunch launch KUKA.launch lat:=100 hap:=Y/N pp:=1 task:=0 -->
+<!--roslaunch launch KUKA.launch lat:=100 p:=0 T:=0 -->
 <launch>
 	<!-- Add some harware -->
 	<arg name="kuka" default="true"/>
@@ -16,6 +16,7 @@
 	<arg name="joy" default="false"/>	
 	
 	<!-- Choose a control method -->
+	<arg name="TDPA" default="false"/>
 	<arg name="NoControl" default="false"/>	
 	<arg name="TDPA" default="true"/>	
 
@@ -25,24 +26,26 @@
 	<arg name="Screw" default="false"/>
 	
 	<!-- Add some data recording -->
-	<arg name="cameras" default="false"/>
-	<arg name="record_data" default="false"/>	
+	<arg name="cameras" default="true"/>
+	<arg name="record_data" default="true"/>	
 	<arg name="sim_only" default="false"/>
 	
 	<!-- Trial parameters -->
 	<arg name="lat" default="0.0"/><!-- Latency in ms -->
-	<arg name="hap" default="NA"/> <!-- Y = haptic feedback on, N = off --> 
-	<arg name="pp" default="-1"/>	<!-- Participant ID number -->
+	<arg name="t" default="0"/>	<!--Trial ID number -->
+	<arg name="p" default="0"/>	<!-- Participant ID number -->
 		
 	<!-- Parameters -->
 	<arg name="axia_rate" default="1000"/>
 	<arg name="node_start_delay_short" default="0.5" />
+	<arg name="node_start_delay_shortish" default="0.6" />
+	<arg name="node_start_delay_shortishish" default="0.7" />	
 	<arg name="node_start_delay_long" default="10.0" />
 
 	<!-- Load config parameters and gui -->
 	<param name="latency" type="double" value="$(arg lat)" />
-	<param name="trial_id" type="str" value="$(arg hap)" />
-	<param name="participant_id" type="int" value="$(arg pp)" />
+	<param name="trial_id" type="int" value="$(arg t)" />
+	<param name="participant_id" type="int" value="$(arg p)" />
 	<param name="sim_only" type="bool" value="$(arg sim_only)"/>
 	
 	<!-- Load config file and start position -->
@@ -60,7 +63,7 @@
 	<node pkg="scripts" type="kuka_joints_delay.py" name="kuka_joints_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>	
 	
 	<!-- Start up controller node -->	
-	<group if="$(arg NoControl)">
+	<group unless="$(arg TDPA)">
 		<node pkg="scripts" type="NoControl_node" name="NoControl_controller_node" launch-prefix="bash -c 'sleep $(arg node_start_delay_long); $0 $@' "/>	
 	</group>
 	<group if="$(arg TDPA)">
@@ -109,16 +112,14 @@
 	
 	<!-- Camera views -->
 	<group if="$(arg cameras)">
-		<node pkg="scripts" type="cam1.py" name="camera_1" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
-		<!--node pkg="scripts" type="cam2.py" name="camera_2" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/-->		
-		<node pkg="launch" type="cam_show.sh" name="Cam_Show" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
+		<node pkg="scripts" type="cam_gui.py" name="cameras" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>			
 	</group>	
 	
 	<!-- Record data -->
 	<group if="$(arg record_data)">
-		<node pkg="scripts" type="user_cam.py" name="user_cam" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>		
 		<node pkg="scripts" type="user_phys.py" name="user_phys" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
-		<node pkg="scripts" type="bag.sh" name="bag_data" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_short); $0 $@' "/>
+		<node pkg="scripts" type="bag.sh" name="bag_data" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_shortish); $0 $@' "/>
+		<node pkg="scripts" type="user_cam.py" name="user_cam" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_shortishish); $0 $@' "/>		
 	</group>	
 
 	<!-- Robotiq -->	
