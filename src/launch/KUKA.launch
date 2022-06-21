@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--roslaunch launch KUKA.launch lat:=100 p:=0 T:=0 -->
+<!--roslaunch launch KUKA.launch (TDPA:=true) (lat:=100) p:=0 T:=0 -->
 <launch>
 	<!-- Add some harware -->
 	<arg name="kuka" default="true"/>
@@ -16,7 +16,7 @@
 	<arg name="joy" default="false"/>	
 	
 	<!-- Choose a control method -->
-	<arg name="TDPA" default="false"/>
+
 	<arg name="NoControl" default="false"/>	
 	<arg name="TDPA" default="true"/>	
 
