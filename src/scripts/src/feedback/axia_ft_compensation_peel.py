@@ -9,39 +9,43 @@ import numpy as np
 
 
 class FT:   
-    def call_Rob_ft(self, ft_msg):
+    def call_Ax_ft(self, ft_msg):
         ## Get sensor readings from Axia
-        rob_fx = ft_msg.wrench.force.x
-        rob_fy = ft_msg.wrench.force.y
-        rob_fz = ft_msg.wrench.force.z
-        rob_tx = ft_msg.wrench.torque.x
-        rob_ty = ft_msg.wrench.torque.y
-        rob_tz = ft_msg.wrench.torque.z
+        ax_fx = ft_msg.wrench.force.x
+        ax_fy = ft_msg.wrench.force.y
+        ax_fz = ft_msg.wrench.force.z
+        ax_tx = ft_msg.wrench.torque.x
+        ax_ty = ft_msg.wrench.torque.y
+        ax_tz = ft_msg.wrench.torque.z
 
-        Rob_F_sensor = np.array([[rob_fx],
-                                 [rob_fy],
-                                 [rob_fz]])
-        Rob_T_sensor = np.array([[rob_tx],
-                                 [rob_ty],
-                                 [rob_tz]])
+        Ax_F_sensor = np.array([[ax_fx],
+                                [ax_fy],
+                                [ax_fz]])
+        Ax_T_sensor = np.array([[ax_tx],
+                                [ax_ty],
+                                [ax_tz]])
         frame_id = ft_msg.header.seq
         
-        ## Remove bias (baseline roboiq reading with tool attached)
-        Rob_F_bias = np.array([[-16], #
-                               [-81], #
-                               [ -0]])#
-        Rob_T_bias = np.array([[ 0.58], #
-                               [ 0.11], #
-                               [-0.07]])#     
+        if not self.biased:
+            bias_ready = rospy.get_param('bias_ready')
+            if bias_ready:
+                self.Ax_F_bias = np.array([[ax_fx],
+                                           [ax_fy],
+                                           [ax_fz]])
+                self.Ax_T_bias = np.array([[ax_tx],
+                                           [ax_ty],
+                                           [ax_tz]])
+                self.biased = True
+
         
-        Rob_F_sensor = Rob_F_sensor - Rob_F_bias
-        Rob_T_sensor = Rob_T_sensor - Rob_T_bias
+        Ax_F_sensor = Ax_F_sensor - self.Ax_F_bias
+        Ax_T_sensor = Ax_T_sensor - self.Ax_T_bias
         
         
         ## Convert to world frame
         if self.Rot_ready_:
-            W_F_sensor = np.dot(self.W_R_Rob, Rob_F_sensor)
-            W_T_sensor = np.dot(self.W_R_Rob, Rob_T_sensor)
+            W_F_sensor = np.dot(self.W_R_Ax, Ax_F_sensor)
+            W_T_sensor = np.dot(self.W_R_Ax, Ax_T_sensor)
             self.Rot_ready_ = False
 
             hap_F = W_F_sensor
@@ -60,12 +64,12 @@ class FT:
                 ft_tz = W_T_sensor[2][0].item()
 
                 # Build publish message
-                self.pub_msg.twist.linear.x = ft_x *0.5   # Scale torques to a good haption range
-                self.pub_msg.twist.linear.y = ft_y *0.5
-                self.pub_msg.twist.linear.z = ft_z *0.5
-                self.pub_msg.twist.angular.x = ft_tx *0.0 # Ignore torques
-                self.pub_msg.twist.angular.y = ft_ty *0.0
-                self.pub_msg.twist.angular.z = ft_tz *0.0
+                self.pub_msg.twist.linear.x = ft_x*0.5
+                self.pub_msg.twist.linear.y = ft_y*0.5
+                self.pub_msg.twist.linear.z = ft_z*0.5
+                self.pub_msg.twist.angular.x = ft_tx*0.0
+                self.pub_msg.twist.angular.y = ft_ty*0.0
+                self.pub_msg.twist.angular.z = ft_tz*0.0
                 self.pub_msg.header.seq = frame_id
                 self.pub_msg.header.stamp = rospy.get_rostime()
                 
@@ -104,7 +108,7 @@ class FT:
         r32 = rot_msg.data[7]
         r33 = rot_msg.data[8]
 
-        self.W_R_Rob = np.array([[r11, r12, r13],
+        self.W_R_Ax = np.array([[r11, r12, r13],
                                 [r21, r22, r23],
                                 [r31, r32, r33]])
 
@@ -117,9 +121,17 @@ class FT:
         self.send_msg_ = False
         self.Rot_ready_ = False
         self.Tool_ready_ = False
+        self.biased = False
+        
+        self.Ax_F_bias = np.array([[0], 
+                                   [0], 
+                                   [0]])
+        self.Ax_T_bias = np.array([[0], 
+                                   [0], 
+                                   [0]])
 
-        rospy.init_node('Force_Compensation')     
-        rospy.Subscriber("/robotiq_ft_wrench", WrenchStamped, self.call_Rob_ft, queue_size=1)
+        rospy.init_node('Force_Compensation')
+        rospy.Subscriber("/netft_data", WrenchStamped, self.call_Ax_ft, queue_size=1)
         rospy.Subscriber("/ft_tool", WrenchStamped, self.call_Tool_ft, queue_size=1)
         rospy.Subscriber("/W_R_Ax", Float32MultiArray, self.call_Rot, queue_size=1)
         

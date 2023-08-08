@@ -22,8 +22,8 @@
 	<arg name="task" default="1"/>
 	
 	<!-- Add some data recording -->
-	<arg name="cameras" default="false"/>
-	<arg name="record_data" default="false"/>	
+	<arg name="cameras" default="true"/>
+	<arg name="record_data" default="true"/>	
 	<arg name="sim_only" default="false"/>
 	
 	<!-- Trial parameters 1=0 ms, 2=600 ms, 3=1500ms, 4=2600ms -->

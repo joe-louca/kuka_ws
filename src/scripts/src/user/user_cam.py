@@ -17,7 +17,7 @@ def RECORD_USER():
     else:
         path =  '~/UserTrialData/P'+str(pp_id)+'/T'+str(trial_id)+'_usercam.mp4'
     
-    vid_capture = cv2.VideoCapture(0)
+    vid_capture = cv2.VideoCapture('/dev/video2')
     vid_cod = cv2.VideoWriter_fourcc(*'mp4v')
     output = cv2.VideoWriter(os.path.expanduser(path), vid_cod, 20.0, (640,480))
 
@@ -27,7 +27,7 @@ def RECORD_USER():
         success, frame = vid_capture.read()
         if success:
             timestamp = str(round(rospy.get_time() - start_time,2))
-            draw_text(frame, timestamp, pos=(5, height-40), font_thickness=1)
+            draw_text(frame, timestamp, pos=(5, 480-40), font_thickness=1)
 
             #cv2.imshow("UserCam", frame)
             output.write(frame)

@@ -49,6 +49,7 @@ class listener
         if (VC == NULL)
         {
             fprintf(stderr, "Error connecting to haption: %s\n", virtGetErrorMessage(virtGetErrorCode(NULL)));
+			std::cout<<"failed here"<<std::endl;
             return false;
         }
         else
@@ -205,11 +206,12 @@ int main(int argc, char* argv[])
 		    	virt_result = virtGetPosition(VC, p_hap);
 		    	if (first_loop != true)
 		    	{
-		    		for (int i = 0; i < 3; i++)
-		    		{
-		    			v_hap[i] = (p_hap[i] - p_hap_last[i])/timestep;
-			    		Publish_V(v_hap, v_pub, clutch_counter);
-			    	}
+		    		// for (int i = 0; i < 3; i++)
+		    		// {
+		    		// 	v_hap[i] = (p_hap[i] - p_hap_last[i])/timestep;
+			    	// 	Publish_V(v_hap, v_pub, clutch_counter);
+			    	// }
+					std::cout<<"x: "<<v_hap[0]<<" y: "<<v_hap[1]<<" z: "<<v_hap[2]<<std::endl;
 		    	}
 		    	for(int i = 0; i < 3; i++) {p_hap_last[i] = p_hap[i];}
 		    	first_loop = false;

@@ -13,6 +13,7 @@ class FT:
         self.pub_msg = TwistStamped()
         self.send_msg_ = False
         
+        rospy.init_node('sim_ft')
         rospy.Subscriber("/sim_netft_data", TwistStamped, self.callback, queue_size=1)
         pub = rospy.Publisher('/F_kuka_out', TwistStamped, queue_size=1)
 
@@ -27,7 +28,4 @@ class FT:
 
  
 if __name__ == '__main__':
-    rospy.init_node('sim_ft')
-    try:
-        foo = FT()
-    except rospy.ROSInterruptException:  pass
+    foo = FT()

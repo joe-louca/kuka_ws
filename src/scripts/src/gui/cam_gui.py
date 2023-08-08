@@ -6,10 +6,12 @@ import os
 import cv2
 import time
 import signal
+import gc
+
 
 class CAMERAS:
     def QuitAll(self):
-        os.system('stop_kuka')
+        os.system('rosnode list | grep KUKA | xargs rosnode kill') #stop_kuka
         time.sleep(1)
         rospy.signal_shutdown('Quitting Programme - Shutting down ROS')
             
@@ -33,7 +35,8 @@ class CAMERAS:
         fps = 20.0
         latency = rospy.get_param('latency')            # One way latency in seconds
         frames_to_store = int(round(latency/(1/fps),0)) # Number of frames to store based on latency and target fps
-        fps = frames_to_store/latency                   # Calculate adjusted fps to have quick store
+        if latency != 0:
+            fps = frames_to_store/latency                   # Calculate adjusted fps to have quick store
         delayed_frame_tbl = [None]*frames_to_store
         store = 0
         full_store = False
@@ -51,8 +54,8 @@ class CAMERAS:
         else:
             path =  '~/UserTrialData/P'+str(pp_id)+'/T'+str(trial_id)+'_taskcam.mp4'
         
-        vid1_capture = cv2.VideoCapture('/dev/video6') #4 or 6
-        vid2_capture = cv2.VideoCapture('/dev/video4')
+        vid1_capture = cv2.VideoCapture('/dev/video2') #4 or 6
+        vid2_capture = cv2.VideoCapture('/dev/video0')
         
         #vid1_capture = cv2.VideoCapture('/home/joe/kuka_ws/src/scripts/src/user/blink_detection_demo.mp4')
         #vid2_capture = cv2.VideoCapture('/home/joe/kuka_ws/src/scripts/src/user/blink_detection_demo.mp4')
@@ -70,21 +73,20 @@ class CAMERAS:
         vid2_capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         vid2_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         vid2_capture.set(cv2.CAP_PROP_FPS,fps)
-
-        self.button = [0, 50, 0, width*2+splitter_width]
-        button_im = np.zeros((50,width*2+splitter_width), np.uint8)
-        button_im[button[0]:button[1],button[2]:button[3]] = 180 
-        
+     
         vid_cod = cv2.VideoWriter_fourcc(*'mp4v')
         output = cv2.VideoWriter(os.path.expanduser(path), vid_cod, fps, (width*2+50,height))
 
         start_time = rospy.get_param('start_time')
         
-        while start_time == -1:
-            start_time = rospy.get_param('start_time')
-            time.sleep(0.001) #wait 1ms
-            
+        #while start_time == -1:
+        #    start_time = rospy.get_param('start_time')
+        #    time.sleep(0.001) #wait 1ms
+
+        #print('next')
+        time = 0
         while not rospy.is_shutdown():
+            start_time = rospy.get_param('start_time')
             # Read the frame from the camera
             success1, frame1 = vid1_capture.read()
             success2, frame2 = vid2_capture.read()
@@ -92,20 +94,23 @@ class CAMERAS:
             #success2 = True
 
             if success1 & success2:
-                timestamp = str(round(rospy.get_time() - start_time,2))
                 self.draw_text(frame1, 'Camera 1')
                 self.draw_text(frame2, 'Camera 2')
-                self.draw_text(frame1, timestamp, pos=(5, height-40), font_thickness=1)
+                    
+                if not start_time == -1:
+                    time = round(rospy.get_time() - start_time,2)
+                    timestamp = str(time)
+                    self.draw_text(frame1, timestamp, pos=(5, height-40), font_thickness=1)
                 
                 spacer = np.zeros((height,splitter_width,3), np.uint8)
                 both = np.concatenate((frame1,spacer), axis=1)   #1 : horz, 0 : Vert. 
-                both = np.concatenate((both,frame2), axis=1)   #1 : horz, 0 : Vert. 
-
-                both = np.concatenate((both,button_im), axis=0)
-                
+                both = np.concatenate((both,frame2), axis=1)   #1 : horz, 0 : Vert.                 
                 # Store frame
-                delayed_frame_tbl[store] = both
-                store += 1
+                if latency != 0:
+                    delayed_frame_tbl[store] = both
+                    store += 1
+                else:
+                    full_store = True
 
                 if store == frames_to_store:
                     store = 0
@@ -113,15 +118,20 @@ class CAMERAS:
                     
                 if full_store:
                     # Retrieve frame
-                    both = delayed_frame_tbl[store]
+                    if latency != 0:
+                        both = delayed_frame_tbl[store]
                     
                     # Write the frame to file
-                    output.write(both)
+                    if not start_time == -1:
+                        output.write(both)
 
                     # Display the frame
                     cv2.imshow("Camera Views", both)
+                    #if time > 120+latency:
+                    #    self.QuitAll()
+                    #    break
                     if cv2.waitKey(50) & 0xFF == ord('q'):
-                        QuitAll(self)
+                        self.QuitAll()
                         break
             else:
                 print('error reading stream')
@@ -129,11 +139,13 @@ class CAMERAS:
             # Sleep
             rate.sleep()
 
+
         vid1_capture.release()
         vid2_capture.release()
         output.release()
         cv2.destroyAllWindows()
-
+        del delayed_frame_tbl
+        gc.collect()
 
 
 if __name__ == '__main__':

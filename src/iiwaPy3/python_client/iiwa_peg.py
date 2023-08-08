@@ -29,31 +29,33 @@ class KukaControl:
         timestep = 0.01#0.002           # Secs (Good at 0.01) - Docs says >20ms for servo control #0.001s, 200Hz bit shakey
         rate_hz = 200#100               # Hz
         kuka_joints_msg = Float32MultiArray() # Initialise msg to publish
+        kuka_pos_msg = TwistStamped()
         cmd = [None, None, None, None, None, None]
-        kuka_position = [None, None, None, None, None, None]
+        kuka_pos = [None, None, None, None, None, None]
 
         try:        
             # Move to home pos
             print('Kuka Arm: Moving to home position')
-            start_pos = [0, -25*pi/180, 0, 75*pi/180, 0, -75*pi/180, 0]
+            start_pos = [5.26*pi/180, -32.05*pi/180, 0.00, 109.91*pi/180, -0.07*pi/180, -38.04*pi/180, 5.30*pi/180]
             self.iiwa.movePTPJointSpace(start_pos,[0.1])
             
-            print('Kuka Arm: Moving to task start position - Peel')
-            start_pos = [-23.83*pi/180, -37.82*pi/180, 0, 101.12*pi/180, 0*pi/180, -40.08*pi/180, -41.77*pi/180]
-            self.iiwa.movePTPJointSpace(start_pos,[0.2])
-            
+            print('Kuka Arm: Moving to task start position - Peg')
+            #self.iiwa.movePTPJointSpace(start_pos,[0.2])
+            start_pos = [5.26*pi/180, -45.94*pi/180, 0.00, 109.30*pi/180, -0.10*pi/180, -24.77*pi/180, 5.33*pi/180]
+            self.iiwa.movePTPJointSpace(start_pos,[0.1])
             kuka_pos = self.iiwa.getEEFPos() # (in mm and rads)
-            #-582.4117252266703   0.029790546497991836   545.6431178144777   3.141476197750022   -0.08725588947971301   3.141521033243545
-
+            #[-467.33294586742807, -43.01988982377409, 162.8067219380999, -3.1412379711912948, 0.0001856420138970384, 3.1408856633489846]
+            
             # Start servo for soft realtime control
             rospy.set_param('bias_ready', True)
             self.iiwa.realTime_startDirectServoCartesian()      
             time.sleep(1)
 
-            pub = rospy.Publisher('/kuka_joints', Float32MultiArray, queue_size=1)
+            jpos_pub = rospy.Publisher('/kuka_joints', Float32MultiArray, queue_size=1)
+            pos_pub = rospy.Publisher('/kuka_pos', TwistStamped, queue_size=1)
             sub = rospy.Subscriber('/v_kuka_in', TwistStamped, self.callback, queue_size=1)
 
-            rospy.set_param('lin_user_scale', 50)
+            rospy.set_param('lin_user_scale', 25)
             rospy.set_param('rot_user_scale', 50)
 
             t_0 = self.getSecs()
@@ -67,31 +69,35 @@ class KukaControl:
                 if self.send_msg_:
                     lin_user_scale = rospy.get_param('/lin_user_scale')
                     rot_user_scale = rospy.get_param('/rot_user_scale')
-
+                    """
                     for i in range(3):
                         cmd[i] = self.vel[i]*timestep*5000  *(lin_user_scale/100) + kuka_pos[i]    # in mm
+
+                        
                         ## Convert Kuka Rz*Ry'*Rz'' to quaternion, Q1
                         Q1 = self.R2Q(kuka_pos[3], kuka_pos[4], kuka_pos[5]) # [w,  x*i,  y*j,  z*k]
-                        
-
                         ## apply angular velocity over a timestep, dt (vel is in zyx)
                         W  = [0, self.vel[5], self.vel[4], self.vel[3]] # [0, wx*i, wy*j, wz*k]
                         Q2 = [1, 0, 0, 0]				# [0, wx*i, wy*j, wz*k]
-
                         # Calculate Using Q2 = Q1+0.5*dt*W*Q1 (derived from: dQ(t)/dt = 0.5*W(t)*Q(t) )
                         WQ1 = self.QMult(W, Q1)
                         for i in range(4):
                                 Q2[i] = Q1[i] + 0.5 * timestep * WQ1[i] *5
-
                         # Convert Q2 back to Rz*Ry'*Rz''
                         angles = self.Q2R(Q2[0], Q2[1], Q2[2], Q2[3])
-
+                        
                         cmd[3] = angles[0]
                         cmd[4] = angles[1]
                         cmd[5] = angles[2]
-
-                        #cmd[i+3] = self.vel[i+3]*timestep*10 *(rot_user_scale/100) + kuka_pos[i+3]  # in rads *20
-                        
+                    """
+                    #cmd[i+3] = self.vel[i+3]*timestep*10 *(rot_user_scale/100) + kuka_pos[i+3]  # in rads *20
+                    cmd[0] = self.vel[0]*timestep*5000  *(50./100) + kuka_pos[0]    # in mm
+                    cmd[1] = self.vel[1]*timestep*5000  *(50./100) + kuka_pos[1]    # in mm
+                    cmd[2] = self.vel[2]*timestep*5000  *(20./100) + kuka_pos[2]    # in mm
+                    cmd[3] = -180*pi/180
+                    cmd[4] = 0
+                    cmd[5] = 180*pi/180
+                    
                     if (self.getSecs()-t_0)>timestep:
                         #intrinsic_latency = rospy.Time.now() - self.timestamp           # To check system latency
                         #print(intrinsic_latency.to_sec())
@@ -99,10 +105,24 @@ class KukaControl:
                         self.send_msg_ = False
                         t_0=self.getSecs()
                         cycle_counter=cycle_counter+1
-                        
+
+                # Publish current joint positions
                 kuka_joints = self.iiwa.getJointsPos()
                 kuka_joints_msg.data = kuka_joints
-                pub.publish(kuka_joints_msg)                           # Publish current joint positions
+                jpos_pub.publish(kuka_joints_msg)                           # Publish current joint positions
+
+                # Publish current positions
+                t_now = rospy.get_rostime()
+                kuka_pos_msg.header.stamp.secs = t_now.secs
+                kuka_pos_msg.header.stamp.nsecs = t_now.nsecs
+                kuka_pos_msg.twist.linear.x = kuka_pos[0]
+                kuka_pos_msg.twist.linear.y = kuka_pos[1]
+                kuka_pos_msg.twist.linear.z = kuka_pos[2]
+                kuka_pos_msg.twist.angular.x = kuka_pos[3]
+                kuka_pos_msg.twist.angular.y = kuka_pos[4]
+                kuka_pos_msg.twist.angular.z = kuka_pos[5]
+                pos_pub.publish(kuka_pos_msg)
+                
                 r.sleep()
                 
             totalT= self.getSecs()-t0;
