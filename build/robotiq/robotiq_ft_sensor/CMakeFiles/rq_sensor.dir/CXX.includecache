@@ -11,7 +11,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -35,7 +35,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -51,7 +51,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -63,16 +63,6 @@ ros/message_operations.h
 -
 
 /home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/include/robotiq_ft_sensor/rq_int.h
-
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/include/robotiq_ft_sensor/rq_sensor_com.h
-rq_int.h
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/include/robotiq_ft_sensor/rq_int.h
-stdio.h
--
-stdbool.h
--
-string
--
 
 /home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/include/robotiq_ft_sensor/rq_sensor_state.h
 rq_int.h
@@ -100,40 +90,12 @@ robotiq_ft_sensor/ft_sensor.h
 robotiq_ft_sensor/sensor_accessor.h
 /home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/nodes/robotiq_ft_sensor/sensor_accessor.h
 
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/src/rq_sensor_com.cpp
-termios.h
--
-unistd.h
--
-windows.h
--
-dirent.h
--
-string.h
--
-unistd.h
--
-errno.h
--
-fcntl.h
--
-robotiq_ft_sensor/rq_sensor_com.h
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/src/robotiq_ft_sensor/rq_sensor_com.h
-
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/src/rq_sensor_state.cpp
-string.h
--
-robotiq_ft_sensor/rq_sensor_state.h
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/src/robotiq_ft_sensor/rq_sensor_state.h
-robotiq_ft_sensor/rq_sensor_com.h
-/home/joe/kuka_ws/src/robotiq/robotiq_ft_sensor/src/robotiq_ft_sensor/rq_sensor_com.h
-
 /opt/ros/noetic/include/geometry_msgs/Vector3.h
 string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -149,7 +111,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -169,7 +131,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -837,7 +799,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -
@@ -853,7 +815,7 @@ string
 -
 vector
 -
-map
+memory
 -
 ros/types.h
 -

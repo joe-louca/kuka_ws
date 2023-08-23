@@ -96,8 +96,8 @@ catkin_install_python(PROGRAMS
    src/user/user_phys.py
    src/user/user_cam.py
    
-   src/data_recording/cam1_record.py
-   src/data_recording/cam2_record.py
+   #src/data_recording/cam1_record.py
+   #src/data_recording/cam2_record.py
       
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
@@ -124,7 +124,18 @@ add_dependencies(NoControl_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXP
 target_link_libraries(NoControl_node 
   ${catkin_LIBRARIES}
 )
-
+  # Add NoControl executable
+add_executable(MyControl_V_node src/controller/MyControl_V.cpp)
+add_dependencies(MyControl_V_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(MyControl_V_node 
+  ${catkin_LIBRARIES}
+)
+  # Add NoControl executable
+  add_executable(MyControl_F_node src/controller/MyControl_F.cpp)
+  add_dependencies(MyControl_F_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+  target_link_libraries(MyControl_F_node 
+    ${catkin_LIBRARIES}
+  )
 
 
 ## Specify libraries to link a library or executable target against

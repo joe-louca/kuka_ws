@@ -4,6 +4,7 @@ import serial
 import time
 import rospy
 from std_msgs.msg import Float32MultiArray
+import time
 
 def main():
     SER_PORT = "/dev/ttyACM0"
@@ -24,10 +25,9 @@ def main():
         data = data.decode()
         data_list = data.split(", ")
         try:
-            #print(data_list)
             EMG1 = float(data_list[0])
             EMG2 = float(data_list[1])
-            HR = float(data_list[3])
+            HR = float(data_list[2])
             t = rospy.get_time() - start_time
 
             user_phys_msg.data = [EMG1, EMG2, HR, t]
@@ -38,8 +38,5 @@ def main():
      
 
 if __name__ == '__main__':
-    try:
-        main()
-    except rospy.ROSInterruptException:
-        pass
+    main()
 

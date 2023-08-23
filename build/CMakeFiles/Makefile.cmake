@@ -70,8 +70,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/kuka_ws/src/scripts/package.xml"
   "/home/joe/kuka_ws/src/scripts/src/config/config_kuka.py"
   "/home/joe/kuka_ws/src/scripts/src/config/timestep.py"
-  "/home/joe/kuka_ws/src/scripts/src/data_recording/cam1_record.py"
-  "/home/joe/kuka_ws/src/scripts/src/data_recording/cam2_record.py"
   "/home/joe/kuka_ws/src/scripts/src/delay/F_kuka_out_delay.py"
   "/home/joe/kuka_ws/src/scripts/src/delay/delayed_F_kuka_out_delay.py"
   "/home/joe/kuka_ws/src/scripts/src/delay/delayed_v_hap_out_delay.py"
@@ -492,6 +490,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "netft_utils/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/DependInfo.cmake"
   "netft_utils/CMakeFiles/lpfilter.dir/DependInfo.cmake"
   "netft_utils/CMakeFiles/netft_utils.dir/DependInfo.cmake"
+  "scripts/CMakeFiles/MyControl_F_node.dir/DependInfo.cmake"
   "scripts/CMakeFiles/shape_msgs_generate_messages_cpp.dir/DependInfo.cmake"
   "scripts/CMakeFiles/moveit_msgs_generate_messages_nodejs.dir/DependInfo.cmake"
   "scripts/CMakeFiles/trajectory_msgs_generate_messages_py.dir/DependInfo.cmake"
@@ -520,4 +519,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/DependInfo.cmake"
   "scripts/CMakeFiles/NoControl_node.dir/DependInfo.cmake"
   "scripts/CMakeFiles/octomap_msgs_generate_messages_lisp.dir/DependInfo.cmake"
+  "scripts/CMakeFiles/MyControl_V_node.dir/DependInfo.cmake"
   )

@@ -13,4 +13,6 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY
 
 
 add_executable (tdpa TDPA.cpp)
+add_executable (MyControl_V MyControl_V.cpp)
+add_executable (MyControl_F MyControl_F.cpp)
 

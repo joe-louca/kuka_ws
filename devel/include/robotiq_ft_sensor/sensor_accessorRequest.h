@@ -8,7 +8,7 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <memory>
 
 #include <ros/types.h>
 #include <ros/serialization.h>
@@ -38,7 +38,7 @@ struct sensor_accessorRequest_
    typedef uint8_t _command_id_type;
   _command_id_type command_id;
 
-   typedef std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other >  _command_type;
+   typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _command_type;
   _command_type command;
 
 
@@ -227,7 +227,7 @@ struct Printer< ::robotiq_ft_sensor::sensor_accessorRequest_<ContainerAllocator>
     s << indent << "command_id: ";
     Printer<uint8_t>::stream(s, indent + "  ", v.command_id);
     s << indent << "command: ";
-    Printer<std::basic_string<char, std::char_traits<char>, typename ContainerAllocator::template rebind<char>::other > >::stream(s, indent + "  ", v.command);
+    Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.command);
   }
 };
 

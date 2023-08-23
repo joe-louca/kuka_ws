@@ -117,7 +117,8 @@ class FT:
         self.send_msg_ = False
         self.Rot_ready_ = False
         self.Tool_ready_ = False
-        
+
+        rospy.init_node('Force_Compensation')     
         rospy.Subscriber("/robotiq_ft_wrench", WrenchStamped, self.call_Rob_ft, queue_size=1)
         rospy.Subscriber("/ft_tool", WrenchStamped, self.call_Tool_ft, queue_size=1)
         rospy.Subscriber("/W_R_Ax", Float32MultiArray, self.call_Rot, queue_size=1)
@@ -135,7 +136,4 @@ class FT:
 
  
 if __name__ == '__main__':
-    rospy.init_node('Force_Compensation')
-    try:
-        foo = FT()
-    except rospy.ROSInterruptException:  pass
+    foo = FT()
